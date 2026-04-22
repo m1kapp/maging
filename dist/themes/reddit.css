@@ -1,0 +1,22 @@
+/*! magicwiget theme: reddit — community orange-red | MIT
+ *  Signature: #FF4500 Reddit orange-red + #24A0ED link blue
+ */
+[data-theme="reddit"] {
+  --mw-bg: #ffffff;
+  --mw-surface: #ffffff;
+  --mw-surface-2: #f6f7f8;
+  --mw-border: #edeff1;
+  --mw-text: #1c1c1c;
+  --mw-text-muted: #7c7c83;
+  --mw-accent: #ff4500;
+  --mw-accent-2: #ff8717;
+  --mw-success: #24a0ed;
+  --mw-danger: #ea0027;
+  --mw-warning: #ffb000;
+  --mw-radius: 8px;
+  --mw-border-w: 1px;
+  --mw-font: 'Inter', system-ui, sans-serif;
+  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 2px 6px -2px rgb(255 69 0 / 0.14);
+}

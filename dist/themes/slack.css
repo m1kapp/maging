@@ -1,0 +1,25 @@
+/*! magicwiget theme: slack — aubergine dark + 4-logo-color palette | MIT
+ *  Signature: Aubergine #3F0E40 bg + Slack logo colors (yellow/blue/green/red)
+ */
+[data-theme="slack"] {
+  --mw-bg: #3f0e40;
+  --mw-surface: #4a154b;
+  --mw-surface-2: #350d36;
+  --mw-border: #5c2d5d;
+  --mw-text: #f8f8f8;
+  --mw-text-muted: #bcabbc;
+  --mw-accent: #ecb22e;
+  --mw-accent-2: #36c5f0;
+  --mw-success: #2eb67d;
+  --mw-danger: #e01e5a;
+  --mw-warning: #ecb22e;
+  --mw-radius: 6px;
+  --mw-border-w: 1px;
+  --mw-font: 'Inter', system-ui, sans-serif;
+  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 4px 14px -4px rgb(63 14 64 / 0.3);
+}
+
+/* Yellow accent needs dark aubergine foreground on avatar */
+[data-theme="slack"] .mw-avatar--top { color: #3f0e40; }

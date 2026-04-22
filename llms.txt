@@ -1,0 +1,216 @@
+# Maging
+
+> **Dashboard? Deck? Doc? Just mage it.**
+> LLM-native HTML output primitives — 32 widgets, 35 brand themes, zero build. Generate a complete, self-contained HTML dashboard / slide deck / document from a single prompt. Designed to be produced by LLMs (ChatGPT, Claude, Gemini, Grok) in one shot.
+
+## Installation
+
+Add these three lines to any HTML file. No bundler required.
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.0/dist/maging.css">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.0/dist/maging.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+```
+
+Set the theme on `<html data-theme="…">`. Wrap body with `<body class="mw-themed">` for base styling.
+
+## Modes
+
+| Mode | Status | Description |
+|------|--------|-------------|
+| `dashboard` | ✅ Available | Grid-based dashboard with 32 widgets |
+| `deck` | 🚧 Coming soon | Slide-based presentations with keyboard navigation |
+| `doc` | 🚧 Coming soon | Long-scroll documents and reports |
+
+Currently all widgets work in dashboard mode via CSS Grid layout.
+
+## Themes (35)
+
+Set on `<html data-theme="NAME">`. The value must match exactly.
+
+**Light (18)**: `notion`, `vercel`, `linear`, `github`, `apple`, `stripe`, `linkedin`, `x`, `medium`, `tiffany`, `airbnb`, `youtube`, `reddit`, `duolingo`, `mailchimp`, `tmobile`, `fedex`, `claude`, `instagram`, `hermes`, `barbie`
+
+**Dark (17)**: `openai`, `discord`, `figma`, `amazon`, `adobe`, `netflix`, `twitch`, `spotify`, `bloomberg`, `slack`, `nasa`, `heineken`, `deere`, `ups`
+
+Each theme is inspired by the named brand's signature palette, radius, typography, and shadow style. Change the theme value to instantly re-style every widget.
+
+## Widgets (32)
+
+Mount via `window.Maging.<widgetName>(selector, config)`. All widgets auto-refresh on theme change.
+
+### Metric tiles
+
+- `kpiCard({ label, value, delta?, sparkline?, icon?, compact?, deltaGoodWhen? })` — label + value + delta + optional mini line chart. `compact: true` hides sparkline and uses smaller padding (for tight grids).
+- `heroTile({ label, value, delta?, sparkline, icon?, context? })` — iOS-weather-widget-style main metric tile.
+- `ringProgress({ value, max, unit, label, context?, thresholds })` — donut progress ring with threshold colors.
+- `compareCard({ title, left:{label,value}, right:{label,value}, delta, deltaLabel? })` — A vs B side-by-side.
+- `metricStack({ title, main:{label,value,delta}, items:[{label,value}] })` — hero metric + sub metrics (bento style).
+- `countdownTile({ title, subtitle?, target, label?, context? })` — live countdown to an ISO datetime.
+
+### Charts
+
+- `lineChart({ title, categories, series:[{name,data}], stack?, area?, yFormatter?, yMin?, yMax? })`
+- `barChart({ title, items:[{label,value}], horizontal?, yFormatter?, showLabels? })`
+- `donutChart({ title, slices:[{label,value,color?}], centerLabel?, centerValue? })`
+- `funnelChart({ title, stages:[{label,value}], valueSuffix? })`
+- `gaugeChart({ title, label, value, max, unit, thresholds:[[ratio,level]] })`
+- `radarChart({ indicators:[{name,max}], series:[{name,data}] })`
+- `heatmapChart({ xAxis, yAxis, matrix:[[row]], tooltipFormatter? })`
+- `treemapChart({ items:[{name,value}], valueFormatter? })`
+- `scatterChart({ points:[{label,x,y,size}], xLabel?, yLabel? })`
+- `sankeyChart({ nodes:[{name}], links:[{source,target,value}], valueFormatter? })`
+- `waterfallChart({ items:[{label,value,type?}], valueFormatter? })` — type: 'start'|'gain'|'loss'|'total' (auto-detected if omitted)
+- `bulletChart({ value, target?, benchmark?, max, min?, ranges?:[{value,label}], valueFormatter?, unit? })`
+
+### Geographic
+
+- `mapChart({ items:[{region,value}], valueFormatter?, tiles? })` — hex tile map of Korea's 17 provinces (서울, 경기, 부산, …). Provide items by region name.
+
+### Lists
+
+- `leaderboard({ title, items:[{name,initial,percent,meta}] })` — ranked list with avatars and progress bars.
+- `activityTable({ title, columns:[{key,label,align?,render?}], rows:[...] , live? })`
+- `timeline({ title, items:[{time,text,type?}] })` — event stream with colored dots.
+- `inboxPreview({ title, items:[{icon,text,time,type}], footer? })` — notification list.
+- `statusGrid({ title, columns?, items:[{label,status,value?}] })` — service health dots (`status: 'ok'|'warning'|'danger'`).
+- `sparklineList({ title, items:[{label,value,delta,sparkline,deltaGoodWhen?}] })` — label + value + delta + mini spark per row.
+- `goalGrid({ title, items:[{label,value,max,unit?,sublabel?}], thresholds? })` — multi-goal progress bars (OKR style).
+
+### Calendar
+
+- `calendarHeatmap({ title, year, values:[[date,value]], max?, valueSuffix?, height?, cellSize? })` — GitHub-style 365-day heatmap.
+- `eventCalendar({ title, year, month, events:[{date,label,type?}], startOfWeek?, showList?, listFilter? })`
+
+### Project
+
+- `progressStepper({ title, kicker?, status?, meta, steps:[{label,date,status,badge?}] })` — project milestone tracker.
+
+### Cohort & retention
+
+- `cohortMatrix({ cohorts:[], periods:[], data:[[v,…]], sizes?:[], cohortLabel?, sizeLabel?, valueFormatter? })` — Mixpanel-style retention grid. Null cells render blank.
+
+### Control & messaging
+
+- `alertBanner({ type, title, message?, icon?, action?:{label,href?,onClick?}, dismissable? })` — top-of-page stripe. Not a card. `type: 'info'|'warning'|'danger'|'success'`.
+- `filterBar({ title?, filters:[{key,type,label,options?,placeholder?,defaultFrom?,defaultTo?}], onChange, resetLabel? })` — dashboard-wide filter control. Filter types: `'segmented' | 'chips' (multi) | 'search' | 'daterange'`. Handle exposes `getState()` and `setState(partial)`.
+
+## Layout
+
+Dashboard layouts use CSS Grid via Tailwind classes. Standard pattern:
+
+```html
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-4" style="grid-auto-rows:400px">
+  <div class="lg:col-span-2" id="revenue-chart"></div>
+  <div id="region-chart"></div>
+</div>
+```
+
+- Fix row height with inline `grid-auto-rows:NNNpx` (for "LEGO block" alignment).
+- Use `col-span-2` / `lg:col-span-2` to make a widget span 2 columns.
+- Small tiles: 120–200px. Regular cards: 400px. Tall cards (treemap etc.): 600px.
+- `<body class="mw-themed">` provides base page styling.
+
+## Complete example
+
+```html
+<!DOCTYPE html>
+<html lang="ko" data-theme="claude">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.0/dist/maging.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.0/dist/maging.js"></script>
+</head>
+<body class="mw-themed">
+<main class="max-w-[1280px] mx-auto p-6">
+
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4" style="grid-auto-rows:192px" id="kpi-row"></div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4" style="grid-auto-rows:400px">
+    <div class="lg:col-span-2" id="revenue-chart"></div>
+    <div id="region-chart"></div>
+  </div>
+
+</main>
+
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  const kpis = [
+    { label: '매출', value: '₩128억', delta: 8.3, sparkline: [420,445,430,468,490,510,548,580] },
+    { label: 'MAU',  value: '42,180', delta: 5.1, sparkline: [38200,39100,40200,40800,41400,41900,42180] },
+    { label: '계약', value: '127건',  delta: -2.3, sparkline: [22,28,31,29,34,26,27] },
+    { label: '응답', value: '1.4s',   delta: -12.0, deltaGoodWhen: 'negative', sparkline: [1.8,1.7,1.55,1.48,1.42,1.4] },
+  ];
+  const row = document.getElementById('kpi-row');
+  kpis.forEach(k => {
+    const el = document.createElement('div');
+    row.appendChild(el);
+    Maging.kpiCard(el, k);
+  });
+
+  Maging.lineChart('#revenue-chart', {
+    title: '주간 매출', subtitle: '최근 12주',
+    categories: ['W01','W02','W03','W04','W05','W06','W07','W08','W09','W10','W11','W12'],
+    series: [{ name: 'Enterprise', data: [420,445,430,468,475,490,510,505,530,548,562,580] }],
+    yFormatter: v => v + '억',
+    height: 260,
+  });
+
+  Maging.barChart('#region-chart', {
+    title: '지역별', horizontal: true,
+    items: [
+      { label: '서울', value: 125 }, { label: '경기', value: 98 },
+      { label: '부산', value: 72 },  { label: '인천', value: 54 },
+    ],
+    yFormatter: v => v + '억',
+    height: 260,
+  });
+});
+</script>
+</body>
+</html>
+```
+
+## LLM generation rules
+
+When generating a dashboard with maging, follow these rules:
+
+1. **Always include setup** (CSS + ECharts + maging + Tailwind, in that order).
+2. **Pick a theme** — infer from user intent. "minimal" → `linear` / `vercel`. "warm" → `claude` / `notion`. "corporate" → `linkedin` / `stripe`. "bold" → `netflix` / `adobe`. Default to `claude`.
+3. **Use Grid for layout**, never floats. Fix row height for LEGO alignment.
+4. **Wait for DOM ready** before calling `Maging.xxx(...)`. Use `DOMContentLoaded` or `defer`.
+5. **Single HTML file output**. Self-contained. Do not reference external local files.
+6. **Pick widgets that match the data shape**:
+   - Time series (revenue over weeks) → `lineChart`
+   - Categorical breakdown (sales by region) → `barChart` (horizontal for long labels)
+   - Share of total → `donutChart`
+   - Funnel / conversion → `funnelChart`
+   - Target vs actual → `bulletChart` or `ringProgress`
+   - Distribution → `treemapChart` or `heatmapChart`
+   - Flow / routing → `sankeyChart`
+   - Correlation → `scatterChart`
+   - Geographic (Korea) → `mapChart`
+   - Retention / cohort → `cohortMatrix`
+   - P&L / flow decomposition → `waterfallChart`
+   - List of people/teams → `leaderboard`
+   - Recent events → `timeline` or `activityTable`
+   - System health → `statusGrid` + `gaugeChart`
+   - OKR / goal tracking → `goalGrid`
+   - Multi-metric trend summary → `sparklineList`
+7. **Use `kpiCard({ compact: true, icon: '◉' })` for compact mini-stats** in 6-wide grids.
+8. **For KRW values**, use `Maging.fmt.krw(v)` formatter or inline `v => '₩' + (v/1_0000_0000).toFixed(1) + '억'`.
+9. **Korean dashboards are welcomed**. Labels, titles, captions in Korean are fine.
+10. **Alerts at the top**, filters next, then content sections ordered by decision hierarchy: at-a-glance → real-time → trends → deep-dive → operations.
+
+## Canonical globals
+
+- `window.Maging` — primary API (use this in new code)
+- `window.mw` — short alias (`mw.kpiCard(...)`)
+- `window.MagicWiget` — legacy alias (backward compat, do not use in new code)
+
+## License
+
+MIT.

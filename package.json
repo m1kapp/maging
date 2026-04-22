@@ -1,0 +1,36 @@
+{
+  "name": "maging",
+  "version": "0.1.0",
+  "description": "LLM-native UI primitives. Dashboard? Deck? Doc? Just mage it.",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/maging.js",
+  "style": "dist/maging.css",
+  "files": [
+    "dist/**",
+    "llms.txt",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "llm",
+    "dashboard",
+    "ai",
+    "claude",
+    "chatgpt",
+    "gemini",
+    "widgets",
+    "html",
+    "echarts",
+    "tailwind",
+    "prompt-to-ui"
+  ],
+  "scripts": {
+    "count-tokens": "node scripts/count-prompt-tokens.mjs",
+    "vercel-build": "echo 'Static site — no build step'"
+  },
+  "devDependencies": {
+    "gpt-tokenizer": "^2.9.0",
+    "@anthropic-ai/tokenizer": "^0.0.4"
+  }
+}

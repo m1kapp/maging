@@ -1,0 +1,25 @@
+/*! magicwiget theme: amazon — marketplace navy + signature orange | MIT
+ *  Signature: Amazon #232F3E navy + iconic #FF9900 orange
+ */
+[data-theme="amazon"] {
+  --mw-bg: #131a22;
+  --mw-surface: #232f3e;
+  --mw-surface-2: #37475a;
+  --mw-border: #455a74;
+  --mw-text: #ffffff;
+  --mw-text-muted: #949ca3;
+  --mw-accent: #ff9900;
+  --mw-accent-2: #146eb4;
+  --mw-success: #007185;
+  --mw-danger: #b12704;
+  --mw-warning: #ff9900;
+  --mw-radius: 4px;
+  --mw-border-w: 1px;
+  --mw-font: 'Inter', system-ui, sans-serif;
+  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 4px 14px -4px rgb(255 153 0 / 0.2);
+}
+
+/* Orange accent needs dark navy foreground on avatar */
+[data-theme="amazon"] .mw-avatar--top { color: #131a22; }

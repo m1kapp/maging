@@ -1,0 +1,22 @@
+/*! magicwiget theme: airbnb — Rausch coral, rounded friendly | MIT
+ *  Signature: Rausch #FF5A5F coral, Babu #00A699 teal, 12px rounded everything
+ */
+[data-theme="airbnb"] {
+  --mw-bg: #ffffff;
+  --mw-surface: #ffffff;
+  --mw-surface-2: #f7f7f7;
+  --mw-border: #dddddd;
+  --mw-text: #222222;
+  --mw-text-muted: #717171;
+  --mw-accent: #ff5a5f;
+  --mw-accent-2: #00a699;
+  --mw-success: #008489;
+  --mw-danger: #c13515;
+  --mw-warning: #fc642d;
+  --mw-radius: 12px;
+  --mw-border-w: 1px;
+  --mw-font: 'Inter', system-ui, sans-serif;
+  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 6px 20px -6px rgb(255 90 95 / 0.14);
+}

@@ -1,0 +1,22 @@
+/*! magicwiget theme: apple — Apple-style light polish | MIT
+ *  Signature: pure white surface, system blue #007AFF, SF-like rounded, generous radius
+ */
+[data-theme="apple"] {
+  --mw-bg: #f5f5f7;
+  --mw-surface: #ffffff;
+  --mw-surface-2: #f2f2f5;
+  --mw-border: #d2d2d7;
+  --mw-text: #1d1d1f;
+  --mw-text-muted: #6e6e73;
+  --mw-accent: #007aff;
+  --mw-accent-2: #5ac8fa;
+  --mw-success: #34c759;
+  --mw-danger: #ff3b30;
+  --mw-warning: #ff9500;
+  --mw-radius: 14px;
+  --mw-border-w: 1px;
+  --mw-font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', system-ui, sans-serif;
+  --mw-display-font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
+  --mw-mono-font: 'SF Mono', ui-monospace, 'JetBrains Mono', monospace;
+  --mw-shadow: 0 1px 3px rgb(0 0 0 / 0.04), 0 8px 24px -12px rgb(0 0 0 / 0.08);
+}

@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="claude">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACME KOREA — 통합 운영 대시보드 · magicwiget demo</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<!-- magicwiget (full bundle · all 25 themes) -->
+<link rel="stylesheet" href="./dist/maging.css">
+<script defer src="./dist/maging.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+<style>
+  .pill {
+    padding: 0.375rem 0.875rem; font-size: 0.75rem;
+    border-radius: var(--mw-radius);
+    border: 1px solid var(--mw-border);
+    background: var(--mw-surface);
+    color: var(--mw-text-muted);
+    cursor: pointer; transition: all 0.15s;
+    font-family: var(--mw-font);
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.375rem;
+  }
+  .pill:hover { color: var(--mw-text); border-color: var(--mw-accent); }
+  .pill.is-active { background: var(--mw-accent); color: #fff; border-color: var(--mw-accent); }
+  [data-theme="terminal"] .pill.is-active { color: #000; }
+  select.pill {
+    appearance: none; -webkit-appearance: none; -moz-appearance: none;
+    padding-right: 1.75rem;
+    background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+                      linear-gradient(135deg, currentColor 50%, transparent 50%);
+    background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    min-width: 190px;
+  }
+  select.pill:focus { outline: 2px solid color-mix(in srgb, var(--mw-accent) 40%, transparent); outline-offset: 1px; }
+  select.pill option, select.pill optgroup { background: var(--mw-surface); color: var(--mw-text); }
+
+  h1, .display { font-family: var(--mw-display-font); }
+
+  .section-hd {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin: 0 0 1rem;
+    flex-wrap: wrap; gap: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--mw-border);
+  }
+  .section-hd__left { display: flex; flex-direction: column; gap: 0.25rem; }
+  .section-hd__kicker {
+    font-size: 0.68rem; color: var(--mw-text-muted);
+    letter-spacing: 0.14em; text-transform: uppercase;
+    font-family: var(--mw-mono-font);
+  }
+  .section-hd__title {
+    font-size: 1.25rem; font-weight: 700;
+    font-family: var(--mw-display-font);
+    color: var(--mw-text);
+  }
+  [data-theme="terminal"] .section-hd__title { text-transform: uppercase; letter-spacing: 0.05em; }
+  .section-hd__tag {
+    font-size: 0.7rem; color: var(--mw-text-muted);
+    font-family: var(--mw-mono-font);
+    display: inline-flex; align-items: center; gap: 0.375rem;
+  }
+
+  /* Release calendar: split layout (calendar left, list right) */
+  #release-calendar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 1.75rem;
+    align-items: flex-start;
+  }
+  #release-calendar > .mw-header {
+    flex: 0 0 100%;
+  }
+  #release-calendar > .mw-evcal__grid {
+    flex: 0 0 420px;
+    max-width: 420px;
+  }
+  #release-calendar > .mw-evcal__list {
+    flex: 1 1 0;
+    min-width: 0;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+    align-self: stretch;
+  }
+
+  .error-box {
+    max-width: 600px; margin: 4rem auto; padding: 1.5rem;
+    background: var(--mw-surface);
+    border: 1px solid var(--mw-border);
+    border-radius: var(--mw-radius);
+    font-family: var(--mw-mono-font);
+    font-size: 0.85rem;
+  }
+
+  /* ========= Theme Bar (horizontal scroll picker) ========= */
+  .theme-bar {
+    background: var(--mw-surface);
+    border-bottom: 1px solid var(--mw-border);
+    padding: 0;
+  }
+  .theme-bar__legend {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 10px 1.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--mw-mono-font);
+    font-size: 0.66rem;
+    color: var(--mw-text-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .theme-bar__legend-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--mw-border) 0%, var(--mw-accent) 50%, var(--mw-accent-2) 100%);
+    opacity: 0.5;
+  }
+  .theme-bar__legend-side { white-space: nowrap; }
+  .theme-bar__shell {
+    position: relative;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .theme-bar__inner {
+    display: flex;
+    gap: 0.625rem;
+    padding: 14px 1.5rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+  .theme-bar__inner::-webkit-scrollbar { display: none; }
+  .theme-bar__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--mw-surface);
+    border: 1px solid var(--mw-border);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--mw-text);
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.18s, background 0.15s, box-shadow 0.15s, transform 0.15s;
+    box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.15);
+    font-family: var(--mw-font);
+    line-height: 1;
+    padding: 0 0 2px;
+  }
+  .theme-bar__shell:hover .theme-bar__arrow:not(.is-disabled) { opacity: 1; }
+  .theme-bar__arrow:hover {
+    background: var(--mw-surface-2);
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.22);
+  }
+  .theme-bar__arrow:active { transform: translateY(-50%) scale(0.94); }
+  .theme-bar__arrow--left { left: 0.25rem; }
+  .theme-bar__arrow--right { right: 0.25rem; }
+  .theme-bar__arrow.is-disabled {
+    opacity: 0 !important;
+    pointer-events: none;
+  }
+  .theme-chip {
+    flex: 0 0 auto;
+    width: 144px;
+    padding: 0.625rem 0.55rem;
+    border: 1px solid;
+    /* border-radius set inline per theme */
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    text-align: left;
+    font-family: var(--mw-font);
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+  }
+  .theme-chip:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px -4px rgba(0, 0, 0, 0.22);
+  }
+  .theme-chip.is-active {
+    box-shadow: 0 0 0 2px var(--mw-accent), 0 5px 12px -4px rgba(0, 0, 0, 0.18);
+  }
+
+  .theme-chip__preview {
+    position: relative;
+    height: 48px;
+    margin: 0.15rem 0 0.5rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 0.45rem;
+    width: 100%;
+  }
+  .theme-chip__index {
+    font-size: 1.35rem;
+    font-weight: 800;
+    font-family: var(--mw-display-font);
+    line-height: 0.95;
+    opacity: 0.5;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+    padding-bottom: 1px;
+  }
+  .theme-chip__bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .theme-chip__bar {
+    flex: 1;
+    border-radius: 2px 2px 0 0;
+    min-height: 3px;
+  }
+  .theme-chip__name {
+    font-size: 0.74rem;
+    font-weight: 700;
+    font-family: var(--mw-display-font);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+  }
+  .theme-chip__sub {
+    font-size: 0.56rem;
+    font-family: var(--mw-mono-font);
+    margin-top: 0.2rem;
+    letter-spacing: 0.03em;
+    text-transform: lowercase;
+    opacity: 0.55;
+  }
+  .theme-chip__brand {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+    cursor: pointer;
+    transition: opacity 120ms;
+  }
+  .theme-chip__brand:hover { opacity: 1; text-decoration-thickness: 2px; }
+
+  /* ========= Widget Inspector (top-right ⋯ menu) ========= */
+  .demo-wrap { position: relative; }
+
+  .demo-menu-btn {
+    position: absolute;
+    top: 0.5rem; right: 0.5rem;
+    width: 26px; height: 26px;
+    padding: 0;
+    border-radius: calc(var(--mw-radius) * 0.7);
+    border: 1px solid var(--mw-border);
+    background: color-mix(in srgb, var(--mw-surface) 85%, transparent);
+    backdrop-filter: blur(4px);
+    color: var(--mw-text-muted);
+    font-size: 16px; line-height: 1;
+    cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    opacity: 0;
+    transition: opacity 120ms, color 120ms, border-color 120ms, transform 100ms;
+    z-index: 10;
+    font-family: var(--mw-font);
+  }
+  .demo-wrap:hover .demo-menu-btn,
+  .demo-menu-btn.is-open { opacity: 1; }
+  .demo-menu-btn:hover {
+    color: var(--mw-text);
+    border-color: var(--mw-accent);
+  }
+  .demo-menu-btn.is-open {
+    color: var(--mw-accent);
+    border-color: var(--mw-accent);
+  }
+
+  .demo-menu {
+    position: absolute;
+    top: calc(0.5rem + 30px);
+    right: 0.5rem;
+    min-width: 240px;
+    max-width: 300px;
+    padding: 0.75rem;
+    background: var(--mw-surface);
+    border: 1px solid var(--mw-border);
+    border-radius: var(--mw-radius);
+    box-shadow: 0 10px 28px -8px rgba(0, 0, 0, 0.18);
+    z-index: 20;
+    display: none;
+    font-family: var(--mw-font);
+  }
+  .demo-menu.is-open { display: block; }
+
+  .demo-menu__type {
+    font-size: 0.62rem;
+    font-family: var(--mw-mono-font);
+    color: var(--mw-text-muted);
+    letter-spacing: 0.04em;
+  }
+  .demo-menu__title {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--mw-text);
+    margin-top: 0.15rem;
+    line-height: 1.2;
+  }
+  .demo-menu__desc {
+    font-size: 0.74rem;
+    color: var(--mw-text-muted);
+    line-height: 1.5;
+    margin-top: 0.5rem;
+    word-break: keep-all;
+  }
+  .demo-menu__where {
+    font-size: 0.66rem;
+    color: var(--mw-text-muted);
+    font-family: var(--mw-mono-font);
+    margin-top: 0.625rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed var(--mw-border);
+    letter-spacing: 0.03em;
+  }
+  .demo-menu__where-label {
+    color: var(--mw-accent);
+    margin-right: 0.375rem;
+  }
+  .demo-menu__divider {
+    height: 1px;
+    background: var(--mw-border);
+    margin: 0.625rem 0 0.375rem;
+  }
+  .demo-menu__item {
+    width: 100%;
+    padding: 0.5rem 0.625rem;
+    display: flex; align-items: center; gap: 0.5rem;
+    background: transparent;
+    border: none;
+    border-radius: calc(var(--mw-radius) * 0.7);
+    color: var(--mw-text);
+    font-size: 0.8rem;
+    font-family: var(--mw-font);
+    text-align: left;
+    cursor: pointer;
+    transition: background 120ms, color 120ms;
+  }
+  .demo-menu__item:hover {
+    background: color-mix(in srgb, var(--mw-accent) 10%, transparent);
+    color: var(--mw-accent);
+  }
+  .demo-menu__item-icon {
+    font-family: var(--mw-mono-font);
+    font-size: 0.7rem;
+    color: var(--mw-accent);
+    width: 16px;
+    flex-shrink: 0;
+  }
+
+  /* Corner pin (for inspector-opt-out widgets) */
+  .demo-pin {
+    position: absolute;
+    top: 0.625rem; right: 0.625rem;
+    width: 28px; height: 28px;
+    padding: 0;
+    border-radius: calc(var(--mw-radius) * 0.65);
+    border: 1px solid var(--mw-border);
+    background: var(--mw-surface);
+    color: var(--mw-text-muted);
+    font-family: var(--mw-mono-font);
+    font-size: 0.7rem; font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
+    z-index: 3;
+  }
+  .mw-card:hover .demo-pin {
+    opacity: 0.8; pointer-events: auto;
+  }
+  .demo-pin:hover {
+    opacity: 1; color: var(--mw-accent); border-color: var(--mw-accent);
+  }
+  .demo-pin:active { transform: scale(0.95); }
+
+  /* =========================================================
+     .grid-fill — 고정 row 높이 그리드 안에서 위젯이 셀을 꽉 채우게.
+     row 높이는 inline `style="grid-auto-rows:192px"` 등으로 지정.
+     차트 body는 flex:1 로 grow, ResizeObserver가 ECharts resize 처리.
+     ========================================================= */
+  .grid-fill > *,
+  .grid-fill > .demo-wrap,
+  .grid-fill > [id],
+  .grid-fill > .mw-card {
+    height: 100%; min-width: 0; min-height: 0;
+  }
+  .grid-fill .demo-wrap > div:not(.demo-wrap__overlay) {
+    height: 100%; min-height: 0;
+  }
+  .grid-fill .mw-card {
+    display: flex; flex-direction: column;
+    box-sizing: border-box;
+    height: 100%; min-height: 0;
+  }
+  .grid-fill .mw-chart__body {
+    height: auto !important;
+    flex: 1 1 auto; min-height: 0;
+  }
+  .grid-fill .mw-lb__list,
+  .grid-fill .mw-timeline,
+  .grid-fill .mw-inbox,
+  .grid-fill .mw-table__wrap {
+    flex: 1 1 auto; min-height: 0;
+    overflow-y: auto;
+  }
+  .grid-fill .mw-kpi__spark,
+  .grid-fill .mw-hero__spark {
+    flex: 1 1 auto; min-height: 32px;
+  }
+
+  /* =========================================================
+     컴팩트 타일 위젯: container queries + fluid typography
+     컨테이너 높이에 따라 메인 값이 cqh 단위로 스케일,
+     body 요소가 flex-grow로 남은 공간 흡수 → 꽉 채움
+     ========================================================= */
+  .grid-fill .mw-countdown.mw-card,
+  .grid-fill .mw-stat.mw-card,
+  .grid-fill .mw-compare.mw-card,
+  .grid-fill .mw-mstack.mw-card,
+  .grid-fill .mw-kpi.mw-card,
+  .grid-fill .mw-hero.mw-card {
+    container-type: size;
+  }
+
+  /* Progress Stepper at M tier (400px)
+     · 헤더(+meta)는 카드 상단에 붙음 (default flex-start)
+     · track이 flex:1로 남은 세로 공간 흡수
+     · track 내부는 items를 세로 가운데 정렬 + 마커/라벨 살짝 키움 */
+  .grid-fill .mw-stepper.mw-card {
+    justify-content: flex-start;
+  }
+  .grid-fill .mw-stepper__track {
+    flex: 1 1 auto;
+    min-height: 0;
+    align-items: center;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+    max-width: 820px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  /* 마커/라벨/칩 살짝 키움 */
+  .grid-fill .mw-stepper__mark {
+    width: 44px; height: 44px;
+    font-size: 1.15rem;
+  }
+  .grid-fill .mw-stepper__mark--pending { font-size: 0.95rem; }
+  .grid-fill .mw-stepper__step::after { top: 21px; }
+  .grid-fill .mw-stepper__step--done::after { top: 20px; }
+  .grid-fill .mw-stepper__step-lbl { font-size: 1rem; }
+  .grid-fill .mw-stepper__chip { font-size: 0.72rem; padding: 0.25rem 0.7rem; }
+  .grid-fill .mw-stepper__step-date { font-size: 0.78rem; }
+  .grid-fill .mw-stepper__badge { top: -1.5rem; font-size: 0.7rem; padding: 0.22rem 0.7rem; }
+
+  /* 메인 값 = 컨테이너 높이 비례 (cqh), 상한/하한은 clamp로 고정 */
+  .grid-fill .mw-countdown__num {
+    font-size: clamp(1.75rem, 18cqh, 3.25rem);
+  }
+  .grid-fill .mw-mstack__main-val {
+    font-size: clamp(1.5rem, 16cqh, 2.75rem);
+  }
+  .grid-fill .mw-compare__val {
+    font-size: clamp(1.15rem, 12cqh, 2.25rem);
+  }
+  .grid-fill .mw-stat__value {
+    font-size: clamp(1.35rem, 18cqh, 2.5rem);
+  }
+  .grid-fill .mw-stat__label {
+    font-size: clamp(0.72rem, 6.5cqh, 0.95rem);
+  }
+  .grid-fill .mw-stat__icon {
+    font-size: clamp(0.85rem, 8cqh, 1.25rem);
+  }
+  .grid-fill .mw-stat__delta {
+    font-size: clamp(0.68rem, 6cqh, 0.9rem);
+  }
+
+  /* KPI Card — 라벨/값/델타도 카드 높이에 비례 */
+  .grid-fill .mw-kpi__label {
+    font-size: clamp(0.72rem, 6cqh, 0.95rem);
+  }
+  .grid-fill .mw-kpi__value {
+    font-size: clamp(1.5rem, 18cqh, 2.5rem);
+  }
+  .grid-fill .mw-kpi__delta {
+    font-size: clamp(0.72rem, 6.5cqh, 1rem);
+  }
+
+  /* Hero Tile — 메인 값도 스케일 */
+  .grid-fill .mw-hero__value {
+    font-size: clamp(1.75rem, 20cqh, 3rem);
+  }
+  .grid-fill .mw-hero__label {
+    font-size: clamp(0.72rem, 6cqh, 1rem);
+  }
+
+  /* 컴팩트 타일 — 위아래 간격 압축 (header margin-bottom 등 global 기본값이 과함) */
+  .grid-fill .mw-countdown.mw-card > .mw-header,
+  .grid-fill .mw-stat.mw-card > .mw-header,
+  .grid-fill .mw-compare.mw-card > .mw-header,
+  .grid-fill .mw-mstack.mw-card > .mw-header {
+    margin-bottom: 0.375rem;
+  }
+  .grid-fill .mw-countdown.mw-card .mw-countdown__label {
+    margin-bottom: 0;
+    font-size: 0.78rem;
+  }
+  .grid-fill .mw-countdown.mw-card .mw-countdown__context {
+    margin-top: 0;
+    font-size: 0.72rem;
+  }
+
+  /* body 요소가 남은 높이를 먹어서 카드 꽉 채움 + 내부는 가운데 정렬 */
+  .grid-fill .mw-countdown.mw-card .mw-countdown__body {
+    flex: 1 1 auto;
+    margin: 0.25rem 0;
+    align-items: center;
+  }
+  .grid-fill .mw-compare.mw-card .mw-compare__row {
+    flex: 1 1 auto;
+    align-items: center;
+    margin: 0;
+  }
+  .grid-fill .mw-stat.mw-card .mw-stat__row {
+    flex: 1 1 auto;
+    align-items: center;
+  }
+  .grid-fill .mw-mstack.mw-card .mw-mstack__sub-row {
+    flex: 1 1 auto;
+    align-content: center;
+  }
+
+  /* (ex-demo-wrap__btn overrides obsolete — ⋯ menu doesn't use accent-bg buttons) */
+
+  .demo-dlg {
+    position: fixed; inset: 0;
+    z-index: 1000;
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 2rem;
+  }
+  .demo-dlg.is-open { display: flex; }
+  .demo-dlg__scrim {
+    position: absolute; inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    cursor: pointer;
+  }
+  .demo-dlg__content {
+    position: relative;
+    background: var(--mw-surface);
+    border: 1px solid var(--mw-border);
+    border-radius: var(--mw-radius);
+    width: 100%; max-width: 720px;
+    max-height: 80vh;
+    display: flex; flex-direction: column;
+    box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.3);
+  }
+  .demo-dlg__head {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--mw-border);
+    gap: 1rem;
+  }
+  .demo-dlg__head-left { flex: 1; min-width: 0; }
+  .demo-dlg__sub {
+    font-size: 0.7rem;
+    font-family: var(--mw-mono-font);
+    color: var(--mw-text-muted);
+    letter-spacing: 0.04em;
+  }
+  .demo-dlg__title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    font-family: var(--mw-display-font);
+    color: var(--mw-text);
+    margin-top: 0.25rem;
+  }
+  .demo-dlg__close {
+    background: none; border: none;
+    cursor: pointer;
+    color: var(--mw-text-muted);
+    font-size: 1.25rem;
+    padding: 0.1rem 0.5rem;
+    line-height: 1;
+  }
+  .demo-dlg__close:hover { color: var(--mw-text); }
+  .demo-dlg__body {
+    position: relative;
+    padding: 1rem 1.5rem 1.5rem;
+    overflow: auto;
+    flex: 1;
+  }
+  .demo-dlg__copy {
+    position: absolute;
+    top: 1.25rem; right: 1.75rem;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.7rem;
+    border: 1px solid var(--mw-border);
+    border-radius: calc(var(--mw-radius) * 0.6);
+    background: var(--mw-surface);
+    color: var(--mw-text-muted);
+    cursor: pointer;
+    font-family: var(--mw-font);
+    z-index: 1;
+  }
+  .demo-dlg__copy:hover { color: var(--mw-text); border-color: var(--mw-accent); }
+  .demo-dlg__code {
+    background: var(--mw-surface-2);
+    padding: 2.25rem 1.1rem 1rem;
+    border-radius: calc(var(--mw-radius) * 0.7);
+    font-size: 0.78rem;
+    line-height: 1.6;
+    font-family: var(--mw-mono-font);
+    color: var(--mw-text);
+    overflow-x: auto;
+    white-space: pre;
+    margin: 0;
+  }
+</style>
+</head>
+
+<body class="mw-themed mw-scanlines">
+
+<nav style="background: var(--mw-surface); border-bottom: 1px solid var(--mw-border);">
+  <div class="max-w-[1400px] mx-auto flex items-center justify-between px-6 py-4 flex-wrap gap-4">
+    <div class="flex items-center gap-3">
+      <div style="width: 32px; height: 32px; background: var(--mw-accent); color: #fff; display:flex; align-items:center; justify-content:center; font-weight:700; border-radius: var(--mw-radius);">A</div>
+      <div>
+        <div class="text-sm font-semibold" id="nav-company">ACME KOREA</div>
+        <div class="text-xs mw-muted" id="nav-sub">통합 운영 대시보드</div>
+      </div>
+    </div>
+    <div class="flex items-center gap-2 flex-wrap">
+      <a href="index.html" class="pill">← 랜딩</a>
+      <span class="mw-muted text-xs ml-1 mr-1">THEME</span>
+      <select class="pill" id="theme-select" aria-label="Theme">
+        <optgroup label="Light">
+          <option value="claude" selected>테라코타 크림 inspired by Claude</option>
+          <option value="linear">인디고 미니멀 inspired by Linear</option>
+          <option value="stripe">페이먼트 퍼플 inspired by Stripe</option>
+          <option value="notion">웜 오프화이트 inspired by Notion</option>
+          <option value="airbnb">코랄 라운드 inspired by Airbnb</option>
+          <option value="linkedin">프로페셔널 블루 inspired by LinkedIn</option>
+          <option value="instagram">비비드 그라디언트 inspired by Instagram</option>
+          <option value="youtube">시그니처 레드 inspired by YouTube</option>
+          <option value="reddit">커뮤니티 오렌지 inspired by Reddit</option>
+          <option value="medium">에디토리얼 세리프 inspired by Medium</option>
+          <option value="apple">시스템 블루 inspired by Apple</option>
+          <option value="duolingo">오울 그린 inspired by Duolingo</option>
+          <option value="tiffany">로빈스에그 블루 inspired by Tiffany</option>
+          <option value="mailchimp">카벤디시 옐로 inspired by Mailchimp</option>
+          <option value="tmobile">시그니처 마젠타 inspired by T-Mobile</option>
+          <option value="fedex">퍼플 오렌지 inspired by FedEx</option>
+          <option value="hermes">럭셔리 크림 inspired by Hermès</option>
+          <option value="barbie">파스텔 핑크 inspired by Barbie</option>
+        </optgroup>
+        <optgroup label="Dark">
+          <option value="vercel">퓨어 미니멀 inspired by Vercel</option>
+          <option value="github">딤드 다크 inspired by GitHub</option>
+          <option value="x">샤프 모노 inspired by X</option>
+          <option value="slack">다크 오버진 inspired by Slack</option>
+          <option value="discord">블러플 inspired by Discord</option>
+          <option value="openai">AI 틸 inspired by OpenAI</option>
+          <option value="spotify">네온 그린 inspired by Spotify</option>
+          <option value="twitch">게이밍 퍼플 inspired by Twitch</option>
+          <option value="netflix">시네마틱 레드 inspired by Netflix</option>
+          <option value="figma">멀티 로고 컬러 inspired by Figma</option>
+          <option value="amazon">마켓 네이비 inspired by Amazon</option>
+          <option value="adobe">크리에이티브 레드 inspired by Adobe</option>
+          <option value="bloomberg">터미널 앰버 inspired by Bloomberg</option>
+          <option value="ups">풀먼 브라운 inspired by UPS</option>
+          <option value="heineken">보틀 그린 inspired by Heineken</option>
+          <option value="nasa">웜 블루 inspired by NASA</option>
+          <option value="deere">트랙터 그린 inspired by John Deere</option>
+        </optgroup>
+      </select>
+    </div>
+  </div>
+</nav>
+
+<!-- Theme Picker Bar — horizontal carousel -->
+<div class="theme-bar">
+  <div class="theme-bar__legend">
+    <span class="theme-bar__legend-side">← 01 · 대중적</span>
+    <span class="theme-bar__legend-line"></span>
+    <span class="theme-bar__legend-side">독창적 · 35 →</span>
+  </div>
+  <div class="theme-bar__shell">
+    <button type="button" class="theme-bar__arrow theme-bar__arrow--left" id="theme-bar-prev" aria-label="이전">‹</button>
+    <div class="theme-bar__inner" id="theme-bar"></div>
+    <button type="button" class="theme-bar__arrow theme-bar__arrow--right" id="theme-bar-next" aria-label="다음">›</button>
+  </div>
+</div>
+
+<main class="max-w-[1400px] mx-auto p-6" id="dashboard" style="display:none;">
+
+  <div class="flex items-end justify-between flex-wrap gap-4 mb-8">
+    <div>
+      <h1 class="text-2xl font-semibold">이번 주 운영 현황</h1>
+      <p class="mw-muted text-sm mt-1">
+        <span class="mw-live-dot" style="margin-right: 0.375rem;"></span>
+        <span id="page-period"></span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Global alert banner -->
+  <div id="global-alert" class="mb-6"></div>
+
+  <!-- Global filter bar -->
+  <div id="global-filter" class="mb-8"></div>
+
+  <!-- ============================================ -->
+  <!-- SECTION 1: AT A GLANCE — 한눈에 보는 현재    -->
+  <!-- ============================================ -->
+  <section>
+    <div class="section-hd">
+      <div class="section-hd__left">
+        <div class="section-hd__kicker">01 · AT A GLANCE</div>
+        <div class="section-hd__title">한눈에 보는 현재</div>
+      </div>
+      <div class="section-hd__tag">Hero · Ring · KPI · Goal · Sparkline · Bullet</div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 grid-fill" style="grid-auto-rows:400px">
+      <div class="lg:col-span-2" id="hero-tile"></div>
+      <div id="ring-progress"></div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4 grid-fill" id="kpi-row" style="grid-auto-rows:192px"></div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4 grid-fill" style="grid-auto-rows:360px">
+      <div class="lg:col-span-2" id="quarterly-goals"></div>
+      <div id="spark-metrics"></div>
+    </div>
+    <div class="grid grid-cols-1 gap-4 mt-4 grid-fill" style="grid-auto-rows:200px">
+      <div id="bullet-revenue"></div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4 grid-fill" style="grid-auto-rows:192px">
+      <div id="compare-card"></div>
+      <div id="metric-stack"></div>
+      <div id="countdown-tile"></div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- SECTION 2: REAL-TIME PULSE — 지금 무슨 일    -->
+  <!-- ============================================ -->
+  <section class="mt-12">
+    <div class="section-hd">
+      <div class="section-hd__left">
+        <div class="section-hd__kicker">02 · REAL-TIME PULSE</div>
+        <div class="section-hd__title">지금 무슨 일</div>
+      </div>
+      <div class="section-hd__tag"><span class="mw-live-dot"></span> LIVE STREAM</div>
+    </div>
+    <div id="transactions-table"></div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4 grid-fill" style="grid-auto-rows:400px">
+      <div id="timeline-feed"></div>
+      <div id="inbox-preview"></div>
+      <div id="status-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- SECTION 3: TRENDS & MIX — 추세와 분포        -->
+  <!-- ============================================ -->
+  <section class="mt-12">
+    <div class="section-hd">
+      <div class="section-hd__left">
+        <div class="section-hd__kicker">03 · TRENDS & MIX</div>
+        <div class="section-hd__title">추세 · 분포</div>
+      </div>
+      <div class="section-hd__tag">Line · Bar · Funnel · Donut · Leaderboard</div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 grid-fill" style="grid-auto-rows:400px">
+      <div class="lg:col-span-2" id="revenue-chart"></div>
+      <div id="region-chart"></div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4 grid-fill" style="grid-auto-rows:400px">
+      <div id="funnel-chart"></div>
+      <div id="product-chart"></div>
+      <div id="team-leaderboard"></div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- SECTION 4: DEEP-DIVE — 깊은 분석             -->
+  <!-- ============================================ -->
+  <section class="mt-12">
+    <div class="section-hd">
+      <div class="section-hd__left">
+        <div class="section-hd__kicker">04 · DEEP-DIVE</div>
+        <div class="section-hd__title">지역 · 분해 · 리텐션</div>
+      </div>
+      <div class="section-hd__tag">Map · Waterfall · Cohort Matrix</div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 grid-fill" style="grid-auto-rows:420px">
+      <div id="region-map"></div>
+      <div class="lg:col-span-2" id="revenue-waterfall"></div>
+    </div>
+    <div class="grid grid-cols-1 gap-4 mt-4 grid-fill" style="grid-auto-rows:320px">
+      <div id="retention-cohort"></div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- SECTION 5: CUSTOMER INSIGHTS — 고객 분석    -->
+  <!-- ============================================ -->
+  <section class="mt-12">
+    <div class="section-hd">
+      <div class="section-hd__left">
+        <div class="section-hd__kicker">05 · CUSTOMER INSIGHTS</div>
+        <div class="section-hd__title">고객 · 활동 · 흐름</div>
+      </div>
+      <div class="section-hd__tag">Heatmap · Radar · Treemap · Scatter · Sankey</div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 grid-fill" style="grid-auto-rows:400px">
+      <div class="lg:col-span-2" id="activity-heatmap"></div>
+      <div id="team-radar"></div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4 grid-fill" style="grid-auto-rows:608px">
+      <div class="lg:col-span-2" id="customer-treemap"></div>
+      <div id="nps-scatter"></div>
+    </div>
+    <div class="grid grid-cols-1 gap-4 mt-4 grid-fill" style="grid-auto-rows:400px">
+      <div id="user-flow-sankey"></div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- SECTION 6: PROJECT & CALENDAR — 운영 일정    -->
+  <!-- ============================================ -->
+  <section class="mt-12">
+    <div class="section-hd">
+      <div class="section-hd__left">
+        <div class="section-hd__kicker">06 · PROJECT &amp; CALENDAR</div>
+        <div class="section-hd__title">프로젝트 · 일정</div>
+      </div>
+      <div class="section-hd__tag">Progress Stepper · Calendar Heatmap · Event Calendar</div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 grid-fill" style="grid-auto-rows:400px">
+      <div class="lg:col-span-2" id="progress-project"></div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4 grid-fill" style="grid-auto-rows:220px">
+      <div class="lg:col-span-2" id="year-activity"></div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4 grid-fill" style="grid-auto-rows:480px">
+      <div class="lg:col-span-2" id="release-calendar"></div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- SECTION 7: SYSTEM HEALTH — 인프라 상태       -->
+  <!-- ============================================ -->
+  <section class="mt-12">
+    <div class="section-hd">
+      <div class="section-hd__left">
+        <div class="section-hd__kicker">07 · SYSTEM HEALTH</div>
+        <div class="section-hd__title">시스템 상태</div>
+      </div>
+      <div class="section-hd__tag"><span class="mw-live-dot"></span> 실시간 · 5초 주기</div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 grid-fill" style="grid-auto-rows:400px">
+      <div id="gauge-cpu"></div>
+      <div id="gauge-memory"></div>
+      <div id="gauge-latency"></div>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-4 grid-fill" id="mini-stats" style="grid-auto-rows:120px"></div>
+  </section>
+
+  <footer class="text-center mw-muted text-xs py-8 mt-8">
+    ACME KOREA · Internal Operations Dashboard · Powered by magicwiget v0.1.0 · 31 widgets rendered
+  </footer>
+
+</main>
+
+<div id="loading" class="error-box" style="display:none;">
+  <div class="mw-muted">Loading ./data/dashboard.json ...</div>
+</div>
+
+<div id="error" class="error-box" style="display:none;">
+  <div class="font-semibold" style="color: var(--mw-danger);">데이터 로드 실패</div>
+  <div class="mw-muted mt-2">
+    파일을 직접 열면 브라우저의 CORS 정책으로 JSON 로드가 막힙니다. 로컬 서버로 실행하세요:
+  </div>
+  <pre style="background: var(--mw-surface-2); padding: 0.75rem; margin-top: 0.75rem; border-radius: var(--mw-radius); overflow-x: auto;">npx serve .
+# or
+python3 -m http.server 8000</pre>
+  <div class="mw-muted text-xs mt-2" id="error-detail"></div>
+</div>
+
+<script>
+// Theme switcher (select)
+(function () {
+  var sel = document.getElementById('theme-select');
+  if (!sel) return;
+  sel.addEventListener('change', function () { Maging.setTheme(sel.value); });
+})();
+
+// ============================================================
+// Theme Bar (horizontal scroll picker)
+// ============================================================
+// Ordered mainstream → distinctive (← 대중적 ··· 독창적 →)
+var THEMES = [
+  { value: 'notion',    brand: 'Notion',    url: 'https://www.notion.so',      desc: '웜 오프화이트',        accent: '#37352f', accent2: '#2eaadc', bg: '#ffffff', text: '#37352f', border: '#e9e9e7', success: '#448361', warning: '#cb912f', danger: '#d44c47', radius: '4px' },
+  { value: 'vercel',    brand: 'Vercel',    url: 'https://vercel.com',         desc: '퓨어 미니멀',          accent: '#ffffff', accent2: '#7928ca', bg: '#000000', text: '#ffffff', border: '#333333', success: '#0070f3', warning: '#f5a623', danger: '#ff0080', radius: '6px' },
+  { value: 'linear',    brand: 'Linear',    url: 'https://linear.app',         desc: '인디고 미니멀',        accent: '#5e6ad2', accent2: '#a78bfa', bg: '#fcfcfd', text: '#0f1115', border: '#e6e8eb', success: '#4cb782', warning: '#f2994a', danger: '#eb5757', radius: '6px' },
+  { value: 'github',    brand: 'GitHub',    url: 'https://github.com',         desc: '딤드 다크',            accent: '#58a6ff', accent2: '#a371f7', bg: '#0d1117', text: '#c9d1d9', border: '#30363d', success: '#3fb950', warning: '#d29922', danger: '#f85149', radius: '6px' },
+  { value: 'apple',     brand: 'Apple',     url: 'https://www.apple.com',      desc: '시스템 블루',          accent: '#007aff', accent2: '#5ac8fa', bg: '#f5f5f7', text: '#1d1d1f', border: '#d2d2d7', success: '#34c759', warning: '#ff9500', danger: '#ff3b30', radius: '14px' },
+  { value: 'stripe',    brand: 'Stripe',    url: 'https://stripe.com',         desc: '페이먼트 퍼플',        accent: '#635bff', accent2: '#00d4ff', bg: '#f6f9fc', text: '#0a2540', border: '#e3e8ee', success: '#3ecf8e', warning: '#f5a623', danger: '#cd3d64', radius: '8px' },
+  { value: 'linkedin',  brand: 'LinkedIn',  url: 'https://www.linkedin.com',   desc: '프로페셔널 블루',      accent: '#0a66c2', accent2: '#378fe9', bg: '#f3f2ef', text: '#000000', border: '#e0e0e0', success: '#057642', warning: '#e7a33e', danger: '#cc1016', radius: '8px' },
+  { value: 'x',         brand: 'X',         url: 'https://x.com',              desc: '샤프 모노',            accent: '#1d9bf0', accent2: '#f91880', bg: '#000000', text: '#e7e9ea', border: '#2f3336', success: '#00ba7c', warning: '#ffd400', danger: '#f4212e', radius: '16px' },
+  { value: 'medium',    brand: 'Medium',    url: 'https://medium.com',         desc: '에디토리얼 세리프',    accent: '#1a8917', accent2: '#242424', bg: '#ffffff', text: '#242424', border: '#e6e6e6', success: '#1a8917', warning: '#b5a642', danger: '#c94a4a', radius: '4px' },
+  { value: 'tiffany',   brand: 'Tiffany',   url: 'https://www.tiffany.com',    desc: '로빈스에그 블루',      accent: '#0abab5', accent2: '#c9a86c', bg: '#f2f9f8', text: '#1f2d2b', border: '#d1e6e3', success: '#4ca8a0', warning: '#d4a84b', danger: '#c85a5a', radius: '4px' },
+  { value: 'openai',    brand: 'OpenAI',    url: 'https://openai.com',         desc: 'AI 틸',                accent: '#00a67e', accent2: '#ab68ff', bg: '#202123', text: '#ececf1', border: '#4d4d4f', success: '#00a67e', warning: '#f59e0b', danger: '#ef4146', radius: '6px' },
+  { value: 'discord',   brand: 'Discord',   url: 'https://discord.com',        desc: '블러플',               accent: '#5865f2', accent2: '#eb459e', bg: '#313338', text: '#f2f3f5', border: '#3f4147', success: '#23a55a', warning: '#f0b232', danger: '#f23f42', radius: '4px' },
+  { value: 'figma',     brand: 'Figma',     url: 'https://www.figma.com',      desc: '멀티 로고 컬러',       accent: '#ff3737', accent2: '#874fff', bg: '#1e1e1e', text: '#ffffff', border: '#444444', success: '#24cb71', warning: '#ff7237', danger: '#ff3737', radius: '2px' },
+  { value: 'amazon',    brand: 'Amazon',    url: 'https://www.amazon.com',     desc: '마켓 네이비',          accent: '#ff9900', accent2: '#146eb4', bg: '#131a22', text: '#ffffff', border: '#455a74', success: '#007185', warning: '#ff9900', danger: '#b12704', radius: '4px' },
+  { value: 'airbnb',    brand: 'Airbnb',    url: 'https://www.airbnb.com',     desc: '코랄 라운드',          accent: '#ff5a5f', accent2: '#00a699', bg: '#ffffff', text: '#222222', border: '#dddddd', success: '#008489', warning: '#fc642d', danger: '#c13515', radius: '12px' },
+  { value: 'adobe',     brand: 'Adobe',     url: 'https://www.adobe.com',      desc: '크리에이티브 레드',    accent: '#fa0c00', accent2: '#ed1c24', bg: '#1d1d1d', text: '#ffffff', border: '#4a4a4a', success: '#12b886', warning: '#ffd000', danger: '#fa0c00', radius: '2px' },
+  { value: 'youtube',   brand: 'YouTube',   url: 'https://www.youtube.com',    desc: '시그니처 레드',        accent: '#ff0000', accent2: '#065fd4', bg: '#ffffff', text: '#0f0f0f', border: '#e5e5e5', success: '#2ba640', warning: '#e3a01e', danger: '#cc0000', radius: '12px' },
+  { value: 'netflix',   brand: 'Netflix',   url: 'https://www.netflix.com',    desc: '시네마틱 레드',        accent: '#e50914', accent2: '#b20710', bg: '#000000', text: '#ffffff', border: '#333333', success: '#46d369', warning: '#ffd700', danger: '#831010', radius: '4px' },
+  { value: 'reddit',    brand: 'Reddit',    url: 'https://www.reddit.com',     desc: '커뮤니티 오렌지',      accent: '#ff4500', accent2: '#0079d3', bg: '#ffffff', text: '#1c1c1c', border: '#edeff1', success: '#24a0ed', warning: '#ffb000', danger: '#ea0027', radius: '8px' },
+  { value: 'twitch',    brand: 'Twitch',    url: 'https://www.twitch.tv',      desc: '게이밍 퍼플',          accent: '#9146ff', accent2: '#bf94ff', bg: '#0e0e10', text: '#efeff1', border: '#2d2d39', success: '#00f593', warning: '#ffc70b', danger: '#eb0400', radius: '4px' },
+  { value: 'duolingo',  brand: 'Duolingo',  url: 'https://www.duolingo.com',   desc: '오울 그린',            accent: '#58cc02', accent2: '#1cb0f6', bg: '#fffdf7', text: '#3c3c3c', border: '#e5e5e5', success: '#58cc02', warning: '#ffc800', danger: '#ff4b4b', radius: '12px' },
+  { value: 'spotify',   brand: 'Spotify',   url: 'https://www.spotify.com',    desc: '네온 그린',            accent: '#1db954', accent2: '#1ed760', bg: '#121212', text: '#ffffff', border: '#3e3e3e', success: '#1db954', warning: '#ffc83d', danger: '#e22134', radius: '8px' },
+  { value: 'tmobile',   brand: 'T-Mobile',  url: 'https://www.t-mobile.com',   desc: '시그니처 마젠타',      accent: '#e20074', accent2: '#9b0056', bg: '#ffffff', text: '#1d1d1d', border: '#e8e8e8', success: '#2aaa50', warning: '#f9a825', danger: '#d9001b', radius: '8px' },
+  { value: 'mailchimp', brand: 'Mailchimp', url: 'https://mailchimp.com',      desc: '카벤디시 옐로',        accent: '#ffe01b', accent2: '#007c89', bg: '#fffaeb', text: '#241c15', border: '#ebe0c5', success: '#1a7d6f', warning: '#e89c2a', danger: '#e8515f', radius: '10px' },
+  { value: 'fedex',     brand: 'FedEx',     url: 'https://www.fedex.com',      desc: '퍼플 오렌지',          accent: '#ff6600', accent2: '#4d148c', bg: '#ffffff', text: '#1a1a1a', border: '#e5e5e5', success: '#2e7d32', warning: '#ff6600', danger: '#c62828', radius: '2px' },
+  { value: 'claude',    brand: 'Claude',    url: 'https://claude.ai',          desc: '테라코타 크림',        accent: '#da7756', accent2: '#6a9bcc', bg: '#faf9f5', text: '#141413', border: '#e8e2d5', success: '#788c5d', warning: '#d4a037', danger: '#c25e5e', radius: '8px' },
+  { value: 'instagram', brand: 'Instagram', url: 'https://www.instagram.com',  desc: '비비드 그라디언트',    accent: '#e1306c', accent2: '#f77737', bg: '#fafafa', text: '#262626', border: '#dbdbdb', success: '#833ab4', warning: '#fcaf45', danger: '#fd1d1d', radius: '12px' },
+  { value: 'bloomberg', brand: 'Bloomberg', url: 'https://www.bloomberg.com',  desc: '터미널 앰버',          accent: '#ffa028', accent2: '#f39f41', bg: '#0a0a0a', text: '#f5f5f5', border: '#2a2a2a', success: '#00c48c', warning: '#ffd23f', danger: '#ff4c4c', radius: '2px' },
+  { value: 'slack',     brand: 'Slack',     url: 'https://slack.com',          desc: '다크 오버진',          accent: '#ecb22e', accent2: '#36c5f0', bg: '#3f0e40', text: '#f8f8f8', border: '#5c2d5d', success: '#2eb67d', warning: '#ecb22e', danger: '#e01e5a', radius: '6px' },
+  { value: 'nasa',      brand: 'NASA',      url: 'https://www.nasa.gov',       desc: '웜 블루',              accent: '#fc3d21', accent2: '#ffffff', bg: '#0b3d91', text: '#ffffff', border: '#2f6bc4', success: '#4caf50', warning: '#ffc107', danger: '#fc3d21', radius: '2px' },
+  { value: 'heineken',  brand: 'Heineken',  url: 'https://www.heineken.com',   desc: '보틀 그린',            accent: '#e10012', accent2: '#ffd700', bg: '#0a3d22', text: '#f5f5f0', border: '#1e6e44', success: '#4fc37a', warning: '#ffd700', danger: '#e10012', radius: '2px' },
+  { value: 'deere',     brand: 'John Deere',url: 'https://www.deere.com',      desc: '트랙터 그린',          accent: '#ffde00', accent2: '#ffffff', bg: '#2a6221', text: '#ffffff', border: '#468d3b', success: '#a8d49a', warning: '#ffde00', danger: '#d9534f', radius: '4px' },
+  { value: 'hermes',    brand: 'Hermès',    url: 'https://www.hermes.com',     desc: '럭셔리 크림',          accent: '#ff6900', accent2: '#3e2110', bg: '#fdf6ec', text: '#3e2110', border: '#e8d4b6', success: '#2e7d32', warning: '#d17a00', danger: '#ac1b2b', radius: '0px' },
+  { value: 'ups',       brand: 'UPS',       url: 'https://www.ups.com',        desc: '풀먼 브라운',          accent: '#ffb500', accent2: '#c89d5a', bg: '#2b1810', text: '#f3e6d0', border: '#5a3d2b', success: '#5ba83f', warning: '#ffb500', danger: '#d9534f', radius: '4px' },
+  { value: 'barbie',    brand: 'Barbie',    url: 'https://www.barbie.com',     desc: '파스텔 핑크',          accent: '#e0218a', accent2: '#ffd700', bg: '#fff0f7', text: '#3d1a2b', border: '#ffcce0', success: '#50c878', warning: '#ffa500', danger: '#8b0000', radius: '20px' }
+];
+
+// Luminance-based contrast text picker
+function onColor(hex) {
+  var h = hex.replace('#', '');
+  if (h.length === 3) h = h.split('').map(function (c) { return c + c; }).join('');
+  var r = parseInt(h.slice(0, 2), 16);
+  var g = parseInt(h.slice(2, 4), 16);
+  var b = parseInt(h.slice(4, 6), 16);
+  var luma = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return luma > 0.62 ? '#111' : '#fff';
+}
+
+function renderThemeBar() {
+  var bar = document.getElementById('theme-bar');
+  if (!bar) return;
+  var current = document.documentElement.getAttribute('data-theme') || 'claude';
+  bar.innerHTML = THEMES.map(function (t, i) {
+    var index = String(i + 1).padStart(2, '0');
+    var active = t.value === current ? ' is-active' : '';
+    var chipStyle =
+      'background:' + t.bg +
+      ';border-color:' + t.border +
+      ';color:' + t.text +
+      ';border-radius:' + t.radius;
+    return '<button type="button" class="theme-chip' + active + '" data-theme-chip="' + t.value + '" style="' + chipStyle + '" title="inspired by ' + t.brand + '">' +
+      '<div class="theme-chip__preview">' +
+        '<div class="theme-chip__index">' + index + '</div>' +
+        '<div class="theme-chip__bars">' +
+          '<div class="theme-chip__bar" style="height:100%;background:' + t.accent  + '"></div>' +
+          '<div class="theme-chip__bar" style="height:78%;background:'  + t.accent2 + '"></div>' +
+          '<div class="theme-chip__bar" style="height:58%;background:'  + t.warning + '"></div>' +
+          '<div class="theme-chip__bar" style="height:38%;background:'  + t.danger  + '"></div>' +
+          '<div class="theme-chip__bar" style="height:22%;background:'  + t.success + '"></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="theme-chip__name">' + t.desc + '</div>' +
+      '<div class="theme-chip__sub">inspired by <a href="' + t.url + '" target="_blank" rel="noopener" class="theme-chip__brand" data-brand-url="' + t.url + '">' + t.brand + '</a></div>' +
+    '</button>';
+  }).join('');
+}
+
+function setActiveChip(value) {
+  document.querySelectorAll('[data-theme-chip]').forEach(function (c) {
+    c.classList.toggle('is-active', c.dataset.themeChip === value);
+  });
+  var active = document.querySelector('[data-theme-chip="' + value + '"]');
+  if (active) active.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  var sel = document.getElementById('theme-select');
+  if (sel && sel.value !== value) sel.value = value;
+}
+
+document.addEventListener('click', function (e) {
+  if (e.target.closest('[data-brand-url]')) {
+    e.stopPropagation();
+    return;
+  }
+  var chip = e.target.closest('[data-theme-chip]');
+  if (!chip) return;
+  var value = chip.dataset.themeChip;
+  Maging.setTheme(value);
+  setActiveChip(value);
+});
+
+document.addEventListener('change', function (e) {
+  if (e.target && e.target.id === 'theme-select') setActiveChip(e.target.value);
+});
+
+renderThemeBar();
+
+// Carousel arrows
+(function setupCarousel() {
+  var inner = document.getElementById('theme-bar');
+  var prev = document.getElementById('theme-bar-prev');
+  var next = document.getElementById('theme-bar-next');
+  if (!inner || !prev || !next) return;
+
+  function updateState() {
+    var max = inner.scrollWidth - inner.clientWidth;
+    prev.classList.toggle('is-disabled', inner.scrollLeft <= 2);
+    next.classList.toggle('is-disabled', inner.scrollLeft >= max - 2);
+  }
+
+  prev.addEventListener('click', function () {
+    inner.scrollBy({ left: -inner.clientWidth * 0.7, behavior: 'smooth' });
+  });
+  next.addEventListener('click', function () {
+    inner.scrollBy({ left: inner.clientWidth * 0.7, behavior: 'smooth' });
+  });
+  inner.addEventListener('scroll', updateState);
+  window.addEventListener('resize', updateState);
+  requestAnimationFrame(updateState);
+})();
+
+// ============================================================
+// Widget Inspector — hover overlay + code dialog
+// title/desc는 Maging.meta에서 파생 (단일 출처).
+// code 샘플은 INSPECTOR_MAP 각 entry가 직접 소유.
+// ============================================================
+function widgetMeta(type) {
+  return (window.MagicWiget && Maging.meta && Maging.meta[type]) || { title: type, desc: '' };
+}
+
+var INSPECTOR_MAP = [
+  { selector: '#kpi-row > .mw-card', type: 'kpiCard',
+    code: "const kpis = [\n  { label: '이번 달 매출', value: '₩128억', delta: 8.3, deltaGoodWhen: 'positive',\n    sparkline: [420, 445, 430, 468, 475, 490, 510, 505, 530, 548, 562, 580] },\n  { label: '활성 사용자 (MAU)', value: '42,180', delta: 5.1, deltaGoodWhen: 'positive',\n    sparkline: [38200, 38900, 39100, 39700, 40200, 40400, 40800, 41100, 41400, 41600, 41900, 42180] },\n  { label: '신규 계약', value: '127건', delta: -2.3, deltaGoodWhen: 'positive',\n    sparkline: [22, 28, 19, 31, 25, 29, 34, 21, 26, 30, 24, 27] },\n  { label: '평균 응답시간', value: '1.4초', delta: -12.0, deltaGoodWhen: 'negative',\n    sparkline: [1.8, 1.75, 1.9, 1.7, 1.65, 1.55, 1.5, 1.48, 1.45, 1.42, 1.4, 1.4] },\n];\n\nconst row = document.getElementById('kpi-row');\nkpis.forEach((kpi) => {\n  const el = document.createElement('div');\n  row.appendChild(el);\n  Maging.kpiCard(el, kpi);\n});" },
+
+  { selector: '#revenue-chart', type: 'lineChart',
+    code: "const revenue = {\n  title: '주간 매출 추이',\n  subtitle: '최근 12주 · 부문별 누적',\n  categories: ['W01','W02','W03','W04','W05','W06','W07','W08','W09','W10','W11','W12'],\n  series: [\n    { name: 'Enterprise',\n      data: [420000000, 445000000, 430000000, 468000000, 475000000, 490000000,\n             510000000, 505000000, 530000000, 548000000, 562000000, 580000000] },\n    { name: 'SMB',\n      data: [160000000, 170000000, 165000000, 175000000, 180000000, 188000000,\n             195000000, 200000000, 210000000, 220000000, 228000000, 240000000] },\n  ],\n  stack: true,\n  yFormatter: (v) => (v / 1_0000_0000).toFixed(1) + '억',\n  yMax: 900000000,\n  height: 240,\n};\n\nMaging.lineChart('#revenue-chart', revenue);" },
+
+  { selector: '#region-chart', type: 'barChart',
+    code: "const regions = {\n  title: '지역별 매출',\n  subtitle: '이번 분기 기준',\n  items: [\n    { label: '서울', value: 1250000000 },\n    { label: '경기', value: 980000000 },\n    { label: '부산', value: 720000000 },\n    { label: '인천', value: 540000000 },\n    { label: '대구', value: 410000000 },\n    { label: '대전', value: 320000000 },\n    { label: '광주', value: 270000000 },\n  ],\n  horizontal: true,\n  yFormatter: Maging.fmt.krw,\n  height: 240,\n};\n\nMaging.barChart('#region-chart', regions);" },
+
+  { selector: '#funnel-chart', type: 'funnelChart',
+    code: "const pipeline = {\n  title: '영업 파이프라인',\n  subtitle: '단계별 잠재 거래',\n  stages: [\n    { label: '리드', value: 2400 },\n    { label: '검증', value: 1380 },\n    { label: '데모', value: 820 },\n    { label: '제안', value: 410 },\n    { label: '성약', value: 127 },\n  ],\n  valueSuffix: '건',\n  height: 240,\n};\n\nMaging.funnelChart('#funnel-chart', pipeline);" },
+
+  { selector: '#product-chart', type: 'donutChart',
+    code: "const slices = [\n  { label: 'Enterprise',   value: 548 },\n  { label: 'Professional', value: 312 },\n  { label: 'Team',         value: 178 },\n  { label: 'Starter',      value: 84 },\n];\nconst total = slices.reduce((s, x) => s + x.value, 0);\n\nMaging.donutChart('#product-chart', {\n  title: '제품 카테고리',\n  subtitle: '이번 달 판매 비중',\n  slices,\n  centerLabel: '전체 판매',\n  centerValue: total.toLocaleString() + '건',\n  height: 240,\n});" },
+
+  { selector: '#team-leaderboard', type: 'leaderboard',
+    code: "const members = [\n  { name: '김지훈', initial: '김', percent: 98, revenue: 245000000 },\n  { name: '이수민', initial: '이', percent: 94, revenue: 220000000 },\n  { name: '정하늘', initial: '정', percent: 87, revenue: 198000000 },\n  { name: '박민재', initial: '박', percent: 82, revenue: 175000000 },\n  { name: '최유리', initial: '최', percent: 76, revenue: 148000000 },\n];\n\nMaging.leaderboard('#team-leaderboard', {\n  title: '영업 TOP 5',\n  subtitle: '분기 목표 달성률',\n  items: members.map((m) => ({\n    name: m.name, initial: m.initial, percent: m.percent,\n    meta: m.percent + '% · ' + Maging.fmt.krw(m.revenue),\n  })),\n});" },
+
+  { selector: '#activity-heatmap', type: 'heatmapChart',
+    code: "const days = ['월','화','수','목','금','토','일'];\nconst hours = ['0','1','2','3','4','5','6','7','8','9','10','11',\n               '12','13','14','15','16','17','18','19','20','21','22','23'];\nconst matrix = [\n  [0,0,0,0,0,0,1,2,8,14,18,15,12,17,20,22,18,10,5,3,2,1,0,0], // 월\n  [0,0,0,0,0,1,1,3,9,16,20,16,13,18,22,21,17,11,4,2,1,0,0,0], // 화\n  // ... 5 more rows (수~일)\n];\n\nMaging.heatmapChart('#activity-heatmap', {\n  title: '시간대별 거래 활동',\n  subtitle: '요일 × 시간 · 이번 주 · 단위 건',\n  xAxis: hours, yAxis: days, matrix,\n  height: 240,\n  tooltipFormatter: (p) =>\n    days[p.value[1]] + '요일 ' + hours[p.value[0]] +\n    '시: <b>' + p.value[2] + '건</b>',\n});" },
+
+  { selector: '#team-radar', type: 'radarChart',
+    code: "const teamRadar = {\n  title: '팀별 역량 매트릭스',\n  subtitle: '6개 지표 · 100점 만점',\n  indicators: [\n    { name: '신규발굴', max: 100 },\n    { name: '유지율',   max: 100 },\n    { name: '계약규모', max: 100 },\n    { name: '응답속도', max: 100 },\n    { name: 'CS만족도', max: 100 },\n    { name: '업셀률',   max: 100 },\n  ],\n  series: [\n    { name: '서울팀',   data: [88, 92, 75, 85, 90, 72] },\n    { name: '수도권팀', data: [72, 85, 88, 76, 82, 80] },\n    { name: '지방팀',   data: [65, 78, 68, 82, 85, 62] },\n  ],\n  height: 240,\n};\n\nMaging.radarChart('#team-radar', teamRadar);" },
+
+  { selector: '#customer-treemap', type: 'treemapChart',
+    code: "const customerTreemap = {\n  title: '고객사 매출 분포',\n  subtitle: 'TOP 15 · 이번 분기',\n  items: [\n    { name: '한빛테크',     value: 580000000 },\n    { name: '블루스퀘어',   value: 410000000 },\n    { name: '유니온시스템', value: 385000000 },\n    { name: '미래엔터프라이즈', value: 320000000 },\n    // ... 11 more items\n  ],\n  valueFormatter: Maging.fmt.krw,\n  height: 360,\n};\n\nMaging.treemapChart('#customer-treemap', customerTreemap);" },
+
+  { selector: '#nps-scatter', type: 'scatterChart',
+    code: "const correlationScatter = {\n  title: 'NPS × 응답시간',\n  subtitle: '제품별 · 원 크기 = 사용자 수(천명)',\n  xLabel: '평균 응답시간 (ms)',\n  yLabel: 'NPS',\n  points: [\n    { label: 'Enterprise',   x: 120, y: 68, size: 44 },\n    { label: 'Professional', x: 180, y: 58, size: 34 },\n    { label: 'Team',         x: 250, y: 45, size: 24 },\n    { label: 'Starter',      x: 340, y: 32, size: 16 },\n    { label: 'Beta',         x: 420, y: 18, size: 10 },\n  ],\n  height: 360,\n};\n\nMaging.scatterChart('#nps-scatter', correlationScatter);" },
+
+  { selector: '#gauge-cpu, #gauge-memory, #gauge-latency', type: 'gaugeChart',
+    code: "const gauges = [\n  { title: 'CPU',     label: '서버 평균', value: 42,  max: 100, unit: '%',\n    thresholds: [[0.5,'good'], [0.8,'warning'], [1.0,'danger']] },\n  { title: 'MEMORY',  label: '힙 사용률', value: 68,  max: 100, unit: '%',\n    thresholds: [[0.5,'good'], [0.85,'warning'], [1.0,'danger']] },\n  { title: 'LATENCY', label: 'p95',       value: 142, max: 500, unit: 'ms',\n    thresholds: [[0.4,'good'], [0.7,'warning'], [1.0,'danger']] },\n];\n\nMaging.gaugeChart('#gauge-cpu',     { ...gauges[0], height: 240 });\nMaging.gaugeChart('#gauge-memory',  { ...gauges[1], height: 240 });\nMaging.gaugeChart('#gauge-latency', { ...gauges[2], height: 240 });" },
+
+  { selector: '#user-flow-sankey', type: 'sankeyChart',
+    code: "const userFlowSankey = {\n  title: '고객 유입 → 전환 플로우',\n  subtitle: '이번 주 · 채널별 퍼널',\n  nodes: [\n    { name: '검색광고' }, { name: '오가닉' }, { name: 'SNS' }, { name: '리퍼럴' },\n    { name: '방문자' }, { name: '무료가입' }, { name: '데모신청' },\n    { name: '유료전환' }, { name: '이탈' },\n  ],\n  links: [\n    { source: '검색광고', target: '방문자', value: 1200 },\n    { source: '오가닉',   target: '방문자', value: 1800 },\n    { source: '방문자',   target: '무료가입', value: 1540 },\n    { source: '무료가입', target: '유료전환', value: 420 },\n    // ... flow edges\n  ],\n  valueFormatter: (v) => Number(v).toLocaleString() + '명',\n  height: 360,\n};\n\nMaging.sankeyChart('#user-flow-sankey', userFlowSankey);" },
+
+  { selector: '#mini-stats > .mw-card', type: 'kpiCard',
+    code: "// kpiCard compact 모드 — 이전 statCard 흡수\nconst miniStats = [\n  { label: '업타임',     value: '99.98%', delta: 0.02,  icon: '◉',  deltaGoodWhen: 'positive' },\n  { label: '평균 응답',   value: '142ms',  delta: -8.5,  icon: '⚡', deltaGoodWhen: 'negative' },\n  { label: 'CPU 평균',   value: '42%',    delta:  3.1,  icon: '▣',  deltaGoodWhen: 'negative' },\n  { label: 'MEM 사용률', value: '68%',    delta:  1.2,  icon: '▤',  deltaGoodWhen: 'negative' },\n  // ... 4 more stats\n];\n\nconst host = document.getElementById('mini-stats');\nminiStats.forEach((stat) => {\n  const el = document.createElement('div');\n  host.appendChild(el);\n  Maging.kpiCard(el, { compact: true, ...stat });\n});\n\n// compact:true → 작은 패딩 · 스파크 숨김\n// icon 있으면 라벨 앞에 표시" },
+  { selector: '#hero-tile', type: 'heroTile',
+    code: "const heroTile = {\n  label: '이번 달 매출',\n  value: '₩128억', icon: '💎',\n  delta: 8.3,\n  sparkline: [420, 445, 430, 468, 475, 490, 510, 530, 548, 562, 580],\n  context: 'vs 지난달 ₩118억 · 목표 ₩150억의 85%'\n};\n\nMaging.heroTile('#hero-tile', heroTile);" },
+  { selector: '#ring-progress', type: 'ringProgress',
+    code: "const ringProgress = {\n  title: '분기 목표', subtitle: 'Q2 2026',\n  value: 82, max: 100, unit: '%',\n  label: '달성률',\n  context: '₩128억 / 목표 ₩150억',\n  thresholds: [\n    [0.5, 'danger'],\n    [0.8, 'warning'],\n    [1.0, 'good']\n  ]\n};\n\nMaging.ringProgress('#ring-progress', ringProgress);" },
+  { selector: '#compare-card', type: 'compareCard',
+    code: "const compareCard = {\n  title: '주간 비교',\n  subtitle: '이번 주 vs 지난 주',\n  left:  { label: '지난 주', value: '₩118억' },\n  right: { label: '이번 주', value: '₩128억' },\n  delta: 8.5,\n  deltaLabel: '(+₩10억)'\n};\n\nMaging.compareCard('#compare-card', compareCard);" },
+  { selector: '#metric-stack', type: 'metricStack',
+    code: "const metricStack = {\n  title: '매출 요약',\n  main: {\n    label: '이번 달 매출',\n    value: '₩128억',\n    delta: 8.3\n  },\n  items: [\n    { label: '평균 거래액', value: '₩45M' },\n    { label: '신규 고객',   value: '127' },\n    { label: '재방문율',    value: '74%' },\n    { label: 'NPS',         value: '68' }\n  ]\n};\n\nMaging.metricStack('#metric-stack', metricStack);" },
+  { selector: '#countdown-tile', type: 'countdownTile',
+    code: "const countdownTile = {\n  title: 'Q2 마감', subtitle: '2026년 6월 30일',\n  target: '2026-06-30T23:59:59+09:00',\n  label: '분기 종료까지',\n  context: '목표 달성 18% 추가 필요'\n};\n\nMaging.countdownTile('#countdown-tile', countdownTile);\n\n// setInterval로 매분 자동 재렌더" },
+  { selector: '#status-grid', type: 'statusGrid',
+    code: "const statusGrid = {\n  title: '서비스 헬스',\n  subtitle: '전체 시스템 상태 · 5s 갱신',\n  columns: 3,\n  items: [\n    { label: 'API Gateway', status: 'ok',      value: '142ms' },\n    { label: 'Database',    status: 'ok',      value: '18ms' },\n    { label: 'Payment',     status: 'warning', value: '지연' },\n    { label: 'Analytics',   status: 'danger',  value: '지연 8분' }\n  ]\n};\n\nMaging.statusGrid('#status-grid', statusGrid);" },
+  { selector: '#timeline-feed', type: 'timeline',
+    code: "const timeline = {\n  title: '최근 활동',\n  subtitle: '실시간 이벤트 스트림',\n  items: [\n    { time: '10:23', text: '김지훈님 거래 성약 ₩45M',\n      type: 'success' },\n    { time: '10:15', text: '서버 #3 재시작 완료',\n      type: 'info' },\n    { time: '09:30', text: '재고 알림: Enterprise 임계치',\n      type: 'warning' }\n  ]\n};\n\nMaging.timeline('#timeline-feed', timeline);" },
+  { selector: '#inbox-preview', type: 'inboxPreview',
+    code: "const inboxPreview = {\n  title: '알림', subtitle: '3개 읽지 않음',\n  items: [\n    { icon: '⚠', text: '결제 실패 확인 필요',\n      time: '15분 전', type: 'warning' },\n    { icon: '✓', text: '배포 v2.4.1 성공',\n      time: '32분 전', type: 'success' }\n  ],\n  footer: '모두 보기 →'\n};\n\nMaging.inboxPreview('#inbox-preview', inboxPreview);" },
+  { selector: '#transactions-table', type: 'activityTable',
+    code: "const STATUS_MAP = {\n  success: { cls: 'success', label: '완료' },\n  warning: { cls: 'warning', label: '진행중' },\n  muted:   { cls: 'muted',   label: '대기' },\n  danger:  { cls: 'danger',  label: '실패' },\n};\n\nconst rows = [\n  { time: '3분 전',  company: '한빛테크',     product: 'Enterprise',\n    rep: '김지훈', amount: 45200000, status: 'success' },\n  { time: '8분 전',  company: '블루스퀘어',    product: 'Professional',\n    rep: '이수민', amount: 18500000, status: 'success' },\n  { time: '14분 전', company: '유니온시스템',  product: 'Enterprise',\n    rep: '정하늘', amount: 62000000, status: 'warning' },\n  // ... 6 more rows\n];\n\nMaging.activityTable('#transactions-table', {\n  title: '최근 거래 내역',\n  subtitle: '실시간 스트림',\n  live: true,\n  columns: [\n    { key: 'time',    label: '시간' },\n    { key: 'company', label: '고객사' },\n    { key: 'product', label: '상품',\n      render: (v) => `<span class=\"mw-badge mw-badge--muted\">${v}</span>` },\n    { key: 'rep',     label: '담당자' },\n    { key: 'amount',  label: '금액', align: 'right',\n      render: (v) => Maging.fmt.krw(v) },\n    { key: 'status',  label: '상태', align: 'right',\n      render: (v) => {\n        const m = STATUS_MAP[v] || STATUS_MAP.muted;\n        return `<span class=\"mw-badge mw-badge--${m.cls}\">${m.label}</span>`;\n      } },\n  ],\n  rows,\n});" },
+  { selector: '#progress-project', type: 'progressStepper',
+    code: "const progressProject = {\n  title: '빌링센터 구축', kicker: 'FBMS',\n  status: { label: '진행중', type: 'accent' },\n  meta: [\n    { label: '담당',      value: '김원모 / 윤선희' },\n    { label: '목표',      value: '6월 오픈' },\n    { label: '개발 마감', value: '4/30' },\n    { label: '테스트',    value: '5월' }\n  ],\n  steps: [\n    { label: '기획',   date: '3/31',   status: 'done' },\n    { label: '개발',   date: '~ 4/30', status: 'active',\n      badge: '진행중' },\n    { label: '테스트', date: '~ 5월',  status: 'pending' },\n    { label: '오픈',   date: '6월',    status: 'pending' }\n  ]\n};\n\nMaging.progressStepper('#progress-project', progressProject);" },
+  { selector: '#year-activity', type: 'calendarHeatmap',
+    code: "const yearActivity = {\n  title: '연간 활동',\n  subtitle: '2026년 배포 · 커밋 · 이슈 일일 합계',\n  year: 2026,\n  max: 20,\n  height: 220,\n  cellSize: [22, 22],\n  valueSuffix: '건',\n  values: [\n    ['2026-01-02', 4],  ['2026-01-05', 8],  ['2026-01-06', 11],\n    ['2026-02-04', 14], ['2026-02-11', 15], ['2026-02-18', 16],\n    ['2026-03-04', 18], ['2026-03-11', 19], ['2026-03-18', 20],\n    ['2026-04-03', 15], ['2026-04-15', 17], ['2026-04-21', 7],\n    // ... 66 more [yyyy-mm-dd, number] pairs\n  ],\n};\n\nMaging.calendarHeatmap('#year-activity', yearActivity);" },
+
+  { selector: '#release-calendar', type: 'eventCalendar',
+    code: "const releaseCalendar = {\n  title: '4월 릴리스 · 일정',\n  subtitle: '배포 · 점검 · 마일스톤',\n  year: 2026,\n  month: 4,\n  startOfWeek: 'sun',\n  showList: true,      // 하단에 이벤트 리스트 표시\n  listLimit: null,     // null = 전체, 넘치면 스크롤\n  listFilter: 'all',   // 'all' | 'upcoming'\n  events: [\n    { date: '2026-04-03', label: 'v2.4.0 정기 배포', type: 'ok' },\n    { date: '2026-04-07', label: 'SRE 인프라 점검', type: 'warning' },\n    { date: '2026-04-10', label: 'Q1 리뷰 미팅' },\n    { date: '2026-04-15', label: '보안 패치',       type: 'danger' },\n    { date: '2026-04-15', label: '홈페이지 디자인 리뷰' },\n    { date: '2026-04-18', label: '홈페이지 3차 배포', type: 'ok' },\n    { date: '2026-04-22', label: '빌링 API 통합 데모' },\n    { date: '2026-04-23', label: '전사 작업 업데이트' },\n    { date: '2026-04-25', label: '방화벽 메인터넌스', type: 'warning' },\n    { date: '2026-04-30', label: '빌링센터 개발 마감', type: 'accent' },\n    { date: '2026-04-30', label: 'Q2 OKR 확정' },\n  ],\n};\n\nMaging.eventCalendar('#release-calendar', releaseCalendar);\n\n// 오늘 날짜는 accent 아웃라인으로 자동 강조됨" },
+
+  { selector: '#region-map', type: 'mapChart',
+    code: "const regionMap = {\n  title: '지역별 매출 (광역자치단체)',\n  subtitle: '이번 분기 · hex 타일맵',\n  items: [\n    { region: '서울', value: 4250000000 },\n    { region: '경기', value: 3180000000 },\n    { region: '부산', value: 1420000000 },\n    { region: '인천', value: 1180000000 },\n    // ... 13개 광역시도\n  ],\n  valueFormatter: Maging.fmt.krw,\n  height: 320,\n};\n\nMaging.mapChart('#region-map', regionMap);\n\n// 기본 타일은 한국 17개 광역자치단체.\n// config.tiles 로 커스텀 그리드 가능 ({ name, row, col }[])." },
+
+  { selector: '#revenue-waterfall', type: 'waterfallChart',
+    code: "const revenueWaterfall = {\n  title: 'Q1 매출 분해',\n  subtitle: '시작 잔액 → 증감 → 최종',\n  items: [\n    { label: \"Q4'25 잔고\", value:  98000000 },  // type 자동: 첫 항목 = start\n    { label: '신규 계약',   value:  42000000 },  // value > 0 = gain\n    { label: '갱신',        value:  28000000 },\n    { label: '이탈',        value: -18000000 },  // value < 0 = loss\n    { label: '환불',        value:  -6000000 },\n    { label: '업셀',        value:  16000000 },\n    { label: \"Q1'26 잔고\", value: 160000000 },  // type 자동: 마지막 = total\n  ],\n  valueFormatter: Maging.fmt.krw,\n  height: 330,\n};\n\nMaging.waterfallChart('#revenue-waterfall', revenueWaterfall);\n\n// type 명시: 'start' | 'gain' | 'loss' | 'total'" },
+
+  { selector: '#retention-cohort', type: 'cohortMatrix',
+    code: "const retentionCohort = {\n  title: '월별 리텐션',\n  subtitle: '신규 가입 코호트 · D0/D7/D14/D30/D60/D90',\n  cohorts: ['2025-11', '2025-12', '2026-01', '2026-02', '2026-03', '2026-04'],\n  periods: ['D0', 'D7', 'D14', 'D30', 'D60', 'D90'],\n  sizes:   [1820, 2140, 2680, 3120, 3580, 4180],\n  data: [\n    [100, 68, 52, 41, 34, 28],\n    [100, 72, 58, 46, 38, 31],\n    [100, 70, 55, 44, 36, null],   // null = 데이터 없음 (대각선)\n    [100, 74, 61, 48, null, null],\n    [100, 76, 64, null, null, null],\n    [100, 78, null, null, null, null],\n  ],\n};\n\nMaging.cohortMatrix('#retention-cohort', retentionCohort);\n\n// 셀 색은 accent 명도 그라디언트로 자동 매핑" },
+
+  { selector: '#global-filter', type: 'filterBar',
+    code: "const filters = {\n  title: 'DASHBOARD FILTERS',\n  filters: [\n    {\n      key: 'range', type: 'segmented', label: '기간',\n      options: [\n        { value: '7d',  label: '7일' },\n        { value: '30d', label: '30일' },\n        { value: 'q',   label: '이번 분기', selected: true },\n        { value: 'y',   label: '올해' },\n      ],\n    },\n    {\n      key: 'regions', type: 'chips', label: '지역',\n      options: [\n        { value: 'sel', label: '서울', selected: true },\n        { value: 'gyg', label: '경기', selected: true },\n        { value: 'bus', label: '부산' },\n        // ... multi-select\n      ],\n    },\n    {\n      key: 'dateRange', type: 'daterange', label: '직접 지정',\n      defaultFrom: '2026-01-01', defaultTo: '2026-04-22',\n    },\n    {\n      key: 'q', type: 'search', label: '검색',\n      placeholder: '고객사/프로젝트',\n    },\n  ],\n  onChange: (state) => {\n    // state = { range: 'q', regions: ['sel','gyg'], dateRange: {from,to}, q: '' }\n    console.log(state);\n    // 실제 앱: state로 데이터 리페치 → 다른 위젯 update()\n  },\n};\n\nconst handle = Maging.filterBar('#global-filter', filters);\nhandle.getState();            // 현재 상태 읽기\nhandle.setState({ range: 'y' }); // 프로그램적 업데이트\n\n// 타입: 'segmented' | 'chips' (다중) | 'search' | 'daterange'" },
+
+  { selector: '#global-alert', type: 'alertBanner',
+    code: "Maging.alertBanner('#global-alert', {\n  type: 'warning',   // 'info' | 'warning' | 'danger' | 'success'\n  title: '결제 시스템 점검 예정',\n  message: '오늘 22:00~24:00 빌링 API 일시 지연 가능',\n  action: { label: '공지 상세', href: '/incidents/42' },\n  dismissable: true,\n});\n\n// 카드 아님 — 수평 스트립. 페이지 상단 글로벌 알림용." },
+
+  { selector: '#spark-metrics', type: 'sparklineList',
+    code: "const sparkMetrics = {\n  title: '주요 지표 트렌드',\n  subtitle: '최근 12주 · 전주 대비',\n  items: [\n    { label: '주간 거래액', value: '₩42.8억', delta:  6.2, sparkline: [28,31,30,34,36,35,39,38,40,41,42,43] },\n    { label: '활성 사용자', value: '24.8K',   delta:  4.1, sparkline: [21000,21500,22400,22800,23500,24100,24400,24600,24800] },\n    { label: '환불율',      value: '1.8%',    delta: -0.4, deltaGoodWhen: 'negative',\n      sparkline: [2.4,2.3,2.2,2.1,2.0,1.9,1.8] },\n    // ... 더\n  ],\n};\n\nMaging.sparklineList('#spark-metrics', sparkMetrics);\n\n// 스파크 색은 델타 방향 × deltaGoodWhen으로 자동 (success/danger)" },
+
+  { selector: '#quarterly-goals', type: 'goalGrid',
+    code: "const quarterlyGoals = {\n  title: 'Q2 OKR 진행률',\n  subtitle: '분기 목표 · 현재 달성률',\n  items: [\n    { label: '분기 매출',    value: 128, max: 150, unit: '억', sublabel: 'Top Priority' },\n    { label: '신규 계약',    value: 127, max: 200, unit: '건' },\n    { label: 'MAU',         value: 42180, max: 50000, unit: '명' },\n    { label: 'NPS',         value:  68, max:  75, unit: '점' },\n  ],\n  thresholds: [[0.5, 'danger'], [0.85, 'warning'], [1.0, 'good']],\n};\n\nMaging.goalGrid('#quarterly-goals', quarterlyGoals);\n\n// ratio <= threshold 에 매핑된 색으로 바/퍼센트 자동 컬러링" },
+
+  { selector: '#bullet-revenue', type: 'bulletChart',
+    code: "const bulletRevenue = {\n  title: '월간 매출 vs 목표',\n  subtitle: '이번 달 · 벤치: 지난달',\n  value:     8200000000,    // 실적\n  target:   10000000000,    // 목표선\n  benchmark: 7400000000,    // 벤치마크(점선)\n  min: 0, max: 12000000000,\n  ranges: [                 // 정성 밴드 (명도 그라디언트)\n    { value:  5000000000, label: '미흡' },\n    { value:  8000000000, label: '양호' },\n    { value: 12000000000, label: '우수' },\n  ],\n  valueFormatter: Maging.fmt.krw,\n  height: 140,\n};\n\nMaging.bulletChart('#bullet-revenue', bulletRevenue);\n\n// gauge는 단일값 게이지, bullet은 value×target×benchmark 3중 비교" }
+];
+
+function findSectionName(el) {
+  var sec = el.closest('section');
+  if (!sec) return '';
+  var kicker = sec.querySelector('.section-hd__kicker');
+  return kicker ? kicker.textContent.trim() : '';
+}
+
+function closeAllMenus() {
+  document.querySelectorAll('.demo-menu.is-open').forEach(function (m) { m.classList.remove('is-open'); });
+  document.querySelectorAll('.demo-menu-btn.is-open').forEach(function (b) { b.classList.remove('is-open'); });
+}
+
+function wrapForInspect(el, type, code) {
+  if (!el) return;
+  if (el.parentElement && el.parentElement.classList.contains('demo-wrap')) return;
+  var meta = widgetMeta(type);
+  var finalCode = code || '';
+  var where = findSectionName(el);
+
+  var wrap = document.createElement('div');
+  var moved = [];
+  Array.from(el.classList).forEach(function (c) {
+    if (/^(lg:|md:)?col-span-/.test(c)) moved.push(c);
+  });
+  moved.forEach(function (c) { el.classList.remove(c); });
+  wrap.className = 'demo-wrap ' + moved.join(' ');
+  el.parentNode.insertBefore(wrap, el);
+  wrap.appendChild(el);
+
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'demo-menu-btn';
+  btn.setAttribute('aria-label', meta.title + ' — 정보');
+  btn.textContent = '⋯';
+  wrap.appendChild(btn);
+
+  var menu = document.createElement('div');
+  menu.className = 'demo-menu';
+  menu.innerHTML =
+    '<div class="demo-menu__type">Maging.' + type + '</div>' +
+    '<div class="demo-menu__title">' + meta.title + '</div>' +
+    '<div class="demo-menu__desc">' + meta.desc + '</div>' +
+    (where ? '<div class="demo-menu__where"><span class="demo-menu__where-label">▸ 사용처</span>' + where + '</div>' : '') +
+    '<div class="demo-menu__divider"></div>' +
+    '<button class="demo-menu__item" type="button" data-action="code">' +
+      '<span class="demo-menu__item-icon">&lt;/&gt;</span>' +
+      '<span>코드 보기</span>' +
+    '</button>';
+  wrap.appendChild(menu);
+
+  btn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var wasOpen = menu.classList.contains('is-open');
+    closeAllMenus();
+    if (!wasOpen) {
+      menu.classList.add('is-open');
+      btn.classList.add('is-open');
+    }
+  });
+
+  menu.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var action = e.target.closest('[data-action]');
+    if (!action) return;
+    if (action.dataset.action === 'code') {
+      showCodeDialog(type, meta, finalCode);
+      closeAllMenus();
+    }
+  });
+}
+
+// 전역: 메뉴 밖 클릭 / ESC 로 닫기
+document.addEventListener('click', function () { closeAllMenus(); });
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') closeAllMenus();
+});
+
+// 위젯 호버 UX: 우상단 `⋯` 버튼 → 드롭다운 메뉴 (타입·설명·사용처·코드 보기)
+function setupInspector() {
+  INSPECTOR_MAP.forEach(function (entry) {
+    document.querySelectorAll(entry.selector).forEach(function (el) {
+      wrapForInspect(el, entry.type, entry.code);
+    });
+  });
+}
+
+function pinInspect(el, type, code) {
+  if (!el || el.__mwPinned) return;
+  var meta = widgetMeta(type);
+  el.__mwPinned = true;
+  el.style.position = el.style.position || 'relative';
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'demo-pin';
+  btn.title = meta.title + ' — 코드 보기';
+  btn.textContent = '</>';
+  btn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    showCodeDialog(type, meta, code || '');
+  });
+  el.appendChild(btn);
+}
+
+function showCodeDialog(type, meta, code) {
+  var dlg = document.getElementById('demo-dlg');
+  dlg.querySelector('.demo-dlg__sub').textContent = 'Maging.' + type;
+  dlg.querySelector('.demo-dlg__title').textContent = meta.title;
+  dlg.querySelector('.demo-dlg__code code').textContent = code || '';
+  dlg.classList.add('is-open');
+}
+
+function closeCodeDialog() {
+  document.getElementById('demo-dlg').classList.remove('is-open');
+}
+
+document.addEventListener('click', function (e) {
+  if (e.target.matches('.demo-dlg__scrim, .demo-dlg__close')) closeCodeDialog();
+  if (e.target.matches('.demo-dlg__copy')) {
+    var code = document.querySelector('.demo-dlg__code code').textContent;
+    navigator.clipboard.writeText(code).then(function () {
+      e.target.textContent = '복사됨!';
+      setTimeout(function () { e.target.textContent = '복사'; }, 1500);
+    });
+  }
+});
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') closeCodeDialog();
+});
+
+var STATUS_MAP = {
+  success: { cls: 'success', label: '완료' },
+  warning: { cls: 'warning', label: '진행중' },
+  muted:   { cls: 'muted',   label: '대기' },
+  danger:  { cls: 'danger',  label: '실패' }
+};
+
+function whenReady(fn) {
+  if (window.MagicWiget) return fn();
+  var t = setInterval(function () {
+    if (window.MagicWiget) { clearInterval(t); fn(); }
+  }, 30);
+}
+
+document.getElementById('loading').style.display = 'block';
+
+whenReady(function () {
+  fetch('./data/dashboard.json')
+    .then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(renderDashboard)
+    .catch(function (err) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error').style.display = 'block';
+      document.getElementById('error-detail').textContent = String(err);
+    });
+});
+
+function renderDashboard(data) {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('dashboard').style.display = '';
+
+  document.getElementById('nav-company').textContent = data.company;
+  document.getElementById('nav-sub').textContent = data.dashboard + ' · ' + data.version;
+  document.getElementById('page-period').textContent =
+    data.period.label + ' · 마지막 업데이트 방금 전';
+
+  // Size tokens — S(120) / M(240) / L(360)
+  var SIZE = { S: 120, M: 240, L: 360 };
+
+  // ============ GLOBAL ALERT ============
+  if (data.alert) {
+    Maging.alertBanner('#global-alert', data.alert);
+  }
+
+  // ============ GLOBAL FILTER BAR ============
+  if (data.filters) {
+    Maging.filterBar('#global-filter', Object.assign({
+      onChange: function (state) {
+        // Demo: console log state. 실제 앱에서는 이 state로 다른 위젯 데이터 리페치
+        console.log('[filterBar] changed:', state);
+      }
+    }, data.filters));
+  }
+
+  // ============ SECTION 1: AT A GLANCE ============
+  Maging.heroTile('#hero-tile', data.heroTile);
+  Maging.ringProgress('#ring-progress', data.ringProgress);
+
+  var kpiRow = document.getElementById('kpi-row');
+  kpiRow.innerHTML = '';
+  data.kpis.slice(0, 4).forEach(function (kpi) {
+    var el = document.createElement('div');
+    kpiRow.appendChild(el);
+    Maging.kpiCard(el, kpi);
+  });
+
+  Maging.goalGrid('#quarterly-goals', Object.assign({
+    valueFormatter: function (v) { return Number(v).toLocaleString(); }
+  }, data.quarterlyGoals));
+
+  Maging.sparklineList('#spark-metrics', data.sparkMetrics);
+
+  Maging.bulletChart('#bullet-revenue', Object.assign({
+    valueFormatter: Maging.fmt.krw,
+    height: 140
+  }, data.bulletRevenue));
+
+  Maging.compareCard('#compare-card', data.compareCard);
+  Maging.metricStack('#metric-stack', data.metricStack);
+  Maging.countdownTile('#countdown-tile', data.countdownTile);
+
+  // ============ SECTION 2: REAL-TIME PULSE ============
+  Maging.activityTable('#transactions-table', {
+    title: data.transactions.title, subtitle: data.transactions.subtitle,
+    live: true,
+    columns: [
+      { key: 'time',    label: '시간' },
+      { key: 'company', label: '고객사' },
+      { key: 'product', label: '상품',
+        render: function (v) { return '<span class="mw-badge mw-badge--muted">' + v + '</span>'; } },
+      { key: 'rep',     label: '담당자' },
+      { key: 'amount',  label: '금액', align: 'right',
+        render: function (v) { return Maging.fmt.krw(v); } },
+      { key: 'status',  label: '상태', align: 'right',
+        render: function (v) {
+          var m = STATUS_MAP[v] || STATUS_MAP.muted;
+          return '<span class="mw-badge mw-badge--' + m.cls + '">' + m.label + '</span>';
+        } }
+    ],
+    rows: data.transactions.rows
+  });
+
+  Maging.timeline('#timeline-feed', data.timeline);
+  Maging.inboxPreview('#inbox-preview', data.inboxPreview);
+  Maging.statusGrid('#status-grid', data.statusGrid);
+
+  // ============ SECTION 3: TRENDS & MIX ============
+  Maging.lineChart('#revenue-chart', {
+    title: data.revenue.title,
+    subtitle: data.revenue.subtitle,
+    categories: data.revenue.categories,
+    series: data.revenue.series,
+    stack: true,
+    yFormatter: function (v) { return (v / 1_0000_0000).toFixed(1) + '억'; },
+    yMax: 900000000,
+    height: SIZE.M
+  });
+
+  Maging.barChart('#region-chart', {
+    title: data.regions.title, subtitle: data.regions.subtitle,
+    items: data.regions.items, horizontal: true,
+    yFormatter: Maging.fmt.krw, height: SIZE.M
+  });
+
+  Maging.funnelChart('#funnel-chart', {
+    title: data.pipeline.title, subtitle: data.pipeline.subtitle,
+    stages: data.pipeline.stages, valueSuffix: '건', height: SIZE.M
+  });
+
+  var productTotal = data.products.slices.reduce(function (s, x) { return s + x.value; }, 0);
+  Maging.donutChart('#product-chart', {
+    title: data.products.title, subtitle: data.products.subtitle,
+    slices: data.products.slices,
+    centerLabel: '전체 판매',
+    centerValue: productTotal.toLocaleString() + '건',
+    height: SIZE.M
+  });
+
+  Maging.leaderboard('#team-leaderboard', {
+    title: data.team.title, subtitle: data.team.subtitle,
+    items: data.team.items.map(function (m) {
+      return {
+        name: m.name, initial: m.initial, percent: m.percent,
+        meta: m.percent + '% · ' + Maging.fmt.krw(m.revenue)
+      };
+    })
+  });
+
+  // ============ SECTION 4: DEEP-DIVE ============
+  Maging.mapChart('#region-map', Object.assign({
+    valueFormatter: Maging.fmt.krw,
+    height: 320
+  }, data.regionMap));
+
+  Maging.waterfallChart('#revenue-waterfall', Object.assign({
+    valueFormatter: Maging.fmt.krw,
+    height: 330
+  }, data.revenueWaterfall));
+
+  Maging.cohortMatrix('#retention-cohort', data.retentionCohort);
+
+  // ============ SECTION 5: CUSTOMER INSIGHTS ============
+  Maging.heatmapChart('#activity-heatmap', {
+    title: data.activityHeatmap.title,
+    subtitle: data.activityHeatmap.subtitle,
+    xAxis: data.activityHeatmap.hours,
+    yAxis: data.activityHeatmap.days,
+    matrix: data.activityHeatmap.matrix,
+    height: SIZE.M,
+    tooltipFormatter: function (p) {
+      return data.activityHeatmap.days[p.value[1]] + '요일 ' +
+             data.activityHeatmap.hours[p.value[0]] + '시: <b>' + p.value[2] + '건</b>';
+    }
+  });
+
+  Maging.radarChart('#team-radar', {
+    title: data.teamRadar.title, subtitle: data.teamRadar.subtitle,
+    indicators: data.teamRadar.indicators,
+    series: data.teamRadar.series,
+    height: SIZE.M
+  });
+
+  Maging.treemapChart('#customer-treemap', {
+    title: data.customerTreemap.title,
+    subtitle: data.customerTreemap.subtitle,
+    items: data.customerTreemap.items,
+    valueFormatter: Maging.fmt.krw,
+    height: SIZE.L
+  });
+
+  Maging.scatterChart('#nps-scatter', {
+    title: data.correlationScatter.title,
+    subtitle: data.correlationScatter.subtitle,
+    points: data.correlationScatter.points,
+    xLabel: data.correlationScatter.xLabel,
+    yLabel: data.correlationScatter.yLabel,
+    height: SIZE.L
+  });
+
+  Maging.sankeyChart('#user-flow-sankey', {
+    title: data.userFlowSankey.title,
+    subtitle: data.userFlowSankey.subtitle,
+    nodes: data.userFlowSankey.nodes,
+    links: data.userFlowSankey.links,
+    valueFormatter: function (v) { return Number(v).toLocaleString() + '명'; },
+    height: SIZE.L
+  });
+
+  // ============ SECTION 6: PROJECT & CALENDAR ============
+  Maging.progressStepper('#progress-project', data.progressProject);
+  Maging.calendarHeatmap('#year-activity', Object.assign({
+    height: 220,
+    cellSize: [22, 22],
+    valueSuffix: '건'
+  }, data.yearActivity));
+  Maging.eventCalendar('#release-calendar', data.releaseCalendar);
+
+  // ============ SECTION 7: SYSTEM HEALTH ============
+  var g = data.systemHealth.gauges;
+  Maging.gaugeChart('#gauge-cpu',     Object.assign({ height: SIZE.M }, g[0]));
+  Maging.gaugeChart('#gauge-memory',  Object.assign({ height: SIZE.M }, g[1]));
+  Maging.gaugeChart('#gauge-latency', Object.assign({ height: SIZE.M }, g[2]));
+
+  var miniHost = document.getElementById('mini-stats');
+  miniHost.innerHTML = '';
+  data.systemHealth.miniStats.slice(0, 6).forEach(function (stat) {
+    var el = document.createElement('div');
+    miniHost.appendChild(el);
+    Maging.kpiCard(el, Object.assign({ compact: true }, stat));
+  });
+
+  setupInspector();
+}
+</script>
+
+<!-- Widget Inspector Code Dialog -->
+<div id="demo-dlg" class="demo-dlg" role="dialog" aria-modal="true" aria-labelledby="demo-dlg-title">
+  <div class="demo-dlg__scrim"></div>
+  <div class="demo-dlg__content">
+    <div class="demo-dlg__head">
+      <div class="demo-dlg__head-left">
+        <div class="demo-dlg__sub"></div>
+        <div class="demo-dlg__title" id="demo-dlg-title"></div>
+      </div>
+      <button class="demo-dlg__close" type="button" aria-label="닫기">✕</button>
+    </div>
+    <div class="demo-dlg__body">
+      <button class="demo-dlg__copy" type="button">복사</button>
+      <pre class="demo-dlg__code"><code></code></pre>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

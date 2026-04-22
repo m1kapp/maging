@@ -1,0 +1,22 @@
+/*! magicwiget theme: openai — ChatGPT teal on warm dark | MIT
+ *  Signature: ChatGPT #202123 bg, user surface #444654, #10A37F brand teal
+ */
+[data-theme="openai"] {
+  --mw-bg: #202123;
+  --mw-surface: #343541;
+  --mw-surface-2: #444654;
+  --mw-border: #4d4d4f;
+  --mw-text: #ececf1;
+  --mw-text-muted: #8e8ea0;
+  --mw-accent: #10a37f;
+  --mw-accent-2: #ab68ff;
+  --mw-success: #10a37f;
+  --mw-danger: #ef4146;
+  --mw-warning: #f59e0b;
+  --mw-radius: 6px;
+  --mw-border-w: 1px;
+  --mw-font: 'Inter', system-ui, sans-serif;
+  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 4px 12px -4px rgb(16 163 127 / 0.15);
+}

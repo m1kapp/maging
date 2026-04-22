@@ -1,0 +1,22 @@
+/*! magicwiget theme: tiffany — luxury robin's-egg blue light | MIT
+ *  Signature: Tiffany Blue #0ABAB5 (trademarked), gold ribbon accent, serif display, pale mint bg
+ */
+[data-theme="tiffany"] {
+  --mw-bg: #f2f9f8;
+  --mw-surface: #ffffff;
+  --mw-surface-2: #e8f5f3;
+  --mw-border: #d1e6e3;
+  --mw-text: #1f2d2b;
+  --mw-text-muted: #7a8a87;
+  --mw-accent: #0abab5;
+  --mw-accent-2: #c9a86c;
+  --mw-success: #4ca8a0;
+  --mw-danger: #c85a5a;
+  --mw-warning: #d4a84b;
+  --mw-radius: 4px;
+  --mw-border-w: 1px;
+  --mw-font: 'Inter', system-ui, sans-serif;
+  --mw-display-font: 'Playfair Display', 'Libre Caslon Text', Georgia, serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 1px 2px rgb(10 186 181 / 0.08);
+}

@@ -1,0 +1,25 @@
+/*! magicwiget theme: vercel — pure black + white minimal, gradient accents | MIT
+ *  Signature: Pure #000 bg, white accent, Vercel purple #7928CA secondary
+ */
+[data-theme="vercel"] {
+  --mw-bg: #000000;
+  --mw-surface: #0a0a0a;
+  --mw-surface-2: #141414;
+  --mw-border: #333333;
+  --mw-text: #ffffff;
+  --mw-text-muted: #888888;
+  --mw-accent: #ffffff;
+  --mw-accent-2: #7928ca;
+  --mw-success: #0070f3;
+  --mw-danger: #ff0080;
+  --mw-warning: #f5a623;
+  --mw-radius: 6px;
+  --mw-border-w: 1px;
+  --mw-font: 'Inter', system-ui, sans-serif;
+  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 0 0 1px rgb(255 255 255 / 0.06);
+}
+
+/* White accent needs dark foreground on avatar pill */
+[data-theme="vercel"] .mw-avatar--top { color: #000; }

@@ -1,0 +1,494 @@
+{
+  "company": "ACME KOREA",
+  "dashboard": "통합 운영 대시보드",
+  "version": "v2.4.1",
+  "period": {
+    "from": "2026-04-15",
+    "to": "2026-04-21",
+    "label": "2026-04-15 ~ 2026-04-21"
+  },
+  "kpis": [
+    {
+      "label": "이번 달 매출",
+      "value": "₩128억",
+      "delta": 8.3,
+      "deltaGoodWhen": "positive",
+      "sparkline": [420, 445, 430, 468, 475, 490, 510, 505, 530, 548, 562, 580]
+    },
+    {
+      "label": "활성 사용자 (MAU)",
+      "value": "42,180",
+      "delta": 5.1,
+      "deltaGoodWhen": "positive",
+      "sparkline": [38200, 38900, 39100, 39700, 40200, 40400, 40800, 41100, 41400, 41600, 41900, 42180]
+    },
+    {
+      "label": "신규 계약",
+      "value": "127건",
+      "delta": -2.3,
+      "deltaGoodWhen": "positive",
+      "sparkline": [22, 28, 19, 31, 25, 29, 34, 21, 26, 30, 24, 27]
+    },
+    {
+      "label": "평균 응답시간",
+      "value": "1.4초",
+      "delta": -12.0,
+      "deltaGoodWhen": "negative",
+      "sparkline": [1.8, 1.75, 1.9, 1.7, 1.65, 1.55, 1.5, 1.48, 1.45, 1.42, 1.4, 1.4]
+    }
+  ],
+  "revenue": {
+    "title": "주간 매출 추이",
+    "subtitle": "최근 12주 · 부문별 누적",
+    "categories": ["W01", "W02", "W03", "W04", "W05", "W06", "W07", "W08", "W09", "W10", "W11", "W12"],
+    "series": [
+      { "name": "Enterprise", "data": [420000000, 445000000, 430000000, 468000000, 475000000, 490000000, 510000000, 505000000, 530000000, 548000000, 562000000, 580000000] },
+      { "name": "SMB",        "data": [160000000, 170000000, 165000000, 175000000, 180000000, 188000000, 195000000, 200000000, 210000000, 220000000, 228000000, 240000000] }
+    ]
+  },
+  "regions": {
+    "title": "지역별 매출",
+    "subtitle": "이번 분기 기준",
+    "items": [
+      { "label": "서울", "value": 1250000000 },
+      { "label": "경기", "value": 980000000 },
+      { "label": "부산", "value": 720000000 },
+      { "label": "인천", "value": 540000000 },
+      { "label": "대구", "value": 410000000 },
+      { "label": "대전", "value": 320000000 },
+      { "label": "광주", "value": 270000000 }
+    ]
+  },
+  "pipeline": {
+    "title": "영업 파이프라인",
+    "subtitle": "단계별 잠재 거래",
+    "stages": [
+      { "label": "리드",   "value": 2400 },
+      { "label": "검증",   "value": 1380 },
+      { "label": "데모",   "value": 820 },
+      { "label": "제안",   "value": 410 },
+      { "label": "성약",   "value": 127 }
+    ]
+  },
+  "products": {
+    "title": "제품 카테고리",
+    "subtitle": "이번 달 판매 비중",
+    "slices": [
+      { "label": "Enterprise",   "value": 548 },
+      { "label": "Professional", "value": 312 },
+      { "label": "Team",         "value": 178 },
+      { "label": "Starter",      "value": 84 }
+    ]
+  },
+  "team": {
+    "title": "영업 TOP 5",
+    "subtitle": "분기 목표 달성률",
+    "items": [
+      { "name": "김지훈", "initial": "김", "percent": 98, "revenue": 245000000 },
+      { "name": "이수민", "initial": "이", "percent": 94, "revenue": 220000000 },
+      { "name": "정하늘", "initial": "정", "percent": 87, "revenue": 198000000 },
+      { "name": "박민재", "initial": "박", "percent": 82, "revenue": 175000000 },
+      { "name": "최유리", "initial": "최", "percent": 76, "revenue": 148000000 }
+    ]
+  },
+  "transactions": {
+    "title": "최근 거래 내역",
+    "subtitle": "실시간 스트림",
+    "rows": [
+      { "time": "3분 전",    "company": "한빛테크",       "product": "Enterprise",   "rep": "김지훈", "amount": 45200000, "status": "success" },
+      { "time": "8분 전",    "company": "블루스퀘어",     "product": "Professional", "rep": "이수민", "amount": 18500000, "status": "success" },
+      { "time": "14분 전",   "company": "유니온시스템",   "product": "Enterprise",   "rep": "정하늘", "amount": 62000000, "status": "warning" },
+      { "time": "22분 전",   "company": "미래엔터프라이즈", "product": "Team",       "rep": "박민재", "amount": 8400000,  "status": "success" },
+      { "time": "31분 전",   "company": "그린라이프",     "product": "Starter",      "rep": "최유리", "amount": 2900000,  "status": "success" },
+      { "time": "45분 전",   "company": "스마트솔루션",   "product": "Professional", "rep": "김지훈", "amount": 14200000, "status": "muted" },
+      { "time": "1시간 2분 전", "company": "넥스트스테이지", "product": "Enterprise", "rep": "이수민", "amount": 51000000, "status": "success" },
+      { "time": "1시간 18분 전", "company": "오션블루",    "product": "Team",         "rep": "정하늘", "amount": 6800000,  "status": "danger" },
+      { "time": "1시간 34분 전", "company": "크로스로드",  "product": "Professional", "rep": "박민재", "amount": 21500000, "status": "success" }
+    ]
+  },
+  "activityHeatmap": {
+    "title": "시간대별 거래 활동",
+    "subtitle": "요일 × 시간 · 이번 주 · 단위 건",
+    "hours": ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"],
+    "days": ["월","화","수","목","금","토","일"],
+    "matrix": [
+      [0, 0, 0, 0, 0, 0, 1, 2, 8, 14, 18, 15, 12, 17, 20, 22, 18, 10, 5, 3, 2, 1, 0, 0],
+      [0, 0, 0, 0, 0, 1, 1, 3, 9, 16, 20, 16, 13, 18, 22, 21, 17, 11, 4, 2, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 2, 4, 10, 15, 19, 17, 14, 19, 21, 23, 19, 12, 6, 3, 2, 1, 0, 0],
+      [0, 0, 0, 0, 0, 0, 1, 3, 8, 13, 18, 15, 11, 16, 19, 20, 16, 9, 5, 2, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 2, 4, 11, 17, 21, 18, 15, 20, 24, 25, 20, 13, 7, 4, 2, 1, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 1, 2, 4, 6, 7, 5, 8, 9, 10, 8, 5, 3, 2, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 4, 5, 4, 6, 7, 6, 5, 3, 1, 1, 0, 0, 0, 0]
+    ]
+  },
+  "teamRadar": {
+    "title": "팀별 역량 매트릭스",
+    "subtitle": "6개 지표 · 100점 만점",
+    "indicators": [
+      { "name": "신규발굴", "max": 100 },
+      { "name": "유지율",   "max": 100 },
+      { "name": "계약규모", "max": 100 },
+      { "name": "응답속도", "max": 100 },
+      { "name": "CS만족도", "max": 100 },
+      { "name": "업셀률",   "max": 100 }
+    ],
+    "series": [
+      { "name": "서울팀",    "data": [88, 92, 75, 85, 90, 72] },
+      { "name": "수도권팀",  "data": [72, 85, 88, 76, 82, 80] },
+      { "name": "지방팀",    "data": [65, 78, 68, 82, 85, 62] }
+    ]
+  },
+  "customerTreemap": {
+    "title": "고객사 매출 분포",
+    "subtitle": "TOP 15 · 이번 분기",
+    "items": [
+      { "name": "한빛테크",       "value": 580000000 },
+      { "name": "블루스퀘어",     "value": 410000000 },
+      { "name": "유니온시스템",   "value": 385000000 },
+      { "name": "미래엔터프라이즈", "value": 320000000 },
+      { "name": "그린라이프",     "value": 285000000 },
+      { "name": "스마트솔루션",   "value": 260000000 },
+      { "name": "피크퍼포먼스",   "value": 225000000 },
+      { "name": "넥스트스테이지", "value": 195000000 },
+      { "name": "오션블루",       "value": 165000000 },
+      { "name": "크로스로드",     "value": 140000000 },
+      { "name": "델타컨설팅",     "value": 118000000 },
+      { "name": "에버그린",       "value": 98000000 },
+      { "name": "라이트하우스",   "value": 75000000 },
+      { "name": "서밋코리아",     "value": 62000000 },
+      { "name": "메타플로우",     "value": 48000000 }
+    ]
+  },
+  "correlationScatter": {
+    "title": "NPS × 응답시간",
+    "subtitle": "제품별 · 원 크기 = 사용자 수(천명)",
+    "xLabel": "평균 응답시간 (ms)",
+    "yLabel": "NPS",
+    "points": [
+      { "label": "Enterprise",   "x": 120, "y": 68, "size": 44 },
+      { "label": "Professional", "x": 180, "y": 58, "size": 34 },
+      { "label": "Team",         "x": 250, "y": 45, "size": 24 },
+      { "label": "Starter",      "x": 340, "y": 32, "size": 16 },
+      { "label": "Beta",         "x": 420, "y": 18, "size": 10 }
+    ]
+  },
+  "userFlowSankey": {
+    "title": "고객 유입 → 전환 플로우",
+    "subtitle": "이번 주 · 채널별 퍼널",
+    "nodes": [
+      { "name": "검색광고" },
+      { "name": "오가닉" },
+      { "name": "SNS" },
+      { "name": "리퍼럴" },
+      { "name": "방문자" },
+      { "name": "무료가입" },
+      { "name": "데모신청" },
+      { "name": "유료전환" },
+      { "name": "이탈" }
+    ],
+    "links": [
+      { "source": "검색광고", "target": "방문자",   "value": 1200 },
+      { "source": "오가닉",   "target": "방문자",   "value": 890 },
+      { "source": "SNS",      "target": "방문자",   "value": 420 },
+      { "source": "리퍼럴",   "target": "방문자",   "value": 180 },
+      { "source": "방문자",   "target": "무료가입", "value": 1540 },
+      { "source": "방문자",   "target": "이탈",     "value": 1150 },
+      { "source": "무료가입", "target": "데모신청", "value": 620 },
+      { "source": "무료가입", "target": "이탈",     "value": 920 },
+      { "source": "데모신청", "target": "유료전환", "value": 280 },
+      { "source": "데모신청", "target": "이탈",     "value": 340 }
+    ]
+  },
+  "systemHealth": {
+    "gauges": [
+      { "title": "CPU 사용률",    "label": "서버 평균",    "value": 42,  "max": 100, "unit": "%",  "thresholds": [[0.5, "good"], [0.8, "warning"], [1.0, "danger"]] },
+      { "title": "메모리 사용률", "label": "할당/전체",    "value": 68,  "max": 100, "unit": "%",  "thresholds": [[0.5, "good"], [0.8, "warning"], [1.0, "danger"]] },
+      { "title": "API 응답시간",  "label": "P95 latency", "value": 124, "max": 500, "unit": "ms", "thresholds": [[0.3, "good"], [0.6, "warning"], [1.0, "danger"]] }
+    ],
+    "miniStats": [
+      { "label": "업타임",       "value": "99.98%",  "delta": 0.02,  "icon": "◉" },
+      { "label": "활성 세션",    "value": "3,240",   "delta": 12.4,  "icon": "⚡" },
+      { "label": "에러율",       "value": "0.02%",   "delta": -15.0, "icon": "⚠", "deltaGoodWhen": "negative" },
+      { "label": "DB 쿼리/초",   "value": "1,420",   "delta": 3.8,   "icon": "⛁" },
+      { "label": "캐시 히트율",  "value": "94.2%",   "delta": 1.1,   "icon": "✦" },
+      { "label": "큐 대기",      "value": "18건",    "delta": -25.0, "icon": "⊘", "deltaGoodWhen": "negative" },
+      { "label": "배포 빈도",    "value": "4.2/일",  "delta": 8.7,   "icon": "↗" },
+      { "label": "평균 TTR",     "value": "4분",     "delta": -42.0, "icon": "⚕", "deltaGoodWhen": "negative" }
+    ]
+  },
+  "heroTile": {
+    "label": "이번 달 매출",
+    "value": "₩128억",
+    "icon": "💎",
+    "delta": 8.3,
+    "sparkline": [420, 445, 430, 468, 475, 490, 510, 505, 530, 548, 562, 580],
+    "context": "vs 지난달 ₩118억 · 목표 ₩150억의 85%"
+  },
+  "ringProgress": {
+    "title": "분기 목표",
+    "subtitle": "Q2 2026",
+    "value": 82,
+    "max": 100,
+    "unit": "%",
+    "label": "달성률",
+    "context": "₩128억 / 목표 ₩150억",
+    "thresholds": [[0.5, "danger"], [0.8, "warning"], [1.0, "good"]]
+  },
+  "timeline": {
+    "title": "최근 활동",
+    "subtitle": "실시간 이벤트 스트림",
+    "items": [
+      { "time": "10:23", "text": "김지훈님이 한빛테크 거래 성약 ₩45M",   "type": "success", "icon": "✓" },
+      { "time": "10:15", "text": "서버 #3 재시작 완료",                  "type": "info",    "icon": "↻" },
+      { "time": "09:58", "text": "박민재님이 신규 리드 5건 등록",         "type": "info",    "icon": "+" },
+      { "time": "09:42", "text": "일일 매출 리포트 발송됨",               "type": "success" },
+      { "time": "09:30", "text": "재고 알림: Enterprise 2개 임계치 도달", "type": "warning", "icon": "!" },
+      { "time": "09:12", "text": "배포 v2.4.1 프로덕션 성공",             "type": "success", "icon": "↑" }
+    ]
+  },
+  "statusGrid": {
+    "title": "서비스 헬스",
+    "subtitle": "전체 시스템 상태 · 5s 갱신",
+    "columns": 2,
+    "items": [
+      { "label": "API Gateway", "status": "ok",      "value": "142ms" },
+      { "label": "Database",    "status": "ok",      "value": "18ms" },
+      { "label": "CDN",         "status": "ok",      "value": "99.99%" },
+      { "label": "Auth",        "status": "ok",      "value": "OK" },
+      { "label": "Payment",     "status": "warning", "value": "지연" },
+      { "label": "Queue",       "status": "ok",      "value": "2.1s" },
+      { "label": "Search",      "status": "ok",      "value": "OK" },
+      { "label": "Email",       "status": "ok",      "value": "24/m" },
+      { "label": "Analytics",   "status": "danger",  "value": "지연 8분" },
+      { "label": "Cache",       "status": "ok",      "value": "98%" },
+      { "label": "Storage",     "status": "ok",      "value": "OK" },
+      { "label": "Worker",      "status": "warning", "value": "1건 대기" }
+    ]
+  },
+  "countdownTile": {
+    "title": "Q2 마감",
+    "subtitle": "2026년 6월 30일",
+    "target": "2026-06-30T23:59:59+09:00",
+    "label": "분기 종료까지",
+    "context": "목표 달성 18% 추가 필요"
+  },
+  "metricStack": {
+    "title": "매출 요약",
+    "main": {
+      "label": "이번 달 매출",
+      "value": "₩128억",
+      "delta": 8.3
+    },
+    "items": [
+      { "label": "평균 거래액", "value": "₩45M" },
+      { "label": "신규 고객",   "value": "127" }
+    ]
+  },
+  "inboxPreview": {
+    "title": "알림",
+    "subtitle": "3개 읽지 않음",
+    "items": [
+      { "icon": "⚠", "text": "유니온시스템 결제 실패 — 확인 필요",     "time": "15분 전",  "type": "warning" },
+      { "icon": "✓", "text": "배포 v2.4.1 성공적으로 적용됨",          "time": "32분 전",  "type": "success" },
+      { "icon": "📊", "text": "일일 리포트가 발송되었습니다",            "time": "1시간 전", "type": "info" },
+      { "icon": "!", "text": "analytics-worker 서비스 지연 (8분)",      "time": "2시간 전", "type": "danger" },
+      { "icon": "🗓", "text": "주간 미팅 리마인더: 내일 오전 10시",      "time": "3시간 전", "type": "info" }
+    ],
+    "footer": "모두 보기 →"
+  },
+  "compareCard": {
+    "title": "주간 비교",
+    "subtitle": "이번 주 vs 지난 주",
+    "left":  { "label": "지난 주", "value": "₩118억" },
+    "right": { "label": "이번 주", "value": "₩128억" },
+    "delta": 8.5,
+    "deltaLabel": "(+₩10억)"
+  },
+  "progressProject": {
+    "title": "빌링센터 구축",
+    "kicker": "FBMS",
+    "status": { "label": "진행중", "type": "accent" },
+    "meta": [
+      { "label": "담당", "value": "김원모 / 윤선희" }
+    ],
+    "steps": [
+      { "label": "기획",   "date": "3/31",    "status": "done" },
+      { "label": "개발",   "date": "~ 4/30",  "status": "active" },
+      { "label": "테스트", "date": "~ 5월",   "status": "pending" },
+      { "label": "오픈",   "date": "6월",     "status": "pending" }
+    ]
+  },
+  "yearActivity": {
+    "title": "연간 활동",
+    "subtitle": "2026년 배포 · 커밋 · 이슈 일일 합계",
+    "year": 2026,
+    "max": 20,
+    "values": [
+      ["2026-01-02", 4], ["2026-01-05", 8], ["2026-01-06", 11], ["2026-01-07", 6], ["2026-01-08", 9], ["2026-01-09", 5], ["2026-01-12", 7], ["2026-01-13", 10], ["2026-01-14", 12], ["2026-01-15", 8], ["2026-01-16", 6], ["2026-01-19", 3], ["2026-01-20", 9], ["2026-01-21", 13], ["2026-01-22", 11], ["2026-01-23", 7], ["2026-01-26", 6], ["2026-01-27", 10], ["2026-01-28", 12], ["2026-01-29", 9], ["2026-01-30", 5],
+      ["2026-02-02", 8], ["2026-02-03", 11], ["2026-02-04", 14], ["2026-02-05", 12], ["2026-02-06", 7], ["2026-02-09", 10], ["2026-02-10", 13], ["2026-02-11", 15], ["2026-02-12", 11], ["2026-02-13", 8], ["2026-02-16", 9], ["2026-02-17", 14], ["2026-02-18", 16], ["2026-02-19", 12], ["2026-02-20", 10], ["2026-02-23", 7], ["2026-02-24", 12], ["2026-02-25", 17], ["2026-02-26", 14], ["2026-02-27", 9],
+      ["2026-03-02", 11], ["2026-03-03", 15], ["2026-03-04", 18], ["2026-03-05", 13], ["2026-03-06", 9], ["2026-03-09", 12], ["2026-03-10", 16], ["2026-03-11", 19], ["2026-03-12", 14], ["2026-03-13", 10], ["2026-03-16", 13], ["2026-03-17", 17], ["2026-03-18", 20], ["2026-03-19", 15], ["2026-03-20", 11], ["2026-03-23", 14], ["2026-03-24", 16], ["2026-03-25", 18], ["2026-03-26", 12], ["2026-03-27", 8], ["2026-03-30", 10], ["2026-03-31", 13],
+      ["2026-04-01", 9], ["2026-04-02", 12], ["2026-04-03", 15], ["2026-04-06", 11], ["2026-04-07", 14], ["2026-04-08", 16], ["2026-04-09", 12], ["2026-04-10", 8], ["2026-04-13", 10], ["2026-04-14", 13], ["2026-04-15", 17], ["2026-04-16", 14], ["2026-04-17", 9], ["2026-04-20", 11], ["2026-04-21", 7]
+    ]
+  },
+  "releaseCalendar": {
+    "title": "4월 릴리스 · 일정",
+    "subtitle": "배포 · 점검 · 마일스톤",
+    "year": 2026,
+    "month": 4,
+    "startOfWeek": "sun",
+    "showList": true,
+    "listLimit": null,
+    "listFilter": "all",
+    "events": [
+      { "date": "2026-04-03", "label": "v2.4.0 정기 배포", "type": "ok" },
+      { "date": "2026-04-07", "label": "SRE 인프라 점검", "type": "warning" },
+      { "date": "2026-04-10", "label": "Q1 리뷰 미팅" },
+      { "date": "2026-04-15", "label": "보안 패치",       "type": "danger" },
+      { "date": "2026-04-15", "label": "홈페이지 디자인 리뷰" },
+      { "date": "2026-04-18", "label": "홈페이지 3차 배포", "type": "ok" },
+      { "date": "2026-04-22", "label": "빌링 API 통합 데모" },
+      { "date": "2026-04-23", "label": "전사 작업 업데이트" },
+      { "date": "2026-04-25", "label": "방화벽 메인터넌스", "type": "warning" },
+      { "date": "2026-04-30", "label": "빌링센터 개발 마감", "type": "accent" },
+      { "date": "2026-04-30", "label": "Q2 OKR 확정" }
+    ]
+  },
+  "regionMap": {
+    "title": "지역별 매출 (광역자치단체)",
+    "subtitle": "이번 분기 · hex 타일맵",
+    "items": [
+      { "region": "서울", "value": 4250000000 },
+      { "region": "경기", "value": 3180000000 },
+      { "region": "부산", "value": 1420000000 },
+      { "region": "인천", "value": 1180000000 },
+      { "region": "대구", "value":  890000000 },
+      { "region": "대전", "value":  720000000 },
+      { "region": "광주", "value":  580000000 },
+      { "region": "울산", "value":  640000000 },
+      { "region": "세종", "value":  240000000 },
+      { "region": "강원", "value":  430000000 },
+      { "region": "충북", "value":  490000000 },
+      { "region": "충남", "value":  610000000 },
+      { "region": "전북", "value":  390000000 },
+      { "region": "전남", "value":  420000000 },
+      { "region": "경북", "value":  680000000 },
+      { "region": "경남", "value":  870000000 },
+      { "region": "제주", "value":  310000000 }
+    ]
+  },
+  "revenueWaterfall": {
+    "title": "Q1 매출 분해",
+    "subtitle": "시작 잔액 → 증감 → 최종",
+    "items": [
+      { "label": "Q4'25 잔고",  "value":  98000000 },
+      { "label": "신규 계약",    "value":  42000000 },
+      { "label": "갱신",         "value":  28000000 },
+      { "label": "이탈",         "value": -18000000 },
+      { "label": "환불",         "value":  -6000000 },
+      { "label": "업셀",         "value":  16000000 },
+      { "label": "Q1'26 잔고",  "value": 160000000 }
+    ]
+  },
+  "filters": {
+    "title": "DASHBOARD FILTERS",
+    "filters": [
+      {
+        "key": "range", "type": "segmented", "label": "기간",
+        "options": [
+          { "value": "7d",     "label": "7일" },
+          { "value": "30d",    "label": "30일" },
+          { "value": "q",      "label": "이번 분기", "selected": true },
+          { "value": "y",      "label": "올해" },
+          { "value": "custom", "label": "직접" }
+        ]
+      },
+      {
+        "key": "segment", "type": "segmented", "label": "고객",
+        "options": [
+          { "value": "all", "label": "전체", "selected": true },
+          { "value": "ent", "label": "Enterprise" },
+          { "value": "smb", "label": "SMB" }
+        ]
+      },
+      {
+        "key": "regions", "type": "chips", "label": "지역",
+        "options": [
+          { "value": "sel", "label": "서울", "selected": true },
+          { "value": "gyg", "label": "경기", "selected": true },
+          { "value": "bus", "label": "부산" },
+          { "value": "dgu", "label": "대구" },
+          { "value": "gws", "label": "강원" },
+          { "value": "etc", "label": "기타" }
+        ]
+      },
+      {
+        "key": "dateRange", "type": "daterange", "label": "직접 지정",
+        "defaultFrom": "2026-01-01",
+        "defaultTo":   "2026-04-22"
+      },
+      {
+        "key": "q", "type": "search", "label": "검색",
+        "placeholder": "고객사/프로젝트"
+      }
+    ]
+  },
+  "alert": {
+    "type": "warning",
+    "title": "결제 시스템 점검 예정",
+    "message": "오늘 22:00~24:00 빌링 API 일시 지연 가능 · 사전 공지 완료",
+    "action": { "label": "공지 상세", "href": "#" }
+  },
+  "sparkMetrics": {
+    "title": "주요 지표 트렌드",
+    "subtitle": "최근 12주 · 전주 대비",
+    "items": [
+      { "label": "주간 거래액",      "value": "₩42.8억", "delta":  6.2, "sparkline": [28, 31, 30, 34, 36, 35, 39, 38, 40, 41, 42, 43] },
+      { "label": "활성 사용자",      "value": "24.8K",   "delta":  4.1, "sparkline": [21000, 21500, 21800, 22400, 22800, 23100, 23500, 23800, 24100, 24400, 24600, 24800] },
+      { "label": "신규 리드",        "value": "1,240",   "delta": -3.8, "sparkline": [1320, 1380, 1410, 1370, 1350, 1320, 1300, 1280, 1270, 1260, 1250, 1240] },
+      { "label": "평균 체류 시간",   "value": "7m 42s",  "delta":  8.9, "sparkline": [6.2, 6.4, 6.5, 6.8, 6.9, 7.0, 7.1, 7.2, 7.3, 7.4, 7.5, 7.7] },
+      { "label": "환불율",           "value": "1.8%",    "delta": -0.4, "sparkline": [2.4, 2.3, 2.3, 2.2, 2.1, 2.1, 2.0, 1.9, 1.9, 1.9, 1.8, 1.8], "deltaGoodWhen": "negative" }
+    ]
+  },
+  "quarterlyGoals": {
+    "title": "Q2 OKR 진행률",
+    "subtitle": "분기 목표 · 현재 달성률",
+    "items": [
+      { "label": "분기 매출",       "value": 128,   "max": 150,   "unit": "억",  "sublabel": "Top Priority" },
+      { "label": "신규 계약",       "value": 127,   "max": 200,   "unit": "건" },
+      { "label": "MAU",             "value": 42180, "max": 50000, "unit": "명" },
+      { "label": "엔터프라이즈 확장","value":   18,  "max":  30,   "unit": "건" },
+      { "label": "NPS",             "value":   68,  "max":  75,   "unit": "점" }
+    ]
+  },
+  "bulletRevenue": {
+    "title": "월간 매출 vs 목표",
+    "subtitle": "이번 달 · 벤치: 지난달",
+    "value": 8200000000,
+    "target": 10000000000,
+    "benchmark": 7400000000,
+    "min": 0,
+    "max": 12000000000,
+    "ranges": [
+      { "value": 5000000000,  "label": "미흡" },
+      { "value": 8000000000,  "label": "양호" },
+      { "value": 12000000000, "label": "우수" }
+    ]
+  },
+  "retentionCohort": {
+    "title": "월별 리텐션",
+    "subtitle": "신규 가입 코호트 · D0/D7/D14/D30/D60/D90",
+    "cohortLabel": "가입월",
+    "sizeLabel": "신규",
+    "cohorts":  ["2025-11", "2025-12", "2026-01", "2026-02", "2026-03", "2026-04"],
+    "periods":  ["D0", "D7", "D14", "D30", "D60", "D90"],
+    "sizes":    [1820, 2140, 2680, 3120, 3580, 4180],
+    "data": [
+      [100, 68, 52, 41, 34, 28],
+      [100, 72, 58, 46, 38, 31],
+      [100, 70, 55, 44, 36, null],
+      [100, 74, 61, 48, null, null],
+      [100, 76, 64, null, null, null],
+      [100, 78, null, null, null, null]
+    ]
+  }
+}

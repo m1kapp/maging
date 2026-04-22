@@ -1,0 +1,18 @@
+# Cloudflare Pages _headers file
+# (same intent as vercel.json headers — platform-agnostic)
+
+/dist/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600
+  Access-Control-Allow-Origin: *
+
+/data/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=3600
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate

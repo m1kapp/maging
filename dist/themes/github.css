@@ -1,0 +1,22 @@
+/*! magicwiget theme: github — Primer dark palette | MIT
+ *  Signature: GitHub dark #0D1117 bg, link blue #58A6FF, dev-favorite palette
+ */
+[data-theme="github"] {
+  --mw-bg: #0d1117;
+  --mw-surface: #161b22;
+  --mw-surface-2: #1c2128;
+  --mw-border: #30363d;
+  --mw-text: #c9d1d9;
+  --mw-text-muted: #8b949e;
+  --mw-accent: #58a6ff;
+  --mw-accent-2: #a371f7;
+  --mw-success: #3fb950;
+  --mw-danger: #f85149;
+  --mw-warning: #d29922;
+  --mw-radius: 6px;
+  --mw-border-w: 1px;
+  --mw-font: 'Inter', system-ui, sans-serif;
+  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 0 0 1px rgb(255 255 255 / 0.04);
+}

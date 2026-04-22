@@ -1,0 +1,22 @@
+/*! magicwiget theme: linear — cool minimal indigo SaaS | MIT
+ *  Signature: Linear Indigo #5E6AD2, tight spacing, near-white bg
+ */
+[data-theme="linear"] {
+  --mw-bg: #fcfcfd;
+  --mw-surface: #ffffff;
+  --mw-surface-2: #f4f5f8;
+  --mw-border: #e6e8eb;
+  --mw-text: #0f1115;
+  --mw-text-muted: #6b7280;
+  --mw-accent: #5e6ad2;
+  --mw-accent-2: #a78bfa;
+  --mw-success: #4cb782;
+  --mw-danger: #eb5757;
+  --mw-warning: #f2994a;
+  --mw-radius: 6px;
+  --mw-border-w: 1px;
+  --mw-font: 'Inter', system-ui, sans-serif;
+  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+}
