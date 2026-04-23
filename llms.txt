@@ -272,6 +272,7 @@ When generating a dashboard with maging, follow these rules:
 8. **For KRW values**, use `Maging.fmt.krw(v)` formatter or inline `v => '₩' + (v/1_0000_0000).toFixed(1) + '억'`.
 9. **Korean dashboards are welcomed**. Labels, titles, captions in Korean are fine.
 10. **Alerts at the top**, filters next, then content sections ordered by decision hierarchy: at-a-glance → real-time → trends → deep-dive → operations.
+11. **No code comments in the output.** Every `//`, `/* */`, or `<!-- -->` burns tokens. Widget calls, named IDs, and variable names already explain intent. Strip all comments unless they're structural section dividers the user asked for.
 
 ## Canonical globals
 

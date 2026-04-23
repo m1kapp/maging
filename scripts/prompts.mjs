@@ -53,6 +53,7 @@ DEFAULT BEHAVIOR — STATIC SNAPSHOT:
 - Pre-compute all values, formats, and labels. Pass plain arrays/objects to widgets.
 
 CRITICAL — NEVER DO:
+- NEVER write code comments (// or /* */). Every comment burns output tokens. Widget/variable names are self-documenting; no need to label "// KPI row" etc.
 - NEVER write your own <style> block with :root { --bg, --card, --text, ... }. maging.css already defines ALL styling via --mw-* tokens per theme. Your custom CSS variables will conflict with the theme system.
 - NEVER invent class names like .shell, .card, .dashboard. Use Grid layout + Maging widget API only.
 - NEVER set background/color on body beyond <body class="mw-themed">. The theme handles it.
@@ -187,6 +188,7 @@ HEIGHT TOKENS — pick one, don't use arbitrary pixel heights:
 10. Output the HTML file inside ONE fenced code block: \`\`\`html\n...full HTML...\n\`\`\` . No text, explanation, or markdown outside the code block. The code block is required so the user can click copy/run in the chat UI.
 
 === CRITICAL — NEVER DO ===
+- NEVER write code comments in the generated output (no //, no /* */, no <!-- --> beyond section dividers). Every comment costs output tokens. Widget calls + named IDs + variable names are already self-documenting. Don't write "// KPI row", "// set up chart", "// mount widgets" etc. Strip all comments.
 - NEVER write your own <style> block defining :root { --bg, --card, --text, --accent, ... }. maging.css already defines all theme tokens as --mw-bg, --mw-surface, --mw-text, --mw-accent, --mw-accent-2, --mw-success, --mw-danger, --mw-warning, --mw-border, --mw-text-muted, --mw-radius, --mw-font, --mw-display-font, --mw-mono-font per data-theme. Defining your own variables conflicts and breaks theme switching.
 - NEVER invent custom class names like .shell, .card, .dashboard, .hero, .grid-item. Use Grid layout + Maging widget API exclusively.
 - NEVER set background, color, font, radius on body/html/.mw-card beyond <body class="mw-themed">. The theme controls it all.
