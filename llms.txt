@@ -119,21 +119,65 @@ Mount via `window.Maging.<widgetName>(selector, config)`. All widgets auto-refre
 
 - `alertBanner({ type, title, message?, icon?, action?:{label,href?,onClick?}, dismissable? })` — top-of-page stripe. Not a card. `type: 'info'|'warning'|'danger'|'success'`.
 
-## Layout
+## Canonical layouts
 
-Dashboard layouts use CSS Grid via Tailwind classes. Standard pattern:
+Don't invent grid classes. Compose dashboards from these named patterns — stack them vertically with `mt-4` between sections. Outer wrapper is always `<main class="max-w-[1280px] mx-auto p-6">`. `<body class="mw-themed">` provides base page styling.
 
+### 1. KPI row — at-a-glance hero metrics (top of dashboard)
 ```html
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-4" style="grid-auto-rows:400px">
-  <div class="lg:col-span-2" id="revenue-chart"></div>
-  <div id="region-chart"></div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4" style="grid-auto-rows:192px">
+  <div id="kpi-1"></div><div id="kpi-2"></div>
+  <div id="kpi-3"></div><div id="kpi-4"></div>
 </div>
 ```
+Fits: 4× `kpiCard` (with sparkline). For 6 compact cards use `md:grid-cols-6 gap-3` + `grid-auto-rows:110px` + `kpiCard({ compact: true })`.
 
-- Fix row height with inline `grid-auto-rows:NNNpx` (for "LEGO block" alignment).
-- Use `col-span-2` / `lg:col-span-2` to make a widget span 2 columns.
-- Small tiles: 120–200px. Regular cards: 400px. Tall cards (treemap etc.): 600px.
-- `<body class="mw-themed">` provides base page styling.
+### 2. Hero + side — one lead chart, one supporting widget (2:1 split)
+```html
+<div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4" style="grid-auto-rows:400px">
+  <div id="lead"></div>
+  <div id="side"></div>
+</div>
+```
+Fits: left = `lineChart` / `barChart` / `funnelChart`; right = `donutChart` / `leaderboard` / `statusGrid` / `metricStack`.
+
+### 3. Equal split — two peer widgets side-by-side
+```html
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4" style="grid-auto-rows:400px">
+  <div id="left"></div>
+  <div id="right"></div>
+</div>
+```
+Fits: any two mid-size charts — funnel + radar, heatmap + scatter, bullet + gauge.
+
+### 4. Metric trio — three equal tiles (ops / health)
+```html
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4" style="grid-auto-rows:240px">
+  <div id="a"></div><div id="b"></div><div id="c"></div>
+</div>
+```
+Fits: 3× `gaugeChart`, or `compareCard` × 3, or three related KPIs needing more breathing room than pattern 1.
+
+### 5. Full-width detail — one tall widget on its own row
+```html
+<div class="grid grid-cols-1 gap-4" style="grid-auto-rows:520px">
+  <div id="detail"></div>
+</div>
+```
+Fits: `treemapChart`, `sankeyChart`, `calendarHeatmap`, `cohortMatrix`, `mapChart` (600px for maps).
+
+### Height tokens
+
+| Token | Value | Use with |
+|---|---|---|
+| `mini` | `110px` | `kpiCard({ compact: true })` |
+| `tile` | `192px` | `kpiCard` with sparkline |
+| `gauge` | `240px` | `gaugeChart`, `ringProgress` |
+| `card` | `400px` | most charts, lists, tables |
+| `detail` | `520px` | `treemap`, `sankey`, `cohortMatrix`, `scatter` |
+| `tall` | `600px` | `mapChart`, `calendarHeatmap` full-year |
+
+Pick from these instead of choosing arbitrary pixel heights. Within a section, keep heights consistent so widgets align.
 
 ## Complete example
 
@@ -147,10 +191,12 @@ Dashboard layouts use CSS Grid via Tailwind classes. Standard pattern:
 <body class="mw-themed">
 <main class="max-w-[1280px] mx-auto p-6">
 
+  <!-- Pattern 1: KPI row -->
   <div class="grid grid-cols-1 md:grid-cols-4 gap-4" style="grid-auto-rows:192px" id="kpi-row"></div>
 
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4" style="grid-auto-rows:400px">
-    <div class="lg:col-span-2" id="revenue-chart"></div>
+  <!-- Pattern 2: Hero + side -->
+  <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4 mt-4" style="grid-auto-rows:400px">
+    <div id="revenue-chart"></div>
     <div id="region-chart"></div>
   </div>
 
@@ -202,7 +248,7 @@ When generating a dashboard with maging, follow these rules:
 
 1. **Always include setup** (CSS + ECharts + maging + Tailwind, in that order).
 2. **Pick a theme** — infer from user intent. "minimal" → `linear` / `vercel`. "warm" → `claude` / `notion`. "corporate" → `linkedin` / `stripe`. "bold" → `netflix` / `adobe`. Default to `claude`.
-3. **Use Grid for layout**, never floats. Fix row height for LEGO alignment.
+3. **Use one of the 5 canonical layouts** (see `## Canonical layouts`) instead of inventing grid classes. Pick height from the token table. Stack sections vertically with `mt-4`.
 4. **Wait for DOM ready** before calling `Maging.xxx(...)`. Use `DOMContentLoaded` or `defer`.
 5. **Single HTML file output**. Self-contained. Do not reference external local files.
 6. **Pick widgets that match the data shape**:

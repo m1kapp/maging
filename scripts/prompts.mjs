@@ -36,12 +36,13 @@ WIDGETS (31): window.Maging.<name>(selector, config)
   calendarHeatmap eventCalendar progressStepper
   alertBanner
 
-LAYOUT: CSS Grid, fixed row-height for LEGO alignment.
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4" style="grid-auto-rows:400px">
-    <div class="lg:col-span-2" id="a"></div>
-    <div id="b"></div>
-  </div>
-Row heights: 120px (mini), 192px (KPI), 400px (chart), 600px (tall).
+CANONICAL LAYOUTS: Don't invent grid classes — compose from these 5 named patterns, stacked with mt-4.
+  1. KPI row (top):       grid grid-cols-2 md:grid-cols-4 gap-4 · grid-auto-rows:192px          · 4× kpiCard
+  2. Hero + side (2:1):   grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4 · grid-auto-rows:400px  · lead chart + donut/leaderboard
+  3. Equal split (1:1):   grid grid-cols-1 lg:grid-cols-2 gap-4 · grid-auto-rows:400px          · two peer charts
+  4. Metric trio (1:1:1): grid grid-cols-1 md:grid-cols-3 gap-4 · grid-auto-rows:240px          · 3× gauge/compareCard
+  5. Full-width detail:   grid grid-cols-1 gap-4 · grid-auto-rows:520px                        · treemap/sankey/cohort/map
+Heights: mini 110px · tile 192px · gauge 240px · card 400px · detail 520px · tall 600px.
 
 Wait for DOMContentLoaded. Output a single self-contained HTML file wrapped in a fenced code block (\`\`\`html ... \`\`\`). No other text before or after the code block.
 
@@ -130,21 +131,48 @@ CALENDAR & PROJECT:
 CONTROL & MESSAGING:
 - alertBanner({type, title, message?, icon?, action?:{label,href?}, dismissable?})  type: "info"|"warning"|"danger"|"success". Horizontal stripe, NOT a card.
 
-=== LAYOUT ===
-Use CSS Grid with Tailwind. Fix row height for LEGO block alignment.
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4" style="grid-auto-rows:400px">
-    <div class="lg:col-span-2" id="revenue"></div>
-    <div id="region"></div>
-  </div>
-Row heights: 120px (mini stats) · 192px (KPIs) · 400px (charts/tables) · 600px (tall).
-Use "lg:col-span-2" for 2-column span.
+=== CANONICAL LAYOUTS ===
+Don't invent grid classes. Compose dashboards from these 5 named patterns, stacked with mt-4. Outer wrapper: <main class="max-w-[1280px] mx-auto p-6">.
+
+1. KPI ROW — at-a-glance hero metrics (top of page)
+   <div class="grid grid-cols-2 md:grid-cols-4 gap-4" style="grid-auto-rows:192px">
+     <div id="kpi-1"></div><div id="kpi-2"></div><div id="kpi-3"></div><div id="kpi-4"></div>
+   </div>
+   Fits: 4× kpiCard. For 6 compact cards: md:grid-cols-6 + grid-auto-rows:110px + kpiCard({compact:true}).
+
+2. HERO + SIDE — one lead chart, one supporting widget (2:1)
+   <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4" style="grid-auto-rows:400px">
+     <div id="lead"></div><div id="side"></div>
+   </div>
+   Fits: left = lineChart/barChart/funnelChart; right = donutChart/leaderboard/statusGrid/metricStack.
+
+3. EQUAL SPLIT — two peer widgets side-by-side (1:1)
+   <div class="grid grid-cols-1 lg:grid-cols-2 gap-4" style="grid-auto-rows:400px">
+     <div id="left"></div><div id="right"></div>
+   </div>
+   Fits: two mid-size charts — funnel+radar, heatmap+scatter, bullet+gauge.
+
+4. METRIC TRIO — three equal tiles (1:1:1)
+   <div class="grid grid-cols-1 md:grid-cols-3 gap-4" style="grid-auto-rows:240px">
+     <div id="a"></div><div id="b"></div><div id="c"></div>
+   </div>
+   Fits: 3× gaugeChart for ops/health, or 3× compareCard.
+
+5. FULL-WIDTH DETAIL — one tall widget on its own row
+   <div class="grid grid-cols-1 gap-4" style="grid-auto-rows:520px">
+     <div id="detail"></div>
+   </div>
+   Fits: treemapChart, sankeyChart, calendarHeatmap, cohortMatrix, mapChart (use 600px for maps).
+
+HEIGHT TOKENS — pick one, don't use arbitrary pixel heights:
+  mini 110px · tile 192px · gauge 240px · card 400px · detail 520px · tall 600px.
 
 === GENERATION RULES ===
 0. DEFAULT MODE = STATIC SNAPSHOT. You are the analyst — pick the story, arrange widgets, no interactive state. NO JavaScript state objects, re-render functions, event handlers (beyond widget internals) unless user explicitly asks "interactive", "filterable", "여러 관점", "탐색 가능", "실시간".
 1. Always include SETUP at the top.
 2. Pick ONE theme via <html data-theme="...">.
 3. Wrap <body class="mw-themed">.
-4. Use Grid with fixed row height.
+4. Compose layout from the 5 CANONICAL LAYOUTS above. Pick heights from the HEIGHT TOKENS list. Don't invent grid classes.
 5. Wait for DOMContentLoaded. maging.js is defer-loaded.
 6. Widget choice by data shape:
    time series→lineChart · categorical→barChart · share→donutChart · funnel→funnelChart
