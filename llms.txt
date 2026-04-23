@@ -10,7 +10,7 @@
 **One-liner (recommended)** — auto-loads Pretendard + maging.css + Tailwind Play + ECharts + maging.js in correct order:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.3/dist/maging-all.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.4/dist/maging-all.js"></script>
 <body class="mw-themed">
 ```
 
@@ -30,10 +30,10 @@ Skip a default with data-attributes:
 **Manual install** (granular control, custom version pinning):
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.3/dist/maging.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.4/dist/maging.css">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.3/dist/maging.js"></script>
+<script defer src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.4/dist/maging.js"></script>
 ```
 
 Set the theme on `<html data-theme="…">`. Wrap body with `<body class="mw-themed">` for base styling.
@@ -142,7 +142,7 @@ Dashboard layouts use CSS Grid via Tailwind classes. Standard pattern:
 <html lang="ko" data-theme="claude">
 <head>
 <meta charset="UTF-8">
-<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.3/dist/maging-all.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.4/dist/maging-all.js"></script>
 </head>
 <body class="mw-themed">
 <main class="max-w-[1280px] mx-auto p-6">

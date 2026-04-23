@@ -19,7 +19,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
 <style>
   /* ========= Landing-page-only styles ========= */
@@ -1086,7 +1086,7 @@
     <a href="#top" class="nav-brand" style="text-decoration: none; color: inherit;">
       <span class="nav-brand__mark">✦</span>
       <span class="nav-brand__name">maging</span>
-      <span class="nav-brand__ver">v0.1.3</span>
+      <span class="nav-brand__ver">v0.1.4</span>
     </a>
     <div class="flex items-center gap-2 flex-wrap">
       <a href="demo.html" class="nav-link">Demo</a>
@@ -1104,7 +1104,7 @@
   <div class="max-w-[980px] mx-auto px-6 pt-24 pb-20 text-center">
     <div class="hero-eyebrow">
       <span class="hero-eyebrow__dot"></span>
-      AI Output Formatter · v0.1.3
+      AI Output Formatter · v0.1.4
     </div>
     <h1 class="hero-title">
       AI 답변을,<br>
@@ -1500,7 +1500,7 @@
     <div class="code">
       <div class="code__lang">html</div>
       <button class="code__copy">복사</button>
-<pre><code>&lt;script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.3/dist/maging-all.js"&gt;&lt;/script&gt;
+<pre><code>&lt;script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.4/dist/maging-all.js"&gt;&lt;/script&gt;
 &lt;body class="mw-themed"&gt;</code></pre>
     </div>
 
@@ -1515,10 +1515,10 @@
       <div class="code mt-4">
         <div class="code__lang">html</div>
         <button class="code__copy">복사</button>
-<pre><code>&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.3/dist/maging.css"&gt;
+<pre><code>&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.4/dist/maging.css"&gt;
 &lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;
 &lt;script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"&gt;&lt;/script&gt;
-&lt;script defer src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.3/dist/maging.js"&gt;&lt;/script&gt;</code></pre>
+&lt;script defer src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.4/dist/maging.js"&gt;&lt;/script&gt;</code></pre>
       </div>
       <p class="mw-muted text-xs mt-2">
         개별 로드. 의존성 버전 고정·Tailwind 제외·자체 Pretendard 등 커스터마이즈 가능.
@@ -1828,7 +1828,7 @@ Maging.setTheme('bloomberg');
           <div class="text-sm font-semibold">maging</div>
           <span class="mw-muted text-xs" style="font-family: var(--mw-mono-font); padding: 0.1rem 0.4rem; background: var(--mw-surface-2); border-radius: 3px;">AI Output Formatter</span>
         </div>
-        <div class="mw-muted text-xs">v0.1.3 · MIT License · Built with ECharts + Tailwind + Pretendard</div>
+        <div class="mw-muted text-xs">v0.1.4 · MIT License · Built with ECharts + Tailwind + Pretendard</div>
       </div>
       <div class="flex gap-5 text-xs mw-muted">
         <a href="demo.html" style="color: inherit;">Demo</a>
@@ -2194,7 +2194,7 @@ Then wait for my next message before generating anything.`;
   var SHORT_PROMPT = `You are generating a single self-contained HTML dashboard using the "maging" library — an LLM-native UI primitive library.
 
 SETUP (always include in output — one-liner loads everything):
-<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.3/dist/maging-all.js"><\/script>
+<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.4/dist/maging-all.js"><\/script>
 <body class="mw-themed">
 
 maging-all.js auto-loads: Pretendard (Korean font) + maging.css + Tailwind Play + ECharts + maging.js, in correct order. Mount widgets inside a window 'maging:ready' listener OR DOMContentLoaded (whichever fires later — maging-all emits 'maging:ready' after all deps loaded).
@@ -2237,13 +2237,13 @@ API GOTCHAS:
 - All widget mounts must happen inside DOMContentLoaded since maging.js is defer-loaded.
 - Theme is switched by setting <html data-theme="…"> only — no DOM manipulation required.
 
-Full widget schemas & examples: https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.3/llms.txt
+Full widget schemas & examples: https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.4/llms.txt
   (Fetch this URL if you can browse. It has complete API for all 31 widgets.)` + HANDSHAKE;
 
   var FULL_PROMPT = `You are generating a single self-contained HTML dashboard using the "maging" library — an LLM-native UI primitive library.
 
 === SETUP (always include in output — one-liner) ===
-<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.3/dist/maging-all.js"><\/script>
+<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.4/dist/maging-all.js"><\/script>
 <body class="mw-themed">
 
 maging-all.js bundles: Pretendard (Korean font via @import) + maging.css + Tailwind Play + ECharts + maging.js, loaded in correct order. Dispatches 'maging:ready' event on window when all dependencies are ready. Mount widgets inside:
