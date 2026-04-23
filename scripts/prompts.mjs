@@ -30,12 +30,12 @@ THEME: Set on <html data-theme="NAME">. Pick one matching intent.
   Light: claude linear stripe notion airbnb linkedin instagram youtube reddit medium apple duolingo tiffany mailchimp tmobile fedex hermes barbie
   Dark:  vercel github x slack discord openai spotify twitch netflix figma amazon adobe bloomberg nasa heineken deere ups
 
-WIDGETS (32): window.Maging.<name>(selector, config)
+WIDGETS (31): window.Maging.<name>(selector, config)
   kpiCard heroTile ringProgress bulletChart compareCard metricStack countdownTile sparklineList goalGrid
   lineChart barChart donutChart funnelChart gaugeChart radarChart heatmapChart treemapChart scatterChart sankeyChart waterfallChart mapChart cohortMatrix
   leaderboard activityTable timeline inboxPreview statusGrid
   calendarHeatmap eventCalendar progressStepper
-  alertBanner filterBar
+  alertBanner
 
 LAYOUT: CSS Grid, fixed row-height for LEGO alignment.
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-4" style="grid-auto-rows:400px">
@@ -44,10 +44,28 @@ LAYOUT: CSS Grid, fixed row-height for LEGO alignment.
   </div>
 Row heights: 120px (mini), 192px (KPI), 400px (chart), 600px (tall).
 
-Wait for DOMContentLoaded. Output ONLY a single self-contained HTML file.
+Wait for DOMContentLoaded. Output a single self-contained HTML file wrapped in a fenced code block (\`\`\`html ... \`\`\`). No other text before or after the code block.
+
+DEFAULT BEHAVIOR — STATIC SNAPSHOT:
+- Generate a CURATED STATIC SNAPSHOT. You are the analyst — inspect the data, pick the story, arrange widgets to tell it. The viewer reads, doesn't explore.
+- NO JavaScript state objects, re-render functions, or event handlers (beyond what's already inside widgets) UNLESS user explicitly asks for "interactive", "filterable", "여러 관점", "탐색 가능", "실시간".
+- For "multiple views" requests, prefer 2-3 clearly-labeled SECTIONS on one scrollable page — NOT filter-controlled switching.
+- Pre-compute all values, formats, and labels. Pass plain arrays/objects to widgets.
+
+CRITICAL — NEVER DO:
+- NEVER write your own <style> block with :root { --bg, --card, --text, ... }. maging.css already defines ALL styling via --mw-* tokens per theme. Your custom CSS variables will conflict with the theme system.
+- NEVER invent class names like .shell, .card, .dashboard. Use Grid layout + Maging widget API only.
+- NEVER set background/color on body beyond <body class="mw-themed">. The theme handles it.
+- If you must reference a color, use existing tokens: var(--mw-accent), var(--mw-text-muted), var(--mw-surface-2), var(--mw-border). Do not define new ones.
+- <html data-theme="..."> is the ONLY way to style. Trust it 100%.
+
+API GOTCHAS:
+- activityTable column render signature is (value, row) — the FIRST argument is the cell value at col.key, NOT the row. Prefer pre-formatting rows into plain strings and omitting render entirely.
+- All widget mounts must happen inside DOMContentLoaded since maging.js is defer-loaded.
+- Theme is switched by setting <html data-theme="…"> only — no DOM manipulation required.
 
 Full widget schemas & examples: https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.0/llms.txt
-  (Fetch this URL if you can browse. It has complete API for all 32 widgets.)${HANDSHAKE}`;
+  (Fetch this URL if you can browse. It has complete API for all 31 widgets.)${HANDSHAKE}`;
 
 export const FULL_PROMPT = `You are generating a single self-contained HTML dashboard using the "maging" library — an LLM-native UI primitive library.
 
@@ -65,7 +83,7 @@ DARK (17): vercel (pure black minimal), github (dimmed), x (sharp mono), slack (
 
 Pick by intent: minimal→linear/vercel · warm→claude/notion · corporate→linkedin/stripe · bold→netflix/adobe · luxury→hermes/tiffany · playful→barbie/duolingo · terminal→bloomberg · engineering→nasa. Default: claude.
 
-=== WIDGETS (32) ===
+=== WIDGETS (31) ===
 Mount: window.Maging.<widget>(selector, config). All auto-refresh on theme change.
 
 METRIC TILES:
@@ -96,7 +114,10 @@ CHARTS:
 
 LISTS & STATUS:
 - leaderboard({title, items:[{name,initial,percent,meta}]})
-- activityTable({title, columns:[{key,label,align?,render?}], rows, live?})
+- activityTable({title, columns:[{key, label, align?, render?}], rows, live?})
+  · render signature: (value, row) => string  — first arg is the cell value at col.key, second is the whole row
+  · SAFER PATTERN: pre-format rows as strings, skip render. Example:
+    rows: raw.map(r => ({ month: r.month, actual: fmt.krw(r.actual), rate: r.rate != null ? r.rate.toFixed(1)+'%' : '-' }))
 - timeline({title, items:[{time,text,type?}]})  type: "success"|"warning"|"danger"|"info"
 - inboxPreview({title, items:[{icon,text,time,type}], footer?})
 - statusGrid({title, columns?, items:[{label,status,value?}]})  status: "ok"|"warning"|"danger"
@@ -108,7 +129,6 @@ CALENDAR & PROJECT:
 
 CONTROL & MESSAGING:
 - alertBanner({type, title, message?, icon?, action?:{label,href?}, dismissable?})  type: "info"|"warning"|"danger"|"success". Horizontal stripe, NOT a card.
-- filterBar({title?, filters:[{key,type,label,options?,placeholder?,defaultFrom?,defaultTo?}], onChange})  filter types: "segmented"|"chips"|"search"|"daterange"
 
 === LAYOUT ===
 Use CSS Grid with Tailwind. Fix row height for LEGO block alignment.
@@ -120,6 +140,7 @@ Row heights: 120px (mini stats) · 192px (KPIs) · 400px (charts/tables) · 600p
 Use "lg:col-span-2" for 2-column span.
 
 === GENERATION RULES ===
+0. DEFAULT MODE = STATIC SNAPSHOT. You are the analyst — pick the story, arrange widgets, no interactive state. NO JavaScript state objects, re-render functions, event handlers (beyond widget internals) unless user explicitly asks "interactive", "filterable", "여러 관점", "탐색 가능", "실시간".
 1. Always include SETUP at the top.
 2. Pick ONE theme via <html data-theme="...">.
 3. Wrap <body class="mw-themed">.
@@ -135,4 +156,13 @@ Use "lg:col-span-2" for 2-column span.
 7. KRW formatter: v => "₩" + (v/1e8).toFixed(1) + "억"  (or use Maging.fmt.krw)
 8. Korean labels OK. Prefer word-break: keep-all for Korean text wrapping.
 9. Section order (execs): at-a-glance → real-time → trends → deep-dive → operations.
-10. Output ONLY the HTML file. No markdown explanation before/after.${HANDSHAKE}`;
+10. Output the HTML file inside ONE fenced code block: \`\`\`html\n...full HTML...\n\`\`\` . No text, explanation, or markdown outside the code block. The code block is required so the user can click copy/run in the chat UI.
+
+=== CRITICAL — NEVER DO ===
+- NEVER write your own <style> block defining :root { --bg, --card, --text, --accent, ... }. maging.css already defines all theme tokens as --mw-bg, --mw-surface, --mw-text, --mw-accent, --mw-accent-2, --mw-success, --mw-danger, --mw-warning, --mw-border, --mw-text-muted, --mw-radius, --mw-font, --mw-display-font, --mw-mono-font per data-theme. Defining your own variables conflicts and breaks theme switching.
+- NEVER invent custom class names like .shell, .card, .dashboard, .hero, .grid-item. Use Grid layout + Maging widget API exclusively.
+- NEVER set background, color, font, radius on body/html/.mw-card beyond <body class="mw-themed">. The theme controls it all.
+- If you need a specific color in inline styles, reference tokens: var(--mw-accent), var(--mw-text-muted), var(--mw-surface), var(--mw-border). Never define new variables.
+- NEVER write .mw-card background or padding overrides. They come from the theme.
+- The <html data-theme="NAME"> attribute is the SINGLE source of truth for all styling. Trust it completely.
+- If user asks for "custom color" or "my brand color", add a new theme entry request — do NOT inline CSS.${HANDSHAKE}`;

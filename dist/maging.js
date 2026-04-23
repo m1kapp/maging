@@ -2038,160 +2038,6 @@
   }
 
   // ==========================================================
-  // Widget: Filter Bar — dashboard control (segmented / chips / search / daterange)
-  // filters: [{ key, type, label, options?, placeholder?, defaultFrom?, defaultTo? }]
-  // onChange: fn(state) — fires on user interaction (not on initial mount)
-  // handle.getState() — read current state
-  // handle.setState(partial) — programmatic update
-  // ==========================================================
-  function filterBar(el, config) {
-    el = q(el);
-    if (!el) return null;
-    var data = Object.assign({
-      title: '',
-      filters: [],
-      resetLabel: '초기화',
-      onChange: null,
-    }, config || {});
-
-    var state = {};
-    function initialFor(f) {
-      if (f.type === 'segmented') {
-        var sel = (f.options || []).filter(function (o) { return o.selected; })[0];
-        return sel ? sel.value : ((f.options && f.options[0]) || {}).value;
-      }
-      if (f.type === 'chips') {
-        return (f.options || []).filter(function (o) { return o.selected; }).map(function (o) { return o.value; });
-      }
-      if (f.type === 'search')    return f.defaultValue || '';
-      if (f.type === 'daterange') return { from: f.defaultFrom || '', to: f.defaultTo || '' };
-      return null;
-    }
-    data.filters.forEach(function (f) { state[f.key] = initialFor(f); });
-
-    function renderItem(f) {
-      var body = '';
-      if (f.type === 'segmented') {
-        body = '<div class="mw-filter__seg" data-filter-seg="' + f.key + '" role="group">' +
-          (f.options || []).map(function (o) {
-            var active = state[f.key] === o.value ? ' is-active' : '';
-            return '<button type="button" class="mw-filter__seg-btn' + active + '" data-value="' + escapeHTML(o.value) + '">' +
-              escapeHTML(o.label) + '</button>';
-          }).join('') +
-          '</div>';
-      } else if (f.type === 'chips') {
-        body = '<div class="mw-filter__chips" data-filter-chips="' + f.key + '">' +
-          (f.options || []).map(function (o) {
-            var active = state[f.key].indexOf(o.value) >= 0 ? ' is-active' : '';
-            return '<button type="button" class="mw-filter__chip' + active + '" data-value="' + escapeHTML(o.value) + '">' +
-              escapeHTML(o.label) + '</button>';
-          }).join('') +
-          '</div>';
-      } else if (f.type === 'search') {
-        body = '<input type="search" class="mw-filter__input" data-filter-search="' + f.key + '" ' +
-          'placeholder="' + escapeHTML(f.placeholder || '') + '" value="' + escapeHTML(state[f.key]) + '" />';
-      } else if (f.type === 'daterange') {
-        body = '<div class="mw-filter__daterange" data-filter-daterange="' + f.key + '">' +
-          '<input type="date" class="mw-filter__date" data-field="from" value="' + escapeHTML(state[f.key].from) + '" />' +
-          '<span class="mw-filter__date-sep">→</span>' +
-          '<input type="date" class="mw-filter__date" data-field="to" value="' + escapeHTML(state[f.key].to) + '" />' +
-          '</div>';
-      }
-      return '<div class="mw-filter__item">' +
-        '<div class="mw-filter__lbl">' + escapeHTML(f.label || '') + '</div>' +
-        body +
-        '</div>';
-    }
-
-    function render() {
-      el.classList.add('mw-card', 'mw-filter');
-      var items = data.filters.map(renderItem).join('');
-      var titleHTML = data.title ? '<div class="mw-filter__title">' + escapeHTML(data.title) + '</div>' : '';
-      var resetHTML = '<button type="button" class="mw-filter__reset" data-filter-reset>' + escapeHTML(data.resetLabel) + '</button>';
-      el.innerHTML = titleHTML + '<div class="mw-filter__row">' + items + resetHTML + '</div>';
-      attach();
-    }
-
-    function notify() {
-      if (typeof data.onChange === 'function') data.onChange(getState());
-    }
-    function getState() {
-      var out = {};
-      Object.keys(state).forEach(function (k) {
-        var v = state[k];
-        out[k] = Array.isArray(v) ? v.slice() : (v && typeof v === 'object' ? Object.assign({}, v) : v);
-      });
-      return out;
-    }
-
-    function attach() {
-      el.querySelectorAll('[data-filter-seg]').forEach(function (grp) {
-        var key = grp.dataset.filterSeg;
-        grp.querySelectorAll('.mw-filter__seg-btn').forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            state[key] = btn.dataset.value;
-            grp.querySelectorAll('.mw-filter__seg-btn').forEach(function (b) {
-              b.classList.toggle('is-active', b.dataset.value === state[key]);
-            });
-            notify();
-          });
-        });
-      });
-      el.querySelectorAll('[data-filter-chips]').forEach(function (grp) {
-        var key = grp.dataset.filterChips;
-        grp.querySelectorAll('.mw-filter__chip').forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            var v = btn.dataset.value;
-            var idx = state[key].indexOf(v);
-            if (idx >= 0) state[key].splice(idx, 1);
-            else state[key].push(v);
-            btn.classList.toggle('is-active', state[key].indexOf(v) >= 0);
-            notify();
-          });
-        });
-      });
-      el.querySelectorAll('[data-filter-search]').forEach(function (inp) {
-        var key = inp.dataset.filterSearch;
-        var timer = null;
-        inp.addEventListener('input', function () {
-          state[key] = inp.value;
-          if (timer) clearTimeout(timer);
-          timer = setTimeout(notify, 180);
-        });
-      });
-      el.querySelectorAll('[data-filter-daterange]').forEach(function (grp) {
-        var key = grp.dataset.filterDaterange;
-        grp.querySelectorAll('.mw-filter__date').forEach(function (inp) {
-          inp.addEventListener('change', function () {
-            state[key][inp.dataset.field] = inp.value;
-            notify();
-          });
-        });
-      });
-      var reset = el.querySelector('[data-filter-reset]');
-      if (reset) reset.addEventListener('click', function () {
-        data.filters.forEach(function (f) { state[f.key] = initialFor(f); });
-        render();
-        notify();
-      });
-    }
-
-    render();
-    var handle = {
-      el: el, type: 'filter-bar',
-      refresh: render,
-      update: function (newData) { data = Object.assign(data, newData || {}); render(); },
-      destroy: function () { el.innerHTML = ''; registry.delete(handle); },
-      getState: getState,
-      setState: function (partial) {
-        Object.keys(partial || {}).forEach(function (k) { state[k] = partial[k]; });
-        render();
-      },
-    };
-    return register(handle);
-  }
-
-  // ==========================================================
   // Auto-mount from DOM (data-mw-widget)
   // ==========================================================
   function camelize(s) { return s.replace(/-([a-z])/g, function (_, c) { return c.toUpperCase(); }); }
@@ -2294,7 +2140,6 @@
     goalGrid: goalGrid,
     alertBanner: alertBanner,
     bulletChart: bulletChart,
-    filterBar: filterBar,
 
     // Widget metadata (title + short description) — for documentation, pickers, galleries.
     // Demo and other consumers can derive UI from this instead of duplicating labels.
@@ -2333,7 +2178,6 @@
       goalGrid:        { title: 'Goal Grid',         desc: '다중 목표 진행률 바 · OKR · threshold 색상 자동.' },
       alertBanner:     { title: 'Alert Banner',      desc: '긴급 알림 가로 스트립 · info/warning/danger/success · 액션 링크 지원.' },
       bulletChart:     { title: 'Bullet Chart',      desc: '목표 vs 실적 vs 벤치마크 · 정성 밴드 + 타겟 마커 (gauge 상위).' },
-      filterBar:       { title: 'Filter Bar',        desc: '대시보드 제어 · segmented/chips/search/daterange 혼합 · onChange 콜백.' },
     },
 
     setTheme: function (name) {

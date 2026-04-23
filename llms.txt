@@ -1,7 +1,9 @@
-# Maging
+# Maging — AI Output Formatter
 
-> **Dashboard? Deck? Doc? Just mage it.**
-> LLM-native HTML output primitives — 32 widgets, 35 brand themes, zero build. Generate a complete, self-contained HTML dashboard / slide deck / document from a single prompt. Designed to be produced by LLMs (ChatGPT, Claude, Gemini, Grok) in one shot.
+> **AI 답변을, 쓸 수 있는 결과물로.** (AI answers, into usable artifacts.)
+> 코딩 없이, 디자인 없이 — 대시보드·피치덱을 HTML로 바로 생성합니다.
+>
+> maging is the missing "last mile" between LLM analysis and shareable visual artifacts. Library of 31 widgets and 35 brand themes that LLMs (ChatGPT, Claude, Gemini, Grok) can reliably produce as a single self-contained HTML file. Default behavior is **curated static snapshots** (LLM acts as analyst, not interactive BI tool).
 
 ## Installation
 
@@ -20,7 +22,7 @@ Set the theme on `<html data-theme="…">`. Wrap body with `<body class="mw-them
 
 | Mode | Status | Description |
 |------|--------|-------------|
-| `dashboard` | ✅ Available | Grid-based dashboard with 32 widgets |
+| `dashboard` | ✅ Available | Grid-based dashboard with 31 widgets |
 | `deck` | 🚧 Coming soon | Slide-based presentations with keyboard navigation |
 | `doc` | 🚧 Coming soon | Long-scroll documents and reports |
 
@@ -36,7 +38,7 @@ Set on `<html data-theme="NAME">`. The value must match exactly.
 
 Each theme is inspired by the named brand's signature palette, radius, typography, and shadow style. Change the theme value to instantly re-style every widget.
 
-## Widgets (32)
+## Widgets (31)
 
 Mount via `window.Maging.<widgetName>(selector, config)`. All widgets auto-refresh on theme change.
 
@@ -71,7 +73,7 @@ Mount via `window.Maging.<widgetName>(selector, config)`. All widgets auto-refre
 ### Lists
 
 - `leaderboard({ title, items:[{name,initial,percent,meta}] })` — ranked list with avatars and progress bars.
-- `activityTable({ title, columns:[{key,label,align?,render?}], rows:[...] , live? })`
+- `activityTable({ title, columns:[{key,label,align?,render?}], rows:[...] , live? })` — `render: (value, row) => string` where `value` is the cell value at `col.key` (NOT the whole row). Prefer pre-formatting rows as plain strings to skip `render` entirely.
 - `timeline({ title, items:[{time,text,type?}] })` — event stream with colored dots.
 - `inboxPreview({ title, items:[{icon,text,time,type}], footer? })` — notification list.
 - `statusGrid({ title, columns?, items:[{label,status,value?}] })` — service health dots (`status: 'ok'|'warning'|'danger'`).
@@ -94,7 +96,6 @@ Mount via `window.Maging.<widgetName>(selector, config)`. All widgets auto-refre
 ### Control & messaging
 
 - `alertBanner({ type, title, message?, icon?, action?:{label,href?,onClick?}, dismissable? })` — top-of-page stripe. Not a card. `type: 'info'|'warning'|'danger'|'success'`.
-- `filterBar({ title?, filters:[{key,type,label,options?,placeholder?,defaultFrom?,defaultTo?}], onChange, resetLabel? })` — dashboard-wide filter control. Filter types: `'segmented' | 'chips' (multi) | 'search' | 'daterange'`. Handle exposes `getState()` and `setState(partial)`.
 
 ## Layout
 

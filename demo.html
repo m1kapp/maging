@@ -740,9 +740,6 @@
   <!-- Global alert banner -->
   <div id="global-alert" class="mb-6"></div>
 
-  <!-- Global filter bar -->
-  <div id="global-filter" class="mb-8"></div>
-
   <!-- ============================================ -->
   <!-- SECTION 1: AT A GLANCE — 한눈에 보는 현재    -->
   <!-- ============================================ -->
@@ -1145,9 +1142,6 @@ var INSPECTOR_MAP = [
   { selector: '#retention-cohort', type: 'cohortMatrix',
     code: "const retentionCohort = {\n  title: '월별 리텐션',\n  subtitle: '신규 가입 코호트 · D0/D7/D14/D30/D60/D90',\n  cohorts: ['2025-11', '2025-12', '2026-01', '2026-02', '2026-03', '2026-04'],\n  periods: ['D0', 'D7', 'D14', 'D30', 'D60', 'D90'],\n  sizes:   [1820, 2140, 2680, 3120, 3580, 4180],\n  data: [\n    [100, 68, 52, 41, 34, 28],\n    [100, 72, 58, 46, 38, 31],\n    [100, 70, 55, 44, 36, null],   // null = 데이터 없음 (대각선)\n    [100, 74, 61, 48, null, null],\n    [100, 76, 64, null, null, null],\n    [100, 78, null, null, null, null],\n  ],\n};\n\nMaging.cohortMatrix('#retention-cohort', retentionCohort);\n\n// 셀 색은 accent 명도 그라디언트로 자동 매핑" },
 
-  { selector: '#global-filter', type: 'filterBar',
-    code: "const filters = {\n  title: 'DASHBOARD FILTERS',\n  filters: [\n    {\n      key: 'range', type: 'segmented', label: '기간',\n      options: [\n        { value: '7d',  label: '7일' },\n        { value: '30d', label: '30일' },\n        { value: 'q',   label: '이번 분기', selected: true },\n        { value: 'y',   label: '올해' },\n      ],\n    },\n    {\n      key: 'regions', type: 'chips', label: '지역',\n      options: [\n        { value: 'sel', label: '서울', selected: true },\n        { value: 'gyg', label: '경기', selected: true },\n        { value: 'bus', label: '부산' },\n        // ... multi-select\n      ],\n    },\n    {\n      key: 'dateRange', type: 'daterange', label: '직접 지정',\n      defaultFrom: '2026-01-01', defaultTo: '2026-04-22',\n    },\n    {\n      key: 'q', type: 'search', label: '검색',\n      placeholder: '고객사/프로젝트',\n    },\n  ],\n  onChange: (state) => {\n    // state = { range: 'q', regions: ['sel','gyg'], dateRange: {from,to}, q: '' }\n    console.log(state);\n    // 실제 앱: state로 데이터 리페치 → 다른 위젯 update()\n  },\n};\n\nconst handle = Maging.filterBar('#global-filter', filters);\nhandle.getState();            // 현재 상태 읽기\nhandle.setState({ range: 'y' }); // 프로그램적 업데이트\n\n// 타입: 'segmented' | 'chips' (다중) | 'search' | 'daterange'" },
-
   { selector: '#global-alert', type: 'alertBanner',
     code: "Maging.alertBanner('#global-alert', {\n  type: 'warning',   // 'info' | 'warning' | 'danger' | 'success'\n  title: '결제 시스템 점검 예정',\n  message: '오늘 22:00~24:00 빌링 API 일시 지연 가능',\n  action: { label: '공지 상세', href: '/incidents/42' },\n  dismissable: true,\n});\n\n// 카드 아님 — 수평 스트립. 페이지 상단 글로벌 알림용." },
 
@@ -1335,16 +1329,6 @@ function renderDashboard(data) {
   // ============ GLOBAL ALERT ============
   if (data.alert) {
     Maging.alertBanner('#global-alert', data.alert);
-  }
-
-  // ============ GLOBAL FILTER BAR ============
-  if (data.filters) {
-    Maging.filterBar('#global-filter', Object.assign({
-      onChange: function (state) {
-        // Demo: console log state. 실제 앱에서는 이 state로 다른 위젯 데이터 리페치
-        console.log('[filterBar] changed:', state);
-      }
-    }, data.filters));
   }
 
   // ============ SECTION 1: AT A GLANCE ============
