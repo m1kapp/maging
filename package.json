@@ -26,6 +26,7 @@
     "prompt-to-ui"
   ],
   "scripts": {
+    "sync": "node scripts/sync-index.mjs",
     "count-tokens": "node scripts/count-prompt-tokens.mjs",
     "vercel-build": "echo 'Static site — no build step'"
   },

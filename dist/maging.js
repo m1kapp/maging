@@ -108,9 +108,10 @@
 
     function render() {
       el.classList.add('mw-card');
+      el.style.minHeight = data.height + 'px';
       var extra = extraHTMLFn ? extraHTMLFn(data) : '';
       el.innerHTML = headerHTML(data.title, data.subtitle) +
-        '<div class="mw-chart__body" style="height:' + data.height + 'px"></div>' +
+        '<div class="mw-chart__body"></div>' +
         extra;
       if (!EC) return;
       var body = el.querySelector('.mw-chart__body');
@@ -118,14 +119,22 @@
       chart = EC.init(body, null, { renderer: 'svg' });
       var c = getColors();
       var palette = [c.accent, c.accent2, c.success, c.warning, c.danger];
-      var opt = buildOption(data, c, palette);
-      if (opt) chart.setOption(opt);
+      function currentSize() { return { width: body.offsetWidth || 0, height: body.offsetHeight || 0 }; }
+      function buildAndSet() {
+        var opt = buildOption(data, c, palette, currentSize());
+        if (opt) chart.setOption(opt, true);
+      }
+      buildAndSet();
 
       // Observe container resize — when CSS lets chart body grow (e.g. flex: 1 in fixed-height grid cell),
-      // ECharts needs chart.resize() to recompute canvas dimensions.
+      // ECharts needs chart.resize() + (for size-aware widgets) option rebuild.
       if (ro) ro.disconnect();
       if (typeof ResizeObserver !== 'undefined') {
-        ro = new ResizeObserver(function () { if (chart) chart.resize(); });
+        ro = new ResizeObserver(function () {
+          if (!chart) return;
+          if (buildOption.length >= 4) buildAndSet();
+          chart.resize();
+        });
         ro.observe(body);
       }
     }
@@ -303,7 +312,7 @@
       if (data.horizontal) {
         return {
           textStyle: { fontFamily: c.font, color: c.text },
-          grid: { top: 8, right: data.showLabels ? 72 : 14, bottom: 8, left: 52 },
+          grid: { top: 8, right: data.showLabels ? 72 : 14, bottom: 8, left: 8, containLabel: true },
           tooltip: Object.assign({ trigger: 'axis', axisPointer: { type: 'shadow' } },
             baseTooltip(c), tipFmt ? { valueFormatter: tipFmt } : {}),
           xAxis: { type: 'value', show: false },
@@ -311,7 +320,7 @@
             type: 'category',
             data: labels.slice().reverse(),
             axisLine: { show: false }, axisTick: { show: false },
-            axisLabel: { color: c.text, fontFamily: c.font, fontSize: 12 },
+            axisLabel: { color: c.text, fontFamily: c.font, fontSize: 12, margin: 10 },
           },
           series: [{
             type: 'bar',
@@ -572,7 +581,7 @@
     return _chartBase(el, config, {
       label: '', value: 0, max: 100, unit: '%',
       thresholds: null,
-    }, 'gauge-chart', function (data, c) {
+    }, 'gauge-chart', function (data, c, _palette, size) {
       var ratio = data.max > 0 ? Math.min(1, Math.max(0, data.value / data.max)) : 0;
       var gaugeColor = c.accent;
       if (data.thresholds) {
@@ -586,31 +595,41 @@
           }
         }
       }
+      // Size-aware rendering — gauge needs different proportions at different heights.
+      var h = (size && size.height) || 260;
+      var w = (size && size.width)  || 320;
+      var minDim = Math.min(w, h * 2);
+      var compact = h < 200;
+      var valueFontSize = Math.round(Math.max(14, Math.min(36, minDim * 0.12)));
+      var titleFontSize = Math.round(Math.max(9, Math.min(14, minDim * 0.045)));
+      var ringWidth = Math.max(6, Math.round(minDim * 0.035));
+      var radius = compact ? '80%' : '92%';
+      var centerY = compact ? '58%' : '62%';
       return {
         textStyle: { fontFamily: c.font },
         series: [{
           type: 'gauge',
-          radius: '92%',
-          center: ['50%', '62%'],
+          radius: radius,
+          center: ['50%', centerY],
           startAngle: 210, endAngle: -30,
           min: 0, max: data.max,
           splitNumber: 5,
-          progress: { show: true, width: 12, itemStyle: { color: gaugeColor } },
-          axisLine: { lineStyle: { width: 12, color: [[1, c.surface2]] } },
+          progress: { show: true, width: ringWidth, itemStyle: { color: gaugeColor } },
+          axisLine: { lineStyle: { width: ringWidth, color: [[1, c.surface2]] } },
           pointer: { show: false },
           axisTick: { show: false },
           splitLine: { show: false },
-          axisLabel: { distance: -18, color: c.muted, fontSize: 9, fontFamily: c.font },
+          axisLabel: { show: !compact, distance: -18, color: c.muted, fontSize: 9, fontFamily: c.font },
           anchor: { show: false },
           title: {
-            show: !!data.label,
+            show: !!data.label && !compact,
             offsetCenter: [0, '34%'],
-            color: c.muted, fontSize: 11, fontFamily: c.font,
+            color: c.muted, fontSize: titleFontSize, fontFamily: c.font,
           },
           detail: {
             valueAnimation: true,
-            offsetCenter: [0, '-2%'],
-            color: c.text, fontSize: 26, fontWeight: 'bold', fontFamily: c.font,
+            offsetCenter: [0, compact ? '10%' : '-2%'],
+            color: c.text, fontSize: valueFontSize, fontWeight: 'bold', fontFamily: c.font,
             formatter: '{value}' + (data.unit || ''),
           },
           data: [{ value: data.value, name: data.label }]
@@ -824,7 +843,7 @@
     var data = Object.assign({
       label: '', value: '', icon: '', context: '',
       delta: null, deltaGoodWhen: 'positive',
-      sparkline: [],
+      sparkline: [], prev: null, target: null,
     }, config || {});
     var chart = null;
     var ro = null;
@@ -841,36 +860,74 @@
           arrow + ' ' + Math.abs(Number(data.delta)).toFixed(1) + '%</span>';
       }
       el.innerHTML =
-        '<div class="mw-hero__top">' +
-          '<span class="mw-hero__label">' + escapeHTML(data.label) + '</span>' +
-          (data.icon ? '<span class="mw-hero__icon">' + escapeHTML(data.icon) + '</span>' : '') +
+        (data.icon ? '<div class="mw-hero__watermark">' + escapeHTML(data.icon) + '</div>' : '') +
+        '<div class="mw-hero__head">' +
+          '<div class="mw-hero__label-group">' +
+            (data.icon ? '<span class="mw-hero__icon">' + escapeHTML(data.icon) + '</span>' : '') +
+            '<span class="mw-hero__label">' + escapeHTML(data.label) + '</span>' +
+          '</div>' +
+          '<div class="mw-hero__value">' + escapeHTML(data.value) + '</div>' +
+          '<div class="mw-hero__meta">' +
+            (deltaHTML || '') +
+            (data.context ? '<span class="mw-hero__context">' + escapeHTML(data.context) + '</span>' : '') +
+          '</div>' +
         '</div>' +
-        '<div class="mw-hero__value">' + escapeHTML(data.value) + '</div>' +
-        (deltaHTML ? '<div class="mw-hero__row">' + deltaHTML + '</div>' : '') +
-        '<div class="mw-hero__spark"></div>' +
-        (data.context ? '<div class="mw-hero__context">' + escapeHTML(data.context) + '</div>' : '');
+        '<div class="mw-hero__spark"></div>';
 
       if (chart) { chart.dispose(); chart = null; }
       if (ro) { ro.disconnect(); ro = null; }
       if (EC && data.sparkline && data.sparkline.length) {
         var spark = el.querySelector('.mw-hero__spark');
         chart = EC.init(spark, null, { renderer: 'svg' });
-        chart.setOption({
-          grid: { top: 2, right: 2, bottom: 2, left: 2 },
-          xAxis: { type: 'category', show: false, data: data.sparkline.map(function (_, i) { return i; }) },
-          yAxis: { type: 'value', show: false, scale: true },
-          series: [{
-            type: 'line', smooth: true, symbol: 'none',
-            data: data.sparkline,
-            lineStyle: { color: c.accent, width: 1.5 },
-            areaStyle: {
-              color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
-                colorStops: [
-                  { offset: 0, color: c.accent + '55' },
-                  { offset: 1, color: c.accent + '00' },
-                ] },
+        var allVals = data.sparkline.concat(data.prev || []);
+        if (data.target != null) allVals.push(data.target);
+        var yMin = Math.min.apply(null, allVals);
+        var yMax = Math.max.apply(null, allVals);
+        var pad = (yMax - yMin) * 0.18;
+        var series = [];
+        if (data.prev && data.prev.length) {
+          series.push({
+            type: 'line', smooth: 0.4, symbol: 'none', z: 1,
+            data: data.prev,
+            lineStyle: { color: c.muted, width: 1.5, type: 'dotted' },
+          });
+        }
+        var lastIdx = data.sparkline.length - 1;
+        var lastVal = data.sparkline[lastIdx];
+        series.push({
+          type: 'line', smooth: 0.4, symbol: 'none', z: 2,
+          data: data.sparkline,
+          lineStyle: { color: c.accent, width: 2.5 },
+          areaStyle: {
+            color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
+              colorStops: [
+                { offset: 0, color: c.accent + '55' },
+                { offset: 1, color: c.accent + '06' },
+              ] },
+          },
+          markPoint: {
+            symbol: 'circle', symbolSize: 8,
+            data: [{ coord: [lastIdx, lastVal] }],
+            itemStyle: { color: c.accent, borderColor: c.surface, borderWidth: 2 },
+            label: { show: false },
+          },
+          markLine: data.target != null ? {
+            silent: true, symbol: 'none', z: 5,
+            lineStyle: { color: c.accent, type: 'dashed', width: 1.5, opacity: 0.45 },
+            label: {
+              show: true, position: 'insideEndTop',
+              fontSize: 10, fontWeight: 600,
+              color: c.accent, opacity: 0.8,
+              formatter: '목표',
             },
-          }],
+            data: [{ yAxis: data.target }],
+          } : undefined,
+        });
+        chart.setOption({
+          grid: { top: 8, right: 0, bottom: 0, left: 0 },
+          xAxis: { type: 'category', show: false, data: data.sparkline.map(function (_, i) { return i; }) },
+          yAxis: { type: 'value', show: false, min: yMin - pad, max: yMax + pad },
+          series: series,
         });
         if (typeof ResizeObserver !== 'undefined') {
           ro = new ResizeObserver(function () { if (chart) chart.resize(); });
@@ -884,6 +941,156 @@
       refresh: render,
       update: function (newData) { data = Object.assign(data, newData || {}); render(); },
       destroy: function () {
+        if (ro) ro.disconnect();
+        if (chart) chart.dispose();
+        el.innerHTML = '';
+        registry.delete(handle);
+      },
+    };
+    return register(handle);
+  }
+
+  // ==========================================================
+  // Widget: Metric Chart — hero number + labeled mini chart
+  // ==========================================================
+  function metricChart(el, config) {
+    el = q(el);
+    if (!el) return null;
+    var data = Object.assign({
+      label: '', value: '', icon: '', context: '',
+      delta: null, deltaGoodWhen: 'positive',
+      categories: [], series: [], target: null, yFormatter: null,
+    }, config || {});
+    var chart = null;
+    var ro = null;
+
+    function fmt(v) {
+      return typeof data.yFormatter === 'function' ? data.yFormatter(v) : v;
+    }
+
+    function render() {
+      var c = getColors();
+      el.classList.add('mw-card', 'mw-mchrt');
+      var deltaHTML = '';
+      if (data.delta != null && !isNaN(data.delta)) {
+        var goodWhenNeg = data.deltaGoodWhen === 'negative';
+        var good = goodWhenNeg ? data.delta < 0 : data.delta > 0;
+        var arrow = data.delta >= 0 ? '▲' : '▼';
+        deltaHTML = '<span class="mw-mchrt__delta mw-mchrt__delta--' + (good ? 'good' : 'bad') + '">' +
+          arrow + ' ' + Math.abs(Number(data.delta)).toFixed(1) + '%</span>';
+      }
+      var legendHTML = '';
+      if (data.series && data.series.length) {
+        legendHTML = '<div class="mw-mchrt__legend">';
+        if (data.series[0]) legendHTML += '<span class="mw-mchrt__leg mw-mchrt__leg--a">' + escapeHTML(data.series[0].name || '이번달') + '</span>';
+        if (data.series[1]) legendHTML += '<span class="mw-mchrt__leg mw-mchrt__leg--b">' + escapeHTML(data.series[1].name || '지난달') + '</span>';
+        legendHTML += '</div>';
+      }
+      el.innerHTML =
+        (data.icon ? '<div class="mw-mchrt__watermark">' + escapeHTML(data.icon) + '</div>' : '') +
+        '<div class="mw-mchrt__head">' +
+          '<div class="mw-mchrt__top">' +
+            '<div class="mw-mchrt__label-group">' +
+              (data.icon ? '<span class="mw-mchrt__icon">' + escapeHTML(data.icon) + '</span>' : '') +
+              '<span class="mw-mchrt__label">' + escapeHTML(data.label) + '</span>' +
+            '</div>' +
+            legendHTML +
+          '</div>' +
+          '<div class="mw-mchrt__value">' + escapeHTML(data.value) + '</div>' +
+          '<div class="mw-mchrt__meta">' +
+            (deltaHTML || '') +
+            (data.context ? '<span class="mw-mchrt__context">' + escapeHTML(data.context) + '</span>' : '') +
+          '</div>' +
+        '</div>' +
+        '<div class="mw-mchrt__chart"></div>';
+
+      if (chart) { chart.dispose(); chart = null; }
+      if (ro) { ro.disconnect(); ro = null; }
+      if (!EC || !data.series || !data.series.length || !data.categories || !data.categories.length) return;
+
+      var chartEl = el.querySelector('.mw-mchrt__chart');
+      chart = EC.init(chartEl, null, { renderer: 'svg' });
+      var series = [];
+
+      if (data.series[1] && data.series[1].data) {
+        series.push({
+          type: 'line', smooth: 0.4, symbol: 'none', z: 1,
+          name: data.series[1].name || '지난달',
+          data: data.series[1].data,
+          lineStyle: { color: c.muted, width: 1.5, type: 'dashed' },
+        });
+      }
+
+      var cur = data.series[0];
+      var lastIdx = cur.data.length - 1;
+      series.push({
+        type: 'line', smooth: 0.4, symbol: 'none', z: 2,
+        name: cur.name || '이번달',
+        data: cur.data,
+        lineStyle: { color: c.accent, width: 2.5 },
+        areaStyle: {
+          color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
+            colorStops: [
+              { offset: 0, color: c.accent + '44' },
+              { offset: 1, color: c.accent + '06' },
+            ] },
+        },
+        markPoint: lastIdx >= 0 ? {
+          symbol: 'circle', symbolSize: 7,
+          data: [{ coord: [lastIdx, cur.data[lastIdx]] }],
+          itemStyle: { color: c.accent, borderColor: c.surface, borderWidth: 2 },
+          label: { show: false },
+        } : undefined,
+        markLine: data.target != null ? {
+          silent: true, symbol: 'none', z: 5,
+          lineStyle: { color: c.accent, type: 'dashed', width: 1.5, opacity: 0.45 },
+          label: {
+            show: true, position: 'insideEndTop',
+            fontSize: 10, fontWeight: 600, color: c.accent, opacity: 0.75,
+            formatter: '목표',
+          },
+          data: [{ yAxis: data.target }],
+        } : undefined,
+      });
+
+      chart.setOption({
+        grid: { top: 16, right: 56, bottom: 32, left: 20 },
+        tooltip: Object.assign(baseTooltip(c), {
+          trigger: 'axis',
+          formatter: function(params) {
+            var html = '<div style="font-weight:600;margin-bottom:4px">' + escapeHTML(params[0].axisValueLabel) + '</div>';
+            params.forEach(function(p) { html += '<div>' + p.marker + ' ' + fmt(p.value) + '</div>'; });
+            return html;
+          },
+        }),
+        xAxis: {
+          type: 'category', data: data.categories, boundaryGap: false,
+          axisLabel: { fontSize: 10, color: c.muted, margin: 10 },
+          axisTick: { show: false },
+          axisLine: { lineStyle: { color: c.border } },
+        },
+        yAxis: {
+          type: 'value', position: 'right', splitNumber: 3,
+          scale: true,
+          axisLabel: { fontSize: 9, color: c.muted, formatter: function(v) { return fmt(v); }, margin: 8 },
+          splitLine: { lineStyle: { color: c.border, type: 'dashed', opacity: 0.4 } },
+          axisTick: { show: false }, axisLine: { show: false },
+        },
+        series: series,
+      });
+
+      if (typeof ResizeObserver !== 'undefined') {
+        ro = new ResizeObserver(function() { if (chart) chart.resize(); });
+        ro.observe(chartEl);
+      }
+    }
+
+    render();
+    var handle = {
+      el: el, type: 'metric-chart',
+      refresh: render,
+      update: function(newData) { data = Object.assign(data, newData || {}); render(); },
+      destroy: function() {
         if (ro) ro.disconnect();
         if (chart) chart.dispose();
         el.innerHTML = '';
@@ -1874,6 +2081,59 @@
   }
 
   // ==========================================================
+  // Widget: Page Header — top-of-page hero header
+  // config: { kicker?, title, subtitle?, meta? }
+  // ==========================================================
+  function pageHeader(el, config) {
+    el = q(el);
+    if (!el) return null;
+    var data = Object.assign({ kicker: '', title: '', subtitle: '', meta: '' }, config || {});
+    function render() {
+      el.classList.add('mw-page-head');
+      el.innerHTML =
+        (data.kicker ? '<div class="mw-page-head__kicker"><span class="mw-page-head__dot"></span>' + escapeHTML(data.kicker) + '</div>' : '') +
+        '<h1 class="mw-page-head__title">' + escapeHTML(data.title) + '</h1>' +
+        (data.subtitle || data.meta
+          ? '<div class="mw-page-head__meta">' +
+              (data.subtitle ? '<span>' + escapeHTML(data.subtitle) + '</span>' : '') +
+              (data.subtitle && data.meta ? '<span class="mw-page-head__sep">|</span>' : '') +
+              (data.meta ? '<span class="mw-page-head__mono">' + escapeHTML(data.meta) + '</span>' : '') +
+            '</div>'
+          : '');
+    }
+    render();
+    var handle = { el: el, type: 'page-header', refresh: render,
+      update: function (newData) { data = Object.assign(data, newData || {}); render(); },
+      destroy: function () { el.innerHTML = ''; registry.delete(handle); } };
+    return register(handle);
+  }
+
+  // ==========================================================
+  // Widget: Section Head — between grid groups
+  // config: { index?, kicker, title, tag? }
+  // ==========================================================
+  function sectionHead(el, config) {
+    el = q(el);
+    if (!el) return null;
+    var data = Object.assign({ index: '', kicker: '', title: '', tag: '' }, config || {});
+    function render() {
+      el.classList.add('mw-section-head');
+      var kickerText = data.index ? (data.index + ' · ' + data.kicker) : data.kicker;
+      el.innerHTML =
+        '<div class="mw-section-head__left">' +
+          (kickerText ? '<div class="mw-section-head__kicker">' + escapeHTML(kickerText) + '</div>' : '') +
+          (data.title ? '<h2 class="mw-section-head__title">' + escapeHTML(data.title) + '</h2>' : '') +
+        '</div>' +
+        (data.tag ? '<div class="mw-section-head__tag">' + escapeHTML(data.tag) + '</div>' : '');
+    }
+    render();
+    var handle = { el: el, type: 'section-head', refresh: render,
+      update: function (newData) { data = Object.assign(data, newData || {}); render(); },
+      destroy: function () { el.innerHTML = ''; registry.delete(handle); } };
+    return register(handle);
+  }
+
+  // ==========================================================
   // Widget: Alert Banner — horizontal stripe (not a card)
   // types: 'info' | 'warning' | 'danger' | 'success'
   // ==========================================================
@@ -2108,7 +2368,7 @@
   // Public API
   // ==========================================================
   var api = {
-    version: '0.1.10',
+    version: '0.1.11',
     kpiCard: kpiCard,
     lineChart: lineChart,
     barChart: barChart,
@@ -2123,6 +2383,7 @@
     scatterChart: scatterChart,
     sankeyChart: sankeyChart,
     heroTile: heroTile,
+    metricChart: metricChart,
     ringProgress: ringProgress,
     timeline: timeline,
     statusGrid: statusGrid,
@@ -2140,12 +2401,15 @@
     goalGrid: goalGrid,
     alertBanner: alertBanner,
     bulletChart: bulletChart,
+    pageHeader: pageHeader,
+    sectionHead: sectionHead,
 
     // Widget metadata (title + short description) — for documentation, pickers, galleries.
     // Demo and other consumers can derive UI from this instead of duplicating labels.
     meta: {
       kpiCard:         { title: 'KPI Card',          desc: '라벨 + 값 + 델타 + 스파크라인. `compact: true` + `icon`으로 미니 모드.' },
       heroTile:        { title: 'Hero Tile',         desc: 'iOS 날씨 위젯 스타일 메인 지표 타일.' },
+      metricChart:     { title: 'Metric Chart',      desc: '히어로 숫자 + 축 레이블 있는 미니 라인차트. 이번달/지난달 비교, 목표선 지원.' },
       metricStack:     { title: 'Metric Stack',      desc: 'Bento — 메인 지표 + 하위 지표 2x2.' },
       compareCard:     { title: 'Compare Card',      desc: 'A vs B 대비 + 델타 표시.' },
       countdownTile:   { title: 'Countdown Tile',    desc: '실시간 days/hrs/min 카운트다운.' },
@@ -2178,6 +2442,8 @@
       goalGrid:        { title: 'Goal Grid',         desc: '다중 목표 진행률 바 · OKR · threshold 색상 자동.' },
       alertBanner:     { title: 'Alert Banner',      desc: '긴급 알림 가로 스트립 · info/warning/danger/success · 액션 링크 지원.' },
       bulletChart:     { title: 'Bullet Chart',      desc: '목표 vs 실적 vs 벤치마크 · 정성 밴드 + 타겟 마커 (gauge 상위).' },
+      pageHeader:      { title: 'Page Header',       desc: '페이지 최상단 hero 헤더 · kicker + H1 + subtitle + meta.' },
+      sectionHead:     { title: 'Section Head',      desc: 'grid 그룹 위 라벨 · index + kicker + H2 + tag.' },
     },
 
     setTheme: function (name) {
@@ -2204,11 +2470,207 @@
     seeded: seeded,
   };
 
+  // Theme metadata for the FAB picker (ordered mainstream → distinctive)
+  var THEME_DATA = [
+    { value: 'notion',    brand: 'Notion',     desc: '웜 오프화이트',      accent: '#37352f', accent2: '#2eaadc', bg: '#ffffff', warning: '#cb912f', danger: '#d44c47' },
+    { value: 'vercel',    brand: 'Vercel',     desc: '퓨어 미니멀',        accent: '#ffffff', accent2: '#7928ca', bg: '#000000', warning: '#f5a623', danger: '#ff0080' },
+    { value: 'linear',    brand: 'Linear',     desc: '인디고 미니멀',      accent: '#5e6ad2', accent2: '#a78bfa', bg: '#fcfcfd', warning: '#f2994a', danger: '#eb5757' },
+    { value: 'github',    brand: 'GitHub',     desc: '딤드 다크',          accent: '#58a6ff', accent2: '#a371f7', bg: '#0d1117', warning: '#d29922', danger: '#f85149' },
+    { value: 'apple',     brand: 'Apple',      desc: '시스템 블루',        accent: '#007aff', accent2: '#5ac8fa', bg: '#f5f5f7', warning: '#ff9500', danger: '#ff3b30' },
+    { value: 'stripe',    brand: 'Stripe',     desc: '페이먼트 퍼플',      accent: '#635bff', accent2: '#00d4ff', bg: '#f6f9fc', warning: '#f5a623', danger: '#cd3d64' },
+    { value: 'linkedin',  brand: 'LinkedIn',   desc: '프로페셔널 블루',    accent: '#0a66c2', accent2: '#378fe9', bg: '#f3f2ef', warning: '#e7a33e', danger: '#cc1016' },
+    { value: 'x',         brand: 'X',          desc: '샤프 모노',          accent: '#1d9bf0', accent2: '#f91880', bg: '#000000', warning: '#ffd400', danger: '#f4212e' },
+    { value: 'medium',    brand: 'Medium',     desc: '에디토리얼 세리프',  accent: '#1a8917', accent2: '#242424', bg: '#ffffff', warning: '#b5a642', danger: '#c94a4a' },
+    { value: 'tiffany',   brand: 'Tiffany',    desc: '로빈스에그 블루',    accent: '#0abab5', accent2: '#c9a86c', bg: '#f2f9f8', warning: '#d4a84b', danger: '#c85a5a' },
+    { value: 'openai',    brand: 'OpenAI',     desc: 'AI 틸',              accent: '#00a67e', accent2: '#ab68ff', bg: '#202123', warning: '#f59e0b', danger: '#ef4146' },
+    { value: 'discord',   brand: 'Discord',    desc: '블러플',             accent: '#5865f2', accent2: '#eb459e', bg: '#313338', warning: '#f0b232', danger: '#f23f42' },
+    { value: 'figma',     brand: 'Figma',      desc: '멀티 로고 컬러',     accent: '#ff3737', accent2: '#874fff', bg: '#1e1e1e', warning: '#ff7237', danger: '#ff3737' },
+    { value: 'amazon',    brand: 'Amazon',     desc: '마켓 네이비',        accent: '#ff9900', accent2: '#146eb4', bg: '#131a22', warning: '#ff9900', danger: '#b12704' },
+    { value: 'airbnb',    brand: 'Airbnb',     desc: '코랄 라운드',        accent: '#ff5a5f', accent2: '#00a699', bg: '#ffffff', warning: '#fc642d', danger: '#c13515' },
+    { value: 'adobe',     brand: 'Adobe',      desc: '크리에이티브 레드',  accent: '#fa0c00', accent2: '#ed1c24', bg: '#1d1d1d', warning: '#ffd000', danger: '#fa0c00' },
+    { value: 'youtube',   brand: 'YouTube',    desc: '시그니처 레드',      accent: '#ff0000', accent2: '#065fd4', bg: '#ffffff', warning: '#e3a01e', danger: '#cc0000' },
+    { value: 'netflix',   brand: 'Netflix',    desc: '시네마틱 레드',      accent: '#e50914', accent2: '#b20710', bg: '#000000', warning: '#ffd700', danger: '#831010' },
+    { value: 'reddit',    brand: 'Reddit',     desc: '커뮤니티 오렌지',    accent: '#ff4500', accent2: '#0079d3', bg: '#ffffff', warning: '#ffb000', danger: '#ea0027' },
+    { value: 'twitch',    brand: 'Twitch',     desc: '게이밍 퍼플',        accent: '#9146ff', accent2: '#bf94ff', bg: '#0e0e10', warning: '#ffc70b', danger: '#eb0400' },
+    { value: 'duolingo',  brand: 'Duolingo',   desc: '오울 그린',          accent: '#58cc02', accent2: '#1cb0f6', bg: '#fffdf7', warning: '#ffc800', danger: '#ff4b4b' },
+    { value: 'spotify',   brand: 'Spotify',    desc: '네온 그린',          accent: '#1db954', accent2: '#1ed760', bg: '#121212', warning: '#ffc83d', danger: '#e22134' },
+    { value: 'tmobile',   brand: 'T-Mobile',   desc: '시그니처 마젠타',    accent: '#e20074', accent2: '#9b0056', bg: '#ffffff', warning: '#f9a825', danger: '#d9001b' },
+    { value: 'mailchimp', brand: 'Mailchimp',  desc: '카벤디시 옐로',      accent: '#ffe01b', accent2: '#007c89', bg: '#fffaeb', warning: '#e89c2a', danger: '#e8515f' },
+    { value: 'fedex',     brand: 'FedEx',      desc: '퍼플 오렌지',        accent: '#ff6600', accent2: '#4d148c', bg: '#ffffff', warning: '#ff6600', danger: '#c62828' },
+    { value: 'claude',    brand: 'Claude',     desc: '테라코타 크림',      accent: '#da7756', accent2: '#6a9bcc', bg: '#faf9f5', warning: '#d4a037', danger: '#c25e5e' },
+    { value: 'instagram', brand: 'Instagram',  desc: '비비드 그라디언트',  accent: '#e1306c', accent2: '#f77737', bg: '#fafafa', warning: '#fcaf45', danger: '#fd1d1d' },
+    { value: 'bloomberg', brand: 'Bloomberg',  desc: '터미널 앰버',        accent: '#ffa028', accent2: '#f39f41', bg: '#0a0a0a', warning: '#ffd23f', danger: '#ff4c4c' },
+    { value: 'slack',     brand: 'Slack',      desc: '다크 오버진',        accent: '#ecb22e', accent2: '#36c5f0', bg: '#3f0e40', warning: '#ecb22e', danger: '#e01e5a' },
+    { value: 'nasa',      brand: 'NASA',       desc: '웜 블루',            accent: '#fc3d21', accent2: '#ffffff', bg: '#0b3d91', warning: '#ffc107', danger: '#fc3d21' },
+    { value: 'heineken',  brand: 'Heineken',   desc: '보틀 그린',          accent: '#e10012', accent2: '#ffd700', bg: '#0a3d22', warning: '#ffd700', danger: '#e10012' },
+    { value: 'deere',     brand: 'John Deere', desc: '트랙터 그린',        accent: '#ffde00', accent2: '#ffffff', bg: '#2a6221', warning: '#ffde00', danger: '#d9534f' },
+    { value: 'hermes',    brand: 'Hermès',     desc: '럭셔리 크림',        accent: '#ff6900', accent2: '#3e2110', bg: '#fdf6ec', warning: '#d17a00', danger: '#ac1b2b' },
+    { value: 'ups',       brand: 'UPS',        desc: '풀먼 브라운',        accent: '#ffb500', accent2: '#c89d5a', bg: '#2b1810', warning: '#ffb500', danger: '#d9534f' },
+    { value: 'barbie',    brand: 'Barbie',     desc: '파스텔 핑크',        accent: '#e0218a', accent2: '#ffd700', bg: '#fff0f7', warning: '#ffa500', danger: '#8b0000' }
+  ];
+
+  function mountThemeFab() {
+    if (document.querySelector('.mw-theme-fab')) return; // already mounted
+
+    var fab = document.createElement('div');
+    fab.className = 'mw-theme-fab';
+    fab.innerHTML =
+      '<button type="button" class="mw-theme-fab__btn" aria-expanded="false" aria-label="테마 선택">' +
+        '<span class="mw-theme-fab__swatches" aria-hidden="true">' +
+          '<span class="mw-theme-fab__swatch mw-theme-fab__swatch--accent" data-swatch="accent"></span>' +
+          '<span class="mw-theme-fab__swatch mw-theme-fab__swatch--accent2" data-swatch="accent2"></span>' +
+          '<span class="mw-theme-fab__swatch mw-theme-fab__swatch--bg" data-swatch="bg"></span>' +
+        '</span>' +
+        '<span class="mw-theme-fab__label">Theme</span>' +
+        '<svg class="mw-theme-fab__caret" viewBox="0 0 10 10" fill="none" aria-hidden="true">' +
+          '<path d="M2 4l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '</svg>' +
+      '</button>' +
+      '<div class="mw-theme-fab__panel" role="dialog" aria-label="테마 목록">' +
+        '<div class="mw-theme-fab__head">' +
+          '<span>Theme · ' + THEME_DATA.length + '</span>' +
+          '<button type="button" class="mw-theme-fab__close" aria-label="닫기">×</button>' +
+        '</div>' +
+        '<div class="mw-theme-fab__tabs" role="tablist">' +
+          '<button type="button" class="mw-theme-fab__tab is-active" data-sort="popular">대중순</button>' +
+          '<button type="button" class="mw-theme-fab__tab" data-sort="unique">독창순</button>' +
+          '<button type="button" class="mw-theme-fab__tab" data-sort="rainbow">무지개순</button>' +
+        '</div>' +
+        '<div class="mw-theme-fab__list"></div>' +
+      '</div>';
+    document.body.appendChild(fab);
+
+    var btn      = fab.querySelector('.mw-theme-fab__btn');
+    var list     = fab.querySelector('.mw-theme-fab__list');
+    var tabs     = fab.querySelectorAll('.mw-theme-fab__tab');
+    var closeBtn = fab.querySelector('.mw-theme-fab__close');
+    var label    = fab.querySelector('.mw-theme-fab__label');
+    var swAccent  = fab.querySelector('[data-swatch="accent"]');
+    var swAccent2 = fab.querySelector('[data-swatch="accent2"]');
+    var swBg      = fab.querySelector('[data-swatch="bg"]');
+    var sortMode = 'popular';
+
+    function hexToHue(hex) {
+      var h = hex.replace('#', '');
+      if (h.length === 3) h = h.split('').map(function (c) { return c + c; }).join('');
+      var r = parseInt(h.slice(0, 2), 16) / 255;
+      var g = parseInt(h.slice(2, 4), 16) / 255;
+      var b = parseInt(h.slice(4, 6), 16) / 255;
+      var mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+      var d = mx - mn;
+      if (d === 0) return { h: -1, s: 0, l: (mx + mn) / 2 };
+      var H;
+      if (mx === r) H = ((g - b) / d + (g < b ? 6 : 0));
+      else if (mx === g) H = ((b - r) / d + 2);
+      else H = ((r - g) / d + 4);
+      return { h: H * 60, s: d / (1 - Math.abs(2 * ((mx + mn) / 2) - 1)), l: (mx + mn) / 2 };
+    }
+    function sortThemes(mode) {
+      var arr = THEME_DATA.slice();
+      if (mode === 'unique') return arr.reverse();
+      if (mode === 'rainbow') {
+        return arr.sort(function (a, b) {
+          var ha = hexToHue(a.accent), hb = hexToHue(b.accent);
+          if (ha.h < 0 && hb.h < 0) return ha.l - hb.l;
+          if (ha.h < 0) return 1;
+          if (hb.h < 0) return -1;
+          return ha.h - hb.h;
+        });
+      }
+      return arr;
+    }
+    function current() { return document.documentElement.getAttribute('data-theme') || 'claude'; }
+    function itemHtml(t, i) {
+      var active = t.value === current() ? ' is-active' : '';
+      var tileStyle = '--mw-tile-accent:' + t.accent + ';';
+      return '<button type="button" class="mw-theme-fab__item' + active + '" data-mw-theme="' + t.value + '" style="' + tileStyle + '">' +
+        '<span class="mw-theme-fab__item-idx">' + String(i).padStart(2, '0') + '</span>' +
+        '<span class="mw-theme-fab__item-check" aria-hidden="true">✓</span>' +
+        '<span class="mw-theme-fab__item-swatch" style="background:' + t.bg + '">' +
+          '<span class="mw-theme-fab__item-swatch-bars">' +
+            '<span style="background:' + t.accent + '"></span>' +
+            '<span style="background:' + t.accent2 + '"></span>' +
+            '<span style="background:' + t.warning + '"></span>' +
+            '<span style="background:' + t.danger + '"></span>' +
+          '</span>' +
+        '</span>' +
+        '<span class="mw-theme-fab__item-body">' +
+          '<span class="mw-theme-fab__item-name">' + t.desc + '</span>' +
+          '<span class="mw-theme-fab__item-brand">inspired by ' + t.brand + '</span>' +
+        '</span>' +
+      '</button>';
+    }
+    function renderList() {
+      var cur = current();
+      var sorted = sortThemes(sortMode);
+      var pinned = sorted.filter(function (t) { return t.value === cur; });
+      var rest   = sorted.filter(function (t) { return t.value !== cur; });
+      var html = '';
+      if (pinned.length) {
+        html += '<div class="mw-theme-fab__pinned-label">Selected</div>';
+        html += pinned.map(function (t) { return itemHtml(t, sorted.indexOf(t) + 1); }).join('');
+        html += '<div class="mw-theme-fab__divider"></div>';
+        html += '<div class="mw-theme-fab__rest-label">Others · ' + rest.length + '</div>';
+      }
+      html += rest.map(function (t) { return itemHtml(t, sorted.indexOf(t) + 1); }).join('');
+      list.innerHTML = html;
+    }
+    function syncButton() {
+      var t = THEME_DATA.filter(function (x) { return x.value === current(); })[0];
+      if (!t) return;
+      swAccent.style.background  = t.accent;
+      swAccent2.style.background = t.accent2;
+      swBg.style.background      = t.bg;
+      label.textContent = t.desc;
+    }
+    function open() {
+      fab.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+      var active = list.querySelector('.is-active');
+      if (active) active.scrollIntoView({ block: 'nearest' });
+    }
+    function close() {
+      fab.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      fab.classList.contains('is-open') ? close() : open();
+    });
+    closeBtn.addEventListener('click', function (e) { e.stopPropagation(); close(); });
+    list.addEventListener('click', function (e) {
+      var item = e.target.closest('[data-mw-theme]');
+      if (!item) return;
+      api.setTheme(item.dataset.mwTheme);
+    });
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function (e) {
+        e.stopPropagation();
+        sortMode = t.dataset.sort;
+        tabs.forEach(function (o) { o.classList.toggle('is-active', o === t); });
+        renderList();
+      });
+    });
+    document.addEventListener('click', function (e) {
+      if (!fab.contains(e.target)) close();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') close();
+    });
+
+    new MutationObserver(function () { syncButton(); renderList(); })
+      .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+    renderList();
+    syncButton();
+  }
+
   // Auto-mount on DOM ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () { mountAll(); });
+    document.addEventListener('DOMContentLoaded', function () { mountAll(); mountThemeFab(); });
   } else {
-    setTimeout(function () { mountAll(); }, 0);
+    setTimeout(function () { mountAll(); mountThemeFab(); }, 0);
   }
 
   // Responsive

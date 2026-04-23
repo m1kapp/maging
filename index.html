@@ -75,232 +75,6 @@
   [data-theme="terminal"] .pill.is-active { color: #000; }
   .pill--primary { background: var(--mw-accent); color: #fff; border-color: var(--mw-accent); padding: 0.625rem 1.25rem; font-weight: 500; }
   [data-theme="terminal"] .pill--primary { color: #000; }
-  /* ========= Floating Theme Picker (shared) ========= */
-  .mw-theme-fab {
-    position: fixed;
-    right: 1.25rem;
-    bottom: 1.25rem;
-    z-index: 120;
-    font-family: var(--mw-font);
-  }
-  .mw-theme-fab__btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.45rem 0.75rem 0.45rem 0.5rem;
-    background: var(--mw-surface);
-    color: var(--mw-text);
-    border: 1px solid var(--mw-border);
-    border-radius: 999px;
-    box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.28), 0 2px 6px -2px rgba(0, 0, 0, 0.12);
-    cursor: pointer;
-    font-size: 0.78rem;
-    font-family: inherit;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s;
-  }
-  .mw-theme-fab__btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.32), 0 4px 10px -2px rgba(0, 0, 0, 0.14);
-    border-color: var(--mw-accent);
-  }
-  .mw-theme-fab__swatches {
-    display: inline-flex;
-    border-radius: 999px;
-    overflow: hidden;
-    border: 1px solid var(--mw-border);
-    height: 18px;
-  }
-  .mw-theme-fab__swatch { height: 100%; }
-  .mw-theme-fab__swatch--accent { width: 18px; }
-  .mw-theme-fab__swatch--accent2 { width: 8px; }
-  .mw-theme-fab__swatch--bg { width: 8px; }
-  .mw-theme-fab__label {
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    max-width: 140px;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  }
-  .mw-theme-fab__caret { width: 10px; height: 10px; opacity: 0.55; transition: transform 0.18s ease; }
-  .mw-theme-fab.is-open .mw-theme-fab__caret { transform: rotate(180deg); }
-
-  .mw-theme-fab__panel {
-    position: absolute;
-    right: 0;
-    bottom: calc(100% + 0.625rem);
-    width: 320px;
-    max-height: 50vh;
-    background: var(--mw-surface);
-    border: 1px solid var(--mw-border);
-    border-radius: calc(var(--mw-radius) + 4px);
-    box-shadow: 0 24px 64px -12px rgba(0, 0, 0, 0.36), 0 6px 14px -4px rgba(0, 0, 0, 0.14);
-    display: none;
-    flex-direction: column;
-    overflow: hidden;
-    transform-origin: bottom right;
-    animation: mwFabIn 0.14s ease-out;
-  }
-  @keyframes mwFabIn {
-    from { opacity: 0; transform: translateY(6px) scale(0.98); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
-  }
-  .mw-theme-fab.is-open .mw-theme-fab__panel { display: flex; }
-
-  .mw-theme-fab__head {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0.625rem 0.875rem;
-    border-bottom: 1px solid var(--mw-border);
-    font-family: var(--mw-mono-font);
-    font-size: 0.66rem;
-    color: var(--mw-text-muted);
-    text-transform: uppercase; letter-spacing: 0.08em;
-    flex-shrink: 0;
-  }
-  .mw-theme-fab__close {
-    width: 22px; height: 22px;
-    display: grid; place-items: center;
-    background: transparent; border: none;
-    color: var(--mw-text-muted); cursor: pointer;
-    border-radius: 4px; font-size: 1.1rem; line-height: 1;
-  }
-  .mw-theme-fab__close:hover { background: var(--mw-surface-2); color: var(--mw-text); }
-
-  .mw-theme-fab__tabs {
-    display: flex; gap: 4px;
-    padding: 0.5rem 0.625rem;
-    border-bottom: 1px solid var(--mw-border);
-    flex-shrink: 0;
-  }
-  .mw-theme-fab__tab {
-    flex: 1;
-    padding: 0.35rem 0.5rem;
-    font-family: var(--mw-font);
-    font-size: 0.72rem; font-weight: 500;
-    color: var(--mw-text-muted);
-    background: transparent;
-    border: 1px solid var(--mw-border);
-    border-radius: calc(var(--mw-radius) - 2px);
-    cursor: pointer;
-    transition: border-color 0.12s, color 0.12s, background 0.12s;
-  }
-  .mw-theme-fab__tab:hover { color: var(--mw-text); border-color: var(--mw-accent); }
-  .mw-theme-fab__tab.is-active {
-    color: var(--mw-surface);
-    background: var(--mw-accent);
-    border-color: var(--mw-accent);
-  }
-
-  .mw-theme-fab__pinned-label,
-  .mw-theme-fab__rest-label {
-    padding: 0.5rem 0.625rem 0.25rem;
-    font-family: var(--mw-mono-font);
-    font-size: 0.62rem;
-    color: var(--mw-text-muted);
-    text-transform: uppercase; letter-spacing: 0.08em;
-  }
-  .mw-theme-fab__divider {
-    height: 1px;
-    background: var(--mw-border);
-    margin: 0.25rem 0.375rem 0.375rem;
-  }
-
-  .mw-theme-fab__list {
-    overflow-y: auto; overflow-x: hidden;
-    padding: 0.375rem;
-    scrollbar-width: thin;
-    scrollbar-color: var(--mw-border) transparent;
-  }
-  .mw-theme-fab__list::-webkit-scrollbar { width: 6px; }
-  .mw-theme-fab__list::-webkit-scrollbar-thumb { background: var(--mw-border); border-radius: 4px; }
-
-  .mw-theme-fab__item {
-    display: flex; align-items: center; gap: 0.625rem;
-    width: 100%;
-    margin-bottom: 3px;
-    padding: 0.55rem 0.625rem;
-    background: var(--mw-bg);
-    color: var(--mw-text) !important;
-    border: 1.5px solid transparent;
-    border-radius: var(--mw-radius);
-    cursor: pointer;
-    text-align: left;
-    font-family: inherit;
-    transition: border-color 0.12s ease, background 0.12s ease;
-  }
-  .mw-theme-fab__item:hover {
-    background: var(--mw-surface-2);
-    border-color: color-mix(in srgb, var(--mw-tile-accent) 50%, transparent);
-  }
-  .mw-theme-fab__item.is-active {
-    background: var(--mw-surface-2);
-    border-color: var(--mw-tile-accent);
-  }
-  .mw-theme-fab__item-swatch {
-    position: relative;
-    flex-shrink: 0;
-    width: 56px; height: 34px;
-    border-radius: 5px; overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--mw-text) 18%, transparent);
-  }
-  .mw-theme-fab__item-swatch-bars {
-    position: absolute;
-    left: 5px; right: 5px; bottom: 4px; top: 4px;
-    display: flex;
-    align-items: flex-end;
-    gap: 2px;
-  }
-  .mw-theme-fab__item-swatch-bars > span { flex: 1; border-radius: 1px; }
-  .mw-theme-fab__item-swatch-bars > span:nth-child(1) { height: 92%; }
-  .mw-theme-fab__item-swatch-bars > span:nth-child(2) { height: 70%; }
-  .mw-theme-fab__item-swatch-bars > span:nth-child(3) { height: 48%; }
-  .mw-theme-fab__item-swatch-bars > span:nth-child(4) { height: 28%; }
-
-  .mw-theme-fab__item-check,
-  .mw-theme-fab__item-idx {
-    flex-shrink: 0;
-    width: 18px;
-    text-align: center;
-    font-size: 0.66rem;
-    font-family: var(--mw-mono-font);
-    font-variant-numeric: tabular-nums;
-    opacity: 0.55;
-  }
-  .mw-theme-fab__item-check {
-    display: none;
-    font-size: 0.95rem;
-    font-weight: 700;
-    opacity: 1;
-    color: var(--mw-tile-accent);
-  }
-  .mw-theme-fab__item.is-active .mw-theme-fab__item-check { display: block; }
-  .mw-theme-fab__item.is-active .mw-theme-fab__item-idx { display: none; }
-  .mw-theme-fab__item-body {
-    flex: 1; min-width: 0;
-    display: flex; flex-direction: column; gap: 1px;
-  }
-  .mw-theme-fab__item-name {
-    font-size: 0.82rem; font-weight: 600;
-    color: var(--mw-text);
-    opacity: 1;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .mw-theme-fab__item-brand {
-    font-size: 0.66rem;
-    font-family: var(--mw-mono-font);
-    color: var(--mw-text);
-    opacity: 0.65;
-    letter-spacing: 0.02em;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .mw-theme-fab__item-idx {
-    color: var(--mw-text);
-  }
-
-  @media (max-width: 480px) {
-    .mw-theme-fab { right: 0.875rem; bottom: 0.875rem; }
-    .mw-theme-fab__panel { width: calc(100vw - 1.75rem); }
-    .mw-theme-fab__label { max-width: 100px; }
-  }
-
   .hero-glow {
     background: radial-gradient(ellipse 80% 60% at 30% 0%,
       color-mix(in srgb, var(--mw-accent) 14%, transparent),
@@ -573,14 +347,19 @@
     font-family: var(--mw-font);
   }
   .ai-handshake__label {
-    font-size: 0.78rem;
-    color: var(--mw-text-muted);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--mw-text);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
   .ai-handshake__label strong {
     color: var(--mw-accent);
-    padding: 0 0.35rem;
+    padding: 0.15rem 0.5rem;
     background: color-mix(in srgb, var(--mw-accent) 14%, transparent);
-    border-radius: 3px;
+    border-radius: 4px;
+    font-size: 1.05rem;
   }
   .ai-handshake__reply {
     margin-top: 0.625rem;
@@ -1145,7 +924,7 @@
     <a href="#top" class="nav-brand" style="text-decoration: none; color: inherit;">
       <span class="nav-brand__mark">✦</span>
       <span class="nav-brand__name">maging</span>
-      <span class="nav-brand__ver">v0.1.10</span>
+      <span class="nav-brand__ver">v0.1.11</span>
     </a>
     <div class="flex items-center gap-2 flex-wrap">
       <a href="demo.html" class="nav-link">Demo</a>
@@ -1163,7 +942,7 @@
   <div class="max-w-[980px] mx-auto px-6 pt-24 pb-20 text-center">
     <div class="hero-eyebrow">
       <span class="hero-eyebrow__dot"></span>
-      AI Output Formatter · v0.1.10
+      AI Output Formatter · v0.1.11
     </div>
     <h1 class="hero-title">
       AI 답변을,<br>
@@ -1288,13 +1067,14 @@
         </div>
 
         <div class="ai-handshake mt-4">
-          <div class="ai-handshake__label">↑ 복사 후 LLM에 붙여넣고 <strong>엔터</strong></div>
+          <div class="ai-handshake__label">⬆︎ 복사 후 LLM에 붙여넣고 <strong>엔터</strong></div>
           <div class="ai-handshake__reply">
             <div class="ai-handshake__reply-lbl">LLM이 이렇게 답하면 준비 완료 :</div>
             <div class="ai-handshake__reply-msg">
               <span class="ai-handshake__cursor">▸</span>
-              <code>maging is ready.</code><br>
-              <code style="padding-left: 1.25rem;">What would you like to create?</code>
+              <code>안녕하세요! 결과물 서포터 매징(maging)입니다 ✦</code><br>
+              <code style="padding-left: 1.25rem;">데이터 파일을 첨부하거나, 만들고 싶은 대시보드를 자유롭게 설명해주세요.</code><br>
+              <code style="padding-left: 1.25rem;">어떤 걸 만들어 드릴까요? 🎨</code>
             </div>
           </div>
           <div class="ai-handshake__next">이후 원하는 걸 자연어로 요청하면 HTML이 돌아옵니다.</div>
@@ -1559,7 +1339,7 @@
     <div class="code">
       <div class="code__lang">html</div>
       <button class="code__copy">복사</button>
-<pre><code>&lt;script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.10/dist/maging-all.js"&gt;&lt;/script&gt;
+<pre><code>&lt;script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.11/dist/maging-all.js"&gt;&lt;/script&gt;
 &lt;body class="mw-themed"&gt;</code></pre>
     </div>
 
@@ -1574,10 +1354,10 @@
       <div class="code mt-4">
         <div class="code__lang">html</div>
         <button class="code__copy">복사</button>
-<pre><code>&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.10/dist/maging.css"&gt;
+<pre><code>&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.11/dist/maging.css"&gt;
 &lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;
 &lt;script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"&gt;&lt;/script&gt;
-&lt;script defer src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.10/dist/maging.js"&gt;&lt;/script&gt;</code></pre>
+&lt;script defer src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.11/dist/maging.js"&gt;&lt;/script&gt;</code></pre>
       </div>
       <p class="mw-muted text-xs mt-2">
         개별 로드. 의존성 버전 고정·Tailwind 제외·자체 Pretendard 등 커스터마이즈 가능.
@@ -1887,7 +1667,7 @@ Maging.setTheme('bloomberg');
           <div class="text-sm font-semibold">maging</div>
           <span class="mw-muted text-xs" style="font-family: var(--mw-mono-font); padding: 0.1rem 0.4rem; background: var(--mw-surface-2); border-radius: 3px;">AI Output Formatter</span>
         </div>
-        <div class="mw-muted text-xs">v0.1.10 · MIT License · Built with ECharts + Tailwind + Pretendard</div>
+        <div class="mw-muted text-xs">v0.1.11 · MIT License · Built with ECharts + Tailwind + Pretendard</div>
       </div>
       <div class="flex gap-5 text-xs mw-muted">
         <a href="demo.html" style="color: inherit;">Demo</a>
@@ -1901,239 +1681,6 @@ Maging.setTheme('bloomberg');
 </footer>
 
 <script>
-// ============================================================
-// THEMES — ordered mainstream → distinctive (← 대중적 ··· 독창적 →)
-// ============================================================
-var THEMES = [
-  { value: 'notion',    brand: 'Notion',     desc: '웜 오프화이트',        accent: '#37352f', accent2: '#2eaadc', bg: '#ffffff', warning: '#cb912f', danger: '#d44c47' },
-  { value: 'vercel',    brand: 'Vercel',     desc: '퓨어 미니멀',          accent: '#ffffff', accent2: '#7928ca', bg: '#000000', warning: '#f5a623', danger: '#ff0080' },
-  { value: 'linear',    brand: 'Linear',     desc: '인디고 미니멀',        accent: '#5e6ad2', accent2: '#a78bfa', bg: '#fcfcfd', warning: '#f2994a', danger: '#eb5757' },
-  { value: 'github',    brand: 'GitHub',     desc: '딤드 다크',            accent: '#58a6ff', accent2: '#a371f7', bg: '#0d1117', warning: '#d29922', danger: '#f85149' },
-  { value: 'apple',     brand: 'Apple',      desc: '시스템 블루',          accent: '#007aff', accent2: '#5ac8fa', bg: '#f5f5f7', warning: '#ff9500', danger: '#ff3b30' },
-  { value: 'stripe',    brand: 'Stripe',     desc: '페이먼트 퍼플',        accent: '#635bff', accent2: '#00d4ff', bg: '#f6f9fc', warning: '#f5a623', danger: '#cd3d64' },
-  { value: 'linkedin',  brand: 'LinkedIn',   desc: '프로페셔널 블루',      accent: '#0a66c2', accent2: '#378fe9', bg: '#f3f2ef', warning: '#e7a33e', danger: '#cc1016' },
-  { value: 'x',         brand: 'X',          desc: '샤프 모노',            accent: '#1d9bf0', accent2: '#f91880', bg: '#000000', warning: '#ffd400', danger: '#f4212e' },
-  { value: 'medium',    brand: 'Medium',     desc: '에디토리얼 세리프',    accent: '#1a8917', accent2: '#242424', bg: '#ffffff', warning: '#b5a642', danger: '#c94a4a' },
-  { value: 'tiffany',   brand: 'Tiffany',    desc: '로빈스에그 블루',      accent: '#0abab5', accent2: '#c9a86c', bg: '#f2f9f8', warning: '#d4a84b', danger: '#c85a5a' },
-  { value: 'openai',    brand: 'OpenAI',     desc: 'AI 틸',                accent: '#00a67e', accent2: '#ab68ff', bg: '#202123', warning: '#f59e0b', danger: '#ef4146' },
-  { value: 'discord',   brand: 'Discord',    desc: '블러플',               accent: '#5865f2', accent2: '#eb459e', bg: '#313338', warning: '#f0b232', danger: '#f23f42' },
-  { value: 'figma',     brand: 'Figma',      desc: '멀티 로고 컬러',       accent: '#ff3737', accent2: '#874fff', bg: '#1e1e1e', warning: '#ff7237', danger: '#ff3737' },
-  { value: 'amazon',    brand: 'Amazon',     desc: '마켓 네이비',          accent: '#ff9900', accent2: '#146eb4', bg: '#131a22', warning: '#ff9900', danger: '#b12704' },
-  { value: 'airbnb',    brand: 'Airbnb',     desc: '코랄 라운드',          accent: '#ff5a5f', accent2: '#00a699', bg: '#ffffff', warning: '#fc642d', danger: '#c13515' },
-  { value: 'adobe',     brand: 'Adobe',      desc: '크리에이티브 레드',    accent: '#fa0c00', accent2: '#ed1c24', bg: '#1d1d1d', warning: '#ffd000', danger: '#fa0c00' },
-  { value: 'youtube',   brand: 'YouTube',    desc: '시그니처 레드',        accent: '#ff0000', accent2: '#065fd4', bg: '#ffffff', warning: '#e3a01e', danger: '#cc0000' },
-  { value: 'netflix',   brand: 'Netflix',    desc: '시네마틱 레드',        accent: '#e50914', accent2: '#b20710', bg: '#000000', warning: '#ffd700', danger: '#831010' },
-  { value: 'reddit',    brand: 'Reddit',     desc: '커뮤니티 오렌지',      accent: '#ff4500', accent2: '#0079d3', bg: '#ffffff', warning: '#ffb000', danger: '#ea0027' },
-  { value: 'twitch',    brand: 'Twitch',     desc: '게이밍 퍼플',          accent: '#9146ff', accent2: '#bf94ff', bg: '#0e0e10', warning: '#ffc70b', danger: '#eb0400' },
-  { value: 'duolingo',  brand: 'Duolingo',   desc: '오울 그린',            accent: '#58cc02', accent2: '#1cb0f6', bg: '#fffdf7', warning: '#ffc800', danger: '#ff4b4b' },
-  { value: 'spotify',   brand: 'Spotify',    desc: '네온 그린',            accent: '#1db954', accent2: '#1ed760', bg: '#121212', warning: '#ffc83d', danger: '#e22134' },
-  { value: 'tmobile',   brand: 'T-Mobile',   desc: '시그니처 마젠타',      accent: '#e20074', accent2: '#9b0056', bg: '#ffffff', warning: '#f9a825', danger: '#d9001b' },
-  { value: 'mailchimp', brand: 'Mailchimp',  desc: '카벤디시 옐로',        accent: '#ffe01b', accent2: '#007c89', bg: '#fffaeb', warning: '#e89c2a', danger: '#e8515f' },
-  { value: 'fedex',     brand: 'FedEx',      desc: '퍼플 오렌지',          accent: '#ff6600', accent2: '#4d148c', bg: '#ffffff', warning: '#ff6600', danger: '#c62828' },
-  { value: 'claude',    brand: 'Claude',     desc: '테라코타 크림',        accent: '#da7756', accent2: '#6a9bcc', bg: '#faf9f5', warning: '#d4a037', danger: '#c25e5e' },
-  { value: 'instagram', brand: 'Instagram',  desc: '비비드 그라디언트',    accent: '#e1306c', accent2: '#f77737', bg: '#fafafa', warning: '#fcaf45', danger: '#fd1d1d' },
-  { value: 'bloomberg', brand: 'Bloomberg',  desc: '터미널 앰버',          accent: '#ffa028', accent2: '#f39f41', bg: '#0a0a0a', warning: '#ffd23f', danger: '#ff4c4c' },
-  { value: 'slack',     brand: 'Slack',      desc: '다크 오버진',          accent: '#ecb22e', accent2: '#36c5f0', bg: '#3f0e40', warning: '#ecb22e', danger: '#e01e5a' },
-  { value: 'nasa',      brand: 'NASA',       desc: '웜 블루',              accent: '#fc3d21', accent2: '#ffffff', bg: '#0b3d91', warning: '#ffc107', danger: '#fc3d21' },
-  { value: 'heineken',  brand: 'Heineken',   desc: '보틀 그린',            accent: '#e10012', accent2: '#ffd700', bg: '#0a3d22', warning: '#ffd700', danger: '#e10012' },
-  { value: 'deere',     brand: 'John Deere', desc: '트랙터 그린',          accent: '#ffde00', accent2: '#ffffff', bg: '#2a6221', warning: '#ffde00', danger: '#d9534f' },
-  { value: 'hermes',    brand: 'Hermès',     desc: '럭셔리 크림',          accent: '#ff6900', accent2: '#3e2110', bg: '#fdf6ec', warning: '#d17a00', danger: '#ac1b2b' },
-  { value: 'ups',       brand: 'UPS',        desc: '풀먼 브라운',          accent: '#ffb500', accent2: '#c89d5a', bg: '#2b1810', warning: '#ffb500', danger: '#d9534f' },
-  { value: 'barbie',    brand: 'Barbie',     desc: '파스텔 핑크',          accent: '#e0218a', accent2: '#ffd700', bg: '#fff0f7', warning: '#ffa500', danger: '#8b0000' }
-];
-
-// ============================================================
-// Floating Theme Picker (bottom-right FAB → vertical panel)
-// ============================================================
-(function mountThemeFab() {
-  function isDark(t) {
-    var h = t.bg.replace('#', '');
-    if (h.length === 3) h = h.split('').map(function (c) { return c + c; }).join('');
-    var r = parseInt(h.slice(0, 2), 16);
-    var g = parseInt(h.slice(2, 4), 16);
-    var b = parseInt(h.slice(4, 6), 16);
-    return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
-  }
-
-  var fab = document.createElement('div');
-  fab.className = 'mw-theme-fab';
-  fab.innerHTML =
-    '<button type="button" class="mw-theme-fab__btn" aria-expanded="false" aria-label="테마 선택">' +
-      '<span class="mw-theme-fab__swatches" aria-hidden="true">' +
-        '<span class="mw-theme-fab__swatch mw-theme-fab__swatch--accent" data-swatch="accent"></span>' +
-        '<span class="mw-theme-fab__swatch mw-theme-fab__swatch--accent2" data-swatch="accent2"></span>' +
-        '<span class="mw-theme-fab__swatch mw-theme-fab__swatch--bg" data-swatch="bg"></span>' +
-      '</span>' +
-      '<span class="mw-theme-fab__label">Theme</span>' +
-      '<svg class="mw-theme-fab__caret" viewBox="0 0 10 10" fill="none" aria-hidden="true">' +
-        '<path d="M2 4l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
-      '</svg>' +
-    '</button>' +
-    '<div class="mw-theme-fab__panel" role="dialog" aria-label="테마 목록">' +
-      '<div class="mw-theme-fab__head">' +
-        '<span>Theme · 35</span>' +
-        '<button type="button" class="mw-theme-fab__close" aria-label="닫기">×</button>' +
-      '</div>' +
-      '<div class="mw-theme-fab__tabs" role="tablist">' +
-        '<button type="button" class="mw-theme-fab__tab is-active" data-sort="popular">대중순</button>' +
-        '<button type="button" class="mw-theme-fab__tab" data-sort="unique">독창순</button>' +
-        '<button type="button" class="mw-theme-fab__tab" data-sort="rainbow">무지개순</button>' +
-      '</div>' +
-      '<div class="mw-theme-fab__list"></div>' +
-    '</div>';
-  document.body.appendChild(fab);
-
-  var btn = fab.querySelector('.mw-theme-fab__btn');
-  var list = fab.querySelector('.mw-theme-fab__list');
-  var tabs = fab.querySelectorAll('.mw-theme-fab__tab');
-  var closeBtn = fab.querySelector('.mw-theme-fab__close');
-  var label = fab.querySelector('.mw-theme-fab__label');
-  var swAccent = fab.querySelector('[data-swatch="accent"]');
-  var swAccent2 = fab.querySelector('[data-swatch="accent2"]');
-  var swBg = fab.querySelector('[data-swatch="bg"]');
-
-  var sortMode = 'popular';
-
-  function hexToHue(hex) {
-    var h = hex.replace('#', '');
-    if (h.length === 3) h = h.split('').map(function (c) { return c + c; }).join('');
-    var r = parseInt(h.slice(0, 2), 16) / 255;
-    var g = parseInt(h.slice(2, 4), 16) / 255;
-    var b = parseInt(h.slice(4, 6), 16) / 255;
-    var mx = Math.max(r, g, b), mn = Math.min(r, g, b);
-    var d = mx - mn;
-    if (d === 0) return { h: -1, s: 0, l: (mx + mn) / 2 };
-    var H;
-    if (mx === r) H = ((g - b) / d + (g < b ? 6 : 0));
-    else if (mx === g) H = ((b - r) / d + 2);
-    else H = ((r - g) / d + 4);
-    return { h: H * 60, s: d / (1 - Math.abs(2 * ((mx + mn) / 2) - 1)), l: (mx + mn) / 2 };
-  }
-  function sortThemes(mode) {
-    var arr = THEMES.slice();
-    if (mode === 'unique') return arr.reverse();
-    if (mode === 'rainbow') {
-      return arr.sort(function (a, b) {
-        var ha = hexToHue(a.accent), hb = hexToHue(b.accent);
-        if (ha.h < 0 && hb.h < 0) return ha.l - hb.l;
-        if (ha.h < 0) return 1;
-        if (hb.h < 0) return -1;
-        return ha.h - hb.h;
-      });
-    }
-    return arr;
-  }
-
-  function current() { return document.documentElement.getAttribute('data-theme') || 'claude'; }
-  function itemHtml(t, i) {
-    var active = t.value === current() ? ' is-active' : '';
-    var tileStyle = '--mw-tile-accent:' + t.accent + ';';
-    return '<button type="button" class="mw-theme-fab__item' + active + '" data-theme="' + t.value + '" style="' + tileStyle + '">' +
-      '<span class="mw-theme-fab__item-idx">' + String(i).padStart(2, '0') + '</span>' +
-      '<span class="mw-theme-fab__item-check" aria-hidden="true">✓</span>' +
-      '<span class="mw-theme-fab__item-swatch" style="background:' + t.bg + '">' +
-        '<span class="mw-theme-fab__item-swatch-bars">' +
-          '<span style="background:' + t.accent + '"></span>' +
-          '<span style="background:' + t.accent2 + '"></span>' +
-          '<span style="background:' + t.warning + '"></span>' +
-          '<span style="background:' + t.danger + '"></span>' +
-        '</span>' +
-      '</span>' +
-      '<span class="mw-theme-fab__item-body">' +
-        '<span class="mw-theme-fab__item-name">' + t.desc + '</span>' +
-        '<span class="mw-theme-fab__item-brand">inspired by ' + t.brand + '</span>' +
-      '</span>' +
-    '</button>';
-  }
-  function render() {
-    var cur = current();
-    var sorted = sortThemes(sortMode);
-    var pinned = sorted.filter(function (t) { return t.value === cur; });
-    var rest   = sorted.filter(function (t) { return t.value !== cur; });
-    var html = '';
-    if (pinned.length) {
-      html += '<div class="mw-theme-fab__pinned-label">Selected</div>';
-      html += pinned.map(function (t) { return itemHtml(t, sorted.indexOf(t) + 1); }).join('');
-      html += '<div class="mw-theme-fab__divider"></div>';
-      html += '<div class="mw-theme-fab__rest-label">Others · ' + rest.length + '</div>';
-    }
-    html += rest.map(function (t) { return itemHtml(t, sorted.indexOf(t) + 1); }).join('');
-    list.innerHTML = html;
-  }
-  function syncButton() {
-    var t = THEMES.find(function (x) { return x.value === current(); });
-    if (!t) return;
-    swAccent.style.background = t.accent;
-    swAccent2.style.background = t.accent2;
-    swBg.style.background = t.bg;
-    label.textContent = t.desc;
-  }
-  function syncActive() {
-    render();
-  }
-  function open() {
-    fab.classList.add('is-open');
-    btn.setAttribute('aria-expanded', 'true');
-    var active = list.querySelector('.is-active');
-    if (active) active.scrollIntoView({ block: 'nearest' });
-  }
-  function close() {
-    fab.classList.remove('is-open');
-    btn.setAttribute('aria-expanded', 'false');
-  }
-
-  function setTheme(value) {
-    if (window.Maging && window.Maging.setTheme) window.Maging.setTheme(value);
-  }
-
-  btn.addEventListener('click', function (e) {
-    e.stopPropagation();
-    fab.classList.contains('is-open') ? close() : open();
-  });
-  closeBtn.addEventListener('click', function (e) { e.stopPropagation(); close(); });
-  list.addEventListener('click', function (e) {
-    var item = e.target.closest('[data-theme]');
-    if (!item) return;
-    setTheme(item.dataset.theme);
-  });
-  tabs.forEach(function (t) {
-    t.addEventListener('click', function (e) {
-      e.stopPropagation();
-      sortMode = t.dataset.sort;
-      tabs.forEach(function (o) { o.classList.toggle('is-active', o === t); });
-      render();
-    });
-  });
-  document.addEventListener('click', function (e) {
-    if (!fab.contains(e.target)) close();
-  });
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') close();
-  });
-
-  new MutationObserver(function () { syncButton(); syncActive(); })
-    .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-
-  render();
-  syncButton();
-
-  // Random theme on page load — deferred until Maging is available.
-  function pickRandom() {
-    var rnd = THEMES[Math.floor(Math.random() * THEMES.length)];
-    setTheme(rnd.value);
-  }
-  if (window.Maging && window.Maging.setTheme) {
-    pickRandom();
-  } else {
-    window.addEventListener('maging:ready', pickRandom, { once: true });
-    var tries = 0;
-    var poll = setInterval(function () {
-      if (window.Maging && window.Maging.setTheme) { clearInterval(poll); pickRandom(); }
-      else if (++tries > 50) clearInterval(poll);
-    }, 100);
-  }
-})();
-
 // ============================================================
 // Copy buttons
 // ============================================================
@@ -2309,208 +1856,537 @@ whenReady(function () {
   var toast = document.getElementById('ai-toast');
   if (!btn || !body) return;
 
-  // ⚠️ These prompts must match scripts/prompts.mjs exactly.
-  // When editing, sync both files and re-run `npm run count-tokens`.
-  // `<\/script>` escapes the JS-tag-closer inside inline <script>.
+          /* SYNC:START — auto-generated by `npm run sync`. Do not edit manually. */
+  var SHORT_PROMPT = `You are a maging dashboard generator.
 
-  var HANDSHAKE = `
+Fetch and read: https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.11/llms.txt
+It has the complete setup, all 31 widget APIs, 35 themes, layout patterns, and generation rules.
 
 === HANDSHAKE ===
 When you have fully understood the above, reply with EXACTLY this text (nothing else, no code fences, no preamble):
 
-maging is ready.
-What would you like to create?
+안녕하세요! 결과물 서포터 매징(maging)입니다 ✦
+
+데이터 파일을 첨부하거나, 만들고 싶은 대시보드를 자유롭게 설명해주세요.
+어떤 걸 만들어 드릴까요? 🎨
 
 Then wait for my next message before generating anything.`;
+  var FULL_PROMPT = `# maging — AI Output Formatter
 
-  var SHORT_PROMPT = `You are generating a single self-contained HTML dashboard using the "maging" library — an LLM-native UI primitive library.
+> **AI 답변을, 쓸 수 있는 결과물로.**
+> 코딩 없이, 디자인 없이 — LLM이 31개 위젯·35개 브랜드 테마로 단일 HTML 대시보드를 바로 생성합니다.
 
-SETUP (always include in output — one-liner loads everything):
-<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.10/dist/maging-all.js"><\/script>
+---
+
+## Setup (always include — one-liner)
+
+\`\`\`html
+<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.11/dist/maging-all.js"><\/script>
 <body class="mw-themed">
+\`\`\`
 
-maging-all.js auto-loads: Pretendard (Korean font) + maging.css + Tailwind Play + ECharts + maging.js, in correct order. Mount widgets inside a window 'maging:ready' listener OR DOMContentLoaded (whichever fires later — maging-all emits 'maging:ready' after all deps loaded).
+\`maging-all.js\` bundles in order: Pretendard (Korean font) + maging.css + Tailwind Play CDN + ECharts 5 + maging.js. Dispatches \`'maging:ready'\` on \`window\` when all deps are ready.
 
-THEME: Set on <html data-theme="NAME">. Pick one matching intent.
-  Light: claude linear stripe notion airbnb linkedin instagram youtube reddit medium apple duolingo tiffany mailchimp tmobile fedex hermes barbie
-  Dark:  vercel github x slack discord openai spotify twitch netflix figma amazon adobe bloomberg nasa heineken deere ups
+**You MUST mount ALL widgets inside \`maging:ready\`:**
 
-WIDGETS (31): window.Maging.<name>(selector, config)
-  kpiCard heroTile ringProgress bulletChart compareCard metricStack countdownTile sparklineList goalGrid
-  lineChart barChart donutChart funnelChart gaugeChart radarChart heatmapChart treemapChart scatterChart sankeyChart waterfallChart mapChart cohortMatrix
-  leaderboard activityTable timeline inboxPreview statusGrid
-  calendarHeatmap eventCalendar progressStepper
-  alertBanner
+\`\`\`js
+window.addEventListener('maging:ready', () => {
+  Maging.kpiCard('#el', { label: '매출', value: '₩128억', delta: 8.3 });
+});
+\`\`\`
 
-CANONICAL LAYOUTS: Don't invent grid classes — compose from these 5 named patterns, stacked with mt-4.
-  1. KPI row (top):       grid grid-cols-2 md:grid-cols-4 gap-4 · grid-auto-rows:192px          · 4× kpiCard
-  2. Hero + side (2:1):   grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4 · grid-auto-rows:400px  · lead chart + donut/leaderboard
-  3. Equal split (1:1):   grid grid-cols-1 lg:grid-cols-2 gap-4 · grid-auto-rows:400px          · two peer charts
-  4. Metric trio (1:1:1): grid grid-cols-1 md:grid-cols-3 gap-4 · grid-auto-rows:240px          · 3× gauge/compareCard
-  5. Full-width detail:   grid grid-cols-1 gap-4 · grid-auto-rows:520px                        · treemap/sankey/cohort/map
-Heights: mini 110px · tile 192px · gauge 240px · card 400px · detail 520px · tall 600px.
+**DO NOT use \`DOMContentLoaded\`** — it fires before ECharts/maging.js finish loading and throws \`"Maging is not defined"\`. This is non-negotiable.
 
-Wait for DOMContentLoaded. Output a single self-contained HTML file wrapped in a fenced code block (\`\`\`html ... \`\`\`). No other text before or after the code block.
+---
 
-DEFAULT BEHAVIOR — STATIC SNAPSHOT:
-- Generate a CURATED STATIC SNAPSHOT. You are the analyst — inspect the data, pick the story, arrange widgets to tell it. The viewer reads, doesn't explore.
-- NO JavaScript state objects, re-render functions, or event handlers (beyond what's already inside widgets) UNLESS user explicitly asks for "interactive", "filterable", "여러 관점", "탐색 가능", "실시간".
-- For "multiple views" requests, prefer 2-3 clearly-labeled SECTIONS on one scrollable page — NOT filter-controlled switching.
-- Pre-compute all values, formats, and labels. Pass plain arrays/objects to widgets.
+## Themes (35)
 
-CRITICAL — NEVER DO:
-- NEVER write code comments (// or /* */). Every comment burns output tokens. Widget/variable names are self-documenting; no need to label "// KPI row" etc.
-- NEVER write your own <style> block with :root { --bg, --card, --text, ... }. maging.css already defines ALL styling via --mw-* tokens per theme. Your custom CSS variables will conflict with the theme system.
-- NEVER invent class names like .shell, .card, .dashboard. Use Grid layout + Maging widget API only.
-- NEVER set background/color on body beyond <body class="mw-themed">. The theme handles it.
-- If you must reference a color, use existing tokens: var(--mw-accent), var(--mw-text-muted), var(--mw-surface-2), var(--mw-border). Do not define new ones.
-- <html data-theme="..."> is the ONLY way to style. Trust it 100%.
+Set on \`<html data-theme="NAME">\`. Each theme bundles palette, typography, radius, shadow. Changing the attribute instantly re-styles every widget.
 
-API GOTCHAS:
-- activityTable column render signature is (value, row) — the FIRST argument is the cell value at col.key, NOT the row. Prefer pre-formatting rows into plain strings and omitting render entirely.
-- All widget mounts must happen inside DOMContentLoaded since maging.js is defer-loaded.
-- Theme is switched by setting <html data-theme="…"> only — no DOM manipulation required.
+**Light (18):** \`claude\` (warm cream+terracotta) · \`linear\` (indigo minimal) · \`stripe\` (payment purple) · \`notion\` (off-white) · \`airbnb\` (coral) · \`linkedin\` (corporate blue) · \`instagram\` (vivid) · \`youtube\` (red) · \`reddit\` (orange) · \`medium\` (editorial green serif) · \`apple\` (system blue) · \`duolingo\` (owl green) · \`tiffany\` (robin-egg blue+gold) · \`mailchimp\` (cavendish yellow) · \`tmobile\` (magenta) · \`fedex\` (purple+orange) · \`hermes\` (cream serif) · \`barbie\` (pastel pink)
 
-Full widget schemas & examples: https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.10/llms.txt
-  (Fetch this URL if you can browse. It has complete API for all 31 widgets.)` + HANDSHAKE;
+**Dark (17):** \`vercel\` (pure black) · \`github\` (dimmed) · \`x\` (sharp mono) · \`slack\` (aubergine) · \`discord\` (blurple) · \`openai\` (AI teal) · \`spotify\` (neon green) · \`twitch\` (gaming purple) · \`netflix\` (cinematic red) · \`figma\` (multi) · \`amazon\` (navy) · \`adobe\` (creative red) · \`bloomberg\` (terminal amber) · \`nasa\` (worm blue+red) · \`heineken\` (bottle green) · \`deere\` (tractor green+yellow) · \`ups\` (pullman brown)
 
-  var FULL_PROMPT = `You are generating a single self-contained HTML dashboard using the "maging" library — an LLM-native UI primitive library.
+Pick by intent: minimal→\`linear\`/\`vercel\` · warm→\`claude\`/\`notion\` · corporate→\`linkedin\`/\`stripe\` · bold→\`netflix\`/\`adobe\` · luxury→\`hermes\`/\`tiffany\` · playful→\`barbie\`/\`duolingo\` · terminal→\`bloomberg\` · engineering→\`nasa\`. Default: \`claude\`.
 
-=== SETUP (always include in output — one-liner) ===
-<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.10/dist/maging-all.js"><\/script>
-<body class="mw-themed">
+---
 
-maging-all.js bundles: Pretendard (Korean font via @import) + maging.css + Tailwind Play + ECharts + maging.js, loaded in correct order. Dispatches 'maging:ready' event on window when all dependencies are ready. Mount widgets inside:
-  window.addEventListener('maging:ready', () => { /* Maging.xxx(...) here */ });
-OR inside DOMContentLoaded (whichever fires later works).
+## Layout Primitives
 
-=== THEMES (35) ===
-Set on <html data-theme="NAME">. Each theme bundles palette, typography, radius, shadow.
-LIGHT (18): claude (warm cream+terracotta), linear (indigo minimal), stripe (payment purple), notion (off-white), airbnb (coral), linkedin (corporate blue), instagram (vivid gradient), youtube (signature red), reddit (community orange), medium (editorial green serif), apple (system blue), duolingo (owl green), tiffany (robin-egg blue+gold), mailchimp (cavendish yellow), tmobile (magenta), fedex (purple+orange), hermes (cream+Didot serif), barbie (pastel pink+gold)
-DARK (17): vercel (pure black minimal), github (dimmed), x (sharp mono), slack (aubergine), discord (blurple), openai (AI teal), spotify (neon green), twitch (gaming purple), netflix (cinematic red), figma (multi-logo), amazon (navy), adobe (creative red), bloomberg (terminal amber mono), nasa (worm blue+red), heineken (bottle green+red star), deere (tractor green+yellow), ups (pullman brown+gold)
+These are structural elements mounted on plain divs **outside** grid cells — not card widgets.
 
-Pick by intent: minimal→linear/vercel · warm→claude/notion · corporate→linkedin/stripe · bold→netflix/adobe · luxury→hermes/tiffany · playful→barbie/duolingo · terminal→bloomberg · engineering→nasa. Default: claude.
+\`\`\`js
+Maging.pageHeader(selector, { kicker?, title, subtitle?, meta? })
+\`\`\`
+Full-width H1 block: dot·kicker line → large title → subtitle + mono-meta row. Use once at the top of the page.
 
-=== WIDGETS (31) ===
-Mount: window.Maging.<widget>(selector, config). All auto-refresh on theme change.
+\`\`\`js
+Maging.sectionHead(selector, { index?, kicker?, title, tag? })
+\`\`\`
+Flex row: \`"index · kicker" + H2\` on the left, tag badge on the right. Use as labeled dividers between grid sections.
 
-METRIC TILES:
-- kpiCard({label, value, delta?, sparkline?, icon?, compact?, deltaGoodWhen?})  compact:true = mini, hides sparkline
-- heroTile({label, value, delta?, sparkline, icon?, context?})  iOS weather-style main metric
-- ringProgress({value, max, unit, label, context?, thresholds})  thresholds: [[0.5,"danger"],[0.85,"warning"],[1,"good"]]
-- bulletChart({value, target?, benchmark?, max, min?, ranges?, valueFormatter?, unit?})  ranges: [{value,label}]
-- compareCard({title, left:{label,value}, right:{label,value}, delta, deltaLabel?})
-- metricStack({title, main:{label,value,delta}, items:[{label,value}]})
-- countdownTile({title, target, label?, context?})  target = ISO datetime
-- sparklineList({title, items:[{label,value,delta,sparkline,deltaGoodWhen?}]})
-- goalGrid({title, items:[{label,value,max,unit?,sublabel?}], thresholds?})
+**Pattern:**
+\`\`\`html
+<div id="page-hero" class="pt-12 pb-4"></div>
 
-CHARTS:
-- lineChart({title, categories, series:[{name,data}], stack?, area?, yFormatter?, yMin?, yMax?, height?})
-- barChart({title, items:[{label,value}], horizontal?, yFormatter?, showLabels?, height?})
-- donutChart({title, slices:[{label,value,color?}], centerLabel?, centerValue?, height?})
-- funnelChart({title, stages:[{label,value}], valueSuffix?, height?})
-- gaugeChart({title, label, value, max, unit, thresholds, height?})
-- radarChart({title, indicators:[{name,max}], series:[{name,data}], height?})
-- heatmapChart({title, xAxis, yAxis, matrix:[[row]], tooltipFormatter?, height?})
-- treemapChart({title, items:[{name,value}], valueFormatter?, height?})
-- scatterChart({title, points:[{label,x,y,size}], xLabel?, yLabel?, height?})
-- sankeyChart({title, nodes:[{name}], links:[{source,target,value}], valueFormatter?, height?})
-- waterfallChart({title, items:[{label,value,type?}], valueFormatter?, height?})  type auto: first=start, last=total, +=gain, -=loss
-- mapChart({title, items:[{region,value}], valueFormatter?, height?})  region = Korean province name (서울,경기,부산,인천,대구,대전,광주,울산,세종,강원,충북,충남,전북,전남,경북,경남,제주)
-- cohortMatrix({title, cohorts, periods, data:[[v]], sizes?, cohortLabel?, sizeLabel?, valueFormatter?})  data[i][j]=retention%, null=blank
+<div class="mt-8 pt-6" style="border-top:1px solid var(--mw-border)">
+  <div id="section-01"></div>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4" style="grid-auto-rows:400px">
+    <div id="chart-a"></div><div id="chart-b"></div>
+  </div>
+</div>
+\`\`\`
+\`\`\`js
+Maging.pageHeader('#page-hero', { kicker: 'REPORT', title: '월간 현황', subtitle: '2025년 4월', meta: 'Last updated 09:00 KST' });
+Maging.sectionHead('#section-01', { index: '01', kicker: 'TRENDS', title: '처리 추이', tag: 'Line · 6M' });
+\`\`\`
 
-LISTS & STATUS:
-- leaderboard({title, items:[{name,initial,percent,meta}]})
-- activityTable({title, columns:[{key, label, align?, render?}], rows, live?})
-  · render signature: (value, row) => string  — first arg is the cell value at col.key, second is the whole row
-  · SAFER PATTERN: pre-format rows as strings, skip render. Example:
-    rows: raw.map(r => ({ month: r.month, actual: fmt.krw(r.actual), rate: r.rate != null ? r.rate.toFixed(1)+'%' : '-' }))
-- timeline({title, items:[{time,text,type?}]})  type: "success"|"warning"|"danger"|"info"
-- inboxPreview({title, items:[{icon,text,time,type}], footer?})
-- statusGrid({title, columns?, items:[{label,status,value?}]})  status: "ok"|"warning"|"danger"
+---
 
-CALENDAR & PROJECT:
-- calendarHeatmap({title, year, values:[[date,value]], max?, valueSuffix?, height?, cellSize?})
-- eventCalendar({title, year, month, events:[{date,label,type?}], startOfWeek?, showList?, listFilter?})
-- progressStepper({title, kicker?, status?, meta, steps:[{label,date,status,badge?}]})  status: "done"|"active"|"pending"
+## Widgets (31)
 
-CONTROL & MESSAGING:
-- alertBanner({type, title, message?, icon?, action?:{label,href?}, dismissable?})  type: "info"|"warning"|"danger"|"success". Horizontal stripe, NOT a card.
+Mount: \`window.Maging.<name>(selector, config)\`. All auto-refresh on theme change.
 
-=== CANONICAL LAYOUTS ===
-Don't invent grid classes. Compose dashboards from these 5 named patterns, stacked with mt-4. Outer wrapper: <main class="max-w-[1280px] mx-auto p-6">.
+### METRIC TILES
 
-1. KPI ROW — at-a-glance hero metrics (top of page)
-   <div class="grid grid-cols-2 md:grid-cols-4 gap-4" style="grid-auto-rows:192px">
-     <div id="kpi-1"></div><div id="kpi-2"></div><div id="kpi-3"></div><div id="kpi-4"></div>
-   </div>
-   Fits: 4× kpiCard. For 6 compact cards: md:grid-cols-6 + grid-auto-rows:110px + kpiCard({compact:true}).
+**\`kpiCard\`**
+\`\`\`js
+Maging.kpiCard(sel, {
+  label,            // string — metric name
+  value,            // string — formatted value e.g. '₩128억'
+  delta?,           // number — MoM % change
+  deltaGoodWhen?,   // 'positive' (default) | 'negative'
+  sparkline?,       // number[] — mini line chart
+  icon?,            // string — emoji or symbol
+  compact?,         // boolean — hides sparkline, smaller padding (for 110px rows)
+})
+\`\`\`
 
-2. HERO + SIDE — one lead chart, one supporting widget (2:1)
-   <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4" style="grid-auto-rows:400px">
-     <div id="lead"></div><div id="side"></div>
-   </div>
-   Fits: left = lineChart/barChart/funnelChart; right = donutChart/leaderboard/statusGrid/metricStack.
+**\`metricChart\`**
+\`\`\`js
+Maging.metricChart(sel, {
+  label, value,
+  delta?,           // number — % change
+  deltaGoodWhen?,   // 'positive' (default) | 'negative'
+  icon?,
+  context?,         // caption below delta
+  categories,       // string[] — x-axis labels
+  series: [
+    { name, data: number[] },   // [0] current period (accent line + area)
+    { name, data: number[] },   // [1] previous period (dashed muted) — optional
+  ],
+  target?,          // number — horizontal dashed goal line
+  yFormatter?,      // (v: number) => string
+})
+\`\`\`
+Hero number + labeled mini line chart. Shows current vs previous period with x/y axis labels. Use when the user needs to understand scale and compare periods.
 
-3. EQUAL SPLIT — two peer widgets side-by-side (1:1)
-   <div class="grid grid-cols-1 lg:grid-cols-2 gap-4" style="grid-auto-rows:400px">
-     <div id="left"></div><div id="right"></div>
-   </div>
-   Fits: two mid-size charts — funnel+radar, heatmap+scatter, bullet+gauge.
+**\`heroTile\`**
+\`\`\`js
+Maging.heroTile(sel, {
+  label, value,
+  delta?,           // number — MoM % change
+  deltaGoodWhen?,   // 'positive' (default) | 'negative'
+  sparkline?,       // number[] — current period trend line
+  prev?,            // number[] — previous period line (dotted, muted)
+  target?,          // number — horizontal dashed target line on chart
+  icon?,            // string — emoji shown inline with label
+  context?,         // string — small caption below delta
+})
+\`\`\`
+Large hero metric. \`prev\` overlays last period as a dotted comparison. \`target\` draws a dashed goal line.
 
-4. METRIC TRIO — three equal tiles (1:1:1)
-   <div class="grid grid-cols-1 md:grid-cols-3 gap-4" style="grid-auto-rows:240px">
-     <div id="a"></div><div id="b"></div><div id="c"></div>
-   </div>
-   Fits: 3× gaugeChart for ops/health, or 3× compareCard.
+**\`ringProgress\`**
+\`\`\`js
+Maging.ringProgress(sel, {
+  value, max, unit, label, context?,
+  thresholds: [[ratio, level], …]  // e.g. [[0.5,'danger'],[0.85,'warning'],[1,'good']]
+})
+\`\`\`
 
-5. FULL-WIDTH DETAIL — one tall widget on its own row
-   <div class="grid grid-cols-1 gap-4" style="grid-auto-rows:520px">
-     <div id="detail"></div>
-   </div>
-   Fits: treemapChart, sankeyChart, calendarHeatmap, cohortMatrix, mapChart (use 600px for maps).
+**\`bulletChart\`**
+\`\`\`js
+Maging.bulletChart(sel, {
+  value, target?, benchmark?, max, min?,
+  ranges?: [{ value, label }],
+  valueFormatter?, unit?
+})
+\`\`\`
 
-HEIGHT TOKENS — pick one, don't use arbitrary pixel heights:
-  mini 110px · tile 192px · gauge 240px · card 400px · detail 520px · tall 600px.
+**\`compareCard\`**
+\`\`\`js
+Maging.compareCard(sel, {
+  title,
+  left:  { label, value },
+  right: { label, value },
+  delta, deltaLabel?
+})
+\`\`\`
 
-=== GENERATION RULES ===
-0. DEFAULT MODE = STATIC SNAPSHOT. You are the analyst — pick the story, arrange widgets, no interactive state. NO JavaScript state objects, re-render functions, event handlers (beyond widget internals) unless user explicitly asks "interactive", "filterable", "여러 관점", "탐색 가능", "실시간".
-1. Always include SETUP at the top.
-2. Pick ONE theme via <html data-theme="...">.
-3. Wrap <body class="mw-themed">.
-4. Compose layout from the 5 CANONICAL LAYOUTS above. Pick heights from the HEIGHT TOKENS list. Don't invent grid classes.
-5. Wait for DOMContentLoaded. maging.js is defer-loaded.
+**\`metricStack\`**
+\`\`\`js
+Maging.metricStack(sel, {
+  title,
+  main: { label, value, delta? },
+  items: [{ label, value }]
+})
+\`\`\`
+
+**\`countdownTile\`**
+\`\`\`js
+Maging.countdownTile(sel, { title, target, label?, context? })
+// target = ISO datetime string e.g. '2025-12-31T00:00:00'
+\`\`\`
+
+**\`sparklineList\`**
+\`\`\`js
+Maging.sparklineList(sel, {
+  title,
+  items: [{ label, value, delta, sparkline: number[], deltaGoodWhen? }]
+})
+\`\`\`
+
+**\`goalGrid\`**
+\`\`\`js
+Maging.goalGrid(sel, {
+  title,
+  items: [{ label, value, max, unit?, sublabel? }],
+  thresholds?
+})
+\`\`\`
+
+---
+
+### CHARTS
+
+**\`lineChart\`**
+\`\`\`js
+Maging.lineChart(sel, {
+  title, subtitle?,
+  categories: string[],
+  series: [{ name, data: number[] }],
+  stack?, area?, yFormatter?, yMin?, yMax?
+})
+\`\`\`
+
+**\`barChart\`**
+\`\`\`js
+Maging.barChart(sel, {
+  title, subtitle?,
+  items: [{ label, value }],
+  horizontal?,    // boolean — use for long Korean labels
+  yFormatter?, showLabels?
+})
+\`\`\`
+
+**\`donutChart\`**
+\`\`\`js
+Maging.donutChart(sel, {
+  title, subtitle?,
+  slices: [{ label, value, color? }],
+  centerLabel?, centerValue?
+})
+\`\`\`
+
+**\`funnelChart\`**
+\`\`\`js
+Maging.funnelChart(sel, { title, stages: [{ label, value }], valueSuffix? })
+\`\`\`
+
+**\`gaugeChart\`**
+\`\`\`js
+Maging.gaugeChart(sel, {
+  title, label,
+  value, max, unit,
+  thresholds: [[ratio, level], …]  // e.g. [[0.7,'danger'],[0.9,'warning'],[1,'good']]
+})
+\`\`\`
+
+**\`radarChart\`**
+\`\`\`js
+Maging.radarChart(sel, {
+  title,
+  indicators: [{ name, max }],
+  series: [{ name, data: number[] }]
+})
+\`\`\`
+
+**\`heatmapChart\`**
+\`\`\`js
+Maging.heatmapChart(sel, {
+  title,
+  xAxis: string[], yAxis: string[],
+  matrix: number[][],   // matrix[row][col]
+  tooltipFormatter?
+})
+\`\`\`
+
+**\`treemapChart\`**
+\`\`\`js
+Maging.treemapChart(sel, { title, items: [{ name, value }], valueFormatter? })
+\`\`\`
+
+**\`scatterChart\`**
+\`\`\`js
+Maging.scatterChart(sel, {
+  title,
+  points: [{ label, x, y, size }],
+  xLabel?, yLabel?
+})
+\`\`\`
+
+**\`sankeyChart\`**
+\`\`\`js
+Maging.sankeyChart(sel, {
+  title,
+  nodes: [{ name }],
+  links: [{ source, target, value }],
+  valueFormatter?
+})
+\`\`\`
+
+**\`waterfallChart\`**
+\`\`\`js
+Maging.waterfallChart(sel, {
+  title,
+  items: [{ label, value, type? }],
+  valueFormatter?
+})
+// type auto-detected: first item=start, last=total, positive=gain, negative=loss
+\`\`\`
+
+**\`mapChart\`**
+\`\`\`js
+Maging.mapChart(sel, { title, items: [{ region, value }], valueFormatter? })
+// region = Korean province name: 서울 경기 부산 인천 대구 대전 광주 울산 세종
+//                                강원 충북 충남 전북 전남 경북 경남 제주
+\`\`\`
+
+**\`cohortMatrix\`**
+\`\`\`js
+Maging.cohortMatrix(sel, {
+  title,
+  cohorts: string[],   // row labels e.g. ['Jan','Feb']
+  periods: string[],   // col labels e.g. ['M0','M1','M2']
+  data: number[][],    // data[i][j] = retention %, null = blank cell
+  sizes?: number[],
+  cohortLabel?, sizeLabel?, valueFormatter?
+})
+\`\`\`
+
+---
+
+### LISTS & STATUS
+
+**\`leaderboard\`**
+\`\`\`js
+Maging.leaderboard(sel, {
+  title,
+  items: [{ name, initial, percent, meta }]
+})
+\`\`\`
+
+**\`activityTable\`**
+\`\`\`js
+Maging.activityTable(sel, {
+  title, subtitle?,
+  columns: [{ key, label, align?, render? }],
+  rows: [...],
+  live?
+})
+// render signature: (value, row) => string
+// SAFER: pre-format rows as plain strings and omit render entirely
+\`\`\`
+
+**\`timeline\`**
+\`\`\`js
+Maging.timeline(sel, {
+  title,
+  items: [{ time, text, type? }]   // type: 'success'|'warning'|'danger'|'info'
+})
+\`\`\`
+
+**\`inboxPreview\`**
+\`\`\`js
+Maging.inboxPreview(sel, {
+  title, subtitle?,
+  items: [{ icon, text, time, type }],
+  footer?
+})
+\`\`\`
+
+**\`statusGrid\`**
+\`\`\`js
+Maging.statusGrid(sel, {
+  title, subtitle?,
+  columns?,   // number of grid columns, default 3
+  items: [{ label, status, value? }]   // status: 'ok'|'warning'|'danger'
+})
+\`\`\`
+
+---
+
+### CALENDAR & PROJECT
+
+**\`calendarHeatmap\`**
+\`\`\`js
+Maging.calendarHeatmap(sel, {
+  title, year,
+  values: [[date, value], …],   // date = 'YYYY-MM-DD'
+  max?, valueSuffix?, cellSize?
+})
+\`\`\`
+
+**\`eventCalendar\`**
+\`\`\`js
+Maging.eventCalendar(sel, {
+  title, year, month,
+  events: [{ date, label, type? }],
+  startOfWeek?, showList?, listFilter?
+})
+\`\`\`
+
+**\`progressStepper\`**
+\`\`\`js
+Maging.progressStepper(sel, {
+  title, kicker?, status?, meta,
+  steps: [{ label, date, status, badge? }]
+  // step status: 'done'|'active'|'pending'
+})
+\`\`\`
+
+---
+
+### CONTROL & MESSAGING
+
+**\`alertBanner\`**
+\`\`\`js
+Maging.alertBanner(sel, {
+  type,       // 'info'|'warning'|'danger'|'success'
+  title, message?,
+  icon?,
+  action?: { label, href? },
+  dismissable?
+})
+\`\`\`
+Horizontal stripe — NOT a card. Place before the grid.
+
+---
+
+## Canonical Layouts
+
+Outer wrapper: \`<main class="max-w-[1280px] mx-auto p-6">\`. Stack sections with \`mt-4\`.
+
+### 1 · KPI Row
+\`\`\`html
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4" style="grid-auto-rows:192px">
+  <div id="kpi-1"></div><div id="kpi-2"></div><div id="kpi-3"></div><div id="kpi-4"></div>
+</div>
+\`\`\`
+4× \`kpiCard\`. For 6 compact: \`md:grid-cols-6 gap-3\` + \`grid-auto-rows:110px\` + \`compact:true\`.
+
+### 2 · Hero + Side (2:1)
+\`\`\`html
+<div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4" style="grid-auto-rows:400px">
+  <div id="lead"></div><div id="side"></div>
+</div>
+\`\`\`
+Left: \`lineChart\`/\`barChart\`/\`funnelChart\`. Right: \`donutChart\`/\`leaderboard\`/\`statusGrid\`/\`metricStack\`.
+
+### 3 · Equal Split (1:1)
+\`\`\`html
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4" style="grid-auto-rows:400px">
+  <div id="left"></div><div id="right"></div>
+</div>
+\`\`\`
+
+### 4 · Metric Trio (1:1:1)
+\`\`\`html
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4" style="grid-auto-rows:240px">
+  <div id="a"></div><div id="b"></div><div id="c"></div>
+</div>
+\`\`\`
+3× \`gaugeChart\` or \`compareCard\`.
+
+### 5 · Full-Width Detail
+\`\`\`html
+<div class="grid grid-cols-1 gap-4" style="grid-auto-rows:520px">
+  <div id="detail"></div>
+</div>
+\`\`\`
+\`treemapChart\` · \`sankeyChart\` · \`calendarHeatmap\` · \`cohortMatrix\` · \`mapChart\` (use 600px).
+
+### Height tokens
+\`mini 110px\` · \`tile 192px\` · \`gauge 240px\` · \`card 400px\` · \`detail 520px\` · \`tall 600px\`
+
+---
+
+## Generation Rules
+
+0. **Default = static snapshot.** You are the analyst — pick the story, arrange widgets, no interactive state. No JS state objects, re-render functions, or event handlers (beyond widget internals) unless user explicitly asks for "interactive" / "filterable" / "실시간".
+1. Include the one-liner setup.
+2. Pick ONE theme via \`<html data-theme="…">\`.
+3. \`<body class="mw-themed">\`.
+4. Compose layout from the 5 canonical patterns. Pick heights from the token list.
+5. Mount ALL widgets inside \`window.addEventListener('maging:ready', () => { … })\`. Never use \`DOMContentLoaded\`.
 6. Widget choice by data shape:
-   time series→lineChart · categorical→barChart · share→donutChart · funnel→funnelChart
-   target vs actual→bulletChart/ringProgress · distribution→treemapChart/heatmapChart
-   flow→sankeyChart · correlation→scatterChart · Korean geo→mapChart
-   retention→cohortMatrix · P&L→waterfallChart · rankings→leaderboard
-   recent events→timeline/activityTable · system health→statusGrid+gaugeChart
-   OKR→goalGrid · multi-metric trend→sparklineList · single hero→heroTile
-7. KRW formatter: v => "₩" + (v/1e8).toFixed(1) + "억"  (or use Maging.fmt.krw)
-8. Korean labels OK. Prefer word-break: keep-all for Korean text wrapping.
-9. Section order (execs): at-a-glance → real-time → trends → deep-dive → operations.
-10. Output the HTML file inside ONE fenced code block: \`\`\`html\n...full HTML...\n\`\`\` . No text, explanation, or markdown outside the code block. The code block is required so the user can click copy/run in the chat UI.
+   - Time series → \`lineChart\` · Categorical → \`barChart\` · Share → \`donutChart\`
+   - Funnel → \`funnelChart\` · Target vs actual → \`bulletChart\`/\`ringProgress\`
+   - Distribution → \`treemapChart\`/\`heatmapChart\` · Flow → \`sankeyChart\`
+   - Correlation → \`scatterChart\` · Korean geo → \`mapChart\`
+   - Retention → \`cohortMatrix\` · P&L → \`waterfallChart\` · Rankings → \`leaderboard\`
+   - Events → \`timeline\`/\`activityTable\` · Health → \`statusGrid\`+\`gaugeChart\`
+   - OKR → \`goalGrid\` · Multi-trend → \`sparklineList\` · Hero metric → \`heroTile\`
+7. KRW: \`v => '₩' + (v/1e8).toFixed(1) + '억'\` or \`Maging.fmt.krw(v)\`.
+8. Korean labels OK. Use \`word-break: keep-all\` for Korean text.
+9. Section order: at-a-glance → real-time → trends → deep-dive → operations.
+10. Output one fenced code block: \` \`\`\`html … \`\`\` \`. No text outside it.
 
-=== CRITICAL — NEVER DO ===
-- NEVER write code comments in the generated output (no //, no /* */, no <!-- --> beyond section dividers). Every comment costs output tokens. Widget calls + named IDs + variable names are already self-documenting. Don't write "// KPI row", "// set up chart", "// mount widgets" etc. Strip all comments.
-- NEVER write your own <style> block defining :root { --bg, --card, --text, --accent, ... }. maging.css already defines all theme tokens as --mw-bg, --mw-surface, --mw-text, --mw-accent, --mw-accent-2, --mw-success, --mw-danger, --mw-warning, --mw-border, --mw-text-muted, --mw-radius, --mw-font, --mw-display-font, --mw-mono-font per data-theme. Defining your own variables conflicts and breaks theme switching.
-- NEVER invent custom class names like .shell, .card, .dashboard, .hero, .grid-item. Use Grid layout + Maging widget API exclusively.
-- NEVER set background, color, font, radius on body/html/.mw-card beyond <body class="mw-themed">. The theme controls it all.
-- If you need a specific color in inline styles, reference tokens: var(--mw-accent), var(--mw-text-muted), var(--mw-surface), var(--mw-border). Never define new variables.
-- NEVER write .mw-card background or padding overrides. They come from the theme.
-- The <html data-theme="NAME"> attribute is the SINGLE source of truth for all styling. Trust it completely.
-- If user asks for "custom color" or "my brand color", add a new theme entry request — do NOT inline CSS.` + HANDSHAKE;
+---
 
-  // Measured via real tokenizers: `npm run count-tokens`
-  //   openai   → gpt-tokenizer/encoding/o200k_base
-  //   claude   → @anthropic-ai/tokenizer
-  //   gemini   → o200k_base × 1.06 (empirical)
+## NEVER DO
+
+- **No code comments** (\`//\`, \`/* */\`, \`<!-- -->\`). Every comment burns output tokens. Widget calls + named IDs are self-documenting.
+- **No custom \`<style>\` with \`:root { --bg, --card, --text … }\`**. maging.css already defines all \`--mw-*\` tokens per theme. Redefining them breaks theme switching.
+- **No invented class names** like \`.shell\`, \`.card\`, \`.dashboard\`. Grid layout + Maging API only.
+- **No background/color on body/html** beyond \`<body class="mw-themed">\`. The theme controls it.
+- If you need a color token, use existing: \`var(--mw-accent)\`, \`var(--mw-text-muted)\`, \`var(--mw-surface-2)\`, \`var(--mw-border)\`.
+- \`<html data-theme="…">\` is the single source of truth for styling. Trust it completely.
+- \`pageHeader\` / \`sectionHead\` are structural — mount on plain divs **outside** grid cells, not inside widget slots.
+
+---
+
+## Utility
+
+\`\`\`js
+window.Maging  // main API object
+window.mw      // short alias (mw.kpiCard(…))
+
+Maging.fmt.krw(value)   // ₩X.X억 formatter
+Maging.setTheme(name)   // programmatically switch theme
+\`\`\`
+
+---
+
+## License
+
+MIT
+
+
+=== HANDSHAKE ===
+When you have fully understood the above, reply with EXACTLY this text (nothing else, no code fences, no preamble):
+
+안녕하세요! 결과물 서포터 매징(maging)입니다 ✦
+
+데이터 파일을 첨부하거나, 만들고 싶은 대시보드를 자유롭게 설명해주세요.
+어떤 걸 만들어 드릴까요? 🎨
+
+Then wait for my next message before generating anything.`;
   var TOKENS = {
-    short: { gpt: 1155, claude: 1281, gemini: 1224 },
-    full:  { gpt: 2922, claude: 3225, gemini: 3097 },
+    short: { gpt: 150,  claude: 209,  gemini: 159 },
+    full:  { gpt: 4453, claude: 4968, gemini: 4720 },
   };
+  /* SYNC:END */
 
   var currentMode = 'short';
 

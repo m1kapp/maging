@@ -1,20 +1,20 @@
-# Maging — AI Output Formatter
+# maging — AI Output Formatter
 
-> **AI 답변을, 쓸 수 있는 결과물로.** (AI answers, into usable artifacts.)
-> 코딩 없이, 디자인 없이 — 대시보드·피치덱을 HTML로 바로 생성합니다.
->
-> maging is the missing "last mile" between LLM analysis and shareable visual artifacts. Library of 31 widgets and 35 brand themes that LLMs (ChatGPT, Claude, Gemini, Grok) can reliably produce as a single self-contained HTML file. Default behavior is **curated static snapshots** (LLM acts as analyst, not interactive BI tool).
+> **AI 답변을, 쓸 수 있는 결과물로.**
+> 코딩 없이, 디자인 없이 — LLM이 31개 위젯·35개 브랜드 테마로 단일 HTML 대시보드를 바로 생성합니다.
 
-## Installation
+---
 
-**One-liner (recommended)** — auto-loads Pretendard + maging.css + Tailwind Play + ECharts + maging.js in correct order:
+## Setup (always include — one-liner)
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.10/dist/maging-all.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.11/dist/maging-all.js"></script>
 <body class="mw-themed">
 ```
 
-The script dispatches a `'maging:ready'` event on `window` once all dependencies are loaded. Mount widgets inside that listener (or `DOMContentLoaded` — whichever fires later).
+`maging-all.js` bundles in order: Pretendard (Korean font) + maging.css + Tailwind Play CDN + ECharts 5 + maging.js. Dispatches `'maging:ready'` on `window` when all deps are ready.
+
+**You MUST mount ALL widgets inside `maging:ready`:**
 
 ```js
 window.addEventListener('maging:ready', () => {
@@ -22,262 +22,479 @@ window.addEventListener('maging:ready', () => {
 });
 ```
 
-Skip a default with data-attributes:
-```html
-<script src=".../maging-all.js" data-no-tailwind data-no-echarts></script>
-```
+**DO NOT use `DOMContentLoaded`** — it fires before ECharts/maging.js finish loading and throws `"Maging is not defined"`. This is non-negotiable.
 
-**Manual install** (granular control, custom version pinning):
-
-```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.10/dist/maging.css">
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.10/dist/maging.js"></script>
-```
-
-Set the theme on `<html data-theme="…">`. Wrap body with `<body class="mw-themed">` for base styling.
-
-**Pretendard Variable** is `@import`-ed inside `maging.css`, so Korean text renders consistently across platforms with no extra setup.
-
-## Modes
-
-| Mode | Status | Description |
-|------|--------|-------------|
-| `dashboard` | ✅ Available | Grid-based dashboard with 31 widgets |
-| `deck` | 🚧 Coming soon | Slide-based presentations with keyboard navigation |
-| `doc` | 🚧 Coming soon | Long-scroll documents and reports |
-
-Currently all widgets work in dashboard mode via CSS Grid layout.
+---
 
 ## Themes (35)
 
-Set on `<html data-theme="NAME">`. The value must match exactly.
+Set on `<html data-theme="NAME">`. Each theme bundles palette, typography, radius, shadow. Changing the attribute instantly re-styles every widget.
 
-**Light (18)**: `notion`, `vercel`, `linear`, `github`, `apple`, `stripe`, `linkedin`, `x`, `medium`, `tiffany`, `airbnb`, `youtube`, `reddit`, `duolingo`, `mailchimp`, `tmobile`, `fedex`, `claude`, `instagram`, `hermes`, `barbie`
+**Light (18):** `claude` (warm cream+terracotta) · `linear` (indigo minimal) · `stripe` (payment purple) · `notion` (off-white) · `airbnb` (coral) · `linkedin` (corporate blue) · `instagram` (vivid) · `youtube` (red) · `reddit` (orange) · `medium` (editorial green serif) · `apple` (system blue) · `duolingo` (owl green) · `tiffany` (robin-egg blue+gold) · `mailchimp` (cavendish yellow) · `tmobile` (magenta) · `fedex` (purple+orange) · `hermes` (cream serif) · `barbie` (pastel pink)
 
-**Dark (17)**: `openai`, `discord`, `figma`, `amazon`, `adobe`, `netflix`, `twitch`, `spotify`, `bloomberg`, `slack`, `nasa`, `heineken`, `deere`, `ups`
+**Dark (17):** `vercel` (pure black) · `github` (dimmed) · `x` (sharp mono) · `slack` (aubergine) · `discord` (blurple) · `openai` (AI teal) · `spotify` (neon green) · `twitch` (gaming purple) · `netflix` (cinematic red) · `figma` (multi) · `amazon` (navy) · `adobe` (creative red) · `bloomberg` (terminal amber) · `nasa` (worm blue+red) · `heineken` (bottle green) · `deere` (tractor green+yellow) · `ups` (pullman brown)
 
-Each theme is inspired by the named brand's signature palette, radius, typography, and shadow style. Change the theme value to instantly re-style every widget.
+Pick by intent: minimal→`linear`/`vercel` · warm→`claude`/`notion` · corporate→`linkedin`/`stripe` · bold→`netflix`/`adobe` · luxury→`hermes`/`tiffany` · playful→`barbie`/`duolingo` · terminal→`bloomberg` · engineering→`nasa`. Default: `claude`.
+
+---
+
+## Layout Primitives
+
+These are structural elements mounted on plain divs **outside** grid cells — not card widgets.
+
+```js
+Maging.pageHeader(selector, { kicker?, title, subtitle?, meta? })
+```
+Full-width H1 block: dot·kicker line → large title → subtitle + mono-meta row. Use once at the top of the page.
+
+```js
+Maging.sectionHead(selector, { index?, kicker?, title, tag? })
+```
+Flex row: `"index · kicker" + H2` on the left, tag badge on the right. Use as labeled dividers between grid sections.
+
+**Pattern:**
+```html
+<div id="page-hero" class="pt-12 pb-4"></div>
+
+<div class="mt-8 pt-6" style="border-top:1px solid var(--mw-border)">
+  <div id="section-01"></div>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4" style="grid-auto-rows:400px">
+    <div id="chart-a"></div><div id="chart-b"></div>
+  </div>
+</div>
+```
+```js
+Maging.pageHeader('#page-hero', { kicker: 'REPORT', title: '월간 현황', subtitle: '2025년 4월', meta: 'Last updated 09:00 KST' });
+Maging.sectionHead('#section-01', { index: '01', kicker: 'TRENDS', title: '처리 추이', tag: 'Line · 6M' });
+```
+
+---
 
 ## Widgets (31)
 
-Mount via `window.Maging.<widgetName>(selector, config)`. All widgets auto-refresh on theme change.
+Mount: `window.Maging.<name>(selector, config)`. All auto-refresh on theme change.
 
-### Metric tiles
+### METRIC TILES
 
-- `kpiCard({ label, value, delta?, sparkline?, icon?, compact?, deltaGoodWhen? })` — label + value + delta + optional mini line chart. `compact: true` hides sparkline and uses smaller padding (for tight grids).
-- `heroTile({ label, value, delta?, sparkline, icon?, context? })` — iOS-weather-widget-style main metric tile.
-- `ringProgress({ value, max, unit, label, context?, thresholds })` — donut progress ring with threshold colors.
-- `compareCard({ title, left:{label,value}, right:{label,value}, delta, deltaLabel? })` — A vs B side-by-side.
-- `metricStack({ title, main:{label,value,delta}, items:[{label,value}] })` — hero metric + sub metrics (bento style).
-- `countdownTile({ title, subtitle?, target, label?, context? })` — live countdown to an ISO datetime.
+**`kpiCard`**
+```js
+Maging.kpiCard(sel, {
+  label,            // string — metric name
+  value,            // string — formatted value e.g. '₩128억'
+  delta?,           // number — MoM % change
+  deltaGoodWhen?,   // 'positive' (default) | 'negative'
+  sparkline?,       // number[] — mini line chart
+  icon?,            // string — emoji or symbol
+  compact?,         // boolean — hides sparkline, smaller padding (for 110px rows)
+})
+```
 
-### Charts
+**`metricChart`**
+```js
+Maging.metricChart(sel, {
+  label, value,
+  delta?,           // number — % change
+  deltaGoodWhen?,   // 'positive' (default) | 'negative'
+  icon?,
+  context?,         // caption below delta
+  categories,       // string[] — x-axis labels
+  series: [
+    { name, data: number[] },   // [0] current period (accent line + area)
+    { name, data: number[] },   // [1] previous period (dashed muted) — optional
+  ],
+  target?,          // number — horizontal dashed goal line
+  yFormatter?,      // (v: number) => string
+})
+```
+Hero number + labeled mini line chart. Shows current vs previous period with x/y axis labels. Use when the user needs to understand scale and compare periods.
 
-- `lineChart({ title, categories, series:[{name,data}], stack?, area?, yFormatter?, yMin?, yMax? })`
-- `barChart({ title, items:[{label,value}], horizontal?, yFormatter?, showLabels? })`
-- `donutChart({ title, slices:[{label,value,color?}], centerLabel?, centerValue? })`
-- `funnelChart({ title, stages:[{label,value}], valueSuffix? })`
-- `gaugeChart({ title, label, value, max, unit, thresholds:[[ratio,level]] })`
-- `radarChart({ indicators:[{name,max}], series:[{name,data}] })`
-- `heatmapChart({ xAxis, yAxis, matrix:[[row]], tooltipFormatter? })`
-- `treemapChart({ items:[{name,value}], valueFormatter? })`
-- `scatterChart({ points:[{label,x,y,size}], xLabel?, yLabel? })`
-- `sankeyChart({ nodes:[{name}], links:[{source,target,value}], valueFormatter? })`
-- `waterfallChart({ items:[{label,value,type?}], valueFormatter? })` — type: 'start'|'gain'|'loss'|'total' (auto-detected if omitted)
-- `bulletChart({ value, target?, benchmark?, max, min?, ranges?:[{value,label}], valueFormatter?, unit? })`
+**`heroTile`**
+```js
+Maging.heroTile(sel, {
+  label, value,
+  delta?,           // number — MoM % change
+  deltaGoodWhen?,   // 'positive' (default) | 'negative'
+  sparkline?,       // number[] — current period trend line
+  prev?,            // number[] — previous period line (dotted, muted)
+  target?,          // number — horizontal dashed target line on chart
+  icon?,            // string — emoji shown inline with label
+  context?,         // string — small caption below delta
+})
+```
+Large hero metric. `prev` overlays last period as a dotted comparison. `target` draws a dashed goal line.
 
-### Geographic
+**`ringProgress`**
+```js
+Maging.ringProgress(sel, {
+  value, max, unit, label, context?,
+  thresholds: [[ratio, level], …]  // e.g. [[0.5,'danger'],[0.85,'warning'],[1,'good']]
+})
+```
 
-- `mapChart({ items:[{region,value}], valueFormatter?, tiles? })` — hex tile map of Korea's 17 provinces (서울, 경기, 부산, …). Provide items by region name.
+**`bulletChart`**
+```js
+Maging.bulletChart(sel, {
+  value, target?, benchmark?, max, min?,
+  ranges?: [{ value, label }],
+  valueFormatter?, unit?
+})
+```
 
-### Lists
+**`compareCard`**
+```js
+Maging.compareCard(sel, {
+  title,
+  left:  { label, value },
+  right: { label, value },
+  delta, deltaLabel?
+})
+```
 
-- `leaderboard({ title, items:[{name,initial,percent,meta}] })` — ranked list with avatars and progress bars.
-- `activityTable({ title, columns:[{key,label,align?,render?}], rows:[...] , live? })` — `render: (value, row) => string` where `value` is the cell value at `col.key` (NOT the whole row). Prefer pre-formatting rows as plain strings to skip `render` entirely.
-- `timeline({ title, items:[{time,text,type?}] })` — event stream with colored dots.
-- `inboxPreview({ title, items:[{icon,text,time,type}], footer? })` — notification list.
-- `statusGrid({ title, columns?, items:[{label,status,value?}] })` — service health dots (`status: 'ok'|'warning'|'danger'`).
-- `sparklineList({ title, items:[{label,value,delta,sparkline,deltaGoodWhen?}] })` — label + value + delta + mini spark per row.
-- `goalGrid({ title, items:[{label,value,max,unit?,sublabel?}], thresholds? })` — multi-goal progress bars (OKR style).
+**`metricStack`**
+```js
+Maging.metricStack(sel, {
+  title,
+  main: { label, value, delta? },
+  items: [{ label, value }]
+})
+```
 
-### Calendar
+**`countdownTile`**
+```js
+Maging.countdownTile(sel, { title, target, label?, context? })
+// target = ISO datetime string e.g. '2025-12-31T00:00:00'
+```
 
-- `calendarHeatmap({ title, year, values:[[date,value]], max?, valueSuffix?, height?, cellSize? })` — GitHub-style 365-day heatmap.
-- `eventCalendar({ title, year, month, events:[{date,label,type?}], startOfWeek?, showList?, listFilter? })`
+**`sparklineList`**
+```js
+Maging.sparklineList(sel, {
+  title,
+  items: [{ label, value, delta, sparkline: number[], deltaGoodWhen? }]
+})
+```
 
-### Project
+**`goalGrid`**
+```js
+Maging.goalGrid(sel, {
+  title,
+  items: [{ label, value, max, unit?, sublabel? }],
+  thresholds?
+})
+```
 
-- `progressStepper({ title, kicker?, status?, meta, steps:[{label,date,status,badge?}] })` — project milestone tracker.
+---
 
-### Cohort & retention
+### CHARTS
 
-- `cohortMatrix({ cohorts:[], periods:[], data:[[v,…]], sizes?:[], cohortLabel?, sizeLabel?, valueFormatter? })` — Mixpanel-style retention grid. Null cells render blank.
+**`lineChart`**
+```js
+Maging.lineChart(sel, {
+  title, subtitle?,
+  categories: string[],
+  series: [{ name, data: number[] }],
+  stack?, area?, yFormatter?, yMin?, yMax?
+})
+```
 
-### Control & messaging
+**`barChart`**
+```js
+Maging.barChart(sel, {
+  title, subtitle?,
+  items: [{ label, value }],
+  horizontal?,    // boolean — use for long Korean labels
+  yFormatter?, showLabels?
+})
+```
 
-- `alertBanner({ type, title, message?, icon?, action?:{label,href?,onClick?}, dismissable? })` — top-of-page stripe. Not a card. `type: 'info'|'warning'|'danger'|'success'`.
+**`donutChart`**
+```js
+Maging.donutChart(sel, {
+  title, subtitle?,
+  slices: [{ label, value, color? }],
+  centerLabel?, centerValue?
+})
+```
 
-## Canonical layouts
+**`funnelChart`**
+```js
+Maging.funnelChart(sel, { title, stages: [{ label, value }], valueSuffix? })
+```
 
-Don't invent grid classes. Compose dashboards from these named patterns — stack them vertically with `mt-4` between sections. Outer wrapper is always `<main class="max-w-[1280px] mx-auto p-6">`. `<body class="mw-themed">` provides base page styling.
+**`gaugeChart`**
+```js
+Maging.gaugeChart(sel, {
+  title, label,
+  value, max, unit,
+  thresholds: [[ratio, level], …]  // e.g. [[0.7,'danger'],[0.9,'warning'],[1,'good']]
+})
+```
 
-### 1. KPI row — at-a-glance hero metrics (top of dashboard)
+**`radarChart`**
+```js
+Maging.radarChart(sel, {
+  title,
+  indicators: [{ name, max }],
+  series: [{ name, data: number[] }]
+})
+```
+
+**`heatmapChart`**
+```js
+Maging.heatmapChart(sel, {
+  title,
+  xAxis: string[], yAxis: string[],
+  matrix: number[][],   // matrix[row][col]
+  tooltipFormatter?
+})
+```
+
+**`treemapChart`**
+```js
+Maging.treemapChart(sel, { title, items: [{ name, value }], valueFormatter? })
+```
+
+**`scatterChart`**
+```js
+Maging.scatterChart(sel, {
+  title,
+  points: [{ label, x, y, size }],
+  xLabel?, yLabel?
+})
+```
+
+**`sankeyChart`**
+```js
+Maging.sankeyChart(sel, {
+  title,
+  nodes: [{ name }],
+  links: [{ source, target, value }],
+  valueFormatter?
+})
+```
+
+**`waterfallChart`**
+```js
+Maging.waterfallChart(sel, {
+  title,
+  items: [{ label, value, type? }],
+  valueFormatter?
+})
+// type auto-detected: first item=start, last=total, positive=gain, negative=loss
+```
+
+**`mapChart`**
+```js
+Maging.mapChart(sel, { title, items: [{ region, value }], valueFormatter? })
+// region = Korean province name: 서울 경기 부산 인천 대구 대전 광주 울산 세종
+//                                강원 충북 충남 전북 전남 경북 경남 제주
+```
+
+**`cohortMatrix`**
+```js
+Maging.cohortMatrix(sel, {
+  title,
+  cohorts: string[],   // row labels e.g. ['Jan','Feb']
+  periods: string[],   // col labels e.g. ['M0','M1','M2']
+  data: number[][],    // data[i][j] = retention %, null = blank cell
+  sizes?: number[],
+  cohortLabel?, sizeLabel?, valueFormatter?
+})
+```
+
+---
+
+### LISTS & STATUS
+
+**`leaderboard`**
+```js
+Maging.leaderboard(sel, {
+  title,
+  items: [{ name, initial, percent, meta }]
+})
+```
+
+**`activityTable`**
+```js
+Maging.activityTable(sel, {
+  title, subtitle?,
+  columns: [{ key, label, align?, render? }],
+  rows: [...],
+  live?
+})
+// render signature: (value, row) => string
+// SAFER: pre-format rows as plain strings and omit render entirely
+```
+
+**`timeline`**
+```js
+Maging.timeline(sel, {
+  title,
+  items: [{ time, text, type? }]   // type: 'success'|'warning'|'danger'|'info'
+})
+```
+
+**`inboxPreview`**
+```js
+Maging.inboxPreview(sel, {
+  title, subtitle?,
+  items: [{ icon, text, time, type }],
+  footer?
+})
+```
+
+**`statusGrid`**
+```js
+Maging.statusGrid(sel, {
+  title, subtitle?,
+  columns?,   // number of grid columns, default 3
+  items: [{ label, status, value? }]   // status: 'ok'|'warning'|'danger'
+})
+```
+
+---
+
+### CALENDAR & PROJECT
+
+**`calendarHeatmap`**
+```js
+Maging.calendarHeatmap(sel, {
+  title, year,
+  values: [[date, value], …],   // date = 'YYYY-MM-DD'
+  max?, valueSuffix?, cellSize?
+})
+```
+
+**`eventCalendar`**
+```js
+Maging.eventCalendar(sel, {
+  title, year, month,
+  events: [{ date, label, type? }],
+  startOfWeek?, showList?, listFilter?
+})
+```
+
+**`progressStepper`**
+```js
+Maging.progressStepper(sel, {
+  title, kicker?, status?, meta,
+  steps: [{ label, date, status, badge? }]
+  // step status: 'done'|'active'|'pending'
+})
+```
+
+---
+
+### CONTROL & MESSAGING
+
+**`alertBanner`**
+```js
+Maging.alertBanner(sel, {
+  type,       // 'info'|'warning'|'danger'|'success'
+  title, message?,
+  icon?,
+  action?: { label, href? },
+  dismissable?
+})
+```
+Horizontal stripe — NOT a card. Place before the grid.
+
+---
+
+## Canonical Layouts
+
+Outer wrapper: `<main class="max-w-[1280px] mx-auto p-6">`. Stack sections with `mt-4`.
+
+### 1 · KPI Row
 ```html
 <div class="grid grid-cols-2 md:grid-cols-4 gap-4" style="grid-auto-rows:192px">
-  <div id="kpi-1"></div><div id="kpi-2"></div>
-  <div id="kpi-3"></div><div id="kpi-4"></div>
+  <div id="kpi-1"></div><div id="kpi-2"></div><div id="kpi-3"></div><div id="kpi-4"></div>
 </div>
 ```
-Fits: 4× `kpiCard` (with sparkline). For 6 compact cards use `md:grid-cols-6 gap-3` + `grid-auto-rows:110px` + `kpiCard({ compact: true })`.
+4× `kpiCard`. For 6 compact: `md:grid-cols-6 gap-3` + `grid-auto-rows:110px` + `compact:true`.
 
-### 2. Hero + side — one lead chart, one supporting widget (2:1 split)
+### 2 · Hero + Side (2:1)
 ```html
 <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4" style="grid-auto-rows:400px">
-  <div id="lead"></div>
-  <div id="side"></div>
+  <div id="lead"></div><div id="side"></div>
 </div>
 ```
-Fits: left = `lineChart` / `barChart` / `funnelChart`; right = `donutChart` / `leaderboard` / `statusGrid` / `metricStack`.
+Left: `lineChart`/`barChart`/`funnelChart`. Right: `donutChart`/`leaderboard`/`statusGrid`/`metricStack`.
 
-### 3. Equal split — two peer widgets side-by-side
+### 3 · Equal Split (1:1)
 ```html
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4" style="grid-auto-rows:400px">
-  <div id="left"></div>
-  <div id="right"></div>
+  <div id="left"></div><div id="right"></div>
 </div>
 ```
-Fits: any two mid-size charts — funnel + radar, heatmap + scatter, bullet + gauge.
 
-### 4. Metric trio — three equal tiles (ops / health)
+### 4 · Metric Trio (1:1:1)
 ```html
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4" style="grid-auto-rows:240px">
   <div id="a"></div><div id="b"></div><div id="c"></div>
 </div>
 ```
-Fits: 3× `gaugeChart`, or `compareCard` × 3, or three related KPIs needing more breathing room than pattern 1.
+3× `gaugeChart` or `compareCard`.
 
-### 5. Full-width detail — one tall widget on its own row
+### 5 · Full-Width Detail
 ```html
 <div class="grid grid-cols-1 gap-4" style="grid-auto-rows:520px">
   <div id="detail"></div>
 </div>
 ```
-Fits: `treemapChart`, `sankeyChart`, `calendarHeatmap`, `cohortMatrix`, `mapChart` (600px for maps).
+`treemapChart` · `sankeyChart` · `calendarHeatmap` · `cohortMatrix` · `mapChart` (use 600px).
 
 ### Height tokens
+`mini 110px` · `tile 192px` · `gauge 240px` · `card 400px` · `detail 520px` · `tall 600px`
 
-| Token | Value | Use with |
-|---|---|---|
-| `mini` | `110px` | `kpiCard({ compact: true })` |
-| `tile` | `192px` | `kpiCard` with sparkline |
-| `gauge` | `240px` | `gaugeChart`, `ringProgress` |
-| `card` | `400px` | most charts, lists, tables |
-| `detail` | `520px` | `treemap`, `sankey`, `cohortMatrix`, `scatter` |
-| `tall` | `600px` | `mapChart`, `calendarHeatmap` full-year |
+---
 
-Pick from these instead of choosing arbitrary pixel heights. Within a section, keep heights consistent so widgets align.
+## Generation Rules
 
-## Complete example
+0. **Default = static snapshot.** You are the analyst — pick the story, arrange widgets, no interactive state. No JS state objects, re-render functions, or event handlers (beyond widget internals) unless user explicitly asks for "interactive" / "filterable" / "실시간".
+1. Include the one-liner setup.
+2. Pick ONE theme via `<html data-theme="…">`.
+3. `<body class="mw-themed">`.
+4. Compose layout from the 5 canonical patterns. Pick heights from the token list.
+5. Mount ALL widgets inside `window.addEventListener('maging:ready', () => { … })`. Never use `DOMContentLoaded`.
+6. Widget choice by data shape:
+   - Time series → `lineChart` · Categorical → `barChart` · Share → `donutChart`
+   - Funnel → `funnelChart` · Target vs actual → `bulletChart`/`ringProgress`
+   - Distribution → `treemapChart`/`heatmapChart` · Flow → `sankeyChart`
+   - Correlation → `scatterChart` · Korean geo → `mapChart`
+   - Retention → `cohortMatrix` · P&L → `waterfallChart` · Rankings → `leaderboard`
+   - Events → `timeline`/`activityTable` · Health → `statusGrid`+`gaugeChart`
+   - OKR → `goalGrid` · Multi-trend → `sparklineList` · Hero metric → `heroTile`
+7. KRW: `v => '₩' + (v/1e8).toFixed(1) + '억'` or `Maging.fmt.krw(v)`.
+8. Korean labels OK. Use `word-break: keep-all` for Korean text.
+9. Section order: at-a-glance → real-time → trends → deep-dive → operations.
+10. Output one fenced code block: ` ```html … ``` `. No text outside it.
 
-```html
-<!DOCTYPE html>
-<html lang="ko" data-theme="claude">
-<head>
-<meta charset="UTF-8">
-<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.10/dist/maging-all.js"></script>
-</head>
-<body class="mw-themed">
-<main class="max-w-[1280px] mx-auto p-6">
+---
 
-  <!-- Pattern 1: KPI row -->
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-4" style="grid-auto-rows:192px" id="kpi-row"></div>
+## NEVER DO
 
-  <!-- Pattern 2: Hero + side -->
-  <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4 mt-4" style="grid-auto-rows:400px">
-    <div id="revenue-chart"></div>
-    <div id="region-chart"></div>
-  </div>
+- **No code comments** (`//`, `/* */`, `<!-- -->`). Every comment burns output tokens. Widget calls + named IDs are self-documenting.
+- **No custom `<style>` with `:root { --bg, --card, --text … }`**. maging.css already defines all `--mw-*` tokens per theme. Redefining them breaks theme switching.
+- **No invented class names** like `.shell`, `.card`, `.dashboard`. Grid layout + Maging API only.
+- **No background/color on body/html** beyond `<body class="mw-themed">`. The theme controls it.
+- If you need a color token, use existing: `var(--mw-accent)`, `var(--mw-text-muted)`, `var(--mw-surface-2)`, `var(--mw-border)`.
+- `<html data-theme="…">` is the single source of truth for styling. Trust it completely.
+- `pageHeader` / `sectionHead` are structural — mount on plain divs **outside** grid cells, not inside widget slots.
 
-</main>
+---
 
-<script>
-// 'maging:ready' fires when Pretendard, maging.css, Tailwind, ECharts, maging.js
-// are all loaded and ready. Safer than DOMContentLoaded for one-liner setup.
-window.addEventListener('maging:ready', () => {
-  const kpis = [
-    { label: '매출', value: '₩128억', delta: 8.3, sparkline: [420,445,430,468,490,510,548,580] },
-    { label: 'MAU',  value: '42,180', delta: 5.1, sparkline: [38200,39100,40200,40800,41400,41900,42180] },
-    { label: '계약', value: '127건',  delta: -2.3, sparkline: [22,28,31,29,34,26,27] },
-    { label: '응답', value: '1.4s',   delta: -12.0, deltaGoodWhen: 'negative', sparkline: [1.8,1.7,1.55,1.48,1.42,1.4] },
-  ];
-  const row = document.getElementById('kpi-row');
-  kpis.forEach(k => {
-    const el = document.createElement('div');
-    row.appendChild(el);
-    Maging.kpiCard(el, k);
-  });
+## Utility
 
-  Maging.lineChart('#revenue-chart', {
-    title: '주간 매출', subtitle: '최근 12주',
-    categories: ['W01','W02','W03','W04','W05','W06','W07','W08','W09','W10','W11','W12'],
-    series: [{ name: 'Enterprise', data: [420,445,430,468,475,490,510,505,530,548,562,580] }],
-    yFormatter: v => v + '억',
-    height: 260,
-  });
+```js
+window.Maging  // main API object
+window.mw      // short alias (mw.kpiCard(…))
 
-  Maging.barChart('#region-chart', {
-    title: '지역별', horizontal: true,
-    items: [
-      { label: '서울', value: 125 }, { label: '경기', value: 98 },
-      { label: '부산', value: 72 },  { label: '인천', value: 54 },
-    ],
-    yFormatter: v => v + '억',
-    height: 260,
-  });
-});
-</script>
-</body>
-</html>
+Maging.fmt.krw(value)   // ₩X.X억 formatter
+Maging.setTheme(name)   // programmatically switch theme
 ```
 
-## LLM generation rules
-
-When generating a dashboard with maging, follow these rules:
-
-1. **Always include setup** (CSS + ECharts + maging + Tailwind, in that order).
-2. **Pick a theme** — infer from user intent. "minimal" → `linear` / `vercel`. "warm" → `claude` / `notion`. "corporate" → `linkedin` / `stripe`. "bold" → `netflix` / `adobe`. Default to `claude`.
-3. **Use one of the 5 canonical layouts** (see `## Canonical layouts`) instead of inventing grid classes. Pick height from the token table. Stack sections vertically with `mt-4`.
-4. **Wait for DOM ready** before calling `Maging.xxx(...)`. Use `DOMContentLoaded` or `defer`.
-5. **Single HTML file output**. Self-contained. Do not reference external local files.
-6. **Pick widgets that match the data shape**:
-   - Time series (revenue over weeks) → `lineChart`
-   - Categorical breakdown (sales by region) → `barChart` (horizontal for long labels)
-   - Share of total → `donutChart`
-   - Funnel / conversion → `funnelChart`
-   - Target vs actual → `bulletChart` or `ringProgress`
-   - Distribution → `treemapChart` or `heatmapChart`
-   - Flow / routing → `sankeyChart`
-   - Correlation → `scatterChart`
-   - Geographic (Korea) → `mapChart`
-   - Retention / cohort → `cohortMatrix`
-   - P&L / flow decomposition → `waterfallChart`
-   - List of people/teams → `leaderboard`
-   - Recent events → `timeline` or `activityTable`
-   - System health → `statusGrid` + `gaugeChart`
-   - OKR / goal tracking → `goalGrid`
-   - Multi-metric trend summary → `sparklineList`
-7. **Use `kpiCard({ compact: true, icon: '◉' })` for compact mini-stats** in 6-wide grids.
-8. **For KRW values**, use `Maging.fmt.krw(v)` formatter or inline `v => '₩' + (v/1_0000_0000).toFixed(1) + '억'`.
-9. **Korean dashboards are welcomed**. Labels, titles, captions in Korean are fine.
-10. **Alerts at the top**, filters next, then content sections ordered by decision hierarchy: at-a-glance → real-time → trends → deep-dive → operations.
-11. **No code comments in the output.** Every `//`, `/* */`, or `<!-- -->` burns tokens. Widget calls, named IDs, and variable names already explain intent. Strip all comments unless they're structural section dividers the user asked for.
-
-## Global
-
-- `window.Maging` — the only API. `window.mw` is a short alias (`mw.kpiCard(...)`).
+---
 
 ## License
 
-MIT.
+MIT
