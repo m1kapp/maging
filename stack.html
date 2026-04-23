@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="claude">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stack — maging의 재료들</title>
+<meta name="description" content="maging 라이브러리를 만드는 데 쓰인 모든 것 — 폰트, 라이브러리, 아이콘, CDN, 35개 브랜드 영감, 빌드 도구.">
+
+<script src="./dist/maging-all.js"></script>
+
+<style>
+  body { background: var(--mw-bg); color: var(--mw-text); min-height: 100vh; }
+
+  /* Layout */
+  .stack-shell {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  .stack-nav {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in srgb, var(--mw-surface) 88%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid color-mix(in srgb, var(--mw-border) 70%, transparent);
+  }
+  .stack-nav__inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.85rem 1.5rem;
+    gap: 1rem; flex-wrap: wrap;
+  }
+  .stack-nav a { text-decoration: none; color: inherit; }
+  .stack-nav__brand { display: inline-flex; align-items: center; gap: 0.5rem; transition: opacity 120ms; }
+  .stack-nav__brand:hover { opacity: 0.8; }
+  .stack-nav__mark {
+    width: 22px; height: 22px;
+    background: var(--mw-accent); color: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; border-radius: calc(var(--mw-radius) * 0.7);
+    font-size: 0.72rem;
+  }
+  [data-theme="vercel"] .stack-nav__mark,
+  [data-theme="spotify"] .stack-nav__mark,
+  [data-theme="slack"] .stack-nav__mark,
+  [data-theme="amazon"] .stack-nav__mark,
+  [data-theme="mailchimp"] .stack-nav__mark,
+  [data-theme="ups"] .stack-nav__mark,
+  [data-theme="deere"] .stack-nav__mark { color: #000; }
+  .stack-nav__name { font-size: 0.95rem; font-weight: 600; }
+  .stack-nav__page {
+    color: var(--mw-text-muted);
+    font-size: 0.78rem;
+    font-family: var(--mw-mono-font);
+    padding-left: 0.5rem;
+    margin-left: 0.5rem;
+    border-left: 1px solid var(--mw-border);
+  }
+  .stack-nav__links { display: flex; gap: 0.25rem; }
+  .stack-nav__link {
+    padding: 0.4rem 0.625rem;
+    font-size: 0.78rem;
+    color: var(--mw-text-muted);
+    border-radius: calc(var(--mw-radius) * 0.6);
+    transition: color 120ms, background 120ms;
+  }
+  .stack-nav__link:hover { color: var(--mw-text); background: var(--mw-surface-2); }
+
+  /* Hero */
+  .stack-hero { padding: 4rem 0 2.5rem; text-align: center; }
+  .stack-hero__kicker {
+    font-size: 0.7rem; font-family: var(--mw-mono-font);
+    color: var(--mw-text-muted); letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .stack-hero__title {
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin-top: 0.875rem;
+  }
+  .stack-hero__sub {
+    font-size: 1.05rem;
+    color: var(--mw-text-muted);
+    max-width: 560px;
+    margin: 1.25rem auto 0;
+    line-height: 1.6;
+  }
+
+  /* Section */
+  .stack-section { padding: 2.5rem 0; border-top: 1px solid var(--mw-border); }
+  .stack-section__head {
+    display: flex; align-items: baseline; gap: 1rem;
+    margin-bottom: 1.5rem; flex-wrap: wrap;
+  }
+  .stack-section__num {
+    font-size: 0.7rem;
+    font-family: var(--mw-mono-font);
+    color: var(--mw-accent);
+    letter-spacing: 0.08em;
+  }
+  .stack-section__title {
+    font-size: 1.5rem; font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+  .stack-section__tag {
+    margin-left: auto;
+    font-size: 0.7rem;
+    color: var(--mw-text-muted);
+    font-family: var(--mw-mono-font);
+  }
+
+  /* Item card */
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 0.75rem;
+  }
+  .stack-item {
+    padding: 1.125rem 1.25rem;
+    background: var(--mw-surface);
+    border: 1px solid var(--mw-border);
+    border-radius: var(--mw-radius);
+    transition: border-color 160ms;
+  }
+  .stack-item:hover {
+    border-color: color-mix(in srgb, var(--mw-accent) 40%, var(--mw-border));
+  }
+  .stack-item__top {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .stack-item__name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--mw-text);
+  }
+  .stack-item__name a { color: inherit; text-decoration: none; }
+  .stack-item__name a:hover { color: var(--mw-accent); }
+  .stack-item__license {
+    font-size: 0.62rem;
+    font-family: var(--mw-mono-font);
+    padding: 0.1rem 0.4rem;
+    background: var(--mw-surface-2);
+    color: var(--mw-text-muted);
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .stack-item__role {
+    font-size: 0.78rem;
+    color: var(--mw-text-muted);
+    margin-top: 0.4rem;
+    line-height: 1.5;
+  }
+  .stack-item__sample {
+    margin-top: 0.625rem;
+    padding-top: 0.625rem;
+    border-top: 1px dashed var(--mw-border);
+    font-size: 1.15rem;
+    color: var(--mw-text);
+    letter-spacing: -0.005em;
+  }
+  .stack-item__sample-en { font-size: 0.85rem; color: var(--mw-text-muted); }
+
+  /* Theme grid (35 brands) */
+  .theme-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.5rem;
+  }
+  .theme-item {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.625rem 0.75rem;
+    background: var(--mw-surface);
+    border: 1px solid var(--mw-border);
+    border-radius: calc(var(--mw-radius) * 0.7);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 160ms, transform 160ms;
+  }
+  .theme-item:hover {
+    border-color: var(--mw-accent);
+    transform: translateY(-1px);
+  }
+  .theme-item__swatch {
+    width: 14px; height: 14px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    border: 1px solid color-mix(in srgb, var(--mw-text) 10%, transparent);
+  }
+  .theme-item__name {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--mw-text);
+  }
+
+  /* Stat row */
+  .stack-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.5rem;
+    margin: 1.5rem 0 0.5rem;
+  }
+  .stack-stat {
+    padding: 1rem 1.125rem;
+    background: var(--mw-surface);
+    border: 1px solid var(--mw-border);
+    border-radius: var(--mw-radius);
+    text-align: center;
+  }
+  .stack-stat__num {
+    font-size: 1.4rem;
+    font-weight: 700;
+    font-family: var(--mw-display-font);
+    color: var(--mw-accent);
+    line-height: 1.1;
+  }
+  .stack-stat__label {
+    font-size: 0.7rem;
+    color: var(--mw-text-muted);
+    margin-top: 0.25rem;
+    font-family: var(--mw-mono-font);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* Footer */
+  .stack-footer {
+    margin-top: 3rem;
+    padding: 2rem 0 3rem;
+    border-top: 1px solid var(--mw-border);
+    text-align: center;
+    color: var(--mw-text-muted);
+    font-size: 0.78rem;
+  }
+  .stack-footer a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+  .stack-footer a:hover { color: var(--mw-text); }
+</style>
+</head>
+<body class="mw-themed">
+
+<nav class="stack-nav">
+  <div class="stack-nav__inner">
+    <a href="./index.html" class="stack-nav__brand">
+      <span class="stack-nav__mark">✦</span>
+      <span class="stack-nav__name">maging</span>
+      <span class="stack-nav__page">/ stack</span>
+    </a>
+    <div class="stack-nav__links">
+      <a href="./index.html" class="stack-nav__link">Home</a>
+      <a href="./demo.html" class="stack-nav__link">Demo</a>
+      <a href="./llms.txt" class="stack-nav__link">llms.txt</a>
+      <a href="https://github.com/m1kapp/maging" target="_blank" rel="noopener" class="stack-nav__link">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<div class="stack-shell">
+
+  <!-- HERO -->
+  <section class="stack-hero">
+    <div class="stack-hero__kicker">THE STACK</div>
+    <h1 class="stack-hero__title">maging의 재료들</h1>
+    <p class="stack-hero__sub">
+      이 라이브러리를 가능하게 한 모든 것 — 무료 폰트, 오픈소스 라이브러리, 공개 CDN, 영감을 준 35개 브랜드, 검증 도구. 모두 출처와 라이선스를 밝힙니다.
+    </p>
+    <div class="stack-stats">
+      <div class="stack-stat"><div class="stack-stat__num">5</div><div class="stack-stat__label">Fonts</div></div>
+      <div class="stack-stat"><div class="stack-stat__num">2</div><div class="stack-stat__label">Libraries</div></div>
+      <div class="stack-stat"><div class="stack-stat__num">35</div><div class="stack-stat__label">Brand themes</div></div>
+      <div class="stack-stat"><div class="stack-stat__num">2</div><div class="stack-stat__label">CDN providers</div></div>
+      <div class="stack-stat"><div class="stack-stat__num">100%</div><div class="stack-stat__label">Open source</div></div>
+    </div>
+  </section>
+
+  <!-- ① FONTS -->
+  <section class="stack-section">
+    <div class="stack-section__head">
+      <span class="stack-section__num">01</span>
+      <h2 class="stack-section__title">Fonts</h2>
+      <span class="stack-section__tag">5종 · 모두 SIL OFL · 상업 사용 가능</span>
+    </div>
+    <div class="stack-grid">
+
+      <div class="stack-item">
+        <div class="stack-item__top">
+          <div class="stack-item__name">
+            <a href="https://github.com/orioncactus/pretendard" target="_blank" rel="noopener">Pretendard Variable</a>
+          </div>
+          <span class="stack-item__license">SIL OFL</span>
+        </div>
+        <div class="stack-item__role">한글 본문 · maging 기본 한글 폰트. <code>maging.css</code>에 <code>@import</code> 자동 내장. by Kil Hyung-jin (길형진).</div>
+        <div class="stack-item__sample" style="font-family:'Pretendard Variable', sans-serif;">대시보드 한 줄 생성</div>
+      </div>
+
+      <div class="stack-item">
+        <div class="stack-item__top">
+          <div class="stack-item__name">
+            <a href="https://rsms.me/inter/" target="_blank" rel="noopener">Inter</a>
+          </div>
+          <span class="stack-item__license">SIL OFL</span>
+        </div>
+        <div class="stack-item__role">영문 본문 · 거의 모든 테마의 sans 1순위. by Rasmus Andersson (Figma 디자인 디렉터).</div>
+        <div class="stack-item__sample stack-item__sample-en" style="font-family:'Inter', sans-serif;">Just maging it.</div>
+      </div>
+
+      <div class="stack-item">
+        <div class="stack-item__top">
+          <div class="stack-item__name">
+            <a href="https://www.jetbrains.com/lp/mono/" target="_blank" rel="noopener">JetBrains Mono</a>
+          </div>
+          <span class="stack-item__license">SIL OFL</span>
+        </div>
+        <div class="stack-item__role">코드 · 데이터 · 메타 텍스트의 mono 폰트. 합자(ligature) 풍부.</div>
+        <div class="stack-item__sample stack-item__sample-en" style="font-family:'JetBrains Mono', monospace;">v0.1.2 → v0.1.3</div>
+      </div>
+
+      <div class="stack-item">
+        <div class="stack-item__top">
+          <div class="stack-item__name">
+            <a href="https://fonts.google.com/specimen/Playfair+Display" target="_blank" rel="noopener">Playfair Display</a>
+          </div>
+          <span class="stack-item__license">SIL OFL</span>
+        </div>
+        <div class="stack-item__role">디스플레이 세리프 · Claude · Tiffany 테마의 헤딩에 사용. 매거진 우아함.</div>
+        <div class="stack-item__sample stack-item__sample-en" style="font-family:'Playfair Display', serif;">Editorial Headlines</div>
+      </div>
+
+      <div class="stack-item">
+        <div class="stack-item__top">
+          <div class="stack-item__name">시스템 폴백</div>
+          <span class="stack-item__license">N/A</span>
+        </div>
+        <div class="stack-item__role">위 폰트가 안 로드될 경우 — system-ui · -apple-system · "Segoe UI" 등 OS별 시스템 sans로 자동 폴백. 깨지지 않음 보장.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ② JS / CSS LIBRARIES -->
+  <section class="stack-section">
+    <div class="stack-section__head">
+      <span class="stack-section__num">02</span>
+      <h2 class="stack-section__title">Libraries</h2>
+      <span class="stack-section__tag">2종 · 모두 무료 상업 사용 가능</span>
+    </div>
+    <div class="stack-grid">
+
+      <div class="stack-item">
+        <div class="stack-item__top">
+          <div class="stack-item__name">
+            <a href="https://echarts.apache.org" target="_blank" rel="noopener">Apache ECharts 5</a>
+          </div>
+          <span class="stack-item__license">Apache 2.0</span>
+        </div>
+        <div class="stack-item__role">차트 엔진 · 13종 차트 위젯의 기반. ~336KB gz. Apache Software Foundation.</div>
+      </div>
+
+      <div class="stack-item">
+        <div class="stack-item__top">
+          <div class="stack-item__name">
+            <a href="https://tailwindcss.com" target="_blank" rel="noopener">Tailwind CSS Play CDN</a>
+          </div>
+          <span class="stack-item__license">MIT</span>
+        </div>
+        <div class="stack-item__role">레이아웃 유틸리티 · grid · flex · spacing · responsive. 빌드 없이 JIT로 사용.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ③ ICONS / ASSETS -->
+  <section class="stack-section">
+    <div class="stack-section__head">
+      <span class="stack-section__num">03</span>
+      <h2 class="stack-section__title">Icons &amp; Assets</h2>
+      <span class="stack-section__tag">CC0 · 공식 브랜드 SVG</span>
+    </div>
+    <div class="stack-grid">
+
+      <div class="stack-item">
+        <div class="stack-item__top">
+          <div class="stack-item__name">
+            <a href="https://simpleicons.org" target="_blank" rel="noopener">Simple Icons</a>
+          </div>
+          <span class="stack-item__license">CC0 1.0</span>
+        </div>
+        <div class="stack-item__role">랜딩의 LLM 플랫폼 로고 (ChatGPT · Claude · Gemini · Grok · Perplexity · Copilot) · 공식 브랜드 SVG · CDN 한 줄로 색상 동적 변경.</div>
+      </div>
+
+      <div class="stack-item">
+        <div class="stack-item__top">
+          <div class="stack-item__name">이모지</div>
+          <span class="stack-item__license">시스템</span>
+        </div>
+        <div class="stack-item__role">⚙️ 🎨 📎 ⚡ 등 핵심 가치 카드 아이콘 — Apple Color Emoji / Segoe UI Emoji 같은 OS 시스템 이모지 사용 (라이브러리 의존성 0).</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ④ CDN / HOSTING -->
+  <section class="stack-section">
+    <div class="stack-section__head">
+      <span class="stack-section__num">04</span>
+      <h2 class="stack-section__title">Distribution</h2>
+      <span class="stack-section__tag">무료 공개 CDN</span>
+    </div>
+    <div class="stack-grid">
+
+      <div class="stack-item">
+        <div class="stack-item__top">
+          <div class="stack-item__name">
+            <a href="https://www.jsdelivr.com" target="_blank" rel="noopener">jsDelivr</a>
+          </div>
+          <span class="stack-item__license">Free CDN</span>
+        </div>
+        <div class="stack-item__role">maging 본체 + 의존 라이브러리(ECharts) + Pretendard 글꼴 모두 jsDelivr 글로벌 엣지에서 서빙. GitHub repo 자동 미러링 — 별도 가입 X.</div>
+      </div>
+
+      <div class="stack-item">
+        <div class="stack-item__top">
+          <div class="stack-item__name">
+            <a href="https://github.com/m1kapp/maging" target="_blank" rel="noopener">GitHub</a>
+          </div>
+          <span class="stack-item__license">Free</span>
+        </div>
+        <div class="stack-item__role">소스 호스팅 · public 저장소. push + tag 만 하면 jsDelivr가 자동으로 새 버전 서빙.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ⑤ THEME INSPIRATIONS -->
+  <section class="stack-section">
+    <div class="stack-section__head">
+      <span class="stack-section__num">05</span>
+      <h2 class="stack-section__title">Theme inspirations</h2>
+      <span class="stack-section__tag">35개 브랜드 · 컬러/타이포/로고 영감 받음</span>
+    </div>
+    <p class="stack-item__role" style="margin-bottom: 1rem;">
+      각 테마는 해당 브랜드의 공식 컬러 팔레트·타이포·radius 스타일을 영감 삼아 재구성한 것입니다. 브랜드 자산이나 로고는 사용하지 않으며, "inspired by" 라벨이 붙어있습니다. 더 자세한 검증 내역은 <code>llms.txt</code> 참조.
+    </p>
+    <div class="theme-grid" id="theme-grid"></div>
+  </section>
+
+  <!-- ⑥ BUILD / DEV TOOLS -->
+  <section class="stack-section">
+    <div class="stack-section__head">
+      <span class="stack-section__num">06</span>
+      <h2 class="stack-section__title">Build &amp; Dev tools</h2>
+      <span class="stack-section__tag">개발 검증용 · 사용자에겐 노출 X</span>
+    </div>
+    <div class="stack-grid">
+
+      <div class="stack-item">
+        <div class="stack-item__top">
+          <div class="stack-item__name">
+            <a href="https://github.com/niieani/gpt-tokenizer" target="_blank" rel="noopener">gpt-tokenizer</a>
+          </div>
+          <span class="stack-item__license">MIT</span>
+        </div>
+        <div class="stack-item__role">OpenAI o200k_base 토크나이저 · 랜딩의 프롬프트 토큰 수 실측에 사용.</div>
+      </div>
+
+      <div class="stack-item">
+        <div class="stack-item__top">
+          <div class="stack-item__name">
+            <a href="https://github.com/anthropics/anthropic-tokenizer-typescript" target="_blank" rel="noopener">@anthropic-ai/tokenizer</a>
+          </div>
+          <span class="stack-item__license">MIT</span>
+        </div>
+        <div class="stack-item__role">Anthropic Claude 공식 토크나이저 · 프롬프트 토큰 수 실측 · GPT 토큰과 비교용.</div>
+      </div>
+
+      <div class="stack-item">
+        <div class="stack-item__top">
+          <div class="stack-item__name">Vercel / Cloudflare Pages</div>
+          <span class="stack-item__license">Free tier</span>
+        </div>
+        <div class="stack-item__role">랜딩 + 데모 호스팅 옵션 · vercel.json · _headers · _redirects 모두 준비됨.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="stack-footer">
+    <div>모든 출처를 명시했습니다 · 의문 있으면 <a href="https://github.com/m1kapp/maging/issues" target="_blank" rel="noopener">GitHub Issue</a>로</div>
+    <div style="margin-top: 0.5rem;"><a href="./index.html">← Home</a></div>
+  </footer>
+
+</div>
+
+<script>
+// Render the 35 theme inspirations grid (uses THEMES data from maging.js if available, otherwise hardcoded)
+window.addEventListener('maging:ready', function () {
+  var THEMES = [
+    { v:'notion',    name:'Notion',    accent:'#37352f', url:'https://www.notion.so' },
+    { v:'vercel',    name:'Vercel',    accent:'#000000', url:'https://vercel.com' },
+    { v:'linear',    name:'Linear',    accent:'#5e6ad2', url:'https://linear.app' },
+    { v:'github',    name:'GitHub',    accent:'#58a6ff', url:'https://github.com' },
+    { v:'apple',     name:'Apple',     accent:'#007aff', url:'https://www.apple.com' },
+    { v:'stripe',    name:'Stripe',    accent:'#635bff', url:'https://stripe.com' },
+    { v:'linkedin',  name:'LinkedIn',  accent:'#0a66c2', url:'https://www.linkedin.com' },
+    { v:'x',         name:'X',         accent:'#1d9bf0', url:'https://x.com' },
+    { v:'medium',    name:'Medium',    accent:'#1a8917', url:'https://medium.com' },
+    { v:'tiffany',   name:'Tiffany',   accent:'#0abab5', url:'https://www.tiffany.com' },
+    { v:'openai',    name:'OpenAI',    accent:'#00a67e', url:'https://openai.com' },
+    { v:'discord',   name:'Discord',   accent:'#5865f2', url:'https://discord.com' },
+    { v:'figma',     name:'Figma',     accent:'#ff3737', url:'https://www.figma.com' },
+    { v:'amazon',    name:'Amazon',    accent:'#ff9900', url:'https://www.amazon.com' },
+    { v:'airbnb',    name:'Airbnb',    accent:'#ff5a5f', url:'https://www.airbnb.com' },
+    { v:'adobe',     name:'Adobe',     accent:'#fa0c00', url:'https://www.adobe.com' },
+    { v:'youtube',   name:'YouTube',   accent:'#ff0000', url:'https://www.youtube.com' },
+    { v:'netflix',   name:'Netflix',   accent:'#e50914', url:'https://www.netflix.com' },
+    { v:'reddit',    name:'Reddit',    accent:'#ff4500', url:'https://www.reddit.com' },
+    { v:'twitch',    name:'Twitch',    accent:'#9146ff', url:'https://www.twitch.tv' },
+    { v:'duolingo',  name:'Duolingo',  accent:'#58cc02', url:'https://www.duolingo.com' },
+    { v:'spotify',   name:'Spotify',   accent:'#1db954', url:'https://www.spotify.com' },
+    { v:'tmobile',   name:'T-Mobile',  accent:'#e20074', url:'https://www.t-mobile.com' },
+    { v:'mailchimp', name:'Mailchimp', accent:'#ffe01b', url:'https://mailchimp.com' },
+    { v:'fedex',     name:'FedEx',     accent:'#ff6600', url:'https://www.fedex.com' },
+    { v:'claude',    name:'Claude',    accent:'#da7756', url:'https://claude.ai' },
+    { v:'instagram', name:'Instagram', accent:'#e1306c', url:'https://www.instagram.com' },
+    { v:'bloomberg', name:'Bloomberg', accent:'#ffa028', url:'https://www.bloomberg.com' },
+    { v:'slack',     name:'Slack',     accent:'#ecb22e', url:'https://slack.com' },
+    { v:'nasa',      name:'NASA',      accent:'#fc3d21', url:'https://www.nasa.gov' },
+    { v:'heineken',  name:'Heineken',  accent:'#e10012', url:'https://www.heineken.com' },
+    { v:'deere',     name:'John Deere',accent:'#ffde00', url:'https://www.deere.com' },
+    { v:'hermes',    name:'Hermès',    accent:'#ff6900', url:'https://www.hermes.com' },
+    { v:'ups',       name:'UPS',       accent:'#ffb500', url:'https://www.ups.com' },
+    { v:'barbie',    name:'Barbie',    accent:'#e0218a', url:'https://www.barbie.com' },
+  ];
+  var container = document.getElementById('theme-grid');
+  container.innerHTML = THEMES.map(function (t) {
+    return '<a class="theme-item" href="' + t.url + '" target="_blank" rel="noopener" ' +
+      'onclick="event.stopPropagation(); window.Maging && Maging.setTheme(\'' + t.v + '\'); event.preventDefault();" ' +
+      'title="이 테마로 페이지 보기">' +
+      '<span class="theme-item__swatch" style="background:' + t.accent + '"></span>' +
+      '<span class="theme-item__name">' + t.name + '</span>' +
+      '</a>';
+  }).join('');
+});
+</script>
+
+</body>
+</html>

@@ -1,3 +1,4 @@
 # Cloudflare Pages _redirects file
-/docs  /llms.txt  302
-/demo  /demo.html  302
+/docs   /llms.txt   302
+/demo   /demo.html  302
+/stack  /stack.html 302
