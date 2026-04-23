@@ -108,8 +108,12 @@
     border-radius: 999px;
     overflow: hidden;
     border: 1px solid var(--mw-border);
+    height: 18px;
   }
-  .mw-theme-fab__swatch { width: 8px; height: 18px; }
+  .mw-theme-fab__swatch { height: 100%; }
+  .mw-theme-fab__swatch--accent { width: 18px; }
+  .mw-theme-fab__swatch--accent2 { width: 8px; }
+  .mw-theme-fab__swatch--bg { width: 8px; }
   .mw-theme-fab__label {
     font-weight: 600;
     letter-spacing: 0.01em;
@@ -179,28 +183,32 @@
   .mw-theme-fab__item {
     display: flex; align-items: center; gap: 0.625rem;
     width: 100%;
-    padding: 0.45rem 0.5rem;
-    background: transparent;
-    border: 1px solid transparent;
+    margin-bottom: 2px;
+    padding: 0.5rem 0.5rem;
+    background: var(--mw-tile-bg, transparent);
+    border: 1.5px solid transparent;
     color: var(--mw-text);
     border-radius: var(--mw-radius);
     cursor: pointer;
     text-align: left;
     font-family: inherit;
-    transition: background 0.1s ease, border-color 0.1s ease;
+    transition: border-color 0.12s ease, transform 0.12s ease;
   }
-  .mw-theme-fab__item:hover { background: var(--mw-surface-2); }
+  .mw-theme-fab__item:hover {
+    border-color: color-mix(in srgb, var(--mw-tile-accent, var(--mw-accent)) 40%, transparent);
+  }
   .mw-theme-fab__item.is-active {
-    background: var(--mw-surface-2);
-    border-color: color-mix(in srgb, var(--mw-accent) 45%, transparent);
+    border-color: var(--mw-tile-accent, var(--mw-accent));
   }
   .mw-theme-fab__item-swatch {
     display: flex; flex-shrink: 0;
-    width: 40px; height: 24px;
+    width: 46px; height: 26px;
     border-radius: 4px; overflow: hidden;
     border: 1px solid var(--mw-border);
   }
-  .mw-theme-fab__item-swatch span { flex: 1; height: 100%; }
+  .mw-theme-fab__item-swatch span { height: 100%; }
+  .mw-theme-fab__item-swatch--accent { flex: 3; }
+  .mw-theme-fab__item-swatch--other { flex: 1; }
   .mw-theme-fab__item-body {
     flex: 1; min-width: 0;
     display: flex; flex-direction: column; gap: 1px;
@@ -1889,9 +1897,9 @@ var THEMES = [
   fab.innerHTML =
     '<button type="button" class="mw-theme-fab__btn" aria-expanded="false" aria-label="테마 선택">' +
       '<span class="mw-theme-fab__swatches" aria-hidden="true">' +
-        '<span class="mw-theme-fab__swatch" data-swatch="accent"></span>' +
-        '<span class="mw-theme-fab__swatch" data-swatch="accent2"></span>' +
-        '<span class="mw-theme-fab__swatch" data-swatch="bg"></span>' +
+        '<span class="mw-theme-fab__swatch mw-theme-fab__swatch--accent" data-swatch="accent"></span>' +
+        '<span class="mw-theme-fab__swatch mw-theme-fab__swatch--accent2" data-swatch="accent2"></span>' +
+        '<span class="mw-theme-fab__swatch mw-theme-fab__swatch--bg" data-swatch="bg"></span>' +
       '</span>' +
       '<span class="mw-theme-fab__label">Theme</span>' +
       '<svg class="mw-theme-fab__caret" viewBox="0 0 10 10" fill="none" aria-hidden="true">' +
@@ -1918,13 +1926,15 @@ var THEMES = [
   function current() { return document.documentElement.getAttribute('data-theme') || 'claude'; }
   function itemHtml(t, i) {
     var active = t.value === current() ? ' is-active' : '';
-    return '<button type="button" class="mw-theme-fab__item' + active + '" data-theme="' + t.value + '">' +
+    var tileStyle =
+      '--mw-tile-bg: color-mix(in srgb, ' + t.bg + ' 22%, transparent);' +
+      '--mw-tile-accent: ' + t.accent + ';';
+    return '<button type="button" class="mw-theme-fab__item' + active + '" data-theme="' + t.value + '" style="' + tileStyle + '">' +
       '<span class="mw-theme-fab__item-swatch">' +
-        '<span style="background:' + t.bg + '"></span>' +
-        '<span style="background:' + t.accent + '"></span>' +
-        '<span style="background:' + t.accent2 + '"></span>' +
-        '<span style="background:' + t.warning + '"></span>' +
-        '<span style="background:' + t.danger + '"></span>' +
+        '<span class="mw-theme-fab__item-swatch--accent" style="background:' + t.accent + '"></span>' +
+        '<span class="mw-theme-fab__item-swatch--other" style="background:' + t.accent2 + '"></span>' +
+        '<span class="mw-theme-fab__item-swatch--other" style="background:' + t.warning + '"></span>' +
+        '<span class="mw-theme-fab__item-swatch--other" style="background:' + t.danger + '"></span>' +
       '</span>' +
       '<span class="mw-theme-fab__item-body">' +
         '<span class="mw-theme-fab__item-name">' + t.desc + '</span>' +
@@ -1949,7 +1959,7 @@ var THEMES = [
     swAccent.style.background = t.accent;
     swAccent2.style.background = t.accent2;
     swBg.style.background = t.bg;
-    label.textContent = t.brand;
+    label.textContent = t.desc;
   }
   function syncActive() {
     var cur = current();
