@@ -102,165 +102,179 @@
     font-size: 0.85rem;
   }
 
-  /* ========= Theme Bar (horizontal scroll picker) ========= */
-  .theme-bar {
-    background: var(--mw-surface);
-    border-bottom: 1px solid var(--mw-border);
-    padding: 0;
+  /* ========= Floating Theme Picker (shared) ========= */
+  .mw-theme-fab {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 120;
+    font-family: var(--mw-font);
   }
-  .theme-bar__legend {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 10px 1.5rem 0;
+  .mw-theme-fab__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.75rem 0.45rem 0.5rem;
+    background: var(--mw-surface);
+    color: var(--mw-text);
+    border: 1px solid var(--mw-border);
+    border-radius: 999px;
+    box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.28), 0 2px 6px -2px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-family: inherit;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s;
+  }
+  .mw-theme-fab__btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.32), 0 4px 10px -2px rgba(0, 0, 0, 0.14);
+    border-color: var(--mw-accent);
+  }
+  .mw-theme-fab__swatches {
+    display: inline-flex;
+    border-radius: 999px;
+    overflow: hidden;
+    border: 1px solid var(--mw-border);
+  }
+  .mw-theme-fab__swatch {
+    width: 8px; height: 18px;
+  }
+  .mw-theme-fab__label {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .mw-theme-fab__caret {
+    width: 10px; height: 10px;
+    opacity: 0.55;
+    transition: transform 0.18s ease;
+  }
+  .mw-theme-fab.is-open .mw-theme-fab__caret { transform: rotate(180deg); }
+
+  .mw-theme-fab__panel {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 0.625rem);
+    width: 320px;
+    max-height: 50vh;
+    background: var(--mw-surface);
+    border: 1px solid var(--mw-border);
+    border-radius: calc(var(--mw-radius) + 4px);
+    box-shadow: 0 24px 64px -12px rgba(0, 0, 0, 0.36), 0 6px 14px -4px rgba(0, 0, 0, 0.14);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    transform-origin: bottom right;
+    animation: mwFabIn 0.14s ease-out;
+  }
+  @keyframes mwFabIn {
+    from { opacity: 0; transform: translateY(6px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .mw-theme-fab.is-open .mw-theme-fab__panel { display: flex; }
+
+  .mw-theme-fab__head {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    justify-content: space-between;
+    padding: 0.625rem 0.875rem;
+    border-bottom: 1px solid var(--mw-border);
     font-family: var(--mw-mono-font);
     font-size: 0.66rem;
     color: var(--mw-text-muted);
-    letter-spacing: 0.04em;
     text-transform: uppercase;
+    letter-spacing: 0.08em;
+    flex-shrink: 0;
   }
-  .theme-bar__legend-line {
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(to right, var(--mw-border) 0%, var(--mw-accent) 50%, var(--mw-accent-2) 100%);
-    opacity: 0.5;
+  .mw-theme-fab__close {
+    width: 22px; height: 22px;
+    display: grid; place-items: center;
+    background: transparent; border: none;
+    color: var(--mw-text-muted); cursor: pointer;
+    border-radius: 4px;
+    font-size: 1.1rem; line-height: 1;
   }
-  .theme-bar__legend-side { white-space: nowrap; }
-  .theme-bar__shell {
-    position: relative;
-    max-width: 1400px;
-    margin: 0 auto;
+  .mw-theme-fab__close:hover { background: var(--mw-surface-2); color: var(--mw-text); }
+
+  .mw-theme-fab__list {
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0.375rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--mw-border) transparent;
   }
-  .theme-bar__inner {
-    display: flex;
-    gap: 0.625rem;
-    padding: 14px 1.5rem;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-behavior: smooth;
-    scrollbar-width: none;
+  .mw-theme-fab__list::-webkit-scrollbar { width: 6px; }
+  .mw-theme-fab__list::-webkit-scrollbar-thumb { background: var(--mw-border); border-radius: 4px; }
+
+  .mw-theme-fab__group {
+    padding: 0.5rem 0.625rem 0.25rem;
+    font-family: var(--mw-mono-font);
+    font-size: 0.64rem;
+    color: var(--mw-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
   }
-  .theme-bar__inner::-webkit-scrollbar { display: none; }
-  .theme-bar__arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background: var(--mw-surface);
-    border: 1px solid var(--mw-border);
-    cursor: pointer;
+  .mw-theme-fab__item {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    font-weight: 500;
+    gap: 0.625rem;
+    width: 100%;
+    padding: 0.45rem 0.5rem;
+    background: transparent;
+    border: 1px solid transparent;
     color: var(--mw-text);
-    z-index: 5;
-    opacity: 0;
-    transition: opacity 0.18s, background 0.15s, box-shadow 0.15s, transform 0.15s;
-    box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.15);
-    font-family: var(--mw-font);
-    line-height: 1;
-    padding: 0 0 2px;
-  }
-  .theme-bar__shell:hover .theme-bar__arrow:not(.is-disabled) { opacity: 1; }
-  .theme-bar__arrow:hover {
-    background: var(--mw-surface-2);
-    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.22);
-  }
-  .theme-bar__arrow:active { transform: translateY(-50%) scale(0.94); }
-  .theme-bar__arrow--left { left: 0.25rem; }
-  .theme-bar__arrow--right { right: 0.25rem; }
-  .theme-bar__arrow.is-disabled {
-    opacity: 0 !important;
-    pointer-events: none;
-  }
-  .theme-chip {
-    flex: 0 0 auto;
-    width: 144px;
-    padding: 0.625rem 0.55rem;
-    border: 1px solid;
-    /* border-radius set inline per theme */
+    border-radius: var(--mw-radius);
     cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
     text-align: left;
-    font-family: var(--mw-font);
+    font-family: inherit;
+    transition: background 0.1s ease, border-color 0.1s ease;
+  }
+  .mw-theme-fab__item:hover { background: var(--mw-surface-2); }
+  .mw-theme-fab__item.is-active {
+    background: var(--mw-surface-2);
+    border-color: color-mix(in srgb, var(--mw-accent) 45%, transparent);
+  }
+  .mw-theme-fab__item-swatch {
     display: flex;
-    flex-direction: column;
-    user-select: none;
+    flex-shrink: 0;
+    width: 40px; height: 24px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--mw-border);
   }
-  .theme-chip:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 12px -4px rgba(0, 0, 0, 0.22);
+  .mw-theme-fab__item-swatch span { flex: 1; height: 100%; }
+  .mw-theme-fab__item-body {
+    flex: 1; min-width: 0;
+    display: flex; flex-direction: column; gap: 1px;
   }
-  .theme-chip.is-active {
-    box-shadow: 0 0 0 2px var(--mw-accent), 0 5px 12px -4px rgba(0, 0, 0, 0.18);
+  .mw-theme-fab__item-name {
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .mw-theme-fab__item-brand {
+    font-size: 0.66rem;
+    font-family: var(--mw-mono-font);
+    color: var(--mw-text-muted);
+    letter-spacing: 0.02em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .mw-theme-fab__item-idx {
+    flex-shrink: 0;
+    font-size: 0.66rem;
+    color: var(--mw-text-muted);
+    font-family: var(--mw-mono-font);
+    font-variant-numeric: tabular-nums;
   }
 
-  .theme-chip__preview {
-    position: relative;
-    height: 48px;
-    margin: 0.15rem 0 0.5rem;
-    display: flex;
-    align-items: flex-end;
-    gap: 0.45rem;
-    width: 100%;
+  @media (max-width: 480px) {
+    .mw-theme-fab { right: 0.875rem; bottom: 0.875rem; }
+    .mw-theme-fab__panel { width: calc(100vw - 1.75rem); }
+    .mw-theme-fab__label { max-width: 100px; }
   }
-  .theme-chip__index {
-    font-size: 1.35rem;
-    font-weight: 800;
-    font-family: var(--mw-display-font);
-    line-height: 0.95;
-    opacity: 0.5;
-    letter-spacing: -0.04em;
-    font-variant-numeric: tabular-nums;
-    flex-shrink: 0;
-    padding-bottom: 1px;
-  }
-  .theme-chip__bars {
-    display: flex;
-    align-items: flex-end;
-    gap: 2px;
-    height: 100%;
-    flex: 1 1 auto;
-    min-width: 0;
-  }
-  .theme-chip__bar {
-    flex: 1;
-    border-radius: 2px 2px 0 0;
-    min-height: 3px;
-  }
-  .theme-chip__name {
-    font-size: 0.74rem;
-    font-weight: 700;
-    font-family: var(--mw-display-font);
-    line-height: 1.2;
-    letter-spacing: -0.02em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: clip;
-  }
-  .theme-chip__sub {
-    font-size: 0.56rem;
-    font-family: var(--mw-mono-font);
-    margin-top: 0.2rem;
-    letter-spacing: 0.03em;
-    text-transform: lowercase;
-    opacity: 0.55;
-  }
-  .theme-chip__brand {
-    color: inherit;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 2px;
-    cursor: pointer;
-    transition: opacity 120ms;
-  }
-  .theme-chip__brand:hover { opacity: 1; text-decoration-thickness: 2px; }
 
   /* ========= Widget Inspector (top-right ⋯ menu) ========= */
   .demo-wrap { position: relative; }
@@ -665,65 +679,9 @@
     </div>
     <div class="flex items-center gap-2 flex-wrap">
       <a href="index.html" class="pill">← 랜딩</a>
-      <span class="mw-muted text-xs ml-1 mr-1">THEME</span>
-      <select class="pill" id="theme-select" aria-label="Theme">
-        <optgroup label="Light">
-          <option value="claude" selected>테라코타 크림 inspired by Claude</option>
-          <option value="linear">인디고 미니멀 inspired by Linear</option>
-          <option value="stripe">페이먼트 퍼플 inspired by Stripe</option>
-          <option value="notion">웜 오프화이트 inspired by Notion</option>
-          <option value="airbnb">코랄 라운드 inspired by Airbnb</option>
-          <option value="linkedin">프로페셔널 블루 inspired by LinkedIn</option>
-          <option value="instagram">비비드 그라디언트 inspired by Instagram</option>
-          <option value="youtube">시그니처 레드 inspired by YouTube</option>
-          <option value="reddit">커뮤니티 오렌지 inspired by Reddit</option>
-          <option value="medium">에디토리얼 세리프 inspired by Medium</option>
-          <option value="apple">시스템 블루 inspired by Apple</option>
-          <option value="duolingo">오울 그린 inspired by Duolingo</option>
-          <option value="tiffany">로빈스에그 블루 inspired by Tiffany</option>
-          <option value="mailchimp">카벤디시 옐로 inspired by Mailchimp</option>
-          <option value="tmobile">시그니처 마젠타 inspired by T-Mobile</option>
-          <option value="fedex">퍼플 오렌지 inspired by FedEx</option>
-          <option value="hermes">럭셔리 크림 inspired by Hermès</option>
-          <option value="barbie">파스텔 핑크 inspired by Barbie</option>
-        </optgroup>
-        <optgroup label="Dark">
-          <option value="vercel">퓨어 미니멀 inspired by Vercel</option>
-          <option value="github">딤드 다크 inspired by GitHub</option>
-          <option value="x">샤프 모노 inspired by X</option>
-          <option value="slack">다크 오버진 inspired by Slack</option>
-          <option value="discord">블러플 inspired by Discord</option>
-          <option value="openai">AI 틸 inspired by OpenAI</option>
-          <option value="spotify">네온 그린 inspired by Spotify</option>
-          <option value="twitch">게이밍 퍼플 inspired by Twitch</option>
-          <option value="netflix">시네마틱 레드 inspired by Netflix</option>
-          <option value="figma">멀티 로고 컬러 inspired by Figma</option>
-          <option value="amazon">마켓 네이비 inspired by Amazon</option>
-          <option value="adobe">크리에이티브 레드 inspired by Adobe</option>
-          <option value="bloomberg">터미널 앰버 inspired by Bloomberg</option>
-          <option value="ups">풀먼 브라운 inspired by UPS</option>
-          <option value="heineken">보틀 그린 inspired by Heineken</option>
-          <option value="nasa">웜 블루 inspired by NASA</option>
-          <option value="deere">트랙터 그린 inspired by John Deere</option>
-        </optgroup>
-      </select>
     </div>
   </div>
 </nav>
-
-<!-- Theme Picker Bar — horizontal carousel -->
-<div class="theme-bar">
-  <div class="theme-bar__legend">
-    <span class="theme-bar__legend-side">← 01 · 대중적</span>
-    <span class="theme-bar__legend-line"></span>
-    <span class="theme-bar__legend-side">독창적 · 35 →</span>
-  </div>
-  <div class="theme-bar__shell">
-    <button type="button" class="theme-bar__arrow theme-bar__arrow--left" id="theme-bar-prev" aria-label="이전">‹</button>
-    <div class="theme-bar__inner" id="theme-bar"></div>
-    <button type="button" class="theme-bar__arrow theme-bar__arrow--right" id="theme-bar-next" aria-label="다음">›</button>
-  </div>
-</div>
 
 <main class="max-w-[1400px] mx-auto p-6" id="dashboard" style="display:none;">
 
@@ -918,17 +876,9 @@ python3 -m http.server 8000</pre>
 </div>
 
 <script>
-// Theme switcher (select)
-(function () {
-  var sel = document.getElementById('theme-select');
-  if (!sel) return;
-  sel.addEventListener('change', function () { Maging.setTheme(sel.value); });
-})();
-
 // ============================================================
-// Theme Bar (horizontal scroll picker)
+// THEMES — ordered mainstream → distinctive (← 대중적 ··· 독창적 →)
 // ============================================================
-// Ordered mainstream → distinctive (← 대중적 ··· 독창적 →)
 var THEMES = [
   { value: 'notion',    brand: 'Notion',    url: 'https://www.notion.so',      desc: '웜 오프화이트',        accent: '#37352f', accent2: '#2eaadc', bg: '#ffffff', text: '#37352f', border: '#e9e9e7', success: '#448361', warning: '#cb912f', danger: '#d44c47', radius: '4px' },
   { value: 'vercel',    brand: 'Vercel',    url: 'https://vercel.com',         desc: '퓨어 미니멀',          accent: '#ffffff', accent2: '#7928ca', bg: '#000000', text: '#ffffff', border: '#333333', success: '#0070f3', warning: '#f5a623', danger: '#ff0080', radius: '6px' },
@@ -967,96 +917,128 @@ var THEMES = [
   { value: 'barbie',    brand: 'Barbie',    url: 'https://www.barbie.com',     desc: '파스텔 핑크',          accent: '#e0218a', accent2: '#ffd700', bg: '#fff0f7', text: '#3d1a2b', border: '#ffcce0', success: '#50c878', warning: '#ffa500', danger: '#8b0000', radius: '20px' }
 ];
 
-// Luminance-based contrast text picker
-function onColor(hex) {
-  var h = hex.replace('#', '');
-  if (h.length === 3) h = h.split('').map(function (c) { return c + c; }).join('');
-  var r = parseInt(h.slice(0, 2), 16);
-  var g = parseInt(h.slice(2, 4), 16);
-  var b = parseInt(h.slice(4, 6), 16);
-  var luma = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  return luma > 0.62 ? '#111' : '#fff';
-}
+// ============================================================
+// Floating Theme Picker (bottom-right FAB → vertical panel)
+// ============================================================
+(function mountThemeFab() {
+  function isDark(t) {
+    var h = t.bg.replace('#', '');
+    if (h.length === 3) h = h.split('').map(function (c) { return c + c; }).join('');
+    var r = parseInt(h.slice(0, 2), 16);
+    var g = parseInt(h.slice(2, 4), 16);
+    var b = parseInt(h.slice(4, 6), 16);
+    return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
+  }
 
-function renderThemeBar() {
-  var bar = document.getElementById('theme-bar');
-  if (!bar) return;
-  var current = document.documentElement.getAttribute('data-theme') || 'claude';
-  bar.innerHTML = THEMES.map(function (t, i) {
-    var index = String(i + 1).padStart(2, '0');
-    var active = t.value === current ? ' is-active' : '';
-    var chipStyle =
-      'background:' + t.bg +
-      ';border-color:' + t.border +
-      ';color:' + t.text +
-      ';border-radius:' + t.radius;
-    return '<button type="button" class="theme-chip' + active + '" data-theme-chip="' + t.value + '" style="' + chipStyle + '" title="inspired by ' + t.brand + '">' +
-      '<div class="theme-chip__preview">' +
-        '<div class="theme-chip__index">' + index + '</div>' +
-        '<div class="theme-chip__bars">' +
-          '<div class="theme-chip__bar" style="height:100%;background:' + t.accent  + '"></div>' +
-          '<div class="theme-chip__bar" style="height:78%;background:'  + t.accent2 + '"></div>' +
-          '<div class="theme-chip__bar" style="height:58%;background:'  + t.warning + '"></div>' +
-          '<div class="theme-chip__bar" style="height:38%;background:'  + t.danger  + '"></div>' +
-          '<div class="theme-chip__bar" style="height:22%;background:'  + t.success + '"></div>' +
-        '</div>' +
+  var fab = document.createElement('div');
+  fab.className = 'mw-theme-fab';
+  fab.innerHTML =
+    '<button type="button" class="mw-theme-fab__btn" aria-expanded="false" aria-label="테마 선택">' +
+      '<span class="mw-theme-fab__swatches" aria-hidden="true">' +
+        '<span class="mw-theme-fab__swatch" data-swatch="accent"></span>' +
+        '<span class="mw-theme-fab__swatch" data-swatch="accent2"></span>' +
+        '<span class="mw-theme-fab__swatch" data-swatch="bg"></span>' +
+      '</span>' +
+      '<span class="mw-theme-fab__label">Theme</span>' +
+      '<svg class="mw-theme-fab__caret" viewBox="0 0 10 10" fill="none" aria-hidden="true">' +
+        '<path d="M2 4l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '</svg>' +
+    '</button>' +
+    '<div class="mw-theme-fab__panel" role="dialog" aria-label="테마 목록">' +
+      '<div class="mw-theme-fab__head">' +
+        '<span>Theme · 35</span>' +
+        '<button type="button" class="mw-theme-fab__close" aria-label="닫기">×</button>' +
       '</div>' +
-      '<div class="theme-chip__name">' + t.desc + '</div>' +
-      '<div class="theme-chip__sub">inspired by <a href="' + t.url + '" target="_blank" rel="noopener" class="theme-chip__brand" data-brand-url="' + t.url + '">' + t.brand + '</a></div>' +
+      '<div class="mw-theme-fab__list"></div>' +
+    '</div>';
+  document.body.appendChild(fab);
+
+  var btn = fab.querySelector('.mw-theme-fab__btn');
+  var panel = fab.querySelector('.mw-theme-fab__panel');
+  var list = fab.querySelector('.mw-theme-fab__list');
+  var closeBtn = fab.querySelector('.mw-theme-fab__close');
+  var label = fab.querySelector('.mw-theme-fab__label');
+  var swAccent = fab.querySelector('[data-swatch="accent"]');
+  var swAccent2 = fab.querySelector('[data-swatch="accent2"]');
+  var swBg = fab.querySelector('[data-swatch="bg"]');
+
+  function itemHtml(t, i) {
+    var active = t.value === current() ? ' is-active' : '';
+    return '<button type="button" class="mw-theme-fab__item' + active + '" data-theme="' + t.value + '">' +
+      '<span class="mw-theme-fab__item-swatch">' +
+        '<span style="background:' + t.bg + '"></span>' +
+        '<span style="background:' + t.accent + '"></span>' +
+        '<span style="background:' + t.accent2 + '"></span>' +
+        '<span style="background:' + t.warning + '"></span>' +
+        '<span style="background:' + t.danger + '"></span>' +
+      '</span>' +
+      '<span class="mw-theme-fab__item-body">' +
+        '<span class="mw-theme-fab__item-name">' + t.desc + '</span>' +
+        '<span class="mw-theme-fab__item-brand">inspired by ' + t.brand + '</span>' +
+      '</span>' +
+      '<span class="mw-theme-fab__item-idx">' + String(i).padStart(2, '0') + '</span>' +
     '</button>';
-  }).join('');
-}
+  }
+  function current() {
+    return document.documentElement.getAttribute('data-theme') || 'claude';
+  }
+  function render() {
+    var lights = [], darks = [];
+    THEMES.forEach(function (t) { (isDark(t) ? darks : lights).push(t); });
+    var i = 0, html = '';
+    html += '<div class="mw-theme-fab__group">Light · ' + lights.length + '</div>';
+    lights.forEach(function (t) { i++; html += itemHtml(t, i); });
+    html += '<div class="mw-theme-fab__group">Dark · ' + darks.length + '</div>';
+    darks.forEach(function (t) { i++; html += itemHtml(t, i); });
+    list.innerHTML = html;
+  }
+  function syncButton() {
+    var t = THEMES.find(function (x) { return x.value === current(); });
+    if (!t) return;
+    swAccent.style.background = t.accent;
+    swAccent2.style.background = t.accent2;
+    swBg.style.background = t.bg;
+    label.textContent = t.brand;
+  }
+  function syncActive() {
+    var cur = current();
+    list.querySelectorAll('[data-theme]').forEach(function (el) {
+      el.classList.toggle('is-active', el.dataset.theme === cur);
+    });
+  }
+  function open() {
+    fab.classList.add('is-open');
+    btn.setAttribute('aria-expanded', 'true');
+    var active = list.querySelector('.is-active');
+    if (active) active.scrollIntoView({ block: 'nearest' });
+  }
+  function close() {
+    fab.classList.remove('is-open');
+    btn.setAttribute('aria-expanded', 'false');
+  }
 
-function setActiveChip(value) {
-  document.querySelectorAll('[data-theme-chip]').forEach(function (c) {
-    c.classList.toggle('is-active', c.dataset.themeChip === value);
-  });
-  var active = document.querySelector('[data-theme-chip="' + value + '"]');
-  if (active) active.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-  var sel = document.getElementById('theme-select');
-  if (sel && sel.value !== value) sel.value = value;
-}
-
-document.addEventListener('click', function (e) {
-  if (e.target.closest('[data-brand-url]')) {
+  btn.addEventListener('click', function (e) {
     e.stopPropagation();
-    return;
-  }
-  var chip = e.target.closest('[data-theme-chip]');
-  if (!chip) return;
-  var value = chip.dataset.themeChip;
-  Maging.setTheme(value);
-  setActiveChip(value);
-});
-
-document.addEventListener('change', function (e) {
-  if (e.target && e.target.id === 'theme-select') setActiveChip(e.target.value);
-});
-
-renderThemeBar();
-
-// Carousel arrows
-(function setupCarousel() {
-  var inner = document.getElementById('theme-bar');
-  var prev = document.getElementById('theme-bar-prev');
-  var next = document.getElementById('theme-bar-next');
-  if (!inner || !prev || !next) return;
-
-  function updateState() {
-    var max = inner.scrollWidth - inner.clientWidth;
-    prev.classList.toggle('is-disabled', inner.scrollLeft <= 2);
-    next.classList.toggle('is-disabled', inner.scrollLeft >= max - 2);
-  }
-
-  prev.addEventListener('click', function () {
-    inner.scrollBy({ left: -inner.clientWidth * 0.7, behavior: 'smooth' });
+    fab.classList.contains('is-open') ? close() : open();
   });
-  next.addEventListener('click', function () {
-    inner.scrollBy({ left: inner.clientWidth * 0.7, behavior: 'smooth' });
+  closeBtn.addEventListener('click', function (e) { e.stopPropagation(); close(); });
+  list.addEventListener('click', function (e) {
+    var item = e.target.closest('[data-theme]');
+    if (!item) return;
+    Maging.setTheme(item.dataset.theme);
   });
-  inner.addEventListener('scroll', updateState);
-  window.addEventListener('resize', updateState);
-  requestAnimationFrame(updateState);
+  document.addEventListener('click', function (e) {
+    if (!fab.contains(e.target)) close();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') close();
+  });
+
+  new MutationObserver(function () { syncButton(); syncActive(); })
+    .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  render();
+  syncButton();
 })();
 
 // ============================================================

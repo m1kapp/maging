@@ -75,21 +75,159 @@
   [data-theme="terminal"] .pill.is-active { color: #000; }
   .pill--primary { background: var(--mw-accent); color: #fff; border-color: var(--mw-accent); padding: 0.625rem 1.25rem; font-weight: 500; }
   [data-theme="terminal"] .pill--primary { color: #000; }
-  select.pill {
-    appearance: none; -webkit-appearance: none; -moz-appearance: none;
-    padding: 0.4rem 1.75rem 0.4rem 0.75rem;
-    font-size: 0.78rem;
-    background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
-                      linear-gradient(135deg, currentColor 50%, transparent 50%);
-    background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%;
-    background-size: 5px 5px, 5px 5px;
-    background-repeat: no-repeat;
-    min-width: 170px;
-    max-width: 220px;
+  /* ========= Floating Theme Picker (shared) ========= */
+  .mw-theme-fab {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 120;
+    font-family: var(--mw-font);
   }
-  select.pill:focus { outline: 2px solid color-mix(in srgb, var(--mw-accent) 40%, transparent); outline-offset: 1px; }
-  select.pill option, select.pill optgroup {
-    background: var(--mw-surface); color: var(--mw-text);
+  .mw-theme-fab__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.75rem 0.45rem 0.5rem;
+    background: var(--mw-surface);
+    color: var(--mw-text);
+    border: 1px solid var(--mw-border);
+    border-radius: 999px;
+    box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.28), 0 2px 6px -2px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-family: inherit;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s;
+  }
+  .mw-theme-fab__btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.32), 0 4px 10px -2px rgba(0, 0, 0, 0.14);
+    border-color: var(--mw-accent);
+  }
+  .mw-theme-fab__swatches {
+    display: inline-flex;
+    border-radius: 999px;
+    overflow: hidden;
+    border: 1px solid var(--mw-border);
+  }
+  .mw-theme-fab__swatch { width: 8px; height: 18px; }
+  .mw-theme-fab__label {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    max-width: 140px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .mw-theme-fab__caret { width: 10px; height: 10px; opacity: 0.55; transition: transform 0.18s ease; }
+  .mw-theme-fab.is-open .mw-theme-fab__caret { transform: rotate(180deg); }
+
+  .mw-theme-fab__panel {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 0.625rem);
+    width: 320px;
+    max-height: 50vh;
+    background: var(--mw-surface);
+    border: 1px solid var(--mw-border);
+    border-radius: calc(var(--mw-radius) + 4px);
+    box-shadow: 0 24px 64px -12px rgba(0, 0, 0, 0.36), 0 6px 14px -4px rgba(0, 0, 0, 0.14);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    transform-origin: bottom right;
+    animation: mwFabIn 0.14s ease-out;
+  }
+  @keyframes mwFabIn {
+    from { opacity: 0; transform: translateY(6px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .mw-theme-fab.is-open .mw-theme-fab__panel { display: flex; }
+
+  .mw-theme-fab__head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.625rem 0.875rem;
+    border-bottom: 1px solid var(--mw-border);
+    font-family: var(--mw-mono-font);
+    font-size: 0.66rem;
+    color: var(--mw-text-muted);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    flex-shrink: 0;
+  }
+  .mw-theme-fab__close {
+    width: 22px; height: 22px;
+    display: grid; place-items: center;
+    background: transparent; border: none;
+    color: var(--mw-text-muted); cursor: pointer;
+    border-radius: 4px; font-size: 1.1rem; line-height: 1;
+  }
+  .mw-theme-fab__close:hover { background: var(--mw-surface-2); color: var(--mw-text); }
+
+  .mw-theme-fab__list {
+    overflow-y: auto; overflow-x: hidden;
+    padding: 0.375rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--mw-border) transparent;
+  }
+  .mw-theme-fab__list::-webkit-scrollbar { width: 6px; }
+  .mw-theme-fab__list::-webkit-scrollbar-thumb { background: var(--mw-border); border-radius: 4px; }
+
+  .mw-theme-fab__group {
+    padding: 0.5rem 0.625rem 0.25rem;
+    font-family: var(--mw-mono-font);
+    font-size: 0.64rem;
+    color: var(--mw-text-muted);
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .mw-theme-fab__item {
+    display: flex; align-items: center; gap: 0.625rem;
+    width: 100%;
+    padding: 0.45rem 0.5rem;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--mw-text);
+    border-radius: var(--mw-radius);
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    transition: background 0.1s ease, border-color 0.1s ease;
+  }
+  .mw-theme-fab__item:hover { background: var(--mw-surface-2); }
+  .mw-theme-fab__item.is-active {
+    background: var(--mw-surface-2);
+    border-color: color-mix(in srgb, var(--mw-accent) 45%, transparent);
+  }
+  .mw-theme-fab__item-swatch {
+    display: flex; flex-shrink: 0;
+    width: 40px; height: 24px;
+    border-radius: 4px; overflow: hidden;
+    border: 1px solid var(--mw-border);
+  }
+  .mw-theme-fab__item-swatch span { flex: 1; height: 100%; }
+  .mw-theme-fab__item-body {
+    flex: 1; min-width: 0;
+    display: flex; flex-direction: column; gap: 1px;
+  }
+  .mw-theme-fab__item-name {
+    font-size: 0.78rem; font-weight: 600;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .mw-theme-fab__item-brand {
+    font-size: 0.66rem;
+    font-family: var(--mw-mono-font);
+    color: var(--mw-text-muted);
+    letter-spacing: 0.02em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .mw-theme-fab__item-idx {
+    flex-shrink: 0;
+    font-size: 0.66rem;
+    color: var(--mw-text-muted);
+    font-family: var(--mw-mono-font);
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 480px) {
+    .mw-theme-fab { right: 0.875rem; bottom: 0.875rem; }
+    .mw-theme-fab__panel { width: calc(100vw - 1.75rem); }
+    .mw-theme-fab__label { max-width: 100px; }
   }
 
   .hero-glow {
@@ -945,48 +1083,6 @@
       <a href="https://github.com/m1kapp/maging" target="_blank" rel="noopener" class="nav-link" aria-label="GitHub" title="GitHub">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px;"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.4 3-.405 1.02.005 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
       </a>
-      <span class="mw-muted text-xs mx-2" style="opacity: 0.4;">|</span>
-      <select class="pill" id="theme-select" aria-label="Theme">
-        <optgroup label="Light">
-          <option value="claude" selected>테라코타 크림 inspired by Claude</option>
-          <option value="linear">인디고 미니멀 inspired by Linear</option>
-          <option value="stripe">페이먼트 퍼플 inspired by Stripe</option>
-          <option value="notion">웜 오프화이트 inspired by Notion</option>
-          <option value="airbnb">코랄 라운드 inspired by Airbnb</option>
-          <option value="linkedin">프로페셔널 블루 inspired by LinkedIn</option>
-          <option value="instagram">비비드 그라디언트 inspired by Instagram</option>
-          <option value="youtube">시그니처 레드 inspired by YouTube</option>
-          <option value="reddit">커뮤니티 오렌지 inspired by Reddit</option>
-          <option value="medium">에디토리얼 세리프 inspired by Medium</option>
-          <option value="apple">시스템 블루 inspired by Apple</option>
-          <option value="duolingo">오울 그린 inspired by Duolingo</option>
-          <option value="tiffany">로빈스에그 블루 inspired by Tiffany</option>
-          <option value="mailchimp">카벤디시 옐로 inspired by Mailchimp</option>
-          <option value="tmobile">시그니처 마젠타 inspired by T-Mobile</option>
-          <option value="fedex">퍼플 오렌지 inspired by FedEx</option>
-          <option value="hermes">럭셔리 크림 inspired by Hermès</option>
-          <option value="barbie">파스텔 핑크 inspired by Barbie</option>
-        </optgroup>
-        <optgroup label="Dark">
-          <option value="vercel">퓨어 미니멀 inspired by Vercel</option>
-          <option value="github">딤드 다크 inspired by GitHub</option>
-          <option value="x">샤프 모노 inspired by X</option>
-          <option value="slack">다크 오버진 inspired by Slack</option>
-          <option value="discord">블러플 inspired by Discord</option>
-          <option value="openai">AI 틸 inspired by OpenAI</option>
-          <option value="spotify">네온 그린 inspired by Spotify</option>
-          <option value="twitch">게이밍 퍼플 inspired by Twitch</option>
-          <option value="netflix">시네마틱 레드 inspired by Netflix</option>
-          <option value="figma">멀티 로고 컬러 inspired by Figma</option>
-          <option value="amazon">마켓 네이비 inspired by Amazon</option>
-          <option value="adobe">크리에이티브 레드 inspired by Adobe</option>
-          <option value="bloomberg">터미널 앰버 inspired by Bloomberg</option>
-          <option value="ups">풀먼 브라운 inspired by UPS</option>
-          <option value="heineken">보틀 그린 inspired by Heineken</option>
-          <option value="nasa">웜 블루 inspired by NASA</option>
-          <option value="deere">트랙터 그린 inspired by John Deere</option>
-        </optgroup>
-      </select>
     </div>
   </div>
 </nav>
@@ -1735,14 +1831,165 @@ Maging.setTheme('bloomberg');
 
 <script>
 // ============================================================
-// Theme switcher (select)
+// THEMES — ordered mainstream → distinctive (← 대중적 ··· 독창적 →)
 // ============================================================
-(function () {
-  var sel = document.getElementById('theme-select');
-  if (!sel) return;
-  sel.addEventListener('change', function () {
-    Maging.setTheme(sel.value);
+var THEMES = [
+  { value: 'notion',    brand: 'Notion',     desc: '웜 오프화이트',        accent: '#37352f', accent2: '#2eaadc', bg: '#ffffff', warning: '#cb912f', danger: '#d44c47' },
+  { value: 'vercel',    brand: 'Vercel',     desc: '퓨어 미니멀',          accent: '#ffffff', accent2: '#7928ca', bg: '#000000', warning: '#f5a623', danger: '#ff0080' },
+  { value: 'linear',    brand: 'Linear',     desc: '인디고 미니멀',        accent: '#5e6ad2', accent2: '#a78bfa', bg: '#fcfcfd', warning: '#f2994a', danger: '#eb5757' },
+  { value: 'github',    brand: 'GitHub',     desc: '딤드 다크',            accent: '#58a6ff', accent2: '#a371f7', bg: '#0d1117', warning: '#d29922', danger: '#f85149' },
+  { value: 'apple',     brand: 'Apple',      desc: '시스템 블루',          accent: '#007aff', accent2: '#5ac8fa', bg: '#f5f5f7', warning: '#ff9500', danger: '#ff3b30' },
+  { value: 'stripe',    brand: 'Stripe',     desc: '페이먼트 퍼플',        accent: '#635bff', accent2: '#00d4ff', bg: '#f6f9fc', warning: '#f5a623', danger: '#cd3d64' },
+  { value: 'linkedin',  brand: 'LinkedIn',   desc: '프로페셔널 블루',      accent: '#0a66c2', accent2: '#378fe9', bg: '#f3f2ef', warning: '#e7a33e', danger: '#cc1016' },
+  { value: 'x',         brand: 'X',          desc: '샤프 모노',            accent: '#1d9bf0', accent2: '#f91880', bg: '#000000', warning: '#ffd400', danger: '#f4212e' },
+  { value: 'medium',    brand: 'Medium',     desc: '에디토리얼 세리프',    accent: '#1a8917', accent2: '#242424', bg: '#ffffff', warning: '#b5a642', danger: '#c94a4a' },
+  { value: 'tiffany',   brand: 'Tiffany',    desc: '로빈스에그 블루',      accent: '#0abab5', accent2: '#c9a86c', bg: '#f2f9f8', warning: '#d4a84b', danger: '#c85a5a' },
+  { value: 'openai',    brand: 'OpenAI',     desc: 'AI 틸',                accent: '#00a67e', accent2: '#ab68ff', bg: '#202123', warning: '#f59e0b', danger: '#ef4146' },
+  { value: 'discord',   brand: 'Discord',    desc: '블러플',               accent: '#5865f2', accent2: '#eb459e', bg: '#313338', warning: '#f0b232', danger: '#f23f42' },
+  { value: 'figma',     brand: 'Figma',      desc: '멀티 로고 컬러',       accent: '#ff3737', accent2: '#874fff', bg: '#1e1e1e', warning: '#ff7237', danger: '#ff3737' },
+  { value: 'amazon',    brand: 'Amazon',     desc: '마켓 네이비',          accent: '#ff9900', accent2: '#146eb4', bg: '#131a22', warning: '#ff9900', danger: '#b12704' },
+  { value: 'airbnb',    brand: 'Airbnb',     desc: '코랄 라운드',          accent: '#ff5a5f', accent2: '#00a699', bg: '#ffffff', warning: '#fc642d', danger: '#c13515' },
+  { value: 'adobe',     brand: 'Adobe',      desc: '크리에이티브 레드',    accent: '#fa0c00', accent2: '#ed1c24', bg: '#1d1d1d', warning: '#ffd000', danger: '#fa0c00' },
+  { value: 'youtube',   brand: 'YouTube',    desc: '시그니처 레드',        accent: '#ff0000', accent2: '#065fd4', bg: '#ffffff', warning: '#e3a01e', danger: '#cc0000' },
+  { value: 'netflix',   brand: 'Netflix',    desc: '시네마틱 레드',        accent: '#e50914', accent2: '#b20710', bg: '#000000', warning: '#ffd700', danger: '#831010' },
+  { value: 'reddit',    brand: 'Reddit',     desc: '커뮤니티 오렌지',      accent: '#ff4500', accent2: '#0079d3', bg: '#ffffff', warning: '#ffb000', danger: '#ea0027' },
+  { value: 'twitch',    brand: 'Twitch',     desc: '게이밍 퍼플',          accent: '#9146ff', accent2: '#bf94ff', bg: '#0e0e10', warning: '#ffc70b', danger: '#eb0400' },
+  { value: 'duolingo',  brand: 'Duolingo',   desc: '오울 그린',            accent: '#58cc02', accent2: '#1cb0f6', bg: '#fffdf7', warning: '#ffc800', danger: '#ff4b4b' },
+  { value: 'spotify',   brand: 'Spotify',    desc: '네온 그린',            accent: '#1db954', accent2: '#1ed760', bg: '#121212', warning: '#ffc83d', danger: '#e22134' },
+  { value: 'tmobile',   brand: 'T-Mobile',   desc: '시그니처 마젠타',      accent: '#e20074', accent2: '#9b0056', bg: '#ffffff', warning: '#f9a825', danger: '#d9001b' },
+  { value: 'mailchimp', brand: 'Mailchimp',  desc: '카벤디시 옐로',        accent: '#ffe01b', accent2: '#007c89', bg: '#fffaeb', warning: '#e89c2a', danger: '#e8515f' },
+  { value: 'fedex',     brand: 'FedEx',      desc: '퍼플 오렌지',          accent: '#ff6600', accent2: '#4d148c', bg: '#ffffff', warning: '#ff6600', danger: '#c62828' },
+  { value: 'claude',    brand: 'Claude',     desc: '테라코타 크림',        accent: '#da7756', accent2: '#6a9bcc', bg: '#faf9f5', warning: '#d4a037', danger: '#c25e5e' },
+  { value: 'instagram', brand: 'Instagram',  desc: '비비드 그라디언트',    accent: '#e1306c', accent2: '#f77737', bg: '#fafafa', warning: '#fcaf45', danger: '#fd1d1d' },
+  { value: 'bloomberg', brand: 'Bloomberg',  desc: '터미널 앰버',          accent: '#ffa028', accent2: '#f39f41', bg: '#0a0a0a', warning: '#ffd23f', danger: '#ff4c4c' },
+  { value: 'slack',     brand: 'Slack',      desc: '다크 오버진',          accent: '#ecb22e', accent2: '#36c5f0', bg: '#3f0e40', warning: '#ecb22e', danger: '#e01e5a' },
+  { value: 'nasa',      brand: 'NASA',       desc: '웜 블루',              accent: '#fc3d21', accent2: '#ffffff', bg: '#0b3d91', warning: '#ffc107', danger: '#fc3d21' },
+  { value: 'heineken',  brand: 'Heineken',   desc: '보틀 그린',            accent: '#e10012', accent2: '#ffd700', bg: '#0a3d22', warning: '#ffd700', danger: '#e10012' },
+  { value: 'deere',     brand: 'John Deere', desc: '트랙터 그린',          accent: '#ffde00', accent2: '#ffffff', bg: '#2a6221', warning: '#ffde00', danger: '#d9534f' },
+  { value: 'hermes',    brand: 'Hermès',     desc: '럭셔리 크림',          accent: '#ff6900', accent2: '#3e2110', bg: '#fdf6ec', warning: '#d17a00', danger: '#ac1b2b' },
+  { value: 'ups',       brand: 'UPS',        desc: '풀먼 브라운',          accent: '#ffb500', accent2: '#c89d5a', bg: '#2b1810', warning: '#ffb500', danger: '#d9534f' },
+  { value: 'barbie',    brand: 'Barbie',     desc: '파스텔 핑크',          accent: '#e0218a', accent2: '#ffd700', bg: '#fff0f7', warning: '#ffa500', danger: '#8b0000' }
+];
+
+// ============================================================
+// Floating Theme Picker (bottom-right FAB → vertical panel)
+// ============================================================
+(function mountThemeFab() {
+  function isDark(t) {
+    var h = t.bg.replace('#', '');
+    if (h.length === 3) h = h.split('').map(function (c) { return c + c; }).join('');
+    var r = parseInt(h.slice(0, 2), 16);
+    var g = parseInt(h.slice(2, 4), 16);
+    var b = parseInt(h.slice(4, 6), 16);
+    return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
+  }
+
+  var fab = document.createElement('div');
+  fab.className = 'mw-theme-fab';
+  fab.innerHTML =
+    '<button type="button" class="mw-theme-fab__btn" aria-expanded="false" aria-label="테마 선택">' +
+      '<span class="mw-theme-fab__swatches" aria-hidden="true">' +
+        '<span class="mw-theme-fab__swatch" data-swatch="accent"></span>' +
+        '<span class="mw-theme-fab__swatch" data-swatch="accent2"></span>' +
+        '<span class="mw-theme-fab__swatch" data-swatch="bg"></span>' +
+      '</span>' +
+      '<span class="mw-theme-fab__label">Theme</span>' +
+      '<svg class="mw-theme-fab__caret" viewBox="0 0 10 10" fill="none" aria-hidden="true">' +
+        '<path d="M2 4l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '</svg>' +
+    '</button>' +
+    '<div class="mw-theme-fab__panel" role="dialog" aria-label="테마 목록">' +
+      '<div class="mw-theme-fab__head">' +
+        '<span>Theme · 35</span>' +
+        '<button type="button" class="mw-theme-fab__close" aria-label="닫기">×</button>' +
+      '</div>' +
+      '<div class="mw-theme-fab__list"></div>' +
+    '</div>';
+  document.body.appendChild(fab);
+
+  var btn = fab.querySelector('.mw-theme-fab__btn');
+  var list = fab.querySelector('.mw-theme-fab__list');
+  var closeBtn = fab.querySelector('.mw-theme-fab__close');
+  var label = fab.querySelector('.mw-theme-fab__label');
+  var swAccent = fab.querySelector('[data-swatch="accent"]');
+  var swAccent2 = fab.querySelector('[data-swatch="accent2"]');
+  var swBg = fab.querySelector('[data-swatch="bg"]');
+
+  function current() { return document.documentElement.getAttribute('data-theme') || 'claude'; }
+  function itemHtml(t, i) {
+    var active = t.value === current() ? ' is-active' : '';
+    return '<button type="button" class="mw-theme-fab__item' + active + '" data-theme="' + t.value + '">' +
+      '<span class="mw-theme-fab__item-swatch">' +
+        '<span style="background:' + t.bg + '"></span>' +
+        '<span style="background:' + t.accent + '"></span>' +
+        '<span style="background:' + t.accent2 + '"></span>' +
+        '<span style="background:' + t.warning + '"></span>' +
+        '<span style="background:' + t.danger + '"></span>' +
+      '</span>' +
+      '<span class="mw-theme-fab__item-body">' +
+        '<span class="mw-theme-fab__item-name">' + t.desc + '</span>' +
+        '<span class="mw-theme-fab__item-brand">inspired by ' + t.brand + '</span>' +
+      '</span>' +
+      '<span class="mw-theme-fab__item-idx">' + String(i).padStart(2, '0') + '</span>' +
+    '</button>';
+  }
+  function render() {
+    var lights = [], darks = [];
+    THEMES.forEach(function (t) { (isDark(t) ? darks : lights).push(t); });
+    var i = 0, html = '';
+    html += '<div class="mw-theme-fab__group">Light · ' + lights.length + '</div>';
+    lights.forEach(function (t) { i++; html += itemHtml(t, i); });
+    html += '<div class="mw-theme-fab__group">Dark · ' + darks.length + '</div>';
+    darks.forEach(function (t) { i++; html += itemHtml(t, i); });
+    list.innerHTML = html;
+  }
+  function syncButton() {
+    var t = THEMES.find(function (x) { return x.value === current(); });
+    if (!t) return;
+    swAccent.style.background = t.accent;
+    swAccent2.style.background = t.accent2;
+    swBg.style.background = t.bg;
+    label.textContent = t.brand;
+  }
+  function syncActive() {
+    var cur = current();
+    list.querySelectorAll('[data-theme]').forEach(function (el) {
+      el.classList.toggle('is-active', el.dataset.theme === cur);
+    });
+  }
+  function open() {
+    fab.classList.add('is-open');
+    btn.setAttribute('aria-expanded', 'true');
+    var active = list.querySelector('.is-active');
+    if (active) active.scrollIntoView({ block: 'nearest' });
+  }
+  function close() {
+    fab.classList.remove('is-open');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+
+  btn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    fab.classList.contains('is-open') ? close() : open();
   });
+  closeBtn.addEventListener('click', function (e) { e.stopPropagation(); close(); });
+  list.addEventListener('click', function (e) {
+    var item = e.target.closest('[data-theme]');
+    if (!item) return;
+    Maging.setTheme(item.dataset.theme);
+  });
+  document.addEventListener('click', function (e) {
+    if (!fab.contains(e.target)) close();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') close();
+  });
+
+  new MutationObserver(function () { syncButton(); syncActive(); })
+    .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  render();
+  syncButton();
 })();
 
 // ============================================================
