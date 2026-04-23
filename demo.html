@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
 <style>
   .pill {
@@ -1118,6 +1118,10 @@ var THEMES = [
     btn.setAttribute('aria-expanded', 'false');
   }
 
+  function setTheme(value) {
+    if (window.Maging && window.Maging.setTheme) window.Maging.setTheme(value);
+  }
+
   btn.addEventListener('click', function (e) {
     e.stopPropagation();
     fab.classList.contains('is-open') ? close() : open();
@@ -1126,7 +1130,7 @@ var THEMES = [
   list.addEventListener('click', function (e) {
     var item = e.target.closest('[data-theme]');
     if (!item) return;
-    Maging.setTheme(item.dataset.theme);
+    setTheme(item.dataset.theme);
   });
   tabs.forEach(function (t) {
     t.addEventListener('click', function (e) {
@@ -1146,12 +1150,24 @@ var THEMES = [
   new MutationObserver(function () { syncButton(); syncActive(); })
     .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
-  // Random theme on page load (each reload shows off a different brand).
-  var rnd = THEMES[Math.floor(Math.random() * THEMES.length)];
-  if (window.Maging && Maging.setTheme) Maging.setTheme(rnd.value);
-
   render();
   syncButton();
+
+  // Random theme on page load — deferred until Maging is available.
+  function pickRandom() {
+    var rnd = THEMES[Math.floor(Math.random() * THEMES.length)];
+    setTheme(rnd.value);
+  }
+  if (window.Maging && window.Maging.setTheme) {
+    pickRandom();
+  } else {
+    window.addEventListener('maging:ready', pickRandom, { once: true });
+    var tries = 0;
+    var poll = setInterval(function () {
+      if (window.Maging && window.Maging.setTheme) { clearInterval(poll); pickRandom(); }
+      else if (++tries > 50) clearInterval(poll);
+    }, 100);
+  }
 })();
 
 // ============================================================
