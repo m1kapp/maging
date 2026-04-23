@@ -44,6 +44,18 @@
     border-radius: calc(var(--mw-radius) * 0.6); transition: color 120ms, background 120ms;
   }
   .stack-nav__link:hover { color: var(--mw-text); background: var(--mw-surface-2); }
+  .stack-nav__sections { display: flex; gap: 0.125rem; }
+  .stack-nav__sec {
+    padding: 0.35rem 0.6rem; font-size: 0.75rem; color: var(--mw-text-muted);
+    border-radius: calc(var(--mw-radius) * 0.6); transition: color 140ms, background 140ms;
+    text-decoration: none; cursor: pointer;
+  }
+  .stack-nav__sec:hover { color: var(--mw-text); background: var(--mw-surface-2); }
+  .stack-nav__sec.is-active {
+    color: var(--mw-accent);
+    background: color-mix(in srgb, var(--mw-accent) 10%, transparent);
+    font-weight: 600;
+  }
 
   /* Section dividers */
   .stack-section { padding-top: 2.5rem; margin-top: 2.5rem; border-top: 1px solid var(--mw-border); }
@@ -90,6 +102,15 @@
       <span class="stack-nav__name">maging</span>
       <span class="stack-nav__page">/ stack</span>
     </a>
+    <div class="stack-nav__sections">
+      <a href="#section-01" class="stack-nav__sec" data-sec="section-01">Fonts</a>
+      <a href="#section-02" class="stack-nav__sec" data-sec="section-02">Libraries</a>
+      <a href="#section-03" class="stack-nav__sec" data-sec="section-03">Assets</a>
+      <a href="#section-04" class="stack-nav__sec" data-sec="section-04">Themes</a>
+      <a href="#section-05" class="stack-nav__sec" data-sec="section-05">Widgets</a>
+      <a href="#section-06" class="stack-nav__sec" data-sec="section-06">Build</a>
+      <a href="#section-07" class="stack-nav__sec" data-sec="section-07">Releases</a>
+    </div>
     <div class="stack-nav__links">
       <a href="./index.html" class="stack-nav__link">Home</a>
       <a href="./demo.html" class="stack-nav__link">Demo</a>
@@ -335,41 +356,41 @@ window.addEventListener('maging:ready', function () {
   });
 
   var THEMES = [
-    { v:'claude',    name:'Claude',     accent:'#da7756' },
-    { v:'linear',    name:'Linear',     accent:'#5e6ad2' },
-    { v:'notion',    name:'Notion',     accent:'#37352f' },
-    { v:'stripe',    name:'Stripe',     accent:'#635bff' },
-    { v:'vercel',    name:'Vercel',     accent:'#000000' },
-    { v:'github',    name:'GitHub',     accent:'#58a6ff' },
-    { v:'apple',     name:'Apple',      accent:'#007aff' },
-    { v:'linkedin',  name:'LinkedIn',   accent:'#0a66c2' },
-    { v:'x',         name:'X',          accent:'#1d9bf0' },
-    { v:'openai',    name:'OpenAI',     accent:'#00a67e' },
-    { v:'discord',   name:'Discord',    accent:'#5865f2' },
-    { v:'figma',     name:'Figma',      accent:'#ff3737' },
-    { v:'amazon',    name:'Amazon',     accent:'#ff9900' },
-    { v:'airbnb',    name:'Airbnb',     accent:'#ff5a5f' },
-    { v:'adobe',     name:'Adobe',      accent:'#fa0c00' },
-    { v:'youtube',   name:'YouTube',    accent:'#ff0000' },
-    { v:'netflix',   name:'Netflix',    accent:'#e50914' },
-    { v:'reddit',    name:'Reddit',     accent:'#ff4500' },
-    { v:'twitch',    name:'Twitch',     accent:'#9146ff' },
-    { v:'duolingo',  name:'Duolingo',   accent:'#58cc02' },
-    { v:'spotify',   name:'Spotify',    accent:'#1db954' },
-    { v:'slack',     name:'Slack',      accent:'#ecb22e' },
-    { v:'tmobile',   name:'T-Mobile',   accent:'#e20074' },
-    { v:'mailchimp', name:'Mailchimp',  accent:'#ffe01b' },
-    { v:'fedex',     name:'FedEx',      accent:'#ff6600' },
-    { v:'instagram', name:'Instagram',  accent:'#e1306c' },
-    { v:'bloomberg', name:'Bloomberg',  accent:'#ffa028' },
-    { v:'medium',    name:'Medium',     accent:'#1a8917' },
-    { v:'tiffany',   name:'Tiffany',    accent:'#0abab5' },
-    { v:'hermes',    name:'Hermès',     accent:'#ff6900' },
-    { v:'nasa',      name:'NASA',       accent:'#fc3d21' },
-    { v:'heineken',  name:'Heineken',   accent:'#e10012' },
-    { v:'deere',     name:'John Deere', accent:'#ffde00' },
-    { v:'ups',       name:'UPS',        accent:'#ffb500' },
-    { v:'barbie',    name:'Barbie',     accent:'#e0218a' },
+    { v:'claude',    name:'Claude',     accent:'#da7756', bg:'#f5f0e8', dark:false },
+    { v:'linear',    name:'Linear',     accent:'#5e6ad2', bg:'#ffffff', dark:false },
+    { v:'notion',    name:'Notion',     accent:'#37352f', bg:'#ffffff', dark:false },
+    { v:'stripe',    name:'Stripe',     accent:'#635bff', bg:'#ffffff', dark:false },
+    { v:'vercel',    name:'Vercel',     accent:'#ffffff', bg:'#000000', dark:true  },
+    { v:'github',    name:'GitHub',     accent:'#58a6ff', bg:'#0d1117', dark:true  },
+    { v:'apple',     name:'Apple',      accent:'#007aff', bg:'#f5f5f7', dark:false },
+    { v:'linkedin',  name:'LinkedIn',   accent:'#0a66c2', bg:'#f3f2ef', dark:false },
+    { v:'x',         name:'X',          accent:'#1d9bf0', bg:'#000000', dark:true  },
+    { v:'openai',    name:'OpenAI',     accent:'#00a67e', bg:'#0d0d0d', dark:true  },
+    { v:'discord',   name:'Discord',    accent:'#5865f2', bg:'#313338', dark:true  },
+    { v:'figma',     name:'Figma',      accent:'#ff3737', bg:'#1e1e1e', dark:true  },
+    { v:'amazon',    name:'Amazon',     accent:'#ff9900', bg:'#131921', dark:true  },
+    { v:'airbnb',    name:'Airbnb',     accent:'#ff5a5f', bg:'#ffffff', dark:false },
+    { v:'adobe',     name:'Adobe',      accent:'#fa0c00', bg:'#1c1c1c', dark:true  },
+    { v:'youtube',   name:'YouTube',    accent:'#ff0000', bg:'#ffffff', dark:false },
+    { v:'netflix',   name:'Netflix',    accent:'#e50914', bg:'#141414', dark:true  },
+    { v:'reddit',    name:'Reddit',     accent:'#ff4500', bg:'#ffffff', dark:false },
+    { v:'twitch',    name:'Twitch',     accent:'#9146ff', bg:'#0e0e10', dark:true  },
+    { v:'duolingo',  name:'Duolingo',   accent:'#58cc02', bg:'#ffffff', dark:false },
+    { v:'spotify',   name:'Spotify',    accent:'#1db954', bg:'#121212', dark:true  },
+    { v:'slack',     name:'Slack',      accent:'#ecb22e', bg:'#3f0e40', dark:true  },
+    { v:'tmobile',   name:'T-Mobile',   accent:'#e20074', bg:'#ffffff', dark:false },
+    { v:'mailchimp', name:'Mailchimp',  accent:'#ffe01b', bg:'#fff3d3', dark:false },
+    { v:'fedex',     name:'FedEx',      accent:'#ff6600', bg:'#ffffff', dark:false },
+    { v:'instagram', name:'Instagram',  accent:'#e1306c', bg:'#ffffff', dark:false },
+    { v:'bloomberg', name:'Bloomberg',  accent:'#ffa028', bg:'#000000', dark:true  },
+    { v:'medium',    name:'Medium',     accent:'#1a8917', bg:'#ffffff', dark:false },
+    { v:'tiffany',   name:'Tiffany',    accent:'#0abab5', bg:'#ffffff', dark:false },
+    { v:'hermes',    name:'Hermès',     accent:'#ff6900', bg:'#f8f2e6', dark:false },
+    { v:'nasa',      name:'NASA',       accent:'#fc3d21', bg:'#0b3d91', dark:true  },
+    { v:'heineken',  name:'Heineken',   accent:'#e10012', bg:'#143d1e', dark:true  },
+    { v:'deere',     name:'John Deere', accent:'#ffde00', bg:'#1a3a1a', dark:true  },
+    { v:'ups',       name:'UPS',        accent:'#ffb500', bg:'#351c15', dark:true  },
+    { v:'barbie',    name:'Barbie',     accent:'#e0218a', bg:'#fce4ec', dark:false },
   ];
 
   var currentTheme = document.documentElement.getAttribute('data-theme') || 'claude';
@@ -381,18 +402,26 @@ window.addEventListener('maging:ready', function () {
     if (note) note.textContent = '현재 테마: ' + v;
     document.querySelectorAll('.theme-item').forEach(function (el) {
       var active = el.dataset.theme === v;
+      var isDark = el.dataset.dark === 'true';
+      var textColor = isDark ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.75)';
       el.classList.toggle('is-active', active);
-      el.style.borderColor = active ? el.dataset.accent : '';
-      el.style.color       = active ? el.dataset.accent : '';
+      el.style.borderColor = active ? el.dataset.accent : (isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.1)');
+      el.style.borderWidth = active ? '2px' : '1px';
+      el.style.boxShadow   = active ? '0 0 0 3px ' + el.dataset.accent + '40' : '';
+      el.style.color       = textColor;
     });
   }
 
   var container = document.getElementById('theme-grid');
   container.innerHTML = THEMES.map(function (t) {
     var active = t.v === currentTheme;
+    var textColor = t.dark ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.75)';
+    var borderColor = active ? t.accent : (t.dark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.1)');
+    var style = 'background:' + t.bg + ';color:' + textColor + ';border-color:' + borderColor + ';';
+    if (active) style += 'border-width:2px;box-shadow:0 0 0 3px ' + t.accent + '40;';
     return '<button class="theme-item' + (active ? ' is-active' : '') + '" ' +
-      'data-theme="' + t.v + '" data-accent="' + t.accent + '" ' +
-      'style="' + (active ? 'border-color:' + t.accent + ';color:' + t.accent + ';border-width:2px;' : '') + '">' +
+      'data-theme="' + t.v + '" data-accent="' + t.accent + '" data-dark="' + t.dark + '" data-bg="' + t.bg + '" ' +
+      'style="' + style + '">' +
       '<span class="theme-item__swatch" style="background:' + t.accent + '"></span>' +
       '<span class="theme-item__name">' + t.name + '</span>' +
       '</button>';
@@ -402,6 +431,21 @@ window.addEventListener('maging:ready', function () {
     var btn = e.target.closest('.theme-item');
     if (btn) applyTheme(btn.dataset.theme, btn.dataset.accent);
   });
+
+  // Scroll-based section highlighting
+  var secLinks = document.querySelectorAll('.stack-nav__sec');
+  var secTargets = document.querySelectorAll('.stack-section');
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      var id = entry.target.querySelector('[id^="section-"]');
+      if (!id) return;
+      secLinks.forEach(function(l) {
+        l.classList.toggle('is-active', l.dataset.sec === id.id);
+      });
+    });
+  }, { rootMargin: '-10% 0px -60% 0px', threshold: 0 });
+  secTargets.forEach(function(s) { io.observe(s); });
 });
 </script>
 

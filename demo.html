@@ -496,18 +496,38 @@
 
 <body class="mw-themed mw-scanlines">
 
-<nav style="background: var(--mw-surface); border-bottom: 1px solid var(--mw-border);">
-  <div class="max-w-[1400px] mx-auto flex items-center justify-between px-6 py-4 flex-wrap gap-4">
+<style>
+.demo-sec {
+  padding: 0.3rem 0.55rem; font-size: 0.68rem; font-weight: 600;
+  letter-spacing: 0.04em; color: var(--mw-text-muted);
+  border-radius: calc(var(--mw-radius) * 0.5);
+  text-decoration: none; transition: color 140ms, background 140ms;
+}
+.demo-sec:hover { color: var(--mw-text); background: var(--mw-surface-2); }
+.demo-sec.is-active {
+  color: var(--mw-accent);
+  background: color-mix(in srgb, var(--mw-accent) 10%, transparent);
+}
+</style>
+<nav id="demo-nav" style="position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--mw-surface) 88%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid color-mix(in srgb,var(--mw-border) 70%,transparent);">
+  <div class="max-w-[1400px] mx-auto flex items-center justify-between px-6 flex-wrap gap-3" style="height:52px;">
     <div class="flex items-center gap-3">
-      <div style="width: 32px; height: 32px; background: var(--mw-accent); color: #fff; display:flex; align-items:center; justify-content:center; font-weight:700; border-radius: var(--mw-radius);">A</div>
+      <div style="width:28px;height:28px;background:var(--mw-accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;border-radius:var(--mw-radius);font-size:0.8rem;" id="nav-logo">A</div>
       <div>
-        <div class="text-sm font-semibold" id="nav-company">ACME KOREA</div>
-        <div class="text-xs mw-muted" id="nav-sub">통합 운영 대시보드</div>
+        <div style="font-size:0.82rem;font-weight:600;line-height:1.2;" id="nav-company">ACME KOREA</div>
+        <div style="font-size:0.68rem;color:var(--mw-text-muted);line-height:1.2;" id="nav-sub">통합 운영 대시보드</div>
       </div>
     </div>
-    <div class="flex items-center gap-2 flex-wrap">
-      <a href="index.html" class="pill">← 랜딩</a>
+    <div style="display:flex;gap:2px;">
+      <a href="#sec-1" class="demo-sec" data-sec="sec-1">AT A GLANCE</a>
+      <a href="#sec-2" class="demo-sec" data-sec="sec-2">REAL-TIME</a>
+      <a href="#sec-3" class="demo-sec" data-sec="sec-3">TRENDS</a>
+      <a href="#sec-4" class="demo-sec" data-sec="sec-4">DEEP-DIVE</a>
+      <a href="#sec-5" class="demo-sec" data-sec="sec-5">INSIGHTS</a>
+      <a href="#sec-6" class="demo-sec" data-sec="sec-6">CALENDAR</a>
+      <a href="#sec-7" class="demo-sec" data-sec="sec-7">SYSTEM</a>
     </div>
+    <a href="index.html" style="font-size:0.75rem;color:var(--mw-text-muted);text-decoration:none;">← 랜딩</a>
   </div>
 </nav>
 
@@ -529,7 +549,7 @@
   <!-- ============================================ -->
   <!-- SECTION 1: AT A GLANCE — 한눈에 보는 현재    -->
   <!-- ============================================ -->
-  <section>
+  <section id="sec-1">
     <div class="section-hd">
       <div class="section-hd__left">
         <div class="section-hd__kicker">01 · AT A GLANCE</div>
@@ -563,7 +583,7 @@
   <!-- ============================================ -->
   <!-- SECTION 2: REAL-TIME PULSE — 지금 무슨 일    -->
   <!-- ============================================ -->
-  <section class="mt-12">
+  <section id="sec-2" class="mt-12">
     <div class="section-hd">
       <div class="section-hd__left">
         <div class="section-hd__kicker">02 · REAL-TIME PULSE</div>
@@ -582,7 +602,7 @@
   <!-- ============================================ -->
   <!-- SECTION 3: TRENDS & MIX — 추세와 분포        -->
   <!-- ============================================ -->
-  <section class="mt-12">
+  <section id="sec-3" class="mt-12">
     <div class="section-hd">
       <div class="section-hd__left">
         <div class="section-hd__kicker">03 · TRENDS & MIX</div>
@@ -604,7 +624,7 @@
   <!-- ============================================ -->
   <!-- SECTION 4: DEEP-DIVE — 깊은 분석             -->
   <!-- ============================================ -->
-  <section class="mt-12">
+  <section id="sec-4" class="mt-12">
     <div class="section-hd">
       <div class="section-hd__left">
         <div class="section-hd__kicker">04 · DEEP-DIVE</div>
@@ -624,7 +644,7 @@
   <!-- ============================================ -->
   <!-- SECTION 5: CUSTOMER INSIGHTS — 고객 분석    -->
   <!-- ============================================ -->
-  <section class="mt-12">
+  <section id="sec-5" class="mt-12">
     <div class="section-hd">
       <div class="section-hd__left">
         <div class="section-hd__kicker">05 · CUSTOMER INSIGHTS</div>
@@ -648,7 +668,7 @@
   <!-- ============================================ -->
   <!-- SECTION 6: PROJECT & CALENDAR — 운영 일정    -->
   <!-- ============================================ -->
-  <section class="mt-12">
+  <section id="sec-6" class="mt-12">
     <div class="section-hd">
       <div class="section-hd__left">
         <div class="section-hd__kicker">06 · PROJECT &amp; CALENDAR</div>
@@ -670,7 +690,7 @@
   <!-- ============================================ -->
   <!-- SECTION 7: SYSTEM HEALTH — 인프라 상태       -->
   <!-- ============================================ -->
-  <section class="mt-12">
+  <section id="sec-7" class="mt-12">
     <div class="section-hd">
       <div class="section-hd__left">
         <div class="section-hd__kicker">07 · SYSTEM HEALTH</div>
@@ -985,7 +1005,17 @@ function renderDashboard(data) {
   }
 
   // ============ SECTION 1: AT A GLANCE ============
-  Maging.heroTile('#hero-tile', data.heroTile);
+  Maging.heroTile('#hero-tile', {
+    kicker: '이번 달 · Q2 2026',
+    value: '₩128억',
+    tagline: '전월 대비 8.3% 성장 — 분기 목표의 85% 달성. 12개월 연속 상승세를 이어가고 있습니다.',
+    stats: [
+      { label: '신규 계약', value: '127건' },
+      { label: '평균 거래액', value: '₩45M' },
+      { label: '활성 고객', value: '48,291' },
+      { label: 'NPS', value: '68' },
+    ],
+  });
   Maging.ringProgress('#ring-progress', data.ringProgress);
   Maging.metricChart('#metric-chart-revenue', {
     label: '월간 매출 추이', value: '₩128억', icon: '💎',
@@ -1183,6 +1213,19 @@ function renderDashboard(data) {
   });
 
   setupInspector();
+
+  // Scroll-based section highlighting
+  var demoSecLinks = document.querySelectorAll('.demo-sec');
+  var demoSections = document.querySelectorAll('section[id^="sec-"]');
+  var demoIO = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      demoSecLinks.forEach(function(l) {
+        l.classList.toggle('is-active', l.dataset.sec === entry.target.id);
+      });
+    });
+  }, { rootMargin: '-10% 0px -60% 0px', threshold: 0 });
+  demoSections.forEach(function(s) { demoIO.observe(s); });
 }
 </script>
 

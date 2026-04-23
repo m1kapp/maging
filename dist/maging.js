@@ -841,111 +841,37 @@
     el = q(el);
     if (!el) return null;
     var data = Object.assign({
-      label: '', value: '', icon: '', context: '',
-      delta: null, deltaGoodWhen: 'positive',
-      sparkline: [], prev: null, target: null,
+      kicker: '', value: '', tagline: '', stats: [],
     }, config || {});
-    var chart = null;
-    var ro = null;
 
     function render() {
-      var c = getColors();
       el.classList.add('mw-card', 'mw-hero');
-      var deltaHTML = '';
-      if (data.delta != null && !isNaN(data.delta)) {
-        var goodWhenNeg = data.deltaGoodWhen === 'negative';
-        var good = goodWhenNeg ? data.delta < 0 : data.delta > 0;
-        var arrow = data.delta >= 0 ? '▲' : '▼';
-        deltaHTML = '<span class="mw-hero__delta mw-hero__delta--' + (good ? 'good' : 'bad') + '">' +
-          arrow + ' ' + Math.abs(Number(data.delta)).toFixed(1) + '%</span>';
+      var statsHTML = '';
+      if (data.stats && data.stats.length) {
+        statsHTML = '<div class="mw-hero__divider"></div><div class="mw-hero__stats">';
+        data.stats.forEach(function(s, i) {
+          if (i > 0) statsHTML += '<div class="mw-hero__stat-sep"></div>';
+          statsHTML +=
+            '<div class="mw-hero__stat">' +
+              '<div class="mw-hero__stat-label">' + escapeHTML(s.label) + '</div>' +
+              '<div class="mw-hero__stat-value">' + escapeHTML(s.value) + '</div>' +
+            '</div>';
+        });
+        statsHTML += '</div>';
       }
       el.innerHTML =
-        (data.icon ? '<div class="mw-hero__watermark">' + escapeHTML(data.icon) + '</div>' : '') +
-        '<div class="mw-hero__head">' +
-          '<div class="mw-hero__label-group">' +
-            (data.icon ? '<span class="mw-hero__icon">' + escapeHTML(data.icon) + '</span>' : '') +
-            '<span class="mw-hero__label">' + escapeHTML(data.label) + '</span>' +
-          '</div>' +
-          '<div class="mw-hero__value">' + escapeHTML(data.value) + '</div>' +
-          '<div class="mw-hero__meta">' +
-            (deltaHTML || '') +
-            (data.context ? '<span class="mw-hero__context">' + escapeHTML(data.context) + '</span>' : '') +
-          '</div>' +
-        '</div>' +
-        '<div class="mw-hero__spark"></div>';
-
-      if (chart) { chart.dispose(); chart = null; }
-      if (ro) { ro.disconnect(); ro = null; }
-      if (EC && data.sparkline && data.sparkline.length) {
-        var spark = el.querySelector('.mw-hero__spark');
-        chart = EC.init(spark, null, { renderer: 'svg' });
-        var allVals = data.sparkline.concat(data.prev || []);
-        if (data.target != null) allVals.push(data.target);
-        var yMin = Math.min.apply(null, allVals);
-        var yMax = Math.max.apply(null, allVals);
-        var pad = (yMax - yMin) * 0.18;
-        var series = [];
-        if (data.prev && data.prev.length) {
-          series.push({
-            type: 'line', smooth: 0.4, symbol: 'none', z: 1,
-            data: data.prev,
-            lineStyle: { color: c.muted, width: 1.5, type: 'dotted' },
-          });
-        }
-        var lastIdx = data.sparkline.length - 1;
-        var lastVal = data.sparkline[lastIdx];
-        series.push({
-          type: 'line', smooth: 0.4, symbol: 'none', z: 2,
-          data: data.sparkline,
-          lineStyle: { color: c.accent, width: 2.5 },
-          areaStyle: {
-            color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
-              colorStops: [
-                { offset: 0, color: c.accent + '55' },
-                { offset: 1, color: c.accent + '06' },
-              ] },
-          },
-          markPoint: {
-            symbol: 'circle', symbolSize: 8,
-            data: [{ coord: [lastIdx, lastVal] }],
-            itemStyle: { color: c.accent, borderColor: c.surface, borderWidth: 2 },
-            label: { show: false },
-          },
-          markLine: data.target != null ? {
-            silent: true, symbol: 'none', z: 5,
-            lineStyle: { color: c.accent, type: 'dashed', width: 1.5, opacity: 0.45 },
-            label: {
-              show: true, position: 'insideEndTop',
-              fontSize: 10, fontWeight: 600,
-              color: c.accent, opacity: 0.8,
-              formatter: '목표',
-            },
-            data: [{ yAxis: data.target }],
-          } : undefined,
-        });
-        chart.setOption({
-          grid: { top: 8, right: 0, bottom: 0, left: 0 },
-          xAxis: { type: 'category', show: false, data: data.sparkline.map(function (_, i) { return i; }) },
-          yAxis: { type: 'value', show: false, min: yMin - pad, max: yMax + pad },
-          series: series,
-        });
-        if (typeof ResizeObserver !== 'undefined') {
-          ro = new ResizeObserver(function () { if (chart) chart.resize(); });
-          ro.observe(spark);
-        }
-      }
+        '<div class="mw-hero__kicker">' + escapeHTML(data.kicker) + '</div>' +
+        '<div class="mw-hero__value">' + escapeHTML(data.value) + '</div>' +
+        (data.tagline ? '<div class="mw-hero__tagline">' + escapeHTML(data.tagline) + '</div>' : '') +
+        statsHTML;
     }
+
     render();
     var handle = {
       el: el, type: 'hero-tile',
       refresh: render,
-      update: function (newData) { data = Object.assign(data, newData || {}); render(); },
-      destroy: function () {
-        if (ro) ro.disconnect();
-        if (chart) chart.dispose();
-        el.innerHTML = '';
-        registry.delete(handle);
-      },
+      update: function(newData) { data = Object.assign(data, newData || {}); render(); },
+      destroy: function() { el.innerHTML = ''; registry.delete(handle); },
     };
     return register(handle);
   }

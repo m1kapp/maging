@@ -111,17 +111,13 @@ Hero number + labeled mini line chart. Shows current vs previous period with x/y
 **`heroTile`**
 ```js
 Maging.heroTile(sel, {
-  label, value,
-  delta?,           // number — MoM % change
-  deltaGoodWhen?,   // 'positive' (default) | 'negative'
-  sparkline?,       // number[] — current period trend line
-  prev?,            // number[] — previous period line (dotted, muted)
-  target?,          // number — horizontal dashed target line on chart
-  icon?,            // string — emoji shown inline with label
-  context?,         // string — small caption below delta
+  kicker?,   // string — small uppercase label e.g. '이번 달 · Q2 2026'
+  value,     // string — the hero number e.g. '₩128억'
+  tagline?,  // string — narrative sentence below the number
+  stats?,    // [{ label, value }] — 2–4 micro-stats below a divider
 })
 ```
-Large hero metric. `prev` overlays last period as a dotted comparison. `target` draws a dashed goal line.
+Landing-page style hero. Typography-first — no chart. Use for the single most important number on a dashboard.
 
 **`ringProgress`**
 ```js
