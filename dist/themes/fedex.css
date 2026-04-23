@@ -15,8 +15,8 @@
   --mw-warning: #ff6600;
   --mw-radius: 2px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
-  --mw-display-font: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 1px 3px rgb(77 20 140 / 0.08);
 }

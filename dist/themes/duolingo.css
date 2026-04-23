@@ -15,8 +15,8 @@
   --mw-warning: #ffc800;
   --mw-radius: 12px;
   --mw-border-w: 2px;
-  --mw-font: 'Nunito', 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Nunito', 'Inter', system-ui, sans-serif;
+  --mw-font: 'Nunito', 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Nunito', 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 4px 0 rgb(0 0 0 / 0.08);
 }

@@ -7,16 +7,38 @@
 
 ## Installation
 
-Add these three lines to any HTML file. No bundler required.
+**One-liner (recommended)** — auto-loads Pretendard + maging.css + Tailwind Play + ECharts + maging.js in correct order:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.0/dist/maging.css">
-<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.0/dist/maging.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.2/dist/maging-all.js"></script>
+<body class="mw-themed">
+```
+
+The script dispatches a `'maging:ready'` event on `window` once all dependencies are loaded. Mount widgets inside that listener (or `DOMContentLoaded` — whichever fires later).
+
+```js
+window.addEventListener('maging:ready', () => {
+  Maging.kpiCard('#el', { label: '매출', value: '₩128억', delta: 8.3 });
+});
+```
+
+Skip a default with data-attributes:
+```html
+<script src=".../maging-all.js" data-no-tailwind data-no-echarts></script>
+```
+
+**Manual install** (granular control, custom version pinning):
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.2/dist/maging.css">
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.2/dist/maging.js"></script>
 ```
 
 Set the theme on `<html data-theme="…">`. Wrap body with `<body class="mw-themed">` for base styling.
+
+**Pretendard Variable** is `@import`-ed inside `maging.css`, so Korean text renders consistently across platforms with no extra setup.
 
 ## Modes
 
@@ -120,10 +142,7 @@ Dashboard layouts use CSS Grid via Tailwind classes. Standard pattern:
 <html lang="ko" data-theme="claude">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.0/dist/maging.css">
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.0/dist/maging.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.2/dist/maging-all.js"></script>
 </head>
 <body class="mw-themed">
 <main class="max-w-[1280px] mx-auto p-6">
@@ -138,7 +157,9 @@ Dashboard layouts use CSS Grid via Tailwind classes. Standard pattern:
 </main>
 
 <script>
-window.addEventListener('DOMContentLoaded', () => {
+// 'maging:ready' fires when Pretendard, maging.css, Tailwind, ECharts, maging.js
+// are all loaded and ready. Safer than DOMContentLoaded for one-liner setup.
+window.addEventListener('maging:ready', () => {
   const kpis = [
     { label: '매출', value: '₩128억', delta: 8.3, sparkline: [420,445,430,468,490,510,548,580] },
     { label: 'MAU',  value: '42,180', delta: 5.1, sparkline: [38200,39100,40200,40800,41400,41900,42180] },

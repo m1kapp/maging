@@ -1,10 +1,11 @@
-/*! magicwiget v0.1.0 — Dashboard widgets for CDN | MIT
- *  12 SaaS brand themes: Claude · Linear · Vercel · Stripe · Notion · Figma
- *                        Spotify · Discord · GitHub · Netflix · Airbnb · Medium
+/*! maging v0.1.2 — AI Output Formatter | MIT
+ *  31 widgets · 35 brand themes · Pretendard Variable bundled for Korean glyphs.
  */
 
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css');
+
 /* ========================================================
-   THEME TOKENS — SaaS Brand Series
+   THEME TOKENS — Brand-Inspired (35)
    ======================================================== */
 
 /* :root default = Claude */
@@ -23,7 +24,7 @@
   --mw-warning: #d4a037;
   --mw-radius: 8px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-display-font: 'Playfair Display', 'Times New Roman', serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 4px 14px -4px rgb(139 119 97 / 0.15);
@@ -43,8 +44,8 @@
   --mw-warning: #f2994a;
   --mw-radius: 6px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.04);
 }
@@ -63,8 +64,8 @@
   --mw-warning: #f5a623;
   --mw-radius: 6px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 0 0 1px rgb(255 255 255 / 0.06);
 }
@@ -83,8 +84,8 @@
   --mw-warning: #f5a623;
   --mw-radius: 8px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 4px 12px -4px rgb(99 91 255 / 0.1);
 }
@@ -103,8 +104,8 @@
   --mw-warning: #cb912f;
   --mw-radius: 4px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 1px 3px 0 rgb(55 53 47 / 0.06);
 }
@@ -123,8 +124,8 @@
   --mw-warning: #ff7237;
   --mw-radius: 2px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 0 0 1px rgb(255 255 255 / 0.05);
 }
@@ -143,8 +144,8 @@
   --mw-warning: #ffc83d;
   --mw-radius: 8px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 4px 12px -4px rgb(29 185 84 / 0.15);
 }
@@ -163,8 +164,8 @@
   --mw-warning: #f0b232;
   --mw-radius: 4px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 4px 12px -4px rgb(88 101 242 / 0.18);
 }
@@ -183,8 +184,8 @@
   --mw-warning: #d29922;
   --mw-radius: 6px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 0 0 1px rgb(255 255 255 / 0.04);
 }
@@ -203,7 +204,7 @@
   --mw-warning: #ffd700;
   --mw-radius: 4px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-display-font: 'Playfair Display', 'Times New Roman', serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 8px 24px -8px rgb(229 9 20 / 0.3);
@@ -223,8 +224,8 @@
   --mw-warning: #fc642d;
   --mw-radius: 12px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 6px 20px -6px rgb(255 90 95 / 0.14);
 }
@@ -263,8 +264,8 @@
   --mw-warning: #ecb22e;
   --mw-radius: 6px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 4px 14px -4px rgb(63 14 64 / 0.3);
 }
@@ -283,8 +284,8 @@
   --mw-warning: #e7a33e;
   --mw-radius: 8px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 0 0 1px rgb(0 0 0 / 0.04);
 }
@@ -303,8 +304,8 @@
   --mw-warning: #ffd400;
   --mw-radius: 16px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 0 0 1px rgb(255 255 255 / 0.04);
 }
@@ -323,8 +324,8 @@
   --mw-warning: #fcaf45;
   --mw-radius: 12px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 4px 14px -4px rgb(225 48 108 / 0.18);
 }
@@ -343,8 +344,8 @@
   --mw-warning: #e3a01e;
   --mw-radius: 12px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 2px 8px -2px rgb(0 0 0 / 0.08);
 }
@@ -363,8 +364,8 @@
   --mw-warning: #ffb000;
   --mw-radius: 8px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 2px 6px -2px rgb(255 69 0 / 0.14);
 }
@@ -383,8 +384,8 @@
   --mw-warning: #ffc70b;
   --mw-radius: 4px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 4px 12px -4px rgb(145 70 255 / 0.22);
 }
@@ -403,8 +404,8 @@
   --mw-warning: #f59e0b;
   --mw-radius: 6px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 4px 12px -4px rgb(16 163 127 / 0.15);
 }
@@ -423,8 +424,8 @@
   --mw-warning: #ff9900;
   --mw-radius: 4px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 4px 14px -4px rgb(255 153 0 / 0.2);
 }
@@ -443,8 +444,8 @@
   --mw-warning: #ffd000;
   --mw-radius: 2px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 4px 14px -4px rgb(250 15 0 / 0.2);
 }
@@ -463,8 +464,8 @@
   --mw-warning: #ff9500;
   --mw-radius: 14px;
   --mw-border-w: 1px;
-  --mw-font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', system-ui, sans-serif;
-  --mw-display-font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
+  --mw-font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'SF Mono', ui-monospace, 'JetBrains Mono', monospace;
   --mw-shadow: 0 1px 3px rgb(0 0 0 / 0.04), 0 8px 24px -12px rgb(0 0 0 / 0.08);
 }
@@ -503,8 +504,8 @@
   --mw-warning: #ffc800;
   --mw-radius: 12px;
   --mw-border-w: 2px;
-  --mw-font: 'Nunito', 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Nunito', 'Inter', system-ui, sans-serif;
+  --mw-font: 'Nunito', 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Nunito', 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 4px 0 rgb(0 0 0 / 0.08);
 }
@@ -523,7 +524,7 @@
   --mw-warning: #d4a84b;
   --mw-radius: 4px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-display-font: 'Playfair Display', 'Libre Caslon Text', Georgia, serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 1px 2px rgb(10 186 181 / 0.08);
@@ -543,8 +544,8 @@
   --mw-warning: #e89c2a;
   --mw-radius: 10px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
-  --mw-display-font: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 2px 4px rgb(36 28 21 / 0.06);
 }
@@ -563,8 +564,8 @@
   --mw-warning: #f9a825;
   --mw-radius: 8px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
-  --mw-display-font: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 2px 6px rgb(226 0 116 / 0.08);
 }
@@ -583,8 +584,8 @@
   --mw-warning: #ffb500;
   --mw-radius: 4px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 2px 4px rgb(0 0 0 / 0.4);
 }
@@ -603,8 +604,8 @@
   --mw-warning: #ff6600;
   --mw-radius: 2px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
-  --mw-display-font: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 1px 3px rgb(77 20 140 / 0.08);
 }
@@ -623,8 +624,8 @@
   --mw-warning: #ffd700;
   --mw-radius: 2px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
-  --mw-display-font: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 2px 6px rgb(0 0 0 / 0.3);
 }
@@ -643,7 +644,7 @@
   --mw-warning: #d17a00;
   --mw-radius: 0px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', system-ui, sans-serif;
   --mw-display-font: 'Didot', 'Playfair Display', 'Libre Caslon Text', Georgia, serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 2px 4px rgb(62 33 16 / 0.08);
@@ -663,8 +664,8 @@
   --mw-warning: #ffc107;
   --mw-radius: 2px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
-  --mw-display-font: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
   --mw-shadow: 0 2px 6px rgb(0 0 0 / 0.35);
 }
@@ -683,8 +684,8 @@
   --mw-warning: #ffa500;
   --mw-radius: 20px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
-  --mw-display-font: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 4px 14px rgb(224 33 138 / 0.12);
 }
@@ -703,8 +704,8 @@
   --mw-warning: #ffde00;
   --mw-radius: 4px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
-  --mw-display-font: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 2px 4px rgb(0 0 0 / 0.2);
 }

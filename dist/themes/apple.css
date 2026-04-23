@@ -15,8 +15,8 @@
   --mw-warning: #ff9500;
   --mw-radius: 14px;
   --mw-border-w: 1px;
-  --mw-font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', system-ui, sans-serif;
-  --mw-display-font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
+  --mw-font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'SF Mono', ui-monospace, 'JetBrains Mono', monospace;
   --mw-shadow: 0 1px 3px rgb(0 0 0 / 0.04), 0 8px 24px -12px rgb(0 0 0 / 0.08);
 }

@@ -15,8 +15,8 @@
   --mw-warning: #f59e0b;
   --mw-radius: 6px;
   --mw-border-w: 1px;
-  --mw-font: 'Inter', system-ui, sans-serif;
-  --mw-display-font: 'Inter', system-ui, sans-serif;
+  --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 4px 12px -4px rgb(16 163 127 / 0.15);
 }

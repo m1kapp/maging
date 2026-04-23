@@ -562,6 +562,40 @@
     opacity: 1;
   }
 
+  /* ========= Word roller (hero) ========= */
+  .word-roller {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    height: 1.08em;
+    color: var(--mw-accent);
+    position: relative;
+    min-width: 4ch;
+  }
+  .word-roller__inner {
+    display: flex;
+    flex-direction: column;
+    animation: wordRoll 10s cubic-bezier(0.76, 0, 0.24, 1) infinite;
+  }
+  .word-roller__item {
+    display: block;
+    height: 1.08em;
+    line-height: 1.08;
+    white-space: nowrap;
+  }
+  @keyframes wordRoll {
+    /*  5 items stacked, 4 cycle visible; the 5th (= duplicate of 1st) lets the
+        animation loop seamlessly from -400% back to 0 with no visible jump. */
+    0%,  17%  { transform: translateY(0); }
+    22%, 42%  { transform: translateY(-1.08em); }
+    47%, 67%  { transform: translateY(-2.16em); }
+    72%, 92%  { transform: translateY(-3.24em); }
+    97%,100%  { transform: translateY(-4.32em); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .word-roller__inner { animation: none; }
+  }
+
   /* ========= Solution pills ========= */
   .solution-pill {
     padding: 0.625rem 1.25rem;
@@ -923,14 +957,23 @@
 <!-- ========= HERO ========= -->
 <section id="top" class="hero-glow">
   <div class="max-w-[1100px] mx-auto px-6 pt-20 pb-16 text-center">
-    <span class="mw-badge mw-badge--muted">⚡ v0.1.1 · 31 widgets · 35 themes · MIT</span>
+    <span class="mw-badge mw-badge--muted">⚡ v0.1.2 · 31 widgets · 35 themes · Pretendard · MIT</span>
     <h1 class="text-5xl md:text-7xl font-bold mt-6" style="line-height: 1.08; letter-spacing: -0.03em;">
       AI 답변을,<br>
-      <span style="color: var(--mw-accent);">쓸 수 있는 결과물</span>로.
+      쓸 수 있는
+      <span class="word-roller" aria-label="결과물">
+        <span class="word-roller__inner">
+          <span class="word-roller__item">결과물</span>
+          <span class="word-roller__item">대시보드</span>
+          <span class="word-roller__item">피치덱</span>
+          <span class="word-roller__item">리포트</span>
+          <span class="word-roller__item">결과물</span>
+        </span>
+      </span>로.
     </h1>
     <p class="text-lg md:text-2xl mw-muted mt-7" style="line-height: 1.5; max-width: 760px; margin-left: auto; margin-right: auto;">
       코딩 없이, 디자인 없이 —<br class="hidden md:inline">
-      대시보드·피치덱을 <strong style="color: var(--mw-text);">HTML로 바로 생성</strong>합니다.
+      HTML 한 줄로 <strong style="color: var(--mw-text);">바로 생성</strong>합니다.
     </p>
 
     <div class="mt-10 flex gap-3 flex-wrap justify-center">
@@ -939,11 +982,11 @@
     </div>
 
     <div class="mt-12 mw-muted text-sm" style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; font-family: var(--mw-mono-font); letter-spacing: 0.02em;">
-      <span>ChatGPT · Claude · Gemini 지원</span>
+      <span>ChatGPT · Claude · Gemini</span>
       <span style="opacity: 0.4;">·</span>
-      <span>31개 위젯</span>
+      <span>31 widgets · 35 themes</span>
       <span style="opacity: 0.4;">·</span>
-      <span>35개 브랜드 테마</span>
+      <span>Pretendard 내장</span>
     </div>
   </div>
 </section>
@@ -1027,11 +1070,11 @@
               <button type="button" class="ai-prompt__mode-btn" data-mode="full">Full (인라인)</button>
             </div>
             <div class="ai-prompt__tokens" id="ai-prompt-tokens" title="Measured via real tokenizers (gpt-tokenizer, @anthropic-ai/tokenizer)">
-              <span class="ai-prompt__tokens-val" data-api="gpt">GPT 945</span>
+              <span class="ai-prompt__tokens-val" data-api="gpt">GPT 953</span>
               <span class="ai-prompt__tokens-sep">·</span>
-              <span class="ai-prompt__tokens-val" data-api="claude">Claude 1080</span>
+              <span class="ai-prompt__tokens-val" data-api="claude">Claude 1073</span>
               <span class="ai-prompt__tokens-sep">·</span>
-              <span class="ai-prompt__tokens-val" data-api="gemini">Gemini 1002</span>
+              <span class="ai-prompt__tokens-val" data-api="gemini">Gemini 1010</span>
             </div>
           </div>
           <pre class="ai-prompt__body" id="ai-prompt-body"></pre>
@@ -1293,28 +1336,48 @@
   </div>
 </section>
 
-<!-- ========= MANUAL INSTALL (demoted) ========= -->
-<section>
-  <div class="max-w-[1100px] mx-auto px-6 pb-12">
-    <details style="border: 1px dashed var(--mw-border); border-radius: var(--mw-radius); padding: 1rem 1.25rem;">
+<!-- ========= INSTALL (one-liner prominent) ========= -->
+<section style="border-top: 1px solid var(--mw-border);">
+  <div class="max-w-[1000px] mx-auto px-6 py-16">
+    <div class="text-center mb-8">
+      <div class="kicker mb-3">INSTALL</div>
+      <h2 class="text-3xl md:text-4xl font-bold" style="letter-spacing: -0.02em;">
+        한 줄이면 끝.
+      </h2>
+      <p class="mw-muted mt-3 text-sm">
+        Pretendard · maging.css · Tailwind · ECharts · maging.js 전부 자동 로드.
+      </p>
+    </div>
+
+    <div class="code">
+      <div class="code__lang">html</div>
+      <button class="code__copy">복사</button>
+<pre><code>&lt;script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.2/dist/maging-all.js"&gt;&lt;/script&gt;
+&lt;body class="mw-themed"&gt;</code></pre>
+    </div>
+
+    <p class="mw-muted text-xs mt-3 text-center">
+      ✨ <code>maging-all.js</code> = Pretendard + maging CSS + Tailwind Play + ECharts + maging JS · 로드 순서 보장 · <code>window.addEventListener('maging:ready', …)</code> 이벤트 발화
+    </p>
+
+    <details class="mt-6" style="border: 1px dashed var(--mw-border); border-radius: var(--mw-radius); padding: 1rem 1.25rem;">
       <summary class="mw-muted text-sm" style="cursor: pointer; font-weight: 500;">
-        🛠 개발자용: 수동 설치 (AI 없이 직접 쓰고 싶다면)
+        🛠 개발자용: 수동 설치 (세세한 제어 원할 때)
       </summary>
       <div class="code mt-4">
         <div class="code__lang">html</div>
         <button class="code__copy">복사</button>
-<pre><code>&lt;!-- ECharts (dependency) --&gt;
+<pre><code>&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.2/dist/maging.css"&gt;
+&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;
 &lt;script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"&gt;&lt;/script&gt;
-
-&lt;!-- maging --&gt;
-&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.1/dist/maging.css"&gt;
-&lt;script defer src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.1/dist/maging.js"&gt;&lt;/script&gt;
-
-&lt;!-- (선택) Tailwind Play --&gt;
-&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</code></pre>
+&lt;script defer src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.2/dist/maging.js"&gt;&lt;/script&gt;</code></pre>
       </div>
       <p class="mw-muted text-xs mt-2">
-        GitHub에 push + 태그만 있으면 jsDelivr가 자동 서빙합니다.
+        개별 로드. 의존성 버전 고정·Tailwind 제외·자체 Pretendard 등 커스터마이즈 가능.
+      </p>
+      <p class="mw-muted text-xs mt-2">
+        one-liner에서 특정 의존성만 끄고 싶으면:<br>
+        <code>&lt;script src=".../maging-all.js" data-no-tailwind data-no-echarts&gt;&lt;/script&gt;</code>
       </p>
     </details>
   </div>
@@ -1928,12 +1991,11 @@ Then wait for my next message before generating anything.`;
 
   var SHORT_PROMPT = `You are generating a single self-contained HTML dashboard using the "maging" library — an LLM-native UI primitive library.
 
-SETUP (always include in output):
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.0/dist/maging.css">
-<script src="https://cdn.tailwindcss.com"><\/script>
-<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"><\/script>
-<script defer src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.0/dist/maging.js"><\/script>
+SETUP (always include in output — one-liner loads everything):
+<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.2/dist/maging-all.js"><\/script>
 <body class="mw-themed">
+
+maging-all.js auto-loads: Pretendard (Korean font) + maging.css + Tailwind Play + ECharts + maging.js, in correct order. Mount widgets inside a window 'maging:ready' listener OR DOMContentLoaded (whichever fires later — maging-all emits 'maging:ready' after all deps loaded).
 
 THEME: Set on <html data-theme="NAME">. Pick one matching intent.
   Light: claude linear stripe notion airbnb linkedin instagram youtube reddit medium apple duolingo tiffany mailchimp tmobile fedex hermes barbie
@@ -1973,17 +2035,18 @@ API GOTCHAS:
 - All widget mounts must happen inside DOMContentLoaded since maging.js is defer-loaded.
 - Theme is switched by setting <html data-theme="…"> only — no DOM manipulation required.
 
-Full widget schemas & examples: https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.0/llms.txt
+Full widget schemas & examples: https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.2/llms.txt
   (Fetch this URL if you can browse. It has complete API for all 31 widgets.)` + HANDSHAKE;
 
   var FULL_PROMPT = `You are generating a single self-contained HTML dashboard using the "maging" library — an LLM-native UI primitive library.
 
-=== SETUP (always include in output) ===
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.0/dist/maging.css">
-<script src="https://cdn.tailwindcss.com"><\/script>
-<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"><\/script>
-<script defer src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.0/dist/maging.js"><\/script>
+=== SETUP (always include in output — one-liner) ===
+<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.2/dist/maging-all.js"><\/script>
 <body class="mw-themed">
+
+maging-all.js bundles: Pretendard (Korean font via @import) + maging.css + Tailwind Play + ECharts + maging.js, loaded in correct order. Dispatches 'maging:ready' event on window when all dependencies are ready. Mount widgets inside:
+  window.addEventListener('maging:ready', () => { /* Maging.xxx(...) here */ });
+OR inside DOMContentLoaded (whichever fires later works).
 
 === THEMES (35) ===
 Set on <html data-theme="NAME">. Each theme bundles palette, typography, radius, shadow.
@@ -2081,8 +2144,8 @@ Use "lg:col-span-2" for 2-column span.
   //   claude   → @anthropic-ai/tokenizer
   //   gemini   → o200k_base × 1.06 (empirical)
   var TOKENS = {
-    short: { gpt: 945,  claude: 1080, gemini: 1002 },
-    full:  { gpt: 2352, claude: 2626, gemini: 2493 },
+    short: { gpt: 953,  claude: 1073, gemini: 1010 },
+    full:  { gpt: 2379, claude: 2637, gemini: 2522 },
   };
 
   var currentMode = 'short';
