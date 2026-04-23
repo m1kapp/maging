@@ -139,7 +139,7 @@ npm publish --access public
 https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.11/...
 
 <!-- After -->
-https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.13/dist/maging.js
+https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.14/dist/maging.js
 ```
 
 그 후 `npm run count-tokens` 다시 돌려서 토큰 수 재계산 → `index.html`의 `TOKENS` 상수 업데이트.
