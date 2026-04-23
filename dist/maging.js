@@ -2294,7 +2294,7 @@
   // Public API
   // ==========================================================
   var api = {
-    version: '0.1.11',
+    version: '0.1.12',
     kpiCard: kpiCard,
     lineChart: lineChart,
     barChart: barChart,

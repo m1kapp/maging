@@ -1,6 +1,6 @@
-# magicwiget — Internals / Contributor Guide
+# maging — Internals / Contributor Guide
 
-> 이 문서는 **magicwiget 확장/수정** (새 위젯 추가, 새 테마 만들기, 내부 구조 수정)을 할 때 지켜야 할 규칙.
+> 이 문서는 **maging 확장/수정** (새 위젯 추가, 새 테마 만들기, 내부 구조 수정)을 할 때 지켜야 할 규칙.
 > 단순히 **위젯을 사용**하려는 에이전트는 [AGENT.md](./AGENT.md)를 참고.
 
 ---
@@ -8,12 +8,12 @@
 ## 📁 파일 구조
 
 ```
-magicwiget/
+maging/
 ├── dist/
-│   ├── magicwiget.js            # 위젯 팩토리 + api object + 자동 마운트
-│   ├── magicwiget.core.css      # 공통 스타일 (테마 X)
-│   ├── magicwiget.css           # FULL 번들 (core + 모든 테마)
-│   ├── magicwiget-grid.js       # GridStack adapter (선택)
+│   ├── maging.js            # 위젯 팩토리 + api object + 자동 마운트
+│   ├── maging.core.css      # 공통 스타일 (테마 X)
+│   ├── maging.css           # FULL 번들 (core + 모든 테마)
+│   ├── maging-grid.js       # GridStack adapter (선택)
 │   └── themes/
 │       └── <name>.css           # 테마별 CSS 변수만 (25개)
 ├── data/
@@ -25,7 +25,7 @@ magicwiget/
 └── README.md                    # 프로젝트 개요
 ```
 
-**동기화 규칙:** CSS 수정 시 `magicwiget.core.css`와 번들 `magicwiget.css` 양쪽에 반영. 대부분 동일 스타일.
+**동기화 규칙:** CSS 수정 시 `maging.core.css`와 번들 `maging.css` 양쪽에 반영. 대부분 동일 스타일.
 
 ---
 
@@ -175,7 +175,7 @@ function myWidget(el, config) {
 }
 ```
 
-### 공통 헬퍼 (`magicwiget.js` 내부 유틸)
+### 공통 헬퍼 (`maging.js` 내부 유틸)
 ```ts
 q(sel)                                    // Element 반환 (selector 또는 Element 둘 다)
 escapeHTML(s)                             // XSS-safe 텍스트
@@ -197,7 +197,7 @@ var items = (data.items || []).slice(0, 100).map(...);
 
 ## ✅ 새 위젯 추가 체크리스트
 
-1. **`dist/magicwiget.js` factory 함수 작성**
+1. **`dist/maging.js` factory 함수 작성**
    - 차트: `_chartBase` 사용
    - HTML: `register` + `handle` 패턴
 2. **`api` object에 등록** (`kpiCard: kpiCard,`)
@@ -205,7 +205,7 @@ var items = (data.items || []).slice(0, 100).map(...);
    ```js
    myWidget: { title: 'My Widget', desc: '간단 한국어 설명' }
    ```
-4. **CSS 스타일 추가** — `magicwiget.core.css` + `magicwiget.css` **양쪽**
+4. **CSS 스타일 추가** — `maging.core.css` + `maging.css` **양쪽**
    - 토큰만 사용 (하드코드 금지)
    - `.mw-<widget>__<part>` 네이밍
 5. **데모 데이터** — `data/dashboard.json`에 샘플 추가
@@ -220,15 +220,15 @@ var items = (data.items || []).slice(0, 100).map(...);
 
 1. **`dist/themes/<name>.css` 생성** — CSS 변수만 정의:
    ```css
-   /*! magicwiget theme: myco — MIT · Signature: <특징> */
+   /*! maging theme: myco — MIT · Signature: <특징> */
    [data-theme="myco"] {
      --mw-bg: ...;
      --mw-surface: ...;
      /* 전체 테마 변수 세트 · 위 color 토큰 참조 */
    }
    ```
-2. **번들 `magicwiget.css`에 동일 블록 append**
-3. **`magicwiget.js` `themes` 배열에 슬러그 추가**
+2. **번들 `maging.css`에 동일 블록 append**
+3. **`maging.js` `themes` 배열에 슬러그 추가**
 4. **demo.html `THEMES` 배열에 색상 팔레트 추가** (칩 렌더링용)
 5. **드롭다운 `<option>`에 추가** — demo.html + index.html
 6. **AGENT.md Light/Dark 분류 업데이트**
@@ -256,24 +256,24 @@ var items = (data.items || []).slice(0, 100).map(...);
 코드 수정 후 항상:
 ```bash
 # 양쪽 CSS 일치 확인
-diff <(grep -E "^\." dist/magicwiget.core.css | sort) \
-     <(grep -E "^\." dist/magicwiget.css | sort | grep -v data-theme)
+diff <(grep -E "^\." dist/maging.core.css | sort) \
+     <(grep -E "^\." dist/maging.css | sort | grep -v data-theme)
 
 # 토큰 정의 깨지지 않았는지 (재귀 참조 찾기)
-grep "var(--mw-space-[0-9]" dist/magicwiget.css | grep "mw-space"
+grep "var(--mw-space-[0-9]" dist/maging.css | grep "mw-space"
 
 # demo에 참조 없는 위젯 있는지
-node -e "const api = require('./dist/magicwiget.js'); console.log(Object.keys(api.meta))"
+node -e "const api = require('./dist/maging.js'); console.log(Object.keys(api.meta))"
 ```
 
 ---
 
 ## 📦 배포
 
-1. **버전 번호** — `magicwiget.js` 상단 주석 + `README.md` + `AGENT.md` CDN URL 업데이트
+1. **버전 번호** — `maging.js` 상단 주석 + `README.md` + `AGENT.md` CDN URL 업데이트
 2. **CHANGELOG 추가** (선택)
 3. **git tag** — `v0.1.0` 식으로
-4. **jsDelivr 자동 서빙** — 태그된 커밋이 `cdn.jsdelivr.net/gh/<user>/magicwiget@<tag>/...`로 노출
+4. **jsDelivr 자동 서빙** — 태그된 커밋이 `cdn.jsdelivr.net/npm/@m1kapp/maging@<version>/...`로 노출
 
 ---
 

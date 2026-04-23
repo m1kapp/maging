@@ -81,9 +81,9 @@ git tag v0.1.0
 git push origin v0.1.0
 
 # 3. 끝. 즉시 접근 가능:
-# https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.0/dist/maging.js
-# https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.0/dist/maging.css
-# https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.0/dist/themes/claude.css
+# https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.11/dist/maging.js
+# https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.11/dist/maging.css
+# https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.11/dist/themes/claude.css
 ```
 
 ### 옵션 B. npm publish (생태계 편입)
@@ -100,7 +100,7 @@ npm info maging
 npm publish --access public
 
 # 4. URL 자동:
-# https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.0/dist/maging.js
+# https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.11/dist/maging.js
 # https://unpkg.com/maging@0.1.0/dist/maging.js
 ```
 
@@ -114,7 +114,7 @@ npm publish --access public
 
 ## 배포 후 확인 체크리스트
 
-- [ ] `https://maging.vercel.app` 랜딩 정상 로드
+- [ ] `https://maging.m1k.app` 랜딩 정상 로드
 - [ ] `/demo.html` 접근 가능, 대시보드 렌더링
 - [ ] `/llms.txt` 접근 가능, Content-Type `text/plain`
 - [ ] "Copy Prompt" 버튼 동작, 클립보드 복사 성공
@@ -136,7 +136,7 @@ npm publish --access public
 예:
 ```html
 <!-- Before -->
-https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.0/...
+https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.11/...
 
 <!-- After -->
 https://cdn.jsdelivr.net/gh/minho/maging@v0.1.0/...

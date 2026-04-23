@@ -1,12 +1,12 @@
-# magicwiget — 에이전트 사용 지침
+# maging — 에이전트 사용 지침
 
-> CDN drop-in 대시보드 위젯 라이브러리. ECharts 5 위에 얹은 **25종 위젯 + 25개 브랜드 테마**. 이 문서만 읽으면 모든 위젯을 즉시 사용 가능.
+> CDN drop-in 대시보드 위젯 라이브러리. ECharts 5 위에 얹은 **32종 위젯 + 35개 브랜드 테마**. 이 문서만 읽으면 모든 위젯을 즉시 사용 가능.
 
 ---
 
 ## 1. 설치 (CDN · 복붙)
 
-**ECharts → magicwiget 순서 엄수.** ECharts 없으면 차트 위젯은 빈칸.
+**ECharts → maging 순서 엄수.** ECharts 없으면 차트 위젯은 빈칸.
 
 ```html
 <!DOCTYPE html>
@@ -16,8 +16,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/<user>/magicwiget@v0.1.0/dist/magicwiget.css">
-  <script defer src="https://cdn.jsdelivr.net/gh/<user>/magicwiget@v0.1.0/dist/magicwiget.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.11/dist/maging.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.11/dist/maging.js"></script>
 </head>
 <body class="mw-themed">
   <!-- 위젯 -->
@@ -48,13 +48,13 @@
 **반드시 `const` → 호출 순서** (주석 스펙 금지):
 ```js
 const config = { title: '주간 매출', /* ... */ };
-MagicWiget.lineChart('#el', config);
+Maging.lineChart('#el', config);
 ```
-`mw === MagicWiget` alias. 반환 핸들: `.update()` · `.refresh()` · `.destroy()`.
+`mw === Maging` alias. 반환 핸들: `.update()` · `.refresh()` · `.destroy()`.
 
 ---
 
-## 3. 위젯 25종
+## 3. 위젯 32종
 
 **타입 이름 규칙:** HTML은 kebab-case (`kpi-card`), JS는 camelCase (`kpiCard`).
 
@@ -108,10 +108,10 @@ MagicWiget.lineChart('#el', config);
 
 ---
 
-## 4. 테마 25개
+## 4. 테마 35개
 
 ```js
-MagicWiget.setTheme('vercel');  // 모든 마운트 위젯 자동 리프레시
+Maging.setTheme('vercel');  // 모든 마운트 위젯 자동 리프레시
 ```
 
 **Light (12):** `claude` · `linear` · `stripe` · `notion` · `airbnb` · `linkedin` · `instagram` · `youtube` · `reddit` · `medium` · `apple` · `duolingo`
@@ -125,7 +125,7 @@ MagicWiget.setTheme('vercel');  // 모든 마운트 위젯 자동 리프레시
 ## 5. 레이아웃
 
 ### 기본 — Tailwind grid
-magicwiget은 레이아웃 미강제. Tailwind로 조립:
+maging은 레이아웃 미강제. Tailwind로 조립:
 ```html
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-6">
   <div data-mw-widget="kpi-card" ...></div>
@@ -161,15 +161,15 @@ magicwiget은 레이아웃 미강제. Tailwind로 조립:
 
 ## 6. 드래그앤드롭 대시보드 (선택 · GridStack adapter)
 
-편집 가능한 대시보드가 필요하면 `magicwiget-grid.js` adapter 추가 로드:
+편집 가능한 대시보드가 필요하면 `maging-grid.js` adapter 추가 로드:
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack.min.css">
 <script src="https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack-all.js"></script>
-<script src="./dist/magicwiget-grid.js"></script>
+<script src="./dist/maging-grid.js"></script>
 ```
 
 ```js
-const dash = MagicWiget.grid('#dashboard', {
+const dash = Maging.grid('#dashboard', {
   items: [
     { id: 'k1', type: 'kpi-card',   x: 0, y: 0, w: 3, h: 3, config: {...} },
     { id: 'rv', type: 'line-chart', x: 0, y: 3, w: 8, h: 6, config: {...} },
@@ -185,7 +185,7 @@ dash.reset() / dash.getLayout() / dash.destroy();
 ```
 
 **규칙:**
-- 편집 가능한 대시보드 → `MagicWiget.grid()` 사용, 직접 GridStack API 금지
+- 편집 가능한 대시보드 → `Maging.grid()` 사용, 직접 GridStack API 금지
 - 섹션별로 grid 분리하면 섹션별 레이아웃 독립 저장 (localStorage key 분리)
 
 ---
@@ -212,8 +212,8 @@ dash.reset() / dash.getLayout() / dash.destroy();
   <meta charset="UTF-8">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
-  <link rel="stylesheet" href="./dist/magicwiget.css">
-  <script defer src="./dist/magicwiget.js"></script>
+  <link rel="stylesheet" href="./dist/maging.css">
+  <script defer src="./dist/maging.js"></script>
 </head>
 <body class="mw-themed">
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 grid-fill p-6 max-w-[1200px] mx-auto"
