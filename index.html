@@ -217,8 +217,8 @@
     width: 100%;
     margin-bottom: 3px;
     padding: 0.55rem 0.625rem;
-    background: transparent;
-    color: var(--mw-text);
+    background: var(--mw-surface);
+    color: var(--mw-text) !important;
     border: 1.5px solid transparent;
     border-radius: var(--mw-radius);
     cursor: pointer;
@@ -278,16 +278,21 @@
     display: flex; flex-direction: column; gap: 1px;
   }
   .mw-theme-fab__item-name {
-    font-size: 0.78rem; font-weight: 600;
+    font-size: 0.82rem; font-weight: 600;
+    color: var(--mw-text);
+    opacity: 1;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .mw-theme-fab__item-brand {
     font-size: 0.66rem;
     font-family: var(--mw-mono-font);
-    color: inherit;
-    opacity: 0.55;
+    color: var(--mw-text);
+    opacity: 0.65;
     letter-spacing: 0.02em;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .mw-theme-fab__item-idx {
+    color: var(--mw-text);
   }
 
   @media (max-width: 480px) {
@@ -2024,6 +2029,8 @@ var THEMES = [
     var active = t.value === current() ? ' is-active' : '';
     var tileStyle = '--mw-tile-accent:' + t.accent + ';';
     return '<button type="button" class="mw-theme-fab__item' + active + '" data-theme="' + t.value + '" style="' + tileStyle + '">' +
+      '<span class="mw-theme-fab__item-idx">' + String(i).padStart(2, '0') + '</span>' +
+      '<span class="mw-theme-fab__item-check" aria-hidden="true">✓</span>' +
       '<span class="mw-theme-fab__item-swatch" style="background:' + t.bg + '">' +
         '<span class="mw-theme-fab__item-swatch-bars">' +
           '<span style="background:' + t.accent + '"></span>' +
@@ -2036,8 +2043,6 @@ var THEMES = [
         '<span class="mw-theme-fab__item-name">' + t.desc + '</span>' +
         '<span class="mw-theme-fab__item-brand">inspired by ' + t.brand + '</span>' +
       '</span>' +
-      '<span class="mw-theme-fab__item-idx">' + String(i).padStart(2, '0') + '</span>' +
-      '<span class="mw-theme-fab__item-check" aria-hidden="true">✓</span>' +
     '</button>';
   }
   function render() {

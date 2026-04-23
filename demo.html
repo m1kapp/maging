@@ -262,8 +262,8 @@
     width: 100%;
     margin-bottom: 3px;
     padding: 0.55rem 0.625rem;
-    background: transparent;
-    color: var(--mw-text);
+    background: var(--mw-surface);
+    color: var(--mw-text) !important;
     border: 1.5px solid transparent;
     border-radius: var(--mw-radius);
     cursor: pointer;
@@ -324,17 +324,22 @@
     display: flex; flex-direction: column; gap: 1px;
   }
   .mw-theme-fab__item-name {
-    font-size: 0.78rem;
+    font-size: 0.82rem;
     font-weight: 600;
+    color: var(--mw-text);
+    opacity: 1;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .mw-theme-fab__item-brand {
     font-size: 0.66rem;
     font-family: var(--mw-mono-font);
-    color: inherit;
-    opacity: 0.55;
+    color: var(--mw-text);
+    opacity: 0.65;
     letter-spacing: 0.02em;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .mw-theme-fab__item-idx {
+    color: var(--mw-text);
   }
 
   @media (max-width: 480px) {
