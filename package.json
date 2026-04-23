@@ -1,6 +1,6 @@
 {
-  "name": "maging",
-  "version": "0.1.0",
+  "name": "@m1kapp/maging",
+  "version": "0.1.11",
   "description": "LLM-native UI primitives. Dashboard? Deck? Doc? Just mage it.",
   "license": "MIT",
   "type": "module",
