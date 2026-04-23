@@ -33,8 +33,6 @@
     }
   ],
   "redirects": [
-    { "source": "/docs", "destination": "/llms.txt", "permanent": false },
-    { "source": "/demo", "destination": "/demo.html", "permanent": false },
-    { "source": "/stack", "destination": "/stack.html", "permanent": false }
+    { "source": "/docs", "destination": "/llms.txt", "permanent": false }
   ]
 }
