@@ -1072,6 +1072,8 @@ var THEMES = [
     var active = t.value === current() ? ' is-active' : '';
     var tileStyle = '--mw-tile-accent:' + t.accent + ';';
     return '<button type="button" class="mw-theme-fab__item' + active + '" data-theme="' + t.value + '" style="' + tileStyle + '">' +
+      '<span class="mw-theme-fab__item-idx">' + String(i).padStart(2, '0') + '</span>' +
+      '<span class="mw-theme-fab__item-check" aria-hidden="true">✓</span>' +
       '<span class="mw-theme-fab__item-swatch" style="background:' + t.bg + '">' +
         '<span class="mw-theme-fab__item-swatch-bars">' +
           '<span style="background:' + t.accent + '"></span>' +
@@ -1084,8 +1086,6 @@ var THEMES = [
         '<span class="mw-theme-fab__item-name">' + t.desc + '</span>' +
         '<span class="mw-theme-fab__item-brand">inspired by ' + t.brand + '</span>' +
       '</span>' +
-      '<span class="mw-theme-fab__item-idx">' + String(i).padStart(2, '0') + '</span>' +
-      '<span class="mw-theme-fab__item-check" aria-hidden="true">✓</span>' +
     '</button>';
   }
   function current() {
