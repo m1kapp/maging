@@ -282,19 +282,23 @@
   .mw-theme-fab__item-swatch {
     position: relative;
     flex-shrink: 0;
-    width: 52px; height: 32px;
+    width: 56px; height: 34px;
     border-radius: 5px;
     overflow: hidden;
     border: 1px solid color-mix(in srgb, var(--mw-text) 18%, transparent);
   }
   .mw-theme-fab__item-swatch-bars {
     position: absolute;
-    left: 0; right: 0; bottom: 0;
-    height: 10px;
+    left: 5px; right: 5px; bottom: 4px; top: 4px;
     display: flex;
+    align-items: flex-end;
+    gap: 2px;
   }
-  .mw-theme-fab__item-swatch-bars > span { flex: 1; height: 100%; }
-  .mw-theme-fab__item-swatch-bars > span:first-child { flex: 3; }
+  .mw-theme-fab__item-swatch-bars > span { flex: 1; border-radius: 1px; }
+  .mw-theme-fab__item-swatch-bars > span:nth-child(1) { height: 92%; }
+  .mw-theme-fab__item-swatch-bars > span:nth-child(2) { height: 70%; }
+  .mw-theme-fab__item-swatch-bars > span:nth-child(3) { height: 48%; }
+  .mw-theme-fab__item-swatch-bars > span:nth-child(4) { height: 28%; }
 
   .mw-theme-fab__item-check,
   .mw-theme-fab__item-idx {
@@ -327,7 +331,8 @@
   .mw-theme-fab__item-brand {
     font-size: 0.66rem;
     font-family: var(--mw-mono-font);
-    color: var(--mw-text-muted);
+    color: inherit;
+    opacity: 0.55;
     letter-spacing: 0.02em;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
