@@ -2108,7 +2108,7 @@
   // Public API
   // ==========================================================
   var api = {
-    version: '0.1.0',
+    version: '0.1.8',
     kpiCard: kpiCard,
     lineChart: lineChart,
     barChart: barChart,
@@ -2218,8 +2218,6 @@
     resizeTimer = setTimeout(refreshAll, 120);
   });
 
-  // Export — canonical: Maging · short: mw · legacy: MagicWiget
   global.Maging = api;
   global.mw = api;
-  global.MagicWiget = api; // backward compat
 })(typeof window !== 'undefined' ? window : this);

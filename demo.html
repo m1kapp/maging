@@ -262,31 +262,39 @@
     width: 100%;
     margin-bottom: 3px;
     padding: 0.55rem 0.625rem;
+    background: transparent;
+    color: var(--mw-text);
     border: 1.5px solid transparent;
     border-radius: var(--mw-radius);
     cursor: pointer;
     text-align: left;
     font-family: inherit;
-    transition: border-color 0.12s ease, transform 0.12s ease;
-    /* background + color are set inline via tile-bg/tile-fg per row */
+    transition: border-color 0.12s ease, background 0.12s ease;
   }
   .mw-theme-fab__item:hover {
-    border-color: color-mix(in srgb, var(--mw-tile-accent) 60%, transparent);
+    background: var(--mw-surface-2);
+    border-color: color-mix(in srgb, var(--mw-tile-accent) 50%, transparent);
   }
   .mw-theme-fab__item.is-active {
+    background: var(--mw-surface-2);
     border-color: var(--mw-tile-accent);
   }
   .mw-theme-fab__item-swatch {
-    display: flex;
+    position: relative;
     flex-shrink: 0;
-    width: 48px; height: 26px;
-    border-radius: 4px;
+    width: 52px; height: 32px;
+    border-radius: 5px;
     overflow: hidden;
-    border: 1px solid rgba(0, 0, 0, 0.18);
+    border: 1px solid color-mix(in srgb, var(--mw-text) 18%, transparent);
   }
-  .mw-theme-fab__item-swatch span { height: 100%; }
-  .mw-theme-fab__item-swatch--accent { flex: 3; }
-  .mw-theme-fab__item-swatch--other { flex: 1; }
+  .mw-theme-fab__item-swatch-bars {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 10px;
+    display: flex;
+  }
+  .mw-theme-fab__item-swatch-bars > span { flex: 1; height: 100%; }
+  .mw-theme-fab__item-swatch-bars > span:first-child { flex: 3; }
 
   .mw-theme-fab__item-check,
   .mw-theme-fab__item-idx {
@@ -319,7 +327,7 @@
   .mw-theme-fab__item-brand {
     font-size: 0.66rem;
     font-family: var(--mw-mono-font);
-    opacity: 0.6;
+    color: var(--mw-text-muted);
     letter-spacing: 0.02em;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
@@ -1057,17 +1065,15 @@ var THEMES = [
 
   function itemHtml(t, i) {
     var active = t.value === current() ? ' is-active' : '';
-    var fg = isDark(t) ? '#f5f5f5' : '#1a1a1a';
-    var tileStyle =
-      'background:' + t.bg + ';' +
-      'color:' + fg + ';' +
-      '--mw-tile-accent:' + t.accent + ';';
+    var tileStyle = '--mw-tile-accent:' + t.accent + ';';
     return '<button type="button" class="mw-theme-fab__item' + active + '" data-theme="' + t.value + '" style="' + tileStyle + '">' +
-      '<span class="mw-theme-fab__item-swatch">' +
-        '<span class="mw-theme-fab__item-swatch--accent" style="background:' + t.accent + '"></span>' +
-        '<span class="mw-theme-fab__item-swatch--other" style="background:' + t.accent2 + '"></span>' +
-        '<span class="mw-theme-fab__item-swatch--other" style="background:' + t.warning + '"></span>' +
-        '<span class="mw-theme-fab__item-swatch--other" style="background:' + t.danger + '"></span>' +
+      '<span class="mw-theme-fab__item-swatch" style="background:' + t.bg + '">' +
+        '<span class="mw-theme-fab__item-swatch-bars">' +
+          '<span style="background:' + t.accent + '"></span>' +
+          '<span style="background:' + t.accent2 + '"></span>' +
+          '<span style="background:' + t.warning + '"></span>' +
+          '<span style="background:' + t.danger + '"></span>' +
+        '</span>' +
       '</span>' +
       '<span class="mw-theme-fab__item-body">' +
         '<span class="mw-theme-fab__item-name">' + t.desc + '</span>' +
@@ -1176,7 +1182,7 @@ var THEMES = [
 // code 샘플은 INSPECTOR_MAP 각 entry가 직접 소유.
 // ============================================================
 function widgetMeta(type) {
-  return (window.MagicWiget && Maging.meta && Maging.meta[type]) || { title: type, desc: '' };
+  return (window.Maging && Maging.meta && Maging.meta[type]) || { title: type, desc: '' };
 }
 
 var INSPECTOR_MAP = [
@@ -1403,9 +1409,9 @@ var STATUS_MAP = {
 };
 
 function whenReady(fn) {
-  if (window.MagicWiget) return fn();
+  if (window.Maging) return fn();
   var t = setInterval(function () {
-    if (window.MagicWiget) { clearInterval(t); fn(); }
+    if (window.Maging) { clearInterval(t); fn(); }
   }, 30);
 }
 

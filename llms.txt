@@ -10,7 +10,7 @@
 **One-liner (recommended)** — auto-loads Pretendard + maging.css + Tailwind Play + ECharts + maging.js in correct order:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.7/dist/maging-all.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.8/dist/maging-all.js"></script>
 <body class="mw-themed">
 ```
 
@@ -30,10 +30,10 @@ Skip a default with data-attributes:
 **Manual install** (granular control, custom version pinning):
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.7/dist/maging.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.8/dist/maging.css">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.7/dist/maging.js"></script>
+<script defer src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.8/dist/maging.js"></script>
 ```
 
 Set the theme on `<html data-theme="…">`. Wrap body with `<body class="mw-themed">` for base styling.
@@ -186,7 +186,7 @@ Pick from these instead of choosing arbitrary pixel heights. Within a section, k
 <html lang="ko" data-theme="claude">
 <head>
 <meta charset="UTF-8">
-<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.7/dist/maging-all.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.8/dist/maging-all.js"></script>
 </head>
 <body class="mw-themed">
 <main class="max-w-[1280px] mx-auto p-6">
@@ -274,11 +274,9 @@ When generating a dashboard with maging, follow these rules:
 10. **Alerts at the top**, filters next, then content sections ordered by decision hierarchy: at-a-glance → real-time → trends → deep-dive → operations.
 11. **No code comments in the output.** Every `//`, `/* */`, or `<!-- -->` burns tokens. Widget calls, named IDs, and variable names already explain intent. Strip all comments unless they're structural section dividers the user asked for.
 
-## Canonical globals
+## Global
 
-- `window.Maging` — primary API (use this in new code)
-- `window.mw` — short alias (`mw.kpiCard(...)`)
-- `window.MagicWiget` — legacy alias (backward compat, do not use in new code)
+- `window.Maging` — the only API. `window.mw` is a short alias (`mw.kpiCard(...)`).
 
 ## License
 

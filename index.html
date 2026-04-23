@@ -217,28 +217,38 @@
     width: 100%;
     margin-bottom: 3px;
     padding: 0.55rem 0.625rem;
+    background: transparent;
+    color: var(--mw-text);
     border: 1.5px solid transparent;
     border-radius: var(--mw-radius);
     cursor: pointer;
     text-align: left;
     font-family: inherit;
-    transition: border-color 0.12s ease, transform 0.12s ease;
+    transition: border-color 0.12s ease, background 0.12s ease;
   }
   .mw-theme-fab__item:hover {
-    border-color: color-mix(in srgb, var(--mw-tile-accent) 60%, transparent);
+    background: var(--mw-surface-2);
+    border-color: color-mix(in srgb, var(--mw-tile-accent) 50%, transparent);
   }
   .mw-theme-fab__item.is-active {
+    background: var(--mw-surface-2);
     border-color: var(--mw-tile-accent);
   }
   .mw-theme-fab__item-swatch {
-    display: flex; flex-shrink: 0;
-    width: 48px; height: 26px;
-    border-radius: 4px; overflow: hidden;
-    border: 1px solid rgba(0, 0, 0, 0.18);
+    position: relative;
+    flex-shrink: 0;
+    width: 52px; height: 32px;
+    border-radius: 5px; overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--mw-text) 18%, transparent);
   }
-  .mw-theme-fab__item-swatch span { height: 100%; }
-  .mw-theme-fab__item-swatch--accent { flex: 3; }
-  .mw-theme-fab__item-swatch--other { flex: 1; }
+  .mw-theme-fab__item-swatch-bars {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 10px;
+    display: flex;
+  }
+  .mw-theme-fab__item-swatch-bars > span { flex: 1; height: 100%; }
+  .mw-theme-fab__item-swatch-bars > span:first-child { flex: 3; }
 
   .mw-theme-fab__item-check,
   .mw-theme-fab__item-idx {
@@ -270,7 +280,7 @@
   .mw-theme-fab__item-brand {
     font-size: 0.66rem;
     font-family: var(--mw-mono-font);
-    opacity: 0.6;
+    color: var(--mw-text-muted);
     letter-spacing: 0.02em;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
@@ -1125,7 +1135,7 @@
     <a href="#top" class="nav-brand" style="text-decoration: none; color: inherit;">
       <span class="nav-brand__mark">✦</span>
       <span class="nav-brand__name">maging</span>
-      <span class="nav-brand__ver">v0.1.7</span>
+      <span class="nav-brand__ver">v0.1.8</span>
     </a>
     <div class="flex items-center gap-2 flex-wrap">
       <a href="demo.html" class="nav-link">Demo</a>
@@ -1143,7 +1153,7 @@
   <div class="max-w-[980px] mx-auto px-6 pt-24 pb-20 text-center">
     <div class="hero-eyebrow">
       <span class="hero-eyebrow__dot"></span>
-      AI Output Formatter · v0.1.7
+      AI Output Formatter · v0.1.8
     </div>
     <h1 class="hero-title">
       AI 답변을,<br>
@@ -1539,7 +1549,7 @@
     <div class="code">
       <div class="code__lang">html</div>
       <button class="code__copy">복사</button>
-<pre><code>&lt;script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.7/dist/maging-all.js"&gt;&lt;/script&gt;
+<pre><code>&lt;script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.8/dist/maging-all.js"&gt;&lt;/script&gt;
 &lt;body class="mw-themed"&gt;</code></pre>
     </div>
 
@@ -1554,10 +1564,10 @@
       <div class="code mt-4">
         <div class="code__lang">html</div>
         <button class="code__copy">복사</button>
-<pre><code>&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.7/dist/maging.css"&gt;
+<pre><code>&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.8/dist/maging.css"&gt;
 &lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;
 &lt;script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"&gt;&lt;/script&gt;
-&lt;script defer src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.7/dist/maging.js"&gt;&lt;/script&gt;</code></pre>
+&lt;script defer src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.8/dist/maging.js"&gt;&lt;/script&gt;</code></pre>
       </div>
       <p class="mw-muted text-xs mt-2">
         개별 로드. 의존성 버전 고정·Tailwind 제외·자체 Pretendard 등 커스터마이즈 가능.
@@ -1867,7 +1877,7 @@ Maging.setTheme('bloomberg');
           <div class="text-sm font-semibold">maging</div>
           <span class="mw-muted text-xs" style="font-family: var(--mw-mono-font); padding: 0.1rem 0.4rem; background: var(--mw-surface-2); border-radius: 3px;">AI Output Formatter</span>
         </div>
-        <div class="mw-muted text-xs">v0.1.7 · MIT License · Built with ECharts + Tailwind + Pretendard</div>
+        <div class="mw-muted text-xs">v0.1.8 · MIT License · Built with ECharts + Tailwind + Pretendard</div>
       </div>
       <div class="flex gap-5 text-xs mw-muted">
         <a href="demo.html" style="color: inherit;">Demo</a>
@@ -2007,17 +2017,15 @@ var THEMES = [
   function current() { return document.documentElement.getAttribute('data-theme') || 'claude'; }
   function itemHtml(t, i) {
     var active = t.value === current() ? ' is-active' : '';
-    var fg = isDark(t) ? '#f5f5f5' : '#1a1a1a';
-    var tileStyle =
-      'background:' + t.bg + ';' +
-      'color:' + fg + ';' +
-      '--mw-tile-accent:' + t.accent + ';';
+    var tileStyle = '--mw-tile-accent:' + t.accent + ';';
     return '<button type="button" class="mw-theme-fab__item' + active + '" data-theme="' + t.value + '" style="' + tileStyle + '">' +
-      '<span class="mw-theme-fab__item-swatch">' +
-        '<span class="mw-theme-fab__item-swatch--accent" style="background:' + t.accent + '"></span>' +
-        '<span class="mw-theme-fab__item-swatch--other" style="background:' + t.accent2 + '"></span>' +
-        '<span class="mw-theme-fab__item-swatch--other" style="background:' + t.warning + '"></span>' +
-        '<span class="mw-theme-fab__item-swatch--other" style="background:' + t.danger + '"></span>' +
+      '<span class="mw-theme-fab__item-swatch" style="background:' + t.bg + '">' +
+        '<span class="mw-theme-fab__item-swatch-bars">' +
+          '<span style="background:' + t.accent + '"></span>' +
+          '<span style="background:' + t.accent2 + '"></span>' +
+          '<span style="background:' + t.warning + '"></span>' +
+          '<span style="background:' + t.danger + '"></span>' +
+        '</span>' +
       '</span>' +
       '<span class="mw-theme-fab__item-body">' +
         '<span class="mw-theme-fab__item-name">' + t.desc + '</span>' +
@@ -2136,9 +2144,9 @@ document.querySelectorAll('.code').forEach(function (block) {
 // Wait for maging (defer-loaded)
 // ============================================================
 function whenReady(fn) {
-  if (window.MagicWiget) return fn();
+  if (window.Maging) return fn();
   var t = setInterval(function () {
-    if (window.MagicWiget) { clearInterval(t); fn(); }
+    if (window.Maging) { clearInterval(t); fn(); }
   }, 30);
 }
 
@@ -2308,7 +2316,7 @@ Then wait for my next message before generating anything.`;
   var SHORT_PROMPT = `You are generating a single self-contained HTML dashboard using the "maging" library — an LLM-native UI primitive library.
 
 SETUP (always include in output — one-liner loads everything):
-<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.7/dist/maging-all.js"><\/script>
+<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.8/dist/maging-all.js"><\/script>
 <body class="mw-themed">
 
 maging-all.js auto-loads: Pretendard (Korean font) + maging.css + Tailwind Play + ECharts + maging.js, in correct order. Mount widgets inside a window 'maging:ready' listener OR DOMContentLoaded (whichever fires later — maging-all emits 'maging:ready' after all deps loaded).
@@ -2353,13 +2361,13 @@ API GOTCHAS:
 - All widget mounts must happen inside DOMContentLoaded since maging.js is defer-loaded.
 - Theme is switched by setting <html data-theme="…"> only — no DOM manipulation required.
 
-Full widget schemas & examples: https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.7/llms.txt
+Full widget schemas & examples: https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.8/llms.txt
   (Fetch this URL if you can browse. It has complete API for all 31 widgets.)` + HANDSHAKE;
 
   var FULL_PROMPT = `You are generating a single self-contained HTML dashboard using the "maging" library — an LLM-native UI primitive library.
 
 === SETUP (always include in output — one-liner) ===
-<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.7/dist/maging-all.js"><\/script>
+<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.8/dist/maging-all.js"><\/script>
 <body class="mw-themed">
 
 maging-all.js bundles: Pretendard (Korean font via @import) + maging.css + Tailwind Play + ECharts + maging.js, loaded in correct order. Dispatches 'maging:ready' event on window when all dependencies are ready. Mount widgets inside:
