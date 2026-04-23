@@ -1,4 +1,4 @@
-/*! maging v0.1.2 — AI Output Formatter | MIT
+/*! maging v0.1.3 — AI Output Formatter | MIT
  *  31 widgets · 35 brand themes · Pretendard Variable bundled for Korean glyphs.
  */
 
@@ -25,7 +25,7 @@
   --mw-radius: 8px;
   --mw-border-w: 1px;
   --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
-  --mw-display-font: 'Playfair Display', 'Times New Roman', serif;
+  --mw-display-font: 'Playfair Display', 'Times New Roman', 'Pretendard Variable', serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 4px 14px -4px rgb(139 119 97 / 0.15);
 }
@@ -205,7 +205,7 @@
   --mw-radius: 4px;
   --mw-border-w: 1px;
   --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
-  --mw-display-font: 'Playfair Display', 'Times New Roman', serif;
+  --mw-display-font: 'Playfair Display', 'Times New Roman', 'Pretendard Variable', serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 8px 24px -8px rgb(229 9 20 / 0.3);
 }
@@ -244,8 +244,8 @@
   --mw-warning: #b5a642;
   --mw-radius: 4px;
   --mw-border-w: 1px;
-  --mw-font: 'Playfair Display', Georgia, 'Times New Roman', serif;
-  --mw-display-font: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --mw-font: 'Playfair Display', Georgia, 'Times New Roman', 'Pretendard Variable', serif;
+  --mw-display-font: 'Playfair Display', Georgia, 'Times New Roman', 'Pretendard Variable', serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: none;
 }
@@ -484,9 +484,9 @@
   --mw-warning: #ffd23f;
   --mw-radius: 2px;
   --mw-border-w: 1px;
-  --mw-font: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
-  --mw-display-font: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
-  --mw-mono-font: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
+  --mw-font: 'JetBrains Mono', 'IBM Plex Mono', 'Pretendard Variable', ui-monospace, monospace;
+  --mw-display-font: 'JetBrains Mono', 'IBM Plex Mono', 'Pretendard Variable', ui-monospace, monospace;
+  --mw-mono-font: 'JetBrains Mono', 'IBM Plex Mono', 'Pretendard Variable', ui-monospace, monospace;
   --mw-shadow: 0 0 0 1px rgb(255 161 0 / 0.06);
 }
 
@@ -525,7 +525,7 @@
   --mw-radius: 4px;
   --mw-border-w: 1px;
   --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
-  --mw-display-font: 'Playfair Display', 'Libre Caslon Text', Georgia, serif;
+  --mw-display-font: 'Playfair Display', 'Libre Caslon Text', Georgia, 'Pretendard Variable', serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 1px 2px rgb(10 186 181 / 0.08);
 }
@@ -645,7 +645,7 @@
   --mw-radius: 0px;
   --mw-border-w: 1px;
   --mw-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', system-ui, sans-serif;
-  --mw-display-font: 'Didot', 'Playfair Display', 'Libre Caslon Text', Georgia, serif;
+  --mw-display-font: 'Didot', 'Playfair Display', 'Libre Caslon Text', Georgia, 'Pretendard Variable', serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 2px 4px rgb(62 33 16 / 0.08);
 }

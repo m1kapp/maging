@@ -1,6 +1,6 @@
-/*! maging-all v0.1.2 — single-tag bootstrap | MIT
+/*! maging-all v0.1.3 — single-tag bootstrap | MIT
  *
- *  <script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.2/dist/maging-all.js"></script>
+ *  <script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.3/dist/maging-all.js"></script>
  *
  *  Auto-injects (in this order):
  *    ① Pretendard Variable   — Korean font (via maging.css @import)
@@ -13,7 +13,7 @@
  *  CSS loads in parallel; JS runs after ECharts is ready.
  *
  *  Skip a default via data-attributes on this script tag:
- *    <script src="...maging-all.js" data-no-tailwind data-version="v0.1.2"></script>
+ *    <script src="...maging-all.js" data-no-tailwind data-version="v0.1.3"></script>
  *
  *  Events dispatched on window:
  *    'maging:ready'  — everything loaded, widgets can mount
@@ -32,7 +32,7 @@
   })();
 
   var ds = (self && self.dataset) || {};
-  var VERSION = ds.version || 'v0.1.2';
+  var VERSION = ds.version || 'v0.1.3';
   var REPO    = ds.repo    || 'm1kapp/maging';
   var BASE    = 'https://cdn.jsdelivr.net/gh/' + REPO + '@' + VERSION + '/dist/';
 

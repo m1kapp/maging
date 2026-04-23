@@ -13,6 +13,8 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -211,47 +213,58 @@
   .mw-theme-fab__list::-webkit-scrollbar { width: 6px; }
   .mw-theme-fab__list::-webkit-scrollbar-thumb { background: var(--mw-border); border-radius: 4px; }
 
-  .mw-theme-fab__group {
-    padding: 0.5rem 0.625rem 0.25rem;
-    font-family: var(--mw-mono-font);
-    font-size: 0.64rem;
-    color: var(--mw-text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
   .mw-theme-fab__item {
     display: flex;
     align-items: center;
     gap: 0.625rem;
     width: 100%;
-    margin-bottom: 2px;
-    padding: 0.5rem 0.5rem;
-    background: var(--mw-tile-bg, transparent);
+    margin-bottom: 3px;
+    padding: 0.55rem 0.625rem;
     border: 1.5px solid transparent;
-    color: var(--mw-text);
     border-radius: var(--mw-radius);
     cursor: pointer;
     text-align: left;
     font-family: inherit;
     transition: border-color 0.12s ease, transform 0.12s ease;
+    /* background + color are set inline via tile-bg/tile-fg per row */
   }
   .mw-theme-fab__item:hover {
-    border-color: color-mix(in srgb, var(--mw-tile-accent, var(--mw-accent)) 40%, transparent);
+    border-color: color-mix(in srgb, var(--mw-tile-accent) 60%, transparent);
   }
   .mw-theme-fab__item.is-active {
-    border-color: var(--mw-tile-accent, var(--mw-accent));
+    border-color: var(--mw-tile-accent);
   }
   .mw-theme-fab__item-swatch {
     display: flex;
     flex-shrink: 0;
-    width: 46px; height: 26px;
+    width: 48px; height: 26px;
     border-radius: 4px;
     overflow: hidden;
-    border: 1px solid var(--mw-border);
+    border: 1px solid rgba(0, 0, 0, 0.18);
   }
   .mw-theme-fab__item-swatch span { height: 100%; }
   .mw-theme-fab__item-swatch--accent { flex: 3; }
   .mw-theme-fab__item-swatch--other { flex: 1; }
+
+  .mw-theme-fab__item-check,
+  .mw-theme-fab__item-idx {
+    flex-shrink: 0;
+    width: 18px;
+    text-align: center;
+    font-size: 0.66rem;
+    font-family: var(--mw-mono-font);
+    font-variant-numeric: tabular-nums;
+    opacity: 0.55;
+  }
+  .mw-theme-fab__item-check {
+    display: none;
+    font-size: 0.95rem;
+    font-weight: 700;
+    opacity: 1;
+    color: var(--mw-tile-accent);
+  }
+  .mw-theme-fab__item.is-active .mw-theme-fab__item-check { display: block; }
+  .mw-theme-fab__item.is-active .mw-theme-fab__item-idx { display: none; }
   .mw-theme-fab__item-body {
     flex: 1; min-width: 0;
     display: flex; flex-direction: column; gap: 1px;
@@ -264,16 +277,9 @@
   .mw-theme-fab__item-brand {
     font-size: 0.66rem;
     font-family: var(--mw-mono-font);
-    color: var(--mw-text-muted);
+    opacity: 0.6;
     letter-spacing: 0.02em;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .mw-theme-fab__item-idx {
-    flex-shrink: 0;
-    font-size: 0.66rem;
-    color: var(--mw-text-muted);
-    font-family: var(--mw-mono-font);
-    font-variant-numeric: tabular-nums;
   }
 
   @media (max-width: 480px) {
@@ -970,9 +976,11 @@ var THEMES = [
 
   function itemHtml(t, i) {
     var active = t.value === current() ? ' is-active' : '';
+    var fg = isDark(t) ? '#f5f5f5' : '#1a1a1a';
     var tileStyle =
-      '--mw-tile-bg: color-mix(in srgb, ' + t.bg + ' 22%, transparent);' +
-      '--mw-tile-accent: ' + t.accent + ';';
+      'background:' + t.bg + ';' +
+      'color:' + fg + ';' +
+      '--mw-tile-accent:' + t.accent + ';';
     return '<button type="button" class="mw-theme-fab__item' + active + '" data-theme="' + t.value + '" style="' + tileStyle + '">' +
       '<span class="mw-theme-fab__item-swatch">' +
         '<span class="mw-theme-fab__item-swatch--accent" style="background:' + t.accent + '"></span>' +
@@ -985,20 +993,14 @@ var THEMES = [
         '<span class="mw-theme-fab__item-brand">inspired by ' + t.brand + '</span>' +
       '</span>' +
       '<span class="mw-theme-fab__item-idx">' + String(i).padStart(2, '0') + '</span>' +
+      '<span class="mw-theme-fab__item-check" aria-hidden="true">✓</span>' +
     '</button>';
   }
   function current() {
     return document.documentElement.getAttribute('data-theme') || 'claude';
   }
   function render() {
-    var lights = [], darks = [];
-    THEMES.forEach(function (t) { (isDark(t) ? darks : lights).push(t); });
-    var i = 0, html = '';
-    html += '<div class="mw-theme-fab__group">Light · ' + lights.length + '</div>';
-    lights.forEach(function (t) { i++; html += itemHtml(t, i); });
-    html += '<div class="mw-theme-fab__group">Dark · ' + darks.length + '</div>';
-    darks.forEach(function (t) { i++; html += itemHtml(t, i); });
-    list.innerHTML = html;
+    list.innerHTML = THEMES.map(function (t, i) { return itemHtml(t, i + 1); }).join('');
   }
   function syncButton() {
     var t = THEMES.find(function (x) { return x.value === current(); });

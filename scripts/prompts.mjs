@@ -20,7 +20,7 @@ Then wait for my next message before generating anything.`;
 export const SHORT_PROMPT = `You are generating a single self-contained HTML dashboard using the "maging" library — an LLM-native UI primitive library.
 
 SETUP (always include in output — one-liner loads everything):
-<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.2/dist/maging-all.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.3/dist/maging-all.js"></script>
 <body class="mw-themed">
 
 maging-all.js auto-loads: Pretendard (Korean font) + maging.css + Tailwind Play + ECharts + maging.js, in correct order. Mount widgets inside a window 'maging:ready' listener OR DOMContentLoaded (whichever fires later — maging-all emits 'maging:ready' after all deps loaded).
@@ -63,13 +63,13 @@ API GOTCHAS:
 - All widget mounts must happen inside DOMContentLoaded since maging.js is defer-loaded.
 - Theme is switched by setting <html data-theme="…"> only — no DOM manipulation required.
 
-Full widget schemas & examples: https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.2/llms.txt
+Full widget schemas & examples: https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.3/llms.txt
   (Fetch this URL if you can browse. It has complete API for all 31 widgets.)${HANDSHAKE}`;
 
 export const FULL_PROMPT = `You are generating a single self-contained HTML dashboard using the "maging" library — an LLM-native UI primitive library.
 
 === SETUP (always include in output — one-liner) ===
-<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.2/dist/maging-all.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/m1kapp/maging@v0.1.3/dist/maging-all.js"></script>
 <body class="mw-themed">
 
 maging-all.js bundles: Pretendard (Korean font via @import) + maging.css + Tailwind Play + ECharts + maging.js, loaded in correct order. Dispatches 'maging:ready' event on window when all dependencies are ready. Mount widgets inside:
