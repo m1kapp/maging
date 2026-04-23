@@ -77,13 +77,15 @@
   [data-theme="terminal"] .pill--primary { color: #000; }
   select.pill {
     appearance: none; -webkit-appearance: none; -moz-appearance: none;
-    padding-right: 1.75rem;
+    padding: 0.4rem 1.75rem 0.4rem 0.75rem;
+    font-size: 0.78rem;
     background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
                       linear-gradient(135deg, currentColor 50%, transparent 50%);
     background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%;
     background-size: 5px 5px, 5px 5px;
     background-repeat: no-repeat;
-    min-width: 190px;
+    min-width: 170px;
+    max-width: 220px;
   }
   select.pill:focus { outline: 2px solid color-mix(in srgb, var(--mw-accent) 40%, transparent); outline-offset: 1px; }
   select.pill option, select.pill optgroup {
@@ -183,102 +185,6 @@
     background: var(--mw-surface-2);
   }
 
-  /* ========= Doc Tabs ========= */
-  .doc-tabs {
-    background: var(--mw-surface);
-    border-bottom: 1px solid var(--mw-border);
-    position: sticky; top: 57px; z-index: 40;
-  }
-  .doc-tab {
-    position: relative;
-    padding: 0.875rem 1rem;
-    font-size: 0.85rem; font-weight: 500;
-    color: var(--mw-text-muted);
-    background: transparent; border: none; cursor: pointer;
-    font-family: var(--mw-font);
-    transition: color 0.15s;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .doc-tab:hover { color: var(--mw-text); }
-  .doc-tab.is-active {
-    color: var(--mw-accent);
-  }
-  .doc-tab.is-active::after {
-    content: '';
-    position: absolute;
-    left: 1rem; right: 1rem; bottom: -1px; height: 2px;
-    background: var(--mw-accent);
-    border-radius: 2px 2px 0 0;
-  }
-
-  /* ========= Markdown 뷰 스타일 ========= */
-  .md-body {
-    font-family: var(--mw-font);
-    color: var(--mw-text);
-    line-height: 1.7;
-    font-size: 0.9rem;
-  }
-  .md-body h1 { font-size: 2rem; font-weight: 700; margin: 2rem 0 1rem; font-family: var(--mw-display-font); letter-spacing: -0.01em; }
-  .md-body h2 { font-size: 1.5rem; font-weight: 700; margin: 2.5rem 0 1rem; font-family: var(--mw-display-font); border-bottom: 1px solid var(--mw-border); padding-bottom: 0.5rem; }
-  .md-body h3 { font-size: 1.2rem; font-weight: 600; margin: 1.75rem 0 0.625rem; }
-  .md-body h4 { font-size: 1rem; font-weight: 600; margin: 1.25rem 0 0.5rem; color: var(--mw-text-muted); }
-  .md-body p { margin: 0.625rem 0; }
-  .md-body a { color: var(--mw-accent); text-decoration: underline; text-underline-offset: 2px; }
-  .md-body a:hover { text-decoration-thickness: 2px; }
-  .md-body ul, .md-body ol { margin: 0.625rem 0 0.875rem 1.25rem; }
-  .md-body li { margin: 0.25rem 0; }
-  .md-body code {
-    font-family: var(--mw-mono-font);
-    font-size: 0.82em;
-    background: var(--mw-surface-2);
-    padding: 2px 6px;
-    border-radius: 4px;
-    color: var(--mw-accent);
-  }
-  .md-body pre {
-    background: var(--mw-surface-2);
-    border: 1px solid var(--mw-border);
-    border-radius: var(--mw-radius);
-    padding: 1rem;
-    overflow-x: auto;
-    margin: 1rem 0;
-    font-size: 0.78rem;
-    line-height: 1.6;
-  }
-  .md-body pre code {
-    background: transparent;
-    padding: 0;
-    color: var(--mw-text);
-    font-size: inherit;
-  }
-  .md-body blockquote {
-    border-left: 3px solid var(--mw-accent);
-    padding-left: 1rem;
-    color: var(--mw-text-muted);
-    margin: 1rem 0;
-  }
-  .md-body table {
-    border-collapse: collapse;
-    margin: 1rem 0;
-    font-size: 0.85em;
-    width: 100%;
-  }
-  .md-body th, .md-body td {
-    border: 1px solid var(--mw-border);
-    padding: 0.5rem 0.75rem;
-    text-align: left;
-  }
-  .md-body th {
-    background: var(--mw-surface-2);
-    font-weight: 600;
-  }
-  .md-body hr {
-    border: none;
-    border-top: 1px solid var(--mw-border);
-    margin: 2rem 0;
-  }
-  .md-body strong { font-weight: 700; color: var(--mw-text); }
 
   /* ========= USE WITH AI section ========= */
   .ai-step {
@@ -1081,32 +987,9 @@
           <option value="deere">트랙터 그린 inspired by John Deere</option>
         </optgroup>
       </select>
-      <a href="demo.html" class="pill">전체 데모 →</a>
     </div>
   </div>
 </nav>
-
-<!-- ========= TAB BAR ========= -->
-<div class="doc-tabs">
-  <div class="max-w-[1280px] mx-auto px-6 flex items-center gap-1 overflow-x-auto">
-    <button class="doc-tab is-active" data-tab="home">홈</button>
-    <button class="doc-tab" data-tab="agent">📘 Agent Guide</button>
-    <button class="doc-tab" data-tab="internals">🔧 Internals</button>
-    <button class="doc-tab" data-tab="components">🧩 Components</button>
-  </div>
-</div>
-
-<!-- Markdown 뷰 컨테이너들 · 기본 숨김 -->
-<section id="tab-agent" class="tab-pane" style="display:none;">
-  <div class="max-w-[900px] mx-auto px-6 py-10 md-body" id="md-agent">
-    <div class="mw-muted text-sm">불러오는 중…</div>
-  </div>
-</section>
-<section id="tab-internals" class="tab-pane" style="display:none;">
-  <div class="max-w-[900px] mx-auto px-6 py-10 md-body" id="md-internals">
-    <div class="mw-muted text-sm">불러오는 중…</div>
-  </div>
-</section>
 
 <!-- ========= HERO ========= -->
 <section id="top" class="hero-glow">
@@ -2024,105 +1907,6 @@ whenReady(function () {
     ]
   });
 });
-</script>
-
-<!-- ========= Marked.js (markdown renderer) ========= -->
-<script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
-<script>
-// ============================================================
-// Doc Tabs: Home / Agent Guide / Internals / Components
-// home 탭은 기존 섹션들 (hero, features, themes, widgets, usage)
-// agent/internals 탭은 .md 파일 fetch + marked 렌더
-// components 탭은 #widgets 섹션 독립 표시
-// ============================================================
-(function () {
-  var tabs = document.querySelectorAll('.doc-tab');
-  if (!tabs.length) return;
-
-  var allTabPanes = document.querySelectorAll('.tab-pane');
-  var widgetsSection = document.getElementById('widgets');
-
-  // home 탭 = body 직하위의 <section> 중 tab-pane·widgets 제외 전부
-  var homeSections = Array.from(document.querySelectorAll('body > section'))
-    .filter(function (s) {
-      return !s.classList.contains('tab-pane') && s.id !== 'widgets';
-    });
-
-  // body 직하위 <footer>도 home일 때만 보이게
-  var footer = document.querySelector('body > footer');
-
-  function hideAll() {
-    allTabPanes.forEach(function (p) { p.style.display = 'none'; });
-    homeSections.forEach(function (s) { s.style.display = 'none'; });
-    if (widgetsSection) widgetsSection.style.display = 'none';
-    if (footer) footer.style.display = 'none';
-  }
-
-  function showHome() {
-    hideAll();
-    homeSections.forEach(function (s) { s.style.display = ''; });
-    if (footer) footer.style.display = '';
-  }
-
-  function showAgent() {
-    hideAll();
-    var pane = document.getElementById('tab-agent');
-    if (pane) { pane.style.display = ''; loadMd('AGENT.md', 'md-agent'); }
-  }
-
-  function showInternals() {
-    hideAll();
-    var pane = document.getElementById('tab-internals');
-    if (pane) { pane.style.display = ''; loadMd('INTERNALS.md', 'md-internals'); }
-  }
-
-  function showComponents() {
-    hideAll();
-    if (widgetsSection) widgetsSection.style.display = '';
-  }
-
-  var mdCache = {};
-  function loadMd(path, targetId) {
-    var target = document.getElementById(targetId);
-    if (!target) return;
-    if (mdCache[path]) { target.innerHTML = mdCache[path]; return; }
-    fetch('./' + path)
-      .then(function (r) {
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        return r.text();
-      })
-      .then(function (text) {
-        var html = window.marked ? marked.parse(text) : ('<pre>' + text.replace(/</g, '&lt;') + '</pre>');
-        mdCache[path] = html;
-        target.innerHTML = html;
-      })
-      .catch(function (err) {
-        target.innerHTML = '<div class="mw-muted">로드 실패: ' + String(err) + '<br><br>' +
-          '브라우저에서 직접 열면 CORS로 .md 로드 불가. <code>npx serve .</code> 같은 로컬 서버로 실행하세요.</div>';
-      });
-  }
-
-  var handlers = { home: showHome, agent: showAgent, internals: showInternals, components: showComponents };
-
-  function activate(tabName) {
-    tabs.forEach(function (t) {
-      t.classList.toggle('is-active', t.dataset.tab === tabName);
-    });
-    (handlers[tabName] || showHome)();
-    // URL hash 업데이트 (공유 가능)
-    if (history.replaceState) history.replaceState(null, '', '#' + tabName);
-    window.scrollTo({ top: 0, behavior: 'auto' });
-  }
-
-  tabs.forEach(function (t) {
-    t.addEventListener('click', function () { activate(t.dataset.tab); });
-  });
-
-  // 초기 탭: URL hash 우선
-  var initial = (location.hash || '#home').slice(1);
-  if (!handlers[initial]) initial = 'home';
-  activate(initial);
-})();
 </script>
 
 <!-- Toast for copy confirmation -->
