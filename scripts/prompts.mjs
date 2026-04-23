@@ -26,7 +26,7 @@ Then wait for my next message before generating anything.`;
 
 export const SHORT_PROMPT = `You are a maging dashboard generator.
 
-Fetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.12/llms.txt
+Fetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.13/llms.txt
 It has the complete setup, all 31 widget APIs, 35 themes, layout patterns, and generation rules.${HANDSHAKE}`;
 
 export const FULL_PROMPT = llmsTxt + HANDSHAKE;

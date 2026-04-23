@@ -1,6 +1,6 @@
-/*! maging-all v0.1.12 — single-tag bootstrap | MIT
+/*! maging-all v0.1.13 — single-tag bootstrap | MIT
  *
- *  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.12/dist/maging-all.js"></script>
+ *  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.13/dist/maging-all.js"></script>
  *
  *  Auto-injects (in this order):
  *    ① Fonts (via maging.css @import):
@@ -19,7 +19,7 @@
  *  CSS loads in parallel; JS runs after ECharts is ready.
  *
  *  Skip a default via data-attributes on this script tag:
- *    <script src="...maging-all.js" data-no-tailwind data-version="v0.1.12"></script>
+ *    <script src="...maging-all.js" data-no-tailwind data-version="v0.1.13"></script>
  *
  *  Events dispatched on window:
  *    'maging:ready'  — everything loaded, widgets can mount
@@ -38,9 +38,8 @@
   })();
 
   var ds = (self && self.dataset) || {};
-  var VERSION = ds.version || 'v0.1.12';
-  var REPO    = ds.repo    || 'm1kapp/maging';
-  var BASE    = 'https://cdn.jsdelivr.net/gh/' + REPO + '@' + VERSION + '/dist/';
+  var VERSION = ds.version || '0.1.13';
+  var BASE    = ds.base || 'https://cdn.jsdelivr.net/npm/@m1kapp/maging@' + VERSION + '/dist/';
 
   var SKIP_TAILWIND   = ds.noTailwind   != null;
   var SKIP_ECHARTS    = ds.noEcharts    != null;
@@ -86,7 +85,7 @@
   // ④ ECharts → ⑤ maging.js (ordered)
   var echartsP = SKIP_ECHARTS
     ? Promise.resolve()
-    : loadScript('https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js');
+    : loadScript('https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js');
 
   echartsP
     .then(function () {

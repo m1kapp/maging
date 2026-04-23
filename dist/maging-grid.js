@@ -2,7 +2,7 @@
  *  Requires: window.MagicWiget, window.GridStack (both must be loaded first).
  *
  *  Usage:
- *    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+ *    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js"></script>
  *    <script src="https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack-all.js"></script>
  *    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack.min.css">
  *    <link rel="stylesheet" href="./dist/magicwiget.css">

@@ -2,7 +2,7 @@
  *  Requires ECharts 5+ loaded as global `echarts`.
  *  Usage:
  *    <link rel="stylesheet" href="magicwiget.css">
- *    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+ *    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js"></script>
  *    <script src="magicwiget.js"></script>
  *    <div data-mw-widget="kpi-card" data-mw-label="매출" data-mw-value="₩128억"
  *         data-mw-delta="8.3" data-mw-sparkline="420,445,430,468,475,490"></div>
@@ -15,7 +15,7 @@
   var EC = (typeof echarts !== 'undefined') ? echarts : null;
   if (!EC && typeof console !== 'undefined') {
     console.warn('[magicwiget] ECharts is not loaded. Charts will not render. ' +
-      'Add <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script> before magicwiget.js.');
+      'Add <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js"></script> before magicwiget.js.');
   }
 
   // ==========================================================
@@ -2294,7 +2294,7 @@
   // Public API
   // ==========================================================
   var api = {
-    version: '0.1.12',
+    version: '0.1.13',
     kpiCard: kpiCard,
     lineChart: lineChart,
     barChart: barChart,
