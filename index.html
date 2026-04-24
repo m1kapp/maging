@@ -204,8 +204,16 @@
     border: 1px solid var(--mw-border);
   }
 
-  .ai-split__content { padding: 1rem; flex: 1; overflow: hidden; min-height: 440px; }
-  .ai-split__content--left { display: flex; flex-direction: column; gap: 0.625rem; }
+  .ai-split__content { padding: 1rem; flex: 1; overflow: hidden; }
+  .ai-split__content--left { display: flex; flex-direction: column; gap: 0.5rem; }
+  .ai-split__toolbar {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 0.5rem;
+  }
+  .ai-split__token-count {
+    font-size: 0.58rem; color: var(--mw-text-muted); font-family: var(--mw-mono-font);
+    white-space: nowrap;
+  }
   .ai-split__content--right {
     display: flex; flex-direction: column; gap: 0.75rem;
     min-height: 440px; padding: 1rem 0.875rem; overflow-y: auto;
@@ -235,7 +243,7 @@
     font-size: 0.62rem; line-height: 1.5; font-family: var(--mw-mono-font);
     color: var(--mw-text-muted); background: var(--mw-bg);
     border: 1px solid var(--mw-border); border-radius: calc(var(--mw-radius) * 0.5);
-    white-space: pre-wrap; word-break: break-all; overflow-y: auto; max-height: 220px;
+    white-space: pre-wrap; word-break: break-all; overflow-y: auto; max-height: 340px;
   }
 
   .ai-split__copy {
@@ -1233,13 +1241,18 @@
           <div class="ai-split__url">maging.m1k.app</div>
         </div>
         <div class="ai-split__content ai-split__content--left">
-          <div class="ai-split__tabs">
-            <button class="ai-split__tab is-active" data-output="dashboard">Dashboard</button>
-            <button class="ai-split__tab" data-output="landing">Landing Page</button>
-          </div>
-          <div class="ai-split__len-row">
-            <button class="ai-split__len" data-mode="short">Short</button>
-            <button class="ai-split__len is-active" data-mode="full">Full</button>
+          <div class="ai-split__toolbar">
+            <div class="ai-split__tabs">
+              <button class="ai-split__tab is-active" data-output="dashboard">Dashboard</button>
+              <button class="ai-split__tab" data-output="landing">Landing Page</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+              <div class="ai-split__len-row">
+                <button class="ai-split__len" data-mode="short">Short</button>
+                <button class="ai-split__len is-active" data-mode="full">Full</button>
+              </div>
+              <span class="ai-split__token-count" id="ai-token-count">4.4K tokens</span>
+            </div>
           </div>
           <pre class="ai-split__code" id="ai-prompt-body"></pre>
           <button class="ai-split__copy" id="copy-prompt-btn">
@@ -2584,6 +2597,11 @@ Then wait for my next message before generating anything.`;
     document.querySelectorAll('.ai-split__len').forEach(function(b) {
       b.classList.toggle('is-active', b.dataset.mode === mode);
     });
+    // update token count
+    var t = TOKENS[mode];
+    var tc = document.getElementById('ai-token-count');
+    var fmt = function(n) { return n >= 1000 ? (n/1000).toFixed(1).replace(/\.0$/,'') + 'K' : n; };
+    if (tc) tc.textContent = fmt(t.gpt) + ' tokens';
   }
 
   function typeText(el, text, speed, cb) {
