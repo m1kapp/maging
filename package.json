@@ -26,12 +26,16 @@
     "prompt-to-ui"
   ],
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "sync": "node scripts/sync-index.mjs",
     "count-tokens": "node scripts/count-prompt-tokens.mjs",
-    "vercel-build": "echo 'Static site — no build step'"
+    "vercel-build": "vite build"
   },
   "devDependencies": {
+    "@anthropic-ai/tokenizer": "^0.0.4",
     "gpt-tokenizer": "^2.9.0",
-    "@anthropic-ai/tokenizer": "^0.0.4"
+    "vite": "^8.0.10"
   }
 }
