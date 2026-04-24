@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="claude">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Components — maging</title>
+<meta name="description" content="maging 위젯 갤러리. Core, Dashboard, Landing Page 모드별 컴포넌트를 확인하세요.">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js"></script>
+<link rel="stylesheet" href="./dist/maging.css">
+<script src="./dist/maging.js"></script>
+<script src="./dist/maging-landing.js"></script>
+<script type="module" src="./components/site.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  html { scroll-behavior: smooth; }
+  h1, h2, h3 { font-family: var(--mw-display-font); }
+
+  .cg-page { max-width: 1100px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+
+  .cg-header { margin-bottom: 2.5rem; }
+  .cg-header__title { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+  .cg-header__desc { font-size: var(--mw-text-sm); color: var(--mw-text-muted); line-height: 1.6; max-width: 560px; }
+  .cg-header__count {
+    display: inline-block; margin-top: 0.75rem;
+    font-size: var(--mw-text-xs); color: var(--mw-accent); font-weight: 600;
+    font-family: var(--mw-mono-font);
+  }
+
+  /* section */
+  .cg-section { margin-bottom: 3rem; }
+  .cg-section__head {
+    display: flex; align-items: center; gap: 0.75rem;
+    margin-bottom: 1.25rem; padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--mw-border);
+  }
+  .cg-section__title { font-size: var(--mw-text-md); font-weight: 700; }
+  .cg-section__badge {
+    font-size: var(--mw-text-xs); font-weight: 600; padding: 0.15rem 0.5rem;
+    border-radius: 999px; font-family: var(--mw-mono-font);
+  }
+  .cg-section__badge--core { background: color-mix(in srgb, var(--mw-accent) 12%, transparent); color: var(--mw-accent); }
+  .cg-section__badge--dashboard { background: color-mix(in srgb, var(--mw-success) 12%, transparent); color: var(--mw-success); }
+  .cg-section__badge--landing { background: color-mix(in srgb, var(--mw-warning) 12%, transparent); color: var(--mw-warning); }
+
+  /* widget card grid */
+  .cg-grid { display: grid; gap: 1rem; grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 960px) { .cg-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) { .cg-grid { grid-template-columns: 1fr; } }
+  .cg-card--wide { grid-column: span 2; }
+  @media (max-width: 640px) { .cg-card--wide { grid-column: span 1; } }
+
+  .cg-card {
+    background: var(--mw-surface); border: 1px solid var(--mw-border);
+    border-radius: var(--mw-radius); overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    display: flex; flex-direction: column;
+  }
+  .cg-card:hover {
+    border-color: var(--mw-accent);
+    box-shadow: 0 4px 16px -4px color-mix(in srgb, var(--mw-accent) 12%, transparent);
+  }
+  .cg-card__preview {
+    overflow: hidden;
+    background: var(--mw-bg); border-bottom: 1px solid var(--mw-border);
+    height: 180px; flex-shrink: 0;
+    padding: 0.75rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cg-card__preview > div { width: 100%; }
+  .cg-card__preview:has(.mw-chart__body) > div { height: 100%; }
+  .cg-card__preview .mw-header { display: none; }
+  .cg-card__preview .mw-card { border: none; box-shadow: none; background: transparent; padding: 0; min-height: 0 !important; height: 100%; display: flex; flex-direction: column; }
+  .cg-card__preview .mw-chart__body { flex: 1; min-height: 0; height: 0 !important; }
+  /* hide legend in compact preview */
+  .cg-card__preview .mw-chart__body [class*="legend"] { display: none !important; }
+  /* non-card widgets — fit content height */
+  .cg-card__preview .mw-alert { font-size: 0.8rem; }
+  .cg-card__preview .mw-page-header { font-size: 0.8rem; }
+  .cg-card__preview .mw-page-header h1 { font-size: 1.5rem; }
+  .cg-card__preview .mw-section-head { font-size: 0.75rem; }
+  .cg-card__preview .mw-section-head h2 { font-size: 1rem; }
+  /* map chart — just hide the legend bar, let tiles fill */
+  .cg-card__preview .mw-mapchart { min-height: 0 !important; padding: 0.5rem !important; }
+  .cg-card__preview .mw-mapchart__legend { display: none; }
+  .cg-card__preview .mw-mapchart__grid { font-size: 0.6rem; gap: 2px; }
+  .cg-card__preview .mw-mapchart__tile { padding: 0.15rem 0.25rem; }
+  .cg-card__preview .mw-mapchart__val { display: none; }
+  .cg-card { cursor: pointer; }
+  .cg-card__info { padding: 0.75rem 1rem; height: 72px; flex-shrink: 0; box-sizing: border-box; }
+
+  /* ── dialog ── */
+  .cg-dlg { position: fixed; inset: 0; z-index: 500; display: none; align-items: center; justify-content: center; }
+  .cg-dlg.is-open { display: flex; }
+  .cg-dlg__scrim { position: absolute; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
+  .cg-dlg__panel {
+    position: relative; width: 90%; max-width: 720px; max-height: 85vh;
+    background: var(--mw-surface); border: 1px solid var(--mw-border);
+    border-radius: var(--mw-radius); box-shadow: 0 24px 48px -12px rgba(0,0,0,0.25);
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  .cg-dlg__head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 1.25rem; border-bottom: 1px solid var(--mw-border); flex-shrink: 0;
+  }
+  .cg-dlg__title { font-size: var(--mw-text-md); font-weight: 700; }
+  .cg-dlg__desc { font-size: var(--mw-text-xs); color: var(--mw-text-muted); margin-top: 0.15rem; }
+  .cg-dlg__close {
+    width: 28px; height: 28px; border-radius: calc(var(--mw-radius) * 0.5);
+    border: 1px solid var(--mw-border); background: var(--mw-surface-2);
+    color: var(--mw-text-muted); cursor: pointer; font-size: 0.8rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: color 120ms, border-color 120ms;
+  }
+  .cg-dlg__close:hover { color: var(--mw-text); border-color: var(--mw-accent); }
+  .cg-dlg__tabs {
+    display: flex; gap: 0; border-bottom: 1px solid var(--mw-border); flex-shrink: 0;
+  }
+  .cg-dlg__tab {
+    padding: 0.6rem 1.25rem; font-size: var(--mw-text-xs); font-weight: 600;
+    color: var(--mw-text-muted); cursor: pointer; border: none; background: none;
+    font-family: var(--mw-font); transition: color 120ms;
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+  }
+  .cg-dlg__tab:hover { color: var(--mw-text); }
+  .cg-dlg__tab.is-active { color: var(--mw-accent); border-bottom-color: var(--mw-accent); }
+  .cg-dlg__body { flex: 1; overflow: auto; }
+  .cg-dlg__preview { padding: 1.5rem; min-height: 300px; background: var(--mw-bg); }
+  .cg-dlg__preview .mw-card { min-height: 280px; }
+  .cg-dlg__code {
+    display: none; padding: 0; margin: 0;
+    background: #1e1e2e; position: relative;
+  }
+  .cg-dlg__code pre {
+    margin: 0; padding: 1.5rem; font-size: 0.8rem; line-height: 1.7;
+    color: #cdd6f4; font-family: var(--mw-mono-font);
+    white-space: pre; overflow-x: auto;
+    tab-size: 2;
+  }
+  .cg-dlg__copy {
+    position: absolute; top: 0.75rem; right: 0.75rem;
+    font-size: 0.65rem; padding: 0.25rem 0.6rem;
+    border: 1px solid #45475a; border-radius: 4px;
+    background: #313244; color: #a6adc8;
+    cursor: pointer; font-family: var(--mw-font);
+    transition: color 150ms, border-color 150ms;
+  }
+  .cg-dlg__copy:hover { color: #cdd6f4; border-color: #89b4fa; }
+  /* syntax colors */
+  .cg-dlg__code .hl-kw { color: #cba6f7; }
+  .cg-dlg__code .hl-str { color: #a6e3a1; }
+  .cg-dlg__code .hl-num { color: #fab387; }
+  .cg-dlg__code .hl-cmt { color: #6c7086; font-style: italic; }
+  .cg-dlg__code .hl-tag { color: #89b4fa; }
+  .cg-dlg__code .hl-attr { color: #f9e2af; }
+  .cg-dlg__code .hl-fn { color: #89dceb; }
+  .cg-dlg__code .hl-bool { color: #fab387; }
+  .cg-dlg__code .hl-prop { color: #b4befe; }
+  .cg-card__name { font-size: var(--mw-text-sm); font-weight: 600; margin-bottom: 0.2rem; }
+  .cg-card__desc { font-size: var(--mw-text-xs); color: var(--mw-text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+  /* upsell banner */
+  .cg-upsell {
+    display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    margin-top: 2rem;
+  }
+  .cg-upsell__card {
+    background: var(--mw-surface); border: 1px solid var(--mw-border);
+    border-radius: var(--mw-radius); padding: 1.25rem;
+    text-decoration: none; color: inherit;
+    transition: border-color 0.2s, transform 0.2s;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .cg-upsell__card:hover { border-color: var(--mw-accent); transform: translateY(-1px); }
+  .cg-upsell__icon { font-size: 1.5rem; flex-shrink: 0; }
+  .cg-upsell__label { font-size: var(--mw-text-sm); font-weight: 600; }
+  .cg-upsell__hint { font-size: var(--mw-text-xs); color: var(--mw-text-muted); }
+</style>
+</head>
+
+<body class="mw-themed">
+
+<maging-nav active="components" mode="core" id="nav-el"></maging-nav>
+
+<div class="cg-page">
+  <div class="cg-header">
+    <h1 class="cg-header__title">Components</h1>
+    <p class="cg-header__desc" id="cg-desc"></p>
+    <div class="cg-header__count" id="cg-count"></div>
+  </div>
+  <div id="cg-content"></div>
+</div>
+
+<!-- Dialog -->
+<div class="cg-dlg" id="cg-dlg">
+  <div class="cg-dlg__scrim"></div>
+  <div class="cg-dlg__panel">
+    <div class="cg-dlg__head">
+      <div>
+        <div class="cg-dlg__title" id="dlg-title"></div>
+        <div class="cg-dlg__desc" id="dlg-desc"></div>
+      </div>
+      <button class="cg-dlg__close" id="dlg-close">&times;</button>
+    </div>
+    <div class="cg-dlg__tabs">
+      <button class="cg-dlg__tab is-active" data-tab="preview">Preview</button>
+      <button class="cg-dlg__tab" data-tab="code">Code</button>
+    </div>
+    <div class="cg-dlg__body">
+      <div class="cg-dlg__preview" id="dlg-preview"></div>
+      <div class="cg-dlg__code" id="dlg-code"><button class="cg-dlg__copy" id="dlg-copy">Copy</button><pre></pre></div>
+    </div>
+  </div>
+</div>
+
+<maging-footer></maging-footer>
+
+<script>
+/* ============================================================
+ * Widget registry — mode tagging
+ * ============================================================ */
+var WIDGETS = {
+  // ── Core: metrics ──
+  kpiCard:         { mode: 'core', cat: 'Metrics' },
+  heroTile:        { mode: 'core', cat: 'Metrics' },
+  metricChart:     { mode: 'core', cat: 'Metrics' },
+  metricStack:     { mode: 'core', cat: 'Metrics' },
+  compareCard:     { mode: 'core', cat: 'Metrics' },
+  countdownTile:   { mode: 'core', cat: 'Metrics' },
+  ringProgress:    { mode: 'core', cat: 'Metrics' },
+  bulletChart:     { mode: 'core', cat: 'Metrics' },
+
+  // ── Core: charts ──
+  lineChart:       { mode: 'core', cat: 'Charts' },
+  barChart:        { mode: 'core', cat: 'Charts' },
+  donutChart:      { mode: 'core', cat: 'Charts' },
+  funnelChart:     { mode: 'core', cat: 'Charts' },
+  gaugeChart:      { mode: 'core', cat: 'Charts' },
+  radarChart:      { mode: 'core', cat: 'Charts' },
+  treemapChart:    { mode: 'core', cat: 'Charts' },
+  scatterChart:    { mode: 'core', cat: 'Charts' },
+  sankeyChart:     { mode: 'core', cat: 'Charts' },
+  heatmapChart:    { mode: 'core', cat: 'Charts' },
+  waterfallChart:  { mode: 'core', cat: 'Charts' },
+
+  // ── Core: lists ──
+  leaderboard:     { mode: 'core', cat: 'Lists' },
+  activityTable:   { mode: 'core', cat: 'Lists' },
+  timeline:        { mode: 'core', cat: 'Lists' },
+  inboxPreview:    { mode: 'core', cat: 'Lists' },
+  statusGrid:      { mode: 'core', cat: 'Lists' },
+  sparklineList:   { mode: 'core', cat: 'Lists' },
+
+  // ── Core: calendar & progress ──
+  calendarHeatmap: { mode: 'core', cat: 'Calendar & Progress', wide: true },
+  eventCalendar:   { mode: 'core', cat: 'Calendar & Progress' },
+  progressStepper: { mode: 'core', cat: 'Calendar & Progress' },
+  goalGrid:        { mode: 'core', cat: 'Calendar & Progress' },
+
+  // ── Core: layout ──
+  pageHeader:      { mode: 'core', cat: 'Layout' },
+  sectionHead:     { mode: 'core', cat: 'Layout' },
+  alertBanner:     { mode: 'core', cat: 'Layout' },
+  mapChart:        { mode: 'core', cat: 'Specialized', wide: true },
+  cohortMatrix:    { mode: 'core', cat: 'Specialized', wide: true },
+
+  // ── Landing Page specific ──
+  stepGuide:       { mode: 'landing', cat: 'Landing Page', wide: true },
+  codeBlock:       { mode: 'landing', cat: 'Landing Page', wide: true },
+  comparisonTable: { mode: 'landing', cat: 'Landing Page', wide: true },
+  heroSection:     { mode: 'landing', cat: 'Landing Page', wide: true },
+  featureGrid:     { mode: 'landing', cat: 'Landing Page', wide: true },
+  pricingTable:    { mode: 'landing', cat: 'Landing Page', wide: true },
+  testimonialGrid: { mode: 'landing', cat: 'Landing Page' },
+  logoBar:         { mode: 'landing', cat: 'Landing Page' },
+  ctaSection:      { mode: 'landing', cat: 'Landing Page', wide: true },
+  faqAccordion:    { mode: 'landing', cat: 'Landing Page' },
+};
+
+/* ── Sample data for live previews ── */
+var SAMPLES = {
+  // ── Metrics ──
+  kpiCard:       function(el) { Maging.kpiCard(el, { label: '매출', value: '128억', delta: 8.3, compact: true, sparkline: [40,55,48,62,75,88] }); },
+  heroTile:      function(el) { Maging.heroTile(el, { kicker: 'Q2', value: '512억', tagline: '+18% YoY' }); },
+  metricChart:   function(el) { Maging.metricChart(el, { label: '매출 추이', value: '128억', delta: 8.3, categories: ['1월','2월','3월','4월','5월','6월'], series: [{ name: '올해', data: [72,78,81,88,91,128] }] }); },
+  metricStack:   function(el) { Maging.metricStack(el, { title: '요약', main: { label: '매출', value: '128억', delta: 8.3 }, items: [{ label: '목표', value: '150억' }, { label: '달성률', value: '85%' }] }); },
+  compareCard:   function(el) { Maging.compareCard(el, { title: '전월비교', left: { label: '이번달', value: '128억' }, right: { label: '지난달', value: '118억' }, delta: 8.5 }); },
+  countdownTile: function(el) { Maging.countdownTile(el, { title: '출시까지', target: new Date(Date.now() + 86400000 * 14).toISOString(), label: 'D-Day' }); },
+  ringProgress:  function(el) { Maging.ringProgress(el, { value: 85, max: 100, unit: '%', label: '달성률', thresholds: [[0.8,'success'],[0.5,'warning'],[0,'danger']] }); },
+  bulletChart:   function(el) { Maging.bulletChart(el, { value: 78, target: 90, max: 100, unit: '%' }); },
+
+  // ── Charts ──
+  lineChart:     function(el) { Maging.lineChart(el, { categories: ['1월','2월','3월','4월','5월','6월'], series: [{ name: '매출', data: [12,14,13,16,18,21] }] }); },
+  barChart:      function(el) { Maging.barChart(el, { items: [{ label: '영업', value: 45 },{ label: '마케팅', value: 32 },{ label: '개발', value: 68 },{ label: 'CS', value: 21 }] }); },
+  donutChart:    function(el) { Maging.donutChart(el, { slices: [{ label: '모바일', value: 60 },{ label: '웹', value: 30 },{ label: '기타', value: 10 }] }); },
+  funnelChart:   function(el) { Maging.funnelChart(el, { stages: [{ label: '방문', value: 1000 },{ label: '가입', value: 600 },{ label: '구매', value: 200 }] }); },
+  gaugeChart:    function(el) { Maging.gaugeChart(el, { label: '성능', value: 78, max: 100, unit: '%' }); },
+  radarChart:    function(el) { Maging.radarChart(el, { indicators: [{ name: 'A', max: 100 },{ name: 'B', max: 100 },{ name: 'C', max: 100 },{ name: 'D', max: 100 },{ name: 'E', max: 100 }], series: [{ name: '팀', data: [80,90,70,85,75] }] }); },
+  treemapChart:  function(el) { Maging.treemapChart(el, { items: [{ name: '서울', value: 45 },{ name: '경기', value: 30 },{ name: '부산', value: 15 },{ name: '기타', value: 10 }] }); },
+  scatterChart:  function(el) { Maging.scatterChart(el, { xLabel: '비용', yLabel: '매출', points: [{x:10,y:20,label:'A'},{x:15,y:28,label:'B'},{x:20,y:35,label:'C'},{x:25,y:40,label:'D'},{x:30,y:52,label:'E'}] }); },
+  sankeyChart:   function(el) { Maging.sankeyChart(el, { nodes: [{ name: '유입' },{ name: '가입' },{ name: '구매' },{ name: '이탈' }], links: [{ source: '유입', target: '가입', value: 60 },{ source: '유입', target: '이탈', value: 40 },{ source: '가입', target: '구매', value: 30 },{ source: '가입', target: '이탈', value: 30 }] }); },
+  heatmapChart:  function(el) { Maging.heatmapChart(el, { xAxis: ['월','화','수','목','금'], yAxis: ['오전','오후','저녁'], values: [[0,0,5],[1,0,7],[2,0,3],[3,0,8],[4,0,6],[0,1,10],[1,1,8],[2,1,12],[3,1,9],[4,1,7],[0,2,3],[1,2,4],[2,2,6],[3,2,5],[4,2,2]] }); },
+  waterfallChart: function(el) { Maging.waterfallChart(el, { items: [{ label: '매출', value: 100, type: 'start' },{ label: '원가', value: -40 },{ label: '영업비', value: -25 },{ label: '영업이익', value: 35, type: 'total' }] }); },
+
+  // ── Lists ──
+  leaderboard:   function(el) { Maging.leaderboard(el, { items: [{ name: '김철수', meta: '95점', percent: 95 },{ name: '이영희', meta: '88점', percent: 88 },{ name: '박민수', meta: '76점', percent: 76 }] }); },
+  activityTable: function(el) { Maging.activityTable(el, { columns: [{ label: '시간', key: 'time' },{ label: '이벤트', key: 'event' },{ label: '상태', key: 'status' }], rows: [{ time: '10:00', event: '배포', status: '성공' },{ time: '09:30', event: '테스트', status: '성공' }] }); },
+  timeline:      function(el) { Maging.timeline(el, { items: [{ time: '10:00', text: '배포 완료' },{ time: '09:30', text: '테스트 통과' },{ time: '09:00', text: 'PR 생성' }] }); },
+  inboxPreview:  function(el) { Maging.inboxPreview(el, { items: [{ text: '배포가 완료되었습니다.', time: '방금' },{ text: '리뷰를 요청합니다.', time: '1시간 전' }] }); },
+  statusGrid:    function(el) { Maging.statusGrid(el, { columns: 4, items: [{ label: 'API', status: 'ok' },{ label: 'DB', status: 'ok' },{ label: 'CDN', status: 'warn' },{ label: 'Auth', status: 'ok' }] }); },
+  sparklineList: function(el) { Maging.sparklineList(el, { items: [{ label: '매출', value: '128억', delta: 8.3, sparkline: [40,55,48,62,75,88] },{ label: 'DAU', value: '48K', delta: 12, sparkline: [30,32,35,38,42,48] }] }); },
+
+  // ── Calendar & Progress ──
+  calendarHeatmap: function(el) { var v = []; var now = Date.now(); for (var i=0;i<120;i++) { v.push([new Date(now - i*86400000).toISOString().slice(0,10), Math.floor(Math.random()*10)]); } Maging.calendarHeatmap(el, { values: v }); },
+  eventCalendar: function(el) { var d = new Date().getDate(); Maging.eventCalendar(el, { events: [{ date: d, label: '회의' },{ date: d+2, label: '배포' }] }); },
+  progressStepper: function(el) { Maging.progressStepper(el, { steps: [{ label: '기획', status: 'done' },{ label: '개발', status: 'active' },{ label: '배포', status: 'pending' }] }); },
+  goalGrid:      function(el) { Maging.goalGrid(el, { items: [{ label: '매출', value: 128, max: 150, unit: '억' },{ label: 'NPS', value: 68, max: 80, unit: '점' }] }); },
+
+  // ── Layout ──
+  pageHeader:    function(el) { Maging.pageHeader(el, { kicker: 'DASHBOARD', title: '운영 현황', subtitle: '실시간 모니터링' }); },
+  sectionHead:   function(el) { Maging.sectionHead(el, { index: '01', kicker: 'OVERVIEW', title: '핵심 지표', tag: 'Live' }); },
+  alertBanner:   function(el) { Maging.alertBanner(el, { type: 'success', title: '배포 완료', message: 'v2.4.1' }); },
+
+  // ── Specialized ──
+  mapChart:      function(el) { Maging.mapChart(el, { items: [{ region: '서울', value: 45 },{ region: '경기', value: 30 },{ region: '부산', value: 15 },{ region: '인천', value: 20 },{ region: '대구', value: 18 }] }); },
+  cohortMatrix:  function(el) { Maging.cohortMatrix(el, { cohorts: ['1월','2월','3월'], periods: ['M0','M1','M2'], data: [[100,60,40],[100,55,35],[100,58,null]] }); },
+
+  // ── Landing ──
+  stepGuide:       function(el) { Maging.stepGuide(el, { steps: [{ title: 'CDN 추가', desc: 'script 태그 한 줄이면 됩니다.', code: '<script src="maging.js"><\/script>' },{ title: '위젯 마운트', desc: 'HTML에 div 하나, JS로 호출.', code: 'Maging.kpiCard("#el", { ... });' },{ title: '테마 변경', desc: '35개 브랜드 테마 즉시 전환.' }] }); },
+  codeBlock:       function(el) { Maging.codeBlock(el, { lang: 'html', code: '<link rel="stylesheet" href="maging.css">\n<script src="maging.js"><\/script>\n\n<div id="chart"></div>\n<script>\n  Maging.lineChart("#chart", {\n    categories: ["1월","2월","3월"],\n    series: [{ name: "매출", data: [10,15,22] }]\n  });\n<\/script>' }); },
+  comparisonTable: function(el) { Maging.comparisonTable(el, { columns: ['maging','Recharts','Chart.js'], highlight: 0, rows: [{ label: '빌드 불필요', values: [true,false,false] },{ label: '35 테마', values: [true,false,false] },{ label: 'CDN 한 줄', values: [true,false,true] },{ label: 'LLM 최적화', values: [true,false,false] }] }); },
+  heroSection:     function(el) { Maging.heroSection(el, { kicker: 'SaaS', title: '제목입니다', subtitle: '설명입니다.', ctas: [{ label: '시작하기', primary: true }], padding: '2rem 1rem' }); },
+  featureGrid:     function(el) { Maging.featureGrid(el, { cols: 2, items: [{ icon: '⚡', title: '빠른 속도', desc: '설명' },{ icon: '🔒', title: '보안', desc: '설명' }] }); },
+  pricingTable:    function(el) { Maging.pricingTable(el, { plans: [{ name: 'Free', price: '무료', features: ['기능 1'], cta: { label: '시작' } },{ name: 'Pro', price: '9.9만', popular: true, badge: '인기', features: ['기능 1','기능 2'], cta: { label: '시작' } }] }); },
+  testimonialGrid: function(el) { Maging.testimonialGrid(el, { cols: 1, items: [{ quote: '정말 좋습니다.', name: '김철수', role: 'PM' }] }); },
+  logoBar:         function(el) { Maging.logoBar(el, { items: [{ name: 'Kakao' },{ name: 'Toss' },{ name: 'LINE' }] }); },
+  ctaSection:      function(el) { Maging.ctaSection(el, { title: '시작하세요', desc: '무료 체험', ctas: [{ label: '시작', primary: true }], padding: '2rem 1rem' }); },
+  faqAccordion:    function(el) { Maging.faqAccordion(el, { items: [{ q: '질문입니다', a: '답변입니다.' }] }); },
+};
+
+/* ============================================================
+ * Render
+ * ============================================================ */
+var params = new URLSearchParams(window.location.search);
+var currentMode = params.get('mode') || 'core';
+
+// Update nav mode
+var navEl = document.getElementById('nav-el');
+navEl.setAttribute('mode', currentMode);
+// re-render nav (Web Component already connected, force re-render)
+navEl.connectedCallback && navEl.connectedCallback();
+
+// Mode descriptions
+var MODE_DESC = {
+  core: 'maging 코어 위젯입니다. 모든 모드에서 공통으로 사용할 수 있습니다.',
+  dashboard: 'Core 위젯 + Dashboard 전용 위젯입니다. 데이터 모니터링과 운영 대시보드에 최적화되어 있습니다.',
+  landing: 'Core 위젯 + Landing Page 전용 위젯입니다. 마케팅 랜딩페이지와 전환 최적화에 특화되어 있습니다.',
+};
+
+// Filter widgets by mode
+function getFilteredWidgets() {
+  var result = {};
+  Object.keys(WIDGETS).forEach(function(key) {
+    var w = WIDGETS[key];
+    if (currentMode === 'core' && w.mode === 'core') result[key] = w;
+    else if (currentMode === 'dashboard' && w.mode === 'core') result[key] = w;
+    else if (currentMode === 'landing' && (w.mode === 'core' || w.mode === 'landing')) result[key] = w;
+  });
+  return result;
+}
+
+var filtered = getFilteredWidgets();
+var count = Object.keys(filtered).length;
+
+// Header
+document.getElementById('cg-desc').textContent = MODE_DESC[currentMode];
+document.getElementById('cg-count').textContent = count + '개 컴포넌트';
+
+// Group by category
+var groups = {};
+Object.keys(filtered).forEach(function(key) {
+  var cat = filtered[key].cat;
+  if (!groups[cat]) groups[cat] = [];
+  groups[cat].push(key);
+});
+
+// Landing meta (not in core Maging.meta)
+var LANDING_META = {
+  stepGuide: { title: 'Step Guide', desc: '번호 + 제목 + 설명 + 코드/이미지. How it works 섹션.' },
+  codeBlock: { title: 'Code Block', desc: '구문 하이라이팅 + Copy 버튼. 개발자 대상 랜딩.' },
+  comparisonTable: { title: 'Comparison Table', desc: '경쟁사 비교표 · 체크/X · 하이라이트 열.' },
+  heroSection: { title: 'Hero Section', desc: '풀폭 히어로 · 타이틀 + 서브 + CTA 버튼.' },
+  featureGrid: { title: 'Feature Grid', desc: '아이콘 + 제목 + 설명 카드 그리드.' },
+  pricingTable: { title: 'Pricing Table', desc: '요금제 비교 테이블 · Popular 배지 + CTA.' },
+  testimonialGrid: { title: 'Testimonial Grid', desc: '인용문 + 프로필 카드 그리드.' },
+  logoBar: { title: 'Logo Bar', desc: '고객사/파트너 로고 나열 (social proof).' },
+  ctaSection: { title: 'CTA Section', desc: '전환 유도 CTA 섹션.' },
+  faqAccordion: { title: 'FAQ Accordion', desc: '아코디언 FAQ.' },
+};
+
+// Category display order — mode-specific first
+var CAT_ORDER_BY_MODE = {
+  core: ['Metrics', 'Charts', 'Lists', 'Calendar & Progress', 'Layout', 'Specialized'],
+  dashboard: ['Metrics', 'Charts', 'Lists', 'Calendar & Progress', 'Layout', 'Specialized'],
+  landing: ['Landing Page', 'Metrics', 'Charts', 'Lists', 'Calendar & Progress', 'Layout', 'Specialized'],
+};
+
+var catOrder = CAT_ORDER_BY_MODE[currentMode] || CAT_ORDER_BY_MODE.core;
+var content = document.getElementById('cg-content');
+var html = '';
+
+catOrder.forEach(function(cat) {
+  var items = groups[cat];
+  if (!items || !items.length) return;
+
+  var badgeClass = 'cg-section__badge--core';
+  if (cat === 'Landing Page') badgeClass = 'cg-section__badge--landing';
+
+  html += '<div class="cg-section">';
+  html += '<div class="cg-section__head">';
+  html += '<h2 class="cg-section__title">' + cat + '</h2>';
+  html += '<span class="cg-section__badge ' + badgeClass + '">' + items.length + '</span>';
+  html += '</div>';
+  html += '<div class="cg-grid">';
+
+  items.forEach(function(key) {
+    var meta = (Maging.meta && Maging.meta[key]) || LANDING_META[key] || {};
+    var title = meta.title || key;
+    var desc = meta.desc || '';
+    var wideClass = WIDGETS[key].wide ? ' cg-card--wide' : '';
+    html += '<div class="cg-card' + wideClass + '">';
+    html += '<div class="cg-card__preview"><div id="preview-' + key + '"></div></div>';
+    html += '<div class="cg-card__info">';
+    html += '<div class="cg-card__name">' + title + '</div>';
+    html += '<div class="cg-card__desc">' + desc + '</div>';
+    html += '</div></div>';
+  });
+
+  html += '</div></div>';
+});
+
+// Upsell banner (only for core mode)
+if (currentMode === 'core') {
+  html += '<div class="cg-upsell">';
+  html += '<a href="components.html?mode=dashboard" class="cg-upsell__card">';
+  html += '<span class="cg-upsell__icon">📊</span>';
+  html += '<div><div class="cg-upsell__label">Dashboard 모드 보기</div>';
+  html += '<div class="cg-upsell__hint">Core + 대시보드 전용 위젯</div></div></a>';
+  html += '<a href="components.html?mode=landing" class="cg-upsell__card">';
+  html += '<span class="cg-upsell__icon">🏠</span>';
+  html += '<div><div class="cg-upsell__label">Landing Page 모드 보기</div>';
+  html += '<div class="cg-upsell__hint">Core + 랜딩페이지 전용 위젯</div></div></a>';
+  html += '</div>';
+}
+
+content.innerHTML = html;
+
+// Mount live previews
+Object.keys(filtered).forEach(function(key) {
+  var el = document.getElementById('preview-' + key);
+  if (el && SAMPLES[key]) {
+    try { SAMPLES[key](el); } catch(e) { el.innerHTML = '<span style="color:var(--mw-text-muted);font-size:0.7rem;">Preview unavailable</span>'; }
+  } else if (el) {
+    el.innerHTML = '<span style="color:var(--mw-text-muted);font-size:0.7rem;">Preview unavailable</span>';
+  }
+});
+
+/* ============================================================
+ * Code samples for dialog
+ * ============================================================ */
+var CODE = {
+  kpiCard:       "const config = {\n  label: '매출',\n  value: '128억',\n  delta: 8.3,\n  compact: true,\n  sparkline: [40, 55, 48, 62, 75, 88]\n};\n\nMaging.kpiCard('#el', config);",
+  heroTile:      "const config = {\n  kicker: 'Q2 2026',\n  value: '512억',\n  tagline: '+18% YoY',\n  stats: [\n    { label: '전년', value: '210억' },\n    { label: 'MRR', value: '42.7억' }\n  ]\n};\n\nMaging.heroTile('#el', config);",
+  metricChart:   "const config = {\n  label: '매출 추이',\n  value: '128억',\n  delta: 8.3,\n  categories: ['1월','2월','3월','4월','5월','6월'],\n  series: [\n    { name: '올해', data: [72, 78, 81, 88, 91, 128] }\n  ]\n};\n\nMaging.metricChart('#el', config);",
+  metricStack:   "const config = {\n  title: '매출 요약',\n  main: { label: '매출', value: '128억', delta: 8.3 },\n  items: [\n    { label: '목표', value: '150억' },\n    { label: '달성률', value: '85%' }\n  ]\n};\n\nMaging.metricStack('#el', config);",
+  compareCard:   "const config = {\n  title: '전월 비교',\n  left: { label: '이번달', value: '128억' },\n  right: { label: '지난달', value: '118억' },\n  delta: 8.5\n};\n\nMaging.compareCard('#el', config);",
+  countdownTile: "const config = {\n  title: '출시까지',\n  target: '2026-06-01T00:00:00',\n  label: 'D-Day'\n};\n\nMaging.countdownTile('#el', config);",
+  ringProgress:  "const config = {\n  value: 85, max: 100,\n  unit: '%', label: '달성률',\n  thresholds: [\n    [0.8, 'success'],\n    [0.5, 'warning'],\n    [0, 'danger']\n  ]\n};\n\nMaging.ringProgress('#el', config);",
+  bulletChart:   "const config = {\n  value: 78,\n  target: 90,\n  max: 100,\n  unit: '%'\n};\n\nMaging.bulletChart('#el', config);",
+  lineChart:     "const config = {\n  categories: ['1월','2월','3월','4월','5월','6월'],\n  series: [\n    { name: '매출', data: [12, 14, 13, 16, 18, 21] }\n  ]\n};\n\nMaging.lineChart('#el', config);",
+  barChart:      "const config = {\n  items: [\n    { label: '영업', value: 45 },\n    { label: '마케팅', value: 32 },\n    { label: '개발', value: 68 },\n    { label: 'CS', value: 21 }\n  ]\n};\n\nMaging.barChart('#el', config);",
+  donutChart:    "const config = {\n  slices: [\n    { label: '모바일', value: 60 },\n    { label: '웹', value: 30 },\n    { label: '기타', value: 10 }\n  ]\n};\n\nMaging.donutChart('#el', config);",
+  funnelChart:   "const config = {\n  stages: [\n    { label: '방문', value: 1000 },\n    { label: '가입', value: 600 },\n    { label: '구매', value: 200 }\n  ]\n};\n\nMaging.funnelChart('#el', config);",
+  gaugeChart:    "const config = {\n  label: '성능',\n  value: 78,\n  max: 100,\n  unit: '%'\n};\n\nMaging.gaugeChart('#el', config);",
+  radarChart:    "const config = {\n  indicators: [\n    { name: 'A', max: 100 },\n    { name: 'B', max: 100 },\n    { name: 'C', max: 100 }\n  ],\n  series: [\n    { name: '팀', data: [80, 90, 70] }\n  ]\n};\n\nMaging.radarChart('#el', config);",
+  treemapChart:  "const config = {\n  items: [\n    { name: '서울', value: 45 },\n    { name: '경기', value: 30 },\n    { name: '부산', value: 15 }\n  ]\n};\n\nMaging.treemapChart('#el', config);",
+  scatterChart:  "const config = {\n  xLabel: '비용', yLabel: '매출',\n  points: [\n    { x: 10, y: 20, label: 'A' },\n    { x: 15, y: 28, label: 'B' },\n    { x: 20, y: 35, label: 'C' }\n  ]\n};\n\nMaging.scatterChart('#el', config);",
+  sankeyChart:   "const config = {\n  nodes: [\n    { name: '유입' },\n    { name: '가입' },\n    { name: '구매' }\n  ],\n  links: [\n    { source: '유입', target: '가입', value: 60 },\n    { source: '가입', target: '구매', value: 30 }\n  ]\n};\n\nMaging.sankeyChart('#el', config);",
+  heatmapChart:  "const config = {\n  xAxis: ['월','화','수','목','금'],\n  yAxis: ['오전','오후','저녁'],\n  values: [[0,0,5],[1,0,7],[2,0,3]]\n};\n\nMaging.heatmapChart('#el', config);",
+  waterfallChart:"const config = {\n  items: [\n    { label: '매출', value: 100, type: 'start' },\n    { label: '원가', value: -40 },\n    { label: '영업이익', value: 35, type: 'total' }\n  ]\n};\n\nMaging.waterfallChart('#el', config);",
+  leaderboard:   "const config = {\n  items: [\n    { name: '김철수', meta: '95점', percent: 95 },\n    { name: '이영희', meta: '88점', percent: 88 }\n  ]\n};\n\nMaging.leaderboard('#el', config);",
+  activityTable: "const config = {\n  columns: [\n    { label: '시간', key: 'time' },\n    { label: '이벤트', key: 'event' }\n  ],\n  rows: [\n    { time: '10:00', event: '배포 완료' }\n  ]\n};\n\nMaging.activityTable('#el', config);",
+  timeline:      "const config = {\n  items: [\n    { time: '10:00', text: '배포 완료' },\n    { time: '09:30', text: '테스트 통과' }\n  ]\n};\n\nMaging.timeline('#el', config);",
+  inboxPreview:  "const config = {\n  items: [\n    { text: '배포가 완료되었습니다.', time: '방금' },\n    { text: '리뷰를 요청합니다.', time: '1시간 전' }\n  ]\n};\n\nMaging.inboxPreview('#el', config);",
+  statusGrid:    "const config = {\n  columns: 4,\n  items: [\n    { label: 'API', status: 'ok' },\n    { label: 'DB', status: 'ok' },\n    { label: 'CDN', status: 'warn' }\n  ]\n};\n\nMaging.statusGrid('#el', config);",
+  sparklineList: "const config = {\n  items: [\n    { label: '매출', value: '128억', delta: 8.3,\n      sparkline: [40, 55, 48, 62, 75, 88] }\n  ]\n};\n\nMaging.sparklineList('#el', config);",
+  calendarHeatmap:"const config = {\n  values: [\n    ['2026-04-01', 5],\n    ['2026-04-02', 8],\n    ['2026-04-03', 3]\n  ]\n};\n\nMaging.calendarHeatmap('#el', config);",
+  eventCalendar: "const config = {\n  events: [\n    { date: 15, label: '회의' },\n    { date: 22, label: '배포' }\n  ]\n};\n\nMaging.eventCalendar('#el', config);",
+  progressStepper:"const config = {\n  steps: [\n    { label: '기획', status: 'done' },\n    { label: '개발', status: 'active' },\n    { label: '배포', status: 'pending' }\n  ]\n};\n\nMaging.progressStepper('#el', config);",
+  goalGrid:      "const config = {\n  items: [\n    { label: '매출', value: 128, max: 150, unit: '억' },\n    { label: 'NPS', value: 68, max: 80, unit: '점' }\n  ]\n};\n\nMaging.goalGrid('#el', config);",
+  pageHeader:    "const config = {\n  kicker: 'DASHBOARD',\n  title: '운영 현황',\n  subtitle: '실시간 모니터링'\n};\n\nMaging.pageHeader('#el', config);",
+  sectionHead:   "const config = {\n  index: '01',\n  kicker: 'OVERVIEW',\n  title: '핵심 지표',\n  tag: 'Live'\n};\n\nMaging.sectionHead('#el', config);",
+  alertBanner:   "const config = {\n  type: 'success',\n  title: '배포 완료',\n  message: 'v2.4.1'\n};\n\nMaging.alertBanner('#el', config);",
+  mapChart:      "const config = {\n  items: [\n    { region: '서울', value: 45 },\n    { region: '경기', value: 30 },\n    { region: '부산', value: 15 }\n  ]\n};\n\nMaging.mapChart('#el', config);",
+  cohortMatrix:  "const config = {\n  cohorts: ['1월','2월','3월'],\n  periods: ['M0','M1','M2'],\n  data: [\n    [100, 60, 40],\n    [100, 55, 35],\n    [100, 58, null]\n  ]\n};\n\nMaging.cohortMatrix('#el', config);",
+  stepGuide:     "const config = {\n  steps: [\n    { title: 'CDN 추가',\n      desc: 'script 태그 한 줄이면 됩니다.',\n      code: '<script src=\"maging.js\"><\\/script>' },\n    { title: '위젯 마운트',\n      desc: 'HTML에 div 하나, JS로 호출.' },\n    { title: '테마 변경',\n      desc: '35개 테마 즉시 전환.' }\n  ]\n};\n\nMaging.stepGuide('#el', config);",
+  codeBlock:     "const config = {\n  lang: 'html',\n  code: '<div id=\"chart\"></div>\\n<script>\\n  Maging.lineChart(\"#chart\", { ... });\\n<\\/script>'\n};\n\nMaging.codeBlock('#el', config);",
+  comparisonTable:"const config = {\n  columns: ['maging', 'Recharts', 'Chart.js'],\n  highlight: 0,\n  rows: [\n    { label: '빌드 불필요', values: [true, false, false] },\n    { label: '35 테마', values: [true, false, false] },\n    { label: 'CDN 한 줄', values: [true, false, true] }\n  ]\n};\n\nMaging.comparisonTable('#el', config);",
+  heroSection:   "const config = {\n  kicker: 'SaaS',\n  title: '제목입니다',\n  subtitle: '설명입니다.',\n  ctas: [\n    { label: '시작하기', primary: true }\n  ]\n};\n\nMaging.heroSection('#el', config);",
+  featureGrid:   "const config = {\n  cols: 3,\n  items: [\n    { icon: '⚡', title: '빠른 속도', desc: '설명' },\n    { icon: '🔒', title: '보안', desc: '설명' }\n  ]\n};\n\nMaging.featureGrid('#el', config);",
+  pricingTable:  "const config = {\n  plans: [\n    { name: 'Free', price: '무료',\n      features: ['기능 1'],\n      cta: { label: '시작' } },\n    { name: 'Pro', price: '9.9만',\n      popular: true, badge: '인기',\n      features: ['기능 1', '기능 2'],\n      cta: { label: '시작' } }\n  ]\n};\n\nMaging.pricingTable('#el', config);",
+  testimonialGrid:"const config = {\n  cols: 3,\n  items: [\n    { quote: '정말 좋습니다.',\n      name: '김철수', role: 'PM' }\n  ]\n};\n\nMaging.testimonialGrid('#el', config);",
+  logoBar:       "const config = {\n  items: [\n    { name: 'Kakao' },\n    { name: 'Toss' },\n    { name: 'LINE' }\n  ]\n};\n\nMaging.logoBar('#el', config);",
+  ctaSection:    "const config = {\n  title: '시작하세요',\n  desc: '무료 체험',\n  ctas: [\n    { label: '시작', primary: true }\n  ]\n};\n\nMaging.ctaSection('#el', config);",
+  faqAccordion:  "const config = {\n  items: [\n    { q: '질문입니다', a: '답변입니다.' }\n  ]\n};\n\nMaging.faqAccordion('#el', config);",
+};
+
+/* ============================================================
+ * Dialog logic
+ * ============================================================ */
+var dlg = document.getElementById('cg-dlg');
+var dlgTitle = document.getElementById('dlg-title');
+var dlgDesc = document.getElementById('dlg-desc');
+var dlgPreview = document.getElementById('dlg-preview');
+var dlgCode = document.getElementById('dlg-code');
+var dlgTabs = dlg.querySelectorAll('.cg-dlg__tab');
+
+// syntax highlighter — tokenize then reassemble to avoid nested span issues
+function highlightSyntax(code) {
+  // Split into HTML parts and JS parts
+  var parts = code.split(/(<[^>]+>)/g);
+  return parts.map(function(part) {
+    // HTML tags — color the whole tag
+    if (/^</.test(part)) {
+      var esc = part.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      return '<span class="hl-tag">' + esc + '</span>';
+    }
+    // Non-tag text — highlight JS syntax
+    var s = part.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    // comments
+    s = s.replace(/(\/\/.*)$/gm, '<span class="hl-cmt">$1</span>');
+    // strings (single-quoted)
+    s = s.replace(/('(?:[^'\\]|\\.)*')/g, '<span class="hl-str">$1</span>');
+    // strings (double-quoted, but not inside spans)
+    s = s.replace(/("(?:[^"\\]|\\.)*")/g, function(m) {
+      if (m.indexOf('class=') >= 0 || m.indexOf('hl-') >= 0) return m;
+      return '<span class="hl-str">' + m + '</span>';
+    });
+    // Maging.xxx
+    s = s.replace(/\b(Maging)\.([\w]+)/g, '<span class="hl-fn">$1.$2</span>');
+    // keywords
+    s = s.replace(/\b(const|let|var|function|return|new|if|else|true|false|null)\b/g, '<span class="hl-kw">$1</span>');
+    // numbers (not inside spans)
+    s = s.replace(/\b(\d+\.?\d*)\b/g, '<span class="hl-num">$1</span>');
+    // object keys — word before colon (but not inside spans)
+    s = s.replace(/^(\s*)([\w]+)(\s*:)/gm, '$1<span class="hl-prop">$2</span>$3');
+    return s;
+  }).join('');
+}
+
+// copy button
+document.getElementById('dlg-copy').addEventListener('click', function() {
+  var text = dlgCode.dataset.plain || dlgCode.querySelector('pre').textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    var btn = document.getElementById('dlg-copy');
+    btn.textContent = 'Copied!';
+    setTimeout(function() { btn.textContent = 'Copy'; }, 1500);
+  });
+});
+
+// close
+document.getElementById('dlg-close').addEventListener('click', closeDlg);
+dlg.querySelector('.cg-dlg__scrim').addEventListener('click', closeDlg);
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeDlg(); });
+
+function closeDlg() {
+  dlg.classList.remove('is-open');
+  dlgPreview.innerHTML = '';
+  document.body.style.overflow = '';
+}
+
+// tabs
+dlgTabs.forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    dlgTabs.forEach(function(t) { t.classList.remove('is-active'); });
+    tab.classList.add('is-active');
+    var mode = tab.dataset.tab;
+    dlgPreview.style.display = mode === 'preview' ? 'block' : 'none';
+    dlgCode.style.display = mode === 'code' ? 'block' : 'none';
+  });
+});
+
+function openDlg(key) {
+  var meta = (Maging.meta && Maging.meta[key]) || LANDING_META[key] || {};
+  dlgTitle.textContent = meta.title || key;
+  dlgDesc.textContent = meta.desc || '';
+
+  // reset tabs
+  dlgTabs[0].classList.add('is-active');
+  dlgTabs[1].classList.remove('is-active');
+  dlgPreview.style.display = 'block';
+  dlgCode.style.display = 'none';
+
+  // render preview
+  dlgPreview.innerHTML = '<div id="dlg-widget"></div>';
+  if (SAMPLES[key]) {
+    try { SAMPLES[key](document.getElementById('dlg-widget')); } catch(e) {}
+  }
+
+  // render code — full working snippet with syntax highlighting
+  var isLanding = WIDGETS[key] && WIDGETS[key].mode === 'landing';
+  var cdnHead = '<!-- CDN -->\n<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@m1kapp/maging/dist/maging.css">\n<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging/dist/maging.js"><\/script>';
+  if (isLanding) cdnHead += '\n<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging/dist/maging-landing.js"><\/script>';
+  var codeBody = CODE[key] || '// code not available';
+  var fullCode = cdnHead + '\n\n<!-- HTML -->\n<div id="el"></div>\n\n<script>\n' + codeBody + '\n<\/script>';
+
+  // store plain text for copy
+  dlgCode.dataset.plain = fullCode;
+  dlgCode.querySelector('pre').innerHTML = highlightSyntax(fullCode);
+
+  dlg.classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+
+  // resize charts in dialog
+  setTimeout(function() {
+    dlgPreview.querySelectorAll('.mw-chart__body').forEach(function(body) {
+      var instance = echarts.getInstanceByDom(body);
+      if (instance) instance.resize();
+    });
+  }, 100);
+}
+
+// card click → open dialog
+document.querySelectorAll('.cg-card').forEach(function(card) {
+  card.addEventListener('click', function() {
+    var previewDiv = card.querySelector('.cg-card__preview > div');
+    if (!previewDiv) return;
+    var key = (previewDiv.id || '').replace('preview-', '');
+    if (key && WIDGETS[key]) openDlg(key);
+  });
+});
+
+// Resize + fix compact charts
+function resizeCharts() {
+  document.querySelectorAll('.cg-card__preview .mw-chart__body').forEach(function(body) {
+    var instance = echarts.getInstanceByDom(body);
+    if (!instance) return;
+    instance.resize();
+    // center donut in preview (override the 30% left offset + hide legend)
+    var opt = instance.getOption();
+    if (opt.series && opt.series[0] && opt.series[0].type === 'pie') {
+      instance.setOption({ series: [{ center: ['50%', '50%'] }], legend: { show: false } });
+    }
+  });
+}
+setTimeout(resizeCharts, 100);
+setTimeout(resizeCharts, 400);
+setTimeout(resizeCharts, 1000);
+window.addEventListener('resize', function() { setTimeout(resizeCharts, 100); });
+</script>
+
+</body>
+</html>
