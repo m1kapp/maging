@@ -1,8 +1,7 @@
 /**
  * prompts.mjs — single source of truth for maging AI prompts.
  *
- * FULL_PROMPT is assembled from llms.txt (the canonical spec file).
- * Edit llms.txt, then run `npm run sync` to update index.html.
+ * Run `npm run build:llms` first to assemble llms-dashboard.txt / llms-landing.txt.
  */
 
 import { readFileSync } from 'fs';
@@ -10,9 +9,11 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
-const llmsTxt = readFileSync(join(__dir, '../llms.txt'), 'utf-8');
 
-export const HANDSHAKE = `
+const dashboardTxt = readFileSync(join(__dir, '../llms-dashboard.txt'), 'utf-8');
+const landingTxt = readFileSync(join(__dir, '../llms-landing.txt'), 'utf-8');
+
+const HANDSHAKE_DASHBOARD = `
 
 === HANDSHAKE ===
 When you have fully understood the above, reply with EXACTLY this text (nothing else, no code fences, no preamble):
@@ -24,9 +25,32 @@ When you have fully understood the above, reply with EXACTLY this text (nothing 
 
 Then wait for my next message before generating anything.`;
 
-export const SHORT_PROMPT = `You are a maging dashboard generator.
+const HANDSHAKE_LANDING = `
 
-Fetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.15/llms.txt
-It has the complete setup, all 31 widget APIs, 35 themes, layout patterns, and generation rules.${HANDSHAKE}`;
+=== HANDSHAKE ===
+When you have fully understood the above, reply with EXACTLY this text (nothing else, no code fences, no preamble):
 
-export const FULL_PROMPT = llmsTxt + HANDSHAKE;
+안녕하세요! 결과물 서포터 매징(maging)입니다 ✦
+
+어떤 서비스의 랜딩페이지를 만들까요? 제품명, 핵심 기능, 타겟 고객을 알려주세요.
+바로 시작할게요! 🎨
+
+Then wait for my next message before generating anything.`;
+
+export const SHORT_PROMPT_DASHBOARD = `You are a maging dashboard generator.
+
+Fetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.15/llms-dashboard.txt
+It has the complete setup, all widget APIs, 35 themes, layout patterns, and generation rules.${HANDSHAKE_DASHBOARD}`;
+
+export const SHORT_PROMPT_LANDING = `You are a maging landing page generator.
+
+Fetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.15/llms-landing.txt
+It has the complete setup, all widget APIs, 35 themes, and generation rules for landing pages.${HANDSHAKE_LANDING}`;
+
+export const FULL_PROMPT_DASHBOARD = dashboardTxt + HANDSHAKE_DASHBOARD;
+export const FULL_PROMPT_LANDING = landingTxt + HANDSHAKE_LANDING;
+
+// backward compat
+export const SHORT_PROMPT = SHORT_PROMPT_DASHBOARD;
+export const FULL_PROMPT = FULL_PROMPT_DASHBOARD;
+export const HANDSHAKE = HANDSHAKE_DASHBOARD;

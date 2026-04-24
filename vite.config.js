@@ -11,6 +11,8 @@ function copyStatic() {
         ['dist', '_site/dist'],
         ['data', '_site/data'],
         ['llms.txt', '_site/llms.txt'],
+        ['llms-dashboard.txt', '_site/llms-dashboard.txt'],
+        ['llms-landing.txt', '_site/llms-landing.txt'],
       ];
       for (const [src, dest] of pairs) {
         if (existsSync(src)) {

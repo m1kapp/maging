@@ -9,6 +9,8 @@
   "files": [
     "dist/**",
     "llms.txt",
+    "llms-dashboard.txt",
+    "llms-landing.txt",
     "README.md",
     "LICENSE"
   ],
@@ -29,6 +31,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "build:llms": "node scripts/build-llms.mjs",
     "sync": "node scripts/sync-index.mjs",
     "count-tokens": "node scripts/count-prompt-tokens.mjs",
     "vercel-build": "vite build"
