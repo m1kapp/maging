@@ -433,30 +433,12 @@
     border-color: var(--mw-accent);
     background: var(--mw-surface);
   }
-  .ai-llm__logo {
-    width: 22px; height: 22px;
-    flex-shrink: 0;
-    display: block;
+  .ai-llm__icon {
+    width: 24px; height: 24px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 700; font-size: 0.7rem;
+    flex-shrink: 0; font-family: var(--mw-font);
   }
-  .ai-llm__logo--invert { filter: var(--mw-llm-invert, none); }
-  /* Dark themes: invert X/Grok logo (originally pure black) so it stays visible. */
-  [data-theme="vercel"] .ai-llm__logo--invert,
-  [data-theme="github"] .ai-llm__logo--invert,
-  [data-theme="x"] .ai-llm__logo--invert,
-  [data-theme="slack"] .ai-llm__logo--invert,
-  [data-theme="discord"] .ai-llm__logo--invert,
-  [data-theme="openai"] .ai-llm__logo--invert,
-  [data-theme="spotify"] .ai-llm__logo--invert,
-  [data-theme="twitch"] .ai-llm__logo--invert,
-  [data-theme="netflix"] .ai-llm__logo--invert,
-  [data-theme="figma"] .ai-llm__logo--invert,
-  [data-theme="amazon"] .ai-llm__logo--invert,
-  [data-theme="adobe"] .ai-llm__logo--invert,
-  [data-theme="bloomberg"] .ai-llm__logo--invert,
-  [data-theme="nasa"] .ai-llm__logo--invert,
-  [data-theme="heineken"] .ai-llm__logo--invert,
-  [data-theme="deere"] .ai-llm__logo--invert,
-  [data-theme="ups"] .ai-llm__logo--invert { filter: invert(1); }
   .ai-llm__name { font-family: var(--mw-font); }
 
   /* Example bubbles */
@@ -1049,8 +1031,8 @@
               <button type="button" class="ai-prompt__mode-btn" data-output="landing">🏠 Landing Page</button>
             </div>
             <div class="ai-prompt__modes" role="tablist">
-              <button type="button" class="ai-prompt__mode-btn is-active" data-mode="short">Short (URL 참조)</button>
-              <button type="button" class="ai-prompt__mode-btn" data-mode="full">Full (인라인)</button>
+              <button type="button" class="ai-prompt__mode-btn" data-mode="short">Short (URL 참조)</button>
+              <button type="button" class="ai-prompt__mode-btn is-active" data-mode="full">Full (인라인)</button>
             </div>
             <div class="ai-prompt__tokens" id="ai-prompt-tokens" title="Measured via real tokenizers (gpt-tokenizer, @anthropic-ai/tokenizer)">
               <span class="ai-prompt__tokens-val" data-api="gpt">GPT 953</span>
@@ -1087,27 +1069,27 @@
         <div class="ai-step__desc">어느 모델이든 상관없습니다. 단일 HTML 출력만 되면 됩니다.</div>
         <div class="ai-llms mt-4">
           <a class="ai-llm" href="https://chatgpt.com" target="_blank" rel="noopener">
-            <img class="ai-llm__logo" src="https://cdn.simpleicons.org/openai/10A37F" alt="" width="22" height="22" loading="lazy">
+            <span class="ai-llm__icon" style="background:#10A37F;">G</span>
             <span class="ai-llm__name">ChatGPT</span>
           </a>
           <a class="ai-llm" href="https://claude.ai" target="_blank" rel="noopener">
-            <img class="ai-llm__logo" src="https://cdn.simpleicons.org/anthropic/DA7756" alt="" width="22" height="22" loading="lazy">
+            <span class="ai-llm__icon" style="background:#DA7756;">C</span>
             <span class="ai-llm__name">Claude</span>
           </a>
           <a class="ai-llm" href="https://gemini.google.com" target="_blank" rel="noopener">
-            <img class="ai-llm__logo" src="https://cdn.simpleicons.org/googlegemini/4285F4" alt="" width="22" height="22" loading="lazy">
+            <span class="ai-llm__icon" style="background:#4285F4;">G</span>
             <span class="ai-llm__name">Gemini</span>
           </a>
           <a class="ai-llm" href="https://grok.com" target="_blank" rel="noopener">
-            <img class="ai-llm__logo ai-llm__logo--invert" src="https://cdn.simpleicons.org/x" alt="" width="22" height="22" loading="lazy">
+            <span class="ai-llm__icon" style="background:var(--mw-text);">X</span>
             <span class="ai-llm__name">Grok</span>
           </a>
           <a class="ai-llm" href="https://www.perplexity.ai" target="_blank" rel="noopener">
-            <img class="ai-llm__logo" src="https://cdn.simpleicons.org/perplexity/20B8CD" alt="" width="22" height="22" loading="lazy">
+            <span class="ai-llm__icon" style="background:#20B8CD;">P</span>
             <span class="ai-llm__name">Perplexity</span>
           </a>
           <a class="ai-llm" href="https://copilot.microsoft.com" target="_blank" rel="noopener">
-            <img class="ai-llm__logo" src="https://cdn.simpleicons.org/githubcopilot/000000" alt="" width="22" height="22" loading="lazy">
+            <span class="ai-llm__icon" style="background:#6e40c9;">C</span>
             <span class="ai-llm__name">Copilot</span>
           </a>
         </div>
@@ -2452,7 +2434,7 @@ Then wait for my next message before generating anything.`;
 
   // Initial render
   setOutput('dashboard');
-  setMode('short');
+  setMode('full');
 
   // Copy handler
   btn.addEventListener('click', function () {
