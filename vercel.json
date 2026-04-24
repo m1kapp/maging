@@ -1,5 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "vite build",
+  "outputDirectory": "_site",
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
@@ -33,6 +35,8 @@
     }
   ],
   "redirects": [
-    { "source": "/docs", "destination": "/llms.txt", "permanent": false }
+    { "source": "/docs", "destination": "/llms.txt", "permanent": false },
+    { "source": "/demo", "destination": "/dashboard/acme", "permanent": true },
+    { "source": "/sales-dashboard", "destination": "/dashboard/sales", "permanent": true }
   ]
 }

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="linkedin">
+  <head>
+    <meta charset="UTF-8" />
+    <title>월간 매출 인사이트 대시보드</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../dist/maging.css">
+    <script defer src="../dist/maging-all.js"></script>
+    <script type="module" src="../components/site.js"></script>
+  </head>
+  <body class="mw-themed">
+    <maging-nav active="demo" mode="dashboard"></maging-nav>
+    <main class="max-w-[1280px] mx-auto px-6 py-4" style="word-break: keep-all">
+      <div id="page-hero" class="pt-4 pb-2"></div>
+
+      <div id="top-alert" class="mb-3"></div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3" style="grid-auto-rows:140px">
+        <div id="kpi-1"></div>
+        <div id="kpi-2"></div>
+        <div id="kpi-3"></div>
+        <div id="kpi-4"></div>
+      </div>
+
+      <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
+        <div id="section-01"></div>
+        <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-3 mt-3" style="grid-auto-rows:380px">
+          <div id="chart-overall"></div>
+          <div id="donut-product-share"></div>
+        </div>
+      </div>
+
+      <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
+        <div id="section-02"></div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 mt-3" style="grid-auto-rows:380px">
+          <div id="line-pg1-2"></div>
+          <div id="line-pg3-4"></div>
+        </div>
+      </div>
+
+      <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
+        <div id="section-03"></div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 mt-3" style="grid-auto-rows:380px">
+          <div id="line-premium"></div>
+          <div id="line-export"></div>
+        </div>
+      </div>
+
+      <div class="mt-5 pt-4 mb-6" style="border-top:1px solid var(--mw-border)">
+        <div id="section-04"></div>
+        <div class="grid grid-cols-1 gap-3 mt-3" style="grid-auto-rows:auto">
+          <div id="status-grid"></div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      window.addEventListener('maging:ready', () => {
+        const { krw, krwPlain } = Maging.fmt;
+
+        const months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+
+        const overallActual2025 = [
+          4377800000, 3366300000, 3623800000, 6880000000,
+          5144500000, 3486800000, 4834300000, 4870500000,
+          4455000000, 3111700000, 3944500000, 3303700000
+        ];
+
+        const overallPlan2026 = [
+          4833700000, 4145600000, 3732900000, 5030400000,
+          3662700000, 5460400000, 5250400000, 4070800000,
+          5004300000, 6197400000, 4726900000, 4921000000
+        ];
+
+        const overallActual2026 = [
+          5032600000, 3987400000, null, null, null, null,
+          null, null, null, null, null, null
+        ];
+
+        const pg1_2025 = [
+          3950800000, 3230300000, 3214200000, 3030600000,
+          3279300000, 3022000000, 2896300000, 2399400000,
+          4061600000, 2760100000, 2251100000, 3433500000
+        ];
+
+        const pg1_2026 = [
+          3270500000, 3121600000, null, null, null, null,
+          null, null, null, null, null, null
+        ];
+
+        const pg2_2025 = [
+          403900000, 486900000, 1183100000, 1709600000,
+          956800000, 1109600000, 724900000, 1217500000,
+          1224300000, 438000000, 300900000, 329200000
+        ];
+
+        const pg2_2026 = [
+          699900000, 337700000, null, null, null, null,
+          null, null, null, null, null, null
+        ];
+
+        const pg2Oak_2025 = [
+          null, null, null, null, null, null, null, null, null,
+          40890000, 36260000, 69080000
+        ];
+
+        const pg2Oak_2026 = [
+          30300000, 19610000, null, null, null, null,
+          null, null, null, null, null, null
+        ];
+
+        const pg3_2025 = [
+          16220000, 13280000, 13040000, 18150000,
+          7559000, 6218000, 13100000, 6776000,
+          89780000, 7570000, 9188000, 6980000
+        ];
+
+        const pg3_2026 = [
+          9361000, 7078000, null, null, null, null,
+          null, null, null, null, null, null
+        ];
+
+        const pg3Gold_2025 = [
+          null, null, null, null, null, null, null, null, null,
+          54160000, 21050000, 30250000
+        ];
+
+        const pg3Gold_2026 = [
+          49830000, 37990000, null, null, null, null,
+          null, null, null, null, null, null
+        ];
+
+        const pg4_2025 = [
+          18250000, 31190000, 26230000, 25100000,
+          33270000, 50290000, 33270000, 49020000,
+          28590000, 26750000, 33750000, 32670000
+        ];
+
+        const pg4_2026 = [
+          23140000, 43540000, null, null, null, null,
+          null, null, null, null, null, null
+        ];
+
+        const export2025 = [
+          28690000, 1137000, 49300000, 32940000,
+          24280000, 67700000, 17510000, 38390000,
+          0, 51670000, 34080000, 95540000
+        ];
+
+        const exportPlan2026 = [
+          36310000, 78670000, 140500000, 60140000,
+          67160000, 127100000, 102800000, 78620000,
+          105560000, 101100000, 105010000, 76260000
+        ];
+
+        const sum = arr => arr.reduce((acc, v) => acc + (v || 0), 0);
+
+        const latestIdx2026 = overallActual2026.findLastIndex(v => v !== null);
+        const latestMonthIndex = latestIdx2026 >= 0 ? latestIdx2026 : 1;
+        const latestMonthLabel = months[latestMonthIndex];
+
+        const latestActual = overallActual2026[latestMonthIndex] || overallActual2025[11];
+        const latestPlan = overallPlan2026[latestMonthIndex] || null;
+        const prevYearSameMonth = overallActual2025[latestMonthIndex];
+
+        const yoy = prevYearSameMonth ? ((latestActual - prevYearSameMonth) / prevYearSameMonth) * 100 : 0;
+        const planRate = latestPlan ? (latestActual / latestPlan) * 100 : null;
+
+        const ytdActual2026 = sum(overallActual2026);
+        const ytdPlan2026 = sum(overallPlan2026.slice(0, latestMonthIndex + 1));
+        const ytdRate = ytdPlan2026 ? (ytdActual2026 / ytdPlan2026) * 100 : null;
+
+        const latestPg1 = pg1_2026[latestMonthIndex] ?? 0;
+        const latestPg2 = pg2_2026[latestMonthIndex] ?? 0;
+        const latestPg3 = pg3_2026[latestMonthIndex] ?? 0;
+        const latestPg4 = pg4_2026[latestMonthIndex] ?? 0;
+        const latestOther = Math.max(latestActual - (latestPg1 + latestPg2 + latestPg3 + latestPg4), 0);
+
+        const latestExportPlan = exportPlan2026[latestMonthIndex] ?? 0;
+        const latestExportActual = export2025[latestMonthIndex] ?? 0;
+        const exportShare = latestActual ? (latestExportActual / latestActual) * 100 : 0;
+
+        Maging.pageHeader('#page-hero', {
+          kicker: 'SALES DASHBOARD',
+          title: '월간 매출 인사이트',
+          subtitle: '2025-2026 전체/제품군별 매출 추이',
+          meta: `Last updated 2026.4.23(목) · 기준: ${latestMonthLabel}`
+        });
+
+        Maging.alertBanner('#top-alert', {
+          type: 'info',
+          title: `${latestMonthLabel} 매출 현황`,
+          message: `${latestMonthLabel} 전체 매출은 ${krw(latestActual)} 수준으로 전년 동월 대비 ${yoy.toFixed(1)}% 변화했습니다.` +
+                   (planRate ? ` 계획 대비 달성률은 ${planRate.toFixed(1)}%입니다.` : ''),
+          icon: '📊'
+        });
+
+        Maging.kpiCard('#kpi-1', {
+          label: `${latestMonthLabel} 전체 매출`,
+          value: krw(latestActual),
+          delta: yoy,
+          deltaGoodWhen: 'positive',
+          icon: '💰',
+          sparkline: overallActual2026.map(v => v || 0)
+        });
+
+        Maging.kpiCard('#kpi-2', {
+          label: `2026 YTD 매출`,
+          value: krw(ytdActual2026),
+          delta: ytdRate ? ytdRate - 100 : 0,
+          deltaGoodWhen: 'positive',
+          icon: '📈',
+          sparkline: overallActual2026.slice(0, latestMonthIndex + 1).map(v => v || 0)
+        });
+
+        Maging.kpiCard('#kpi-3', {
+          label: `${latestMonthLabel} 계획 달성률`,
+          value: planRate ? planRate.toFixed(1) + '%':'계획 없음',
+          delta: planRate ? planRate - 100 : 0,
+          deltaGoodWhen: 'positive',
+          icon: '🎯',
+          sparkline: overallPlan2026.map((p, i) => {
+            const a = overallActual2026[i];
+            return p && a ? (a / p) * 100 : 0;
+          })
+        });
+
+        const exportPlanShare = latestExportPlan && latestPlan ? (latestExportPlan / latestPlan * 100) : 0;
+
+        Maging.kpiCard('#kpi-4', {
+          label: `${latestMonthLabel} 수출 비중(계획 기준)`,
+          value: exportPlanShare ? exportPlanShare.toFixed(1) + '%' : '-',
+          delta: exportPlanShare ? exportShare - exportPlanShare : 0,
+          deltaGoodWhen: 'positive',
+          icon: '🌏',
+          sparkline: exportPlan2026.map((v, i) => {
+            const p = overallPlan2026[i];
+            return p ? (v / p) * 100 : 0;
+          })
+        });
+
+        Maging.sectionHead('#section-01', {
+          index: '01',
+          kicker: 'OVERVIEW',
+          title: '전체 매출 추이 및 제품군 비중',
+          tag: '2025-2026'
+        });
+
+        Maging.metricChart('#chart-overall', {
+          label: '전체 월별 매출',
+          value: krw(latestActual),
+          delta: yoy,
+          deltaGoodWhen: 'positive',
+          icon: '📉',
+          context: '2025 실적 vs 2026 실적·계획',
+          categories: months,
+          series: [
+            {
+              name: '2026 실적',
+              data: overallActual2026
+            },
+            {
+              name: '2025 실적',
+              data: overallActual2025
+            }
+          ],
+          target: latestPlan || undefined,
+          yFormatter: krwPlain
+        });
+
+        Maging.donutChart('#donut-product-share', {
+          title: `${latestMonthLabel} 제품군별 매출 비중`,
+          subtitle: '2026 기준 (실적 데이터 존재 기준)' ,
+          slices: [
+            { label: '제품군1', value: latestPg1 },
+            { label: '제품군2', value: latestPg2 },
+            { label: '제품군3', value: latestPg3 },
+            { label: '제품군4', value: latestPg4 },
+            { label: '기타/미분류', value: latestOther }
+          ],
+          centerLabel: '합계',
+          centerValue: krw(latestActual)
+        });
+
+        Maging.sectionHead('#section-02', {
+          index: '02',
+          kicker: 'SEGMENT',
+          title: '제품군별 월별 매출 추이',
+          tag: '라인차트'
+        });
+
+        Maging.lineChart('#line-pg1-2', {
+          title: '제품군1/2 월별 매출 추이',
+          subtitle: '2025 실적 vs 2026 실적',
+          categories: months,
+          series: [
+            {
+              name: '제품군1 2025',
+              data: pg1_2025
+            },
+            {
+              name: '제품군1 2026',
+              data: pg1_2026
+            },
+            {
+              name: '제품군2 2025',
+              data: pg2_2025
+            },
+            {
+              name: '제품군2 2026',
+              data: pg2_2026
+            }
+          ],
+          area: false,
+          yFormatter: krwPlain
+        });
+
+        Maging.lineChart('#line-pg3-4', {
+          title: '제품군3/4 월별 매출 추이',
+          subtitle: '2025 실적 vs 2026 실적',
+          categories: months,
+          series: [
+            {
+              name: '제품군3 2025',
+              data: pg3_2025
+            },
+            {
+              name: '제품군3 2026',
+              data: pg3_2026
+            },
+            {
+              name: '제품군4 2025',
+              data: pg4_2025
+            },
+            {
+              name: '제품군4 2026',
+              data: pg4_2026
+            }
+          ],
+          area: false,
+          yFormatter: krwPlain
+        });
+
+        Maging.sectionHead('#section-03', {
+          index: '03',
+          kicker: 'PREMIUM & EXPORT',
+          title: '프리미엄 라인 및 수출 매출',
+          tag: '세부 추이'
+        });
+
+        Maging.lineChart('#line-premium', {
+          title: '프리미엄 라인 매출 추이',
+          subtitle: '제품군2Oak, 제품군3GOLD (월별)' ,
+          categories: months,
+          series: [
+            {
+              name: '제품군2Oak 2025',
+              data: pg2Oak_2025
+            },
+            {
+              name: '제품군2Oak 2026',
+              data: pg2Oak_2026
+            },
+            {
+              name: '제품군3GOLD 2025',
+              data: pg3Gold_2025
+            },
+            {
+              name: '제품군3GOLD 2026',
+              data: pg3Gold_2026
+            }
+          ],
+          area: false,
+          yFormatter: krwPlain
+        });
+
+        Maging.metricChart('#line-export', {
+          label: '수출 매출(계획 기준)' ,
+          value: krw(latestExportPlan),
+          delta: 0,
+          icon: '🚢',
+          context: '2025 실적 vs 2026 계획',
+          categories: months,
+          series: [
+            {
+              name: '2026 수출 계획',
+              data: exportPlan2026
+            },
+            {
+              name: '2025 수출 실적',
+              data: export2025
+            }
+          ],
+          yFormatter: krwPlain
+        });
+
+        Maging.sectionHead('#section-04', {
+          index: '04',
+          kicker: 'HEALTH CHECK',
+          title: '매출 계획 달성 상태',
+          tag: 'Status'
+        });
+
+        const statusItems = [
+          {
+            label: '2026 YTD 전체 매출 계획 달성률',
+            status: ytdRate >= 100 ? 'ok' : (ytdRate >= 95 ? 'warning':'danger'),
+            value: ytdRate ? ytdRate.toFixed(1) + '%':'N/A'
+          },
+          {
+            label: `${latestMonthLabel} 제품군1 전년 동월 대비 성장률`,
+            status: (() => {
+              const a = pg1_2026[latestMonthIndex];
+              const b = pg1_2025[latestMonthIndex];
+              if (!a || !b) return 'warning';
+              const g = (a - b) / b * 100;
+              return g >= 0 ? 'ok':'danger';
+            })(),
+            value: (() => {
+              const a = pg1_2026[latestMonthIndex];
+              const b = pg1_2025[latestMonthIndex];
+              if (!a || !b) return '데이터 부족';
+              return ((a - b) / b * 100).toFixed(1) + '%';
+            })()
+          },
+          {
+            label: `${latestMonthLabel} 수출 비중(계획 기준)`,
+            status: 'ok',
+            value: latestExportPlan && latestPlan ? (latestExportPlan / latestPlan * 100).toFixed(1) + '%':'N/A'
+          },
+          {
+            label: '프리미엄 라인 매출 비중(직전 분기)' ,
+            status: 'warning',
+            value: '데이터 예시 수준'
+          }
+        ];
+
+        Maging.statusGrid('#status-grid', {
+          title: '핵심 지표 상태 요약',
+          subtitle: 'OK / Warning / Danger',
+          columns: 2,
+          items: statusItems
+        });
+      });
+    </script>
+  </body>
+</html>

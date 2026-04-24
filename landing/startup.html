@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="claude">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>maging — AI 답변을, 쓸 수 있는 결과물로 · landing demo</title>
+<meta name="description" content="maging 랜딩페이지 모드 데모. maging 자체를 랜딩 위젯으로 소개합니다.">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js"></script>
+<link rel="stylesheet" href="../dist/maging.css">
+<script src="../dist/maging.js"></script>
+<script src="../dist/maging-landing.js"></script>
+<script type="module" src="../components/site.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  html { scroll-behavior: smooth; }
+  h1, h2, h3 { font-family: var(--mw-display-font); }
+
+  .grid-fill > *, .grid-fill > [id], .grid-fill > .mw-card { height: 100%; min-width: 0; min-height: 0; }
+  .grid-fill .mw-card { display: flex; flex-direction: column; box-sizing: border-box; height: 100%; min-height: 0; }
+  .grid-fill .mw-chart__body { height: auto !important; flex: 1 1 auto; min-height: 0; }
+  .grid-fill .mw-kpi__spark, .grid-fill .mw-hero__spark { flex: 1 1 auto; min-height: 32px; }
+
+  .lp-section {
+    max-width: 1100px; margin: 0 auto;
+    padding: 5rem 1.5rem; scroll-margin-top: 60px;
+  }
+  .lp-section--center { text-align: center; }
+  .lp-section__kicker {
+    font-size: var(--mw-text-xs); color: var(--mw-accent); text-transform: uppercase;
+    letter-spacing: 0.12em; font-family: var(--mw-font); margin-bottom: 0.75rem; font-weight: 600;
+  }
+  .lp-section__title {
+    font-size: clamp(1.5rem, 3vw, 2.125rem); font-weight: 700;
+    letter-spacing: -0.02em; margin-bottom: 0.75rem; font-family: var(--mw-display-font);
+  }
+  .lp-section__desc {
+    font-size: var(--mw-text-sm); color: var(--mw-text-muted);
+    max-width: 520px; line-height: 1.7; margin-bottom: 2.5rem;
+  }
+  .lp-section--center .lp-section__desc { margin-left: auto; margin-right: auto; }
+  .lp-divider {
+    max-width: 1100px; margin: 0 auto; padding: 0 1.5rem;
+    border: none; border-top: 1px solid var(--mw-border); opacity: 0.5;
+  }
+
+  .lp-theme-bar {
+    display: flex; gap: 0.5rem; justify-content: center;
+    flex-wrap: wrap; padding: 1.5rem 0 0;
+  }
+  .lp-theme-btn {
+    width: 20px; height: 20px; border-radius: 50%; border: 2px solid transparent;
+    cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--mw-border) 60%, transparent);
+  }
+  .lp-theme-btn:hover { transform: scale(1.25); }
+  .lp-theme-btn.is-active { box-shadow: 0 0 0 2px var(--mw-text); transform: scale(1.25); }
+</style>
+</head>
+
+<body class="mw-themed">
+
+<maging-nav active="demo" mode="landing"></maging-nav>
+
+<!-- HERO -->
+<div id="hero"></div>
+
+<!-- LOGOS + STATS -->
+<section class="lp-section lp-section--center" style="padding-top:0;padding-bottom:3rem;">
+  <div style="margin-bottom:2.5rem;">
+    <div class="lp-section__kicker" style="margin-bottom:1.25rem;">Works with</div>
+    <div id="logos"></div>
+  </div>
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+    <div id="stat-1"></div>
+    <div id="stat-2"></div>
+    <div id="stat-3"></div>
+    <div id="stat-4"></div>
+  </div>
+</section>
+
+<hr class="lp-divider">
+
+<!-- HOW IT WORKS -->
+<section id="how" class="lp-section">
+  <div class="lp-section__kicker">How it works</div>
+  <div class="lp-section__title">3줄이면 끝납니다</div>
+  <div id="steps"></div>
+</section>
+
+<hr class="lp-divider">
+
+<!-- CODE EXAMPLE -->
+<section id="code" class="lp-section">
+  <div class="lp-section__kicker">Example</div>
+  <div class="lp-section__title">이게 전부입니다</div>
+  <div class="lp-section__desc">이 코드 하나로 대시보드 위젯이 만들어집니다.</div>
+  <div id="code-block"></div>
+</section>
+
+<hr class="lp-divider">
+
+<!-- FEATURES -->
+<section id="features" class="lp-section lp-section--center">
+  <div class="lp-section__kicker">Features</div>
+  <div class="lp-section__title">이런 걸 할 수 있어요</div>
+  <div class="lp-section__desc"></div>
+  <div id="feature-grid"></div>
+</section>
+
+<hr class="lp-divider">
+
+<!-- COMPARISON -->
+<section id="compare" class="lp-section lp-section--center">
+  <div class="lp-section__kicker">Comparison</div>
+  <div class="lp-section__title">기존 도구와 뭐가 다른가요</div>
+  <div class="lp-section__desc"></div>
+  <div id="comparison"></div>
+</section>
+
+<hr class="lp-divider">
+
+<!-- LIVE DEMO (core widget showcase) -->
+<section id="demo" class="lp-section">
+  <div class="lp-section__kicker">Live demo</div>
+  <div class="lp-section__title">테마를 바꿔보세요</div>
+  <div class="lp-section__desc">35개 브랜드 테마가 한 줄로 전환됩니다.</div>
+  <div class="lp-theme-bar" id="theme-bar" style="margin-bottom:1.5rem;"></div>
+  <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-3 grid-fill" style="grid-auto-rows:minmax(300px,auto)">
+    <div id="demo-chart"></div>
+    <div id="demo-hero"></div>
+  </div>
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-3">
+    <div id="demo-kpi-1"></div>
+    <div id="demo-kpi-2"></div>
+    <div id="demo-kpi-3"></div>
+    <div id="demo-kpi-4"></div>
+  </div>
+</section>
+
+<hr class="lp-divider">
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" class="lp-section lp-section--center">
+  <div class="lp-section__kicker">사용 후기</div>
+  <div class="lp-section__title">써본 사람들의 반응</div>
+  <div class="lp-section__desc"></div>
+  <div id="testimonials-grid"></div>
+</section>
+
+<hr class="lp-divider">
+
+<!-- FAQ -->
+<section id="faq" class="lp-section" style="max-width:720px;">
+  <div class="lp-section__kicker">FAQ</div>
+  <div class="lp-section__title">자주 묻는 질문</div>
+  <div id="faq-list" style="margin-top:1.5rem;"></div>
+</section>
+
+<!-- CTA -->
+<div id="cta"></div>
+
+<maging-footer></maging-footer>
+
+<script>
+/* ── Theme switcher ── */
+var themes = [
+  { name: 'claude', color: '#C96442' }, { name: 'linear', color: '#5E6AD2' },
+  { name: 'stripe', color: '#635BFF' }, { name: 'vercel', color: '#171717' },
+  { name: 'github', color: '#238636' }, { name: 'spotify', color: '#1DB954' },
+  { name: 'netflix', color: '#E50914' }, { name: 'notion', color: '#000000' },
+];
+var bar = document.getElementById('theme-bar');
+themes.forEach(function(t) {
+  var btn = document.createElement('button');
+  btn.className = 'lp-theme-btn';
+  btn.style.background = t.color;
+  btn.title = t.name;
+  btn.addEventListener('click', function() {
+    bar.querySelectorAll('.lp-theme-btn').forEach(function(b) { b.classList.remove('is-active'); });
+    btn.classList.add('is-active');
+    Maging.setTheme(t.name);
+  });
+  bar.appendChild(btn);
+});
+
+/* ── Hero ── */
+Maging.heroSection('#hero', {
+  kicker: 'maging',
+  title: 'AI한테 대시보드 만들어달라고 하면<br>진짜 나옵니다',
+  subtitle: 'ChatGPT, Claude, Gemini가 바로 쓸 수 있는 UI 라이브러리. CDN 한 줄이면 32개 위젯 + 35개 브랜드 테마.',
+  ctas: [
+    { label: '시작하기', href: '#how', primary: true },
+    { label: 'GitHub', href: 'https://github.com/m1kapp/maging' },
+  ]
+});
+
+/* ── Logos ── */
+Maging.logoBar('#logos', {
+  items: [
+    { name: 'ChatGPT' }, { name: 'Claude' }, { name: 'Gemini' },
+    { name: 'Copilot' }, { name: 'Cursor' },
+  ]
+});
+
+/* ── Stats ── */
+var sc = { compact: true };
+Maging.kpiCard('#stat-1', Object.assign({}, sc, { label: '위젯', value: '32개' }));
+Maging.kpiCard('#stat-2', Object.assign({}, sc, { label: '테마', value: '35개' }));
+Maging.kpiCard('#stat-3', Object.assign({}, sc, { label: '빌드', value: '0' }));
+Maging.kpiCard('#stat-4', Object.assign({}, sc, { label: '라이선스', value: 'MIT' }));
+
+/* ── Step Guide ── */
+Maging.stepGuide('#steps', {
+  steps: [
+    {
+      title: 'CDN 두 줄 추가',
+      desc: 'npm도 되지만, CDN이 제일 빠릅니다.',
+      code: '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@m1kapp/maging/dist/maging.css">\n<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging/dist/maging.js"><\/script>'
+    },
+    {
+      title: 'div 하나 + 함수 하나',
+      desc: '위젯 이름과 데이터만 넘기면 됩니다.',
+      code: '<div id="chart"></div>\n<script>\n  Maging.lineChart("#chart", {\n    categories: ["1월","2월","3월"],\n    series: [{ name: "매출", data: [10, 15, 22] }]\n  });\n<\/script>'
+    },
+    {
+      title: '테마 변경은 한 줄',
+      desc: '35개 브랜드 테마를 런타임에 즉시 전환할 수 있습니다.',
+      code: 'Maging.setTheme("github");  // vercel, notion, stripe, netflix...'
+    }
+  ]
+});
+
+/* ── Code Block ── */
+Maging.codeBlock('#code-block', {
+  lang: 'html',
+  title: 'dashboard.html',
+  code: '<!DOCTYPE html>\n<html data-theme="claude">\n<head>\n  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@m1kapp/maging/dist/maging.css">\n  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging/dist/maging.js"><\/script>\n</head>\n<body class="mw-themed">\n\n  <div id="revenue"></div>\n  <div id="users"></div>\n\n  <script>\n    Maging.kpiCard("#revenue", {\n      label: "매출", value: "128억", delta: 8.3,\n      sparkline: [40, 55, 48, 62, 75, 88]\n    });\n\n    Maging.lineChart("#users", {\n      categories: ["1월","2월","3월","4월","5월","6월"],\n      series: [{ name: "MAU", data: [31, 33, 36, 38, 42, 48] }]\n    });\n  <\/script>\n</body>\n</html>'
+});
+
+/* ── Features ── */
+Maging.featureGrid('#feature-grid', {
+  cols: 3,
+  items: [
+    { icon: '⚡', title: '빌드 없음', desc: 'script 태그 하나면 끝. 번들러, 프레임워크 불필요.' },
+    { icon: '🎨', title: '35개 테마', desc: 'Claude, Vercel, Notion, Spotify... 한 줄로 전환.' },
+    { icon: '📊', title: '32개 위젯', desc: 'KPI, 차트, 테이블, 타임라인, 맵까지 전부 포함.' },
+    { icon: '🤖', title: 'LLM 최적화', desc: 'AI가 생성한 코드가 바로 돌아가도록 설계했습니다.' },
+    { icon: '📱', title: '반응형', desc: 'ResizeObserver 기반 자동 리사이즈. 모바일도 OK.' },
+    { icon: '🔒', title: 'XSS 방어', desc: '모든 입력을 자동 이스케이프. 안전합니다.' },
+  ]
+});
+
+/* ── Comparison Table ── */
+Maging.comparisonTable('#comparison', {
+  columns: ['maging', 'Recharts', 'Chart.js', 'Tremor'],
+  highlight: 0,
+  rows: [
+    { label: '빌드 불필요', values: [true, false, true, false] },
+    { label: 'CDN 한 줄', values: [true, false, true, false] },
+    { label: '프레임워크 무관', values: [true, false, true, false] },
+    { label: '브랜드 테마', values: ['35개', false, false, false] },
+    { label: 'LLM 프롬프트 최적화', values: [true, false, false, false] },
+    { label: 'KPI + 차트 + 테이블', values: [true, false, false, true] },
+    { label: '한국어 포맷 (억/만)', values: [true, false, false, false] },
+    { label: '라이선스', values: ['MIT', 'MIT', 'MIT', 'Apache'] },
+  ]
+});
+
+/* ── Live Demo widgets ── */
+Maging.lineChart('#demo-chart', {
+  title: '월별 활성 사용자',
+  categories: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+  series: [
+    { name: '2025', data: [5800,6400,7200,8100,9300,10800,12500,14200,16000,18500,21000,24000] },
+    { name: '2024', data: [1200,1400,1600,1900,2200,2500,2800,3100,3500,4000,4500,5200] }
+  ]
+});
+Maging.heroTile('#demo-hero', {
+  kicker: '이번 분기', value: '128억',
+  tagline: '전월 대비 8.3% 성장',
+  stats: [{ label: '신규 계약', value: '127건' }, { label: 'NPS', value: '72' }]
+});
+Maging.kpiCard('#demo-kpi-1', { label: '매출', value: '128억', delta: 8.3, compact: true, sparkline: [40,55,48,62,75,88] });
+Maging.kpiCard('#demo-kpi-2', { label: 'DAU', value: '48,291', delta: 12.4, compact: true, sparkline: [31,33,36,38,42,48] });
+Maging.kpiCard('#demo-kpi-3', { label: '계약', value: '127건', delta: -2.3, compact: true, sparkline: [22,28,19,31,25,29] });
+Maging.kpiCard('#demo-kpi-4', { label: '응답시간', value: '1.4초', delta: -12, deltaGoodWhen: 'negative', compact: true, sparkline: [1.8,1.7,1.6,1.5,1.48,1.4] });
+
+/* ── Testimonials ── */
+Maging.testimonialGrid('#testimonials-grid', {
+  cols: 3,
+  items: [
+    {
+      quote: 'Claude한테 "매출 대시보드 만들어줘"라고 했더니 진짜 나왔어요. maging 없었으면 못 했을 듯.',
+      name: '프론트엔드 개발자', role: '스타트업', initial: 'F'
+    },
+    {
+      quote: '피치덱 급하게 만들어야 하는데 피그마 열 시간이 없었습니다. HTML 하나로 해결했어요.',
+      name: '창업자', role: 'Pre-A', initial: 'C'
+    },
+    {
+      quote: '테마 바꾸는 게 진짜 한 줄이라서 놀랐습니다. 클라이언트마다 브랜드 컬러 맞추기 편해요.',
+      name: '프리랜서', role: '에이전시', initial: 'P'
+    },
+  ]
+});
+
+/* ── FAQ ── */
+Maging.faqAccordion('#faq-list', {
+  items: [
+    { q: 'React 없이도 되나요?', a: '네. Vanilla JS입니다. React, Vue, Svelte 어디서든 그냥 쓰면 됩니다. 프레임워크 의존성이 없어요.' },
+    { q: 'ECharts를 꼭 써야 하나요?', a: '차트 위젯을 쓰려면 ECharts 5+가 필요합니다. KPI, 타임라인 같은 HTML 위젯은 ECharts 없이도 동작해요.' },
+    { q: '상용으로 써도 되나요?', a: 'MIT 라이선스입니다. 상업적 사용, 수정, 재배포 전부 자유롭습니다.' },
+    { q: 'AI가 아니라 직접 코딩해도 되나요?', a: '당연하죠. API 문서 보고 직접 호출하면 됩니다. LLM이 쓰기 쉽게 만들었을 뿐, 사람이 쓰기 어려운 건 아닙니다.' },
+    { q: '커스텀 테마 만들 수 있나요?', a: 'CSS 변수 12개만 정의하면 됩니다. maging.core.css를 쓰고 변수만 오버라이드하세요.' },
+  ]
+});
+
+/* ── CTA ── */
+Maging.ctaSection('#cta', {
+  kicker: '',
+  title: 'AI한테 시켜보세요',
+  desc: '"maging으로 매출 대시보드 만들어줘"',
+  ctas: [
+    { label: 'GitHub', href: 'https://github.com/m1kapp/maging', primary: true },
+    { label: 'npm', href: 'https://www.npmjs.com/package/@m1kapp/maging' },
+  ]
+});
+</script>
+
+</body>
+</html>
