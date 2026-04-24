@@ -39,51 +39,70 @@ class MagingNav extends HTMLElement {
     const link = (href, label, key) =>
       `<a href="${href}" class="mw-site-nav__link${active === key ? ' mw-site-nav__link--active' : ''}">${label}</a>`;
 
-    // mode selector items
-    const modeItems = Object.entries(MODES).map(([k, v]) =>
-      `<div class="mw-mode__item${k === mode ? ' is-active' : ''}" data-mode="${k}">
-        <span class="mw-mode__dot mw-mode__dot--${k}"></span>
-        ${v.label}
-      </div>`
-    ).join('');
-
-    // demo link (only if mode has a demo)
-    const demoLink = modeInfo.demo
-      ? link(base + modeInfo.demo, 'Demo', 'demo')
-      : '';
-
     this.innerHTML = `
 <nav class="mw-site-nav">
   <div class="mw-site-nav__inner">
-    <div class="mw-site-nav__left">
-      <a href="${base}index.html" class="mw-site-nav__brand">
-        <span class="mw-site-nav__mark">✦</span>
-        <span class="mw-site-nav__name">maging</span>
-      </a>
-      <span class="mw-site-nav__sep">/</span>
-      <div class="mw-mode" id="mw-mode-picker">
-        <button class="mw-mode__trigger" type="button">
-          <span class="mw-mode__dot mw-mode__dot--${mode}"></span>
-          <span class="mw-mode__label">${modeInfo.label}</span>
-          <svg class="mw-mode__chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
-        </button>
-        <div class="mw-mode__menu">
-          ${modeItems}
-        </div>
-      </div>
-    </div>
+    <a href="${base}index.html" class="mw-site-nav__brand">
+      <span class="mw-site-nav__mark">✦</span>
+      <span class="mw-site-nav__name">maging</span>
+    </a>
     <button class="mw-site-nav__burger" type="button" aria-label="Menu">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
     </button>
     <div class="mw-site-nav__links">
       ${link(base + 'index.html', 'Home', 'home')}
-      ${link(base + 'components.html', 'Components', 'components')}
-      ${demoLink}
+      <div class="mw-site-nav__dropdown">
+        <button class="mw-site-nav__link mw-site-nav__link--dropdown${active === 'components' ? ' mw-site-nav__link--active' : ''}" type="button">
+          Components <span class="mw-site-nav__caret">▾</span>
+        </button>
+        <div class="mw-site-nav__menu">
+          <a href="${base}components.html?mode=core" class="mw-site-nav__menu-item">
+            <span class="mw-site-nav__menu-label">Core</span>
+            <span class="mw-site-nav__menu-desc">모든 모드 공통 위젯</span>
+          </a>
+          <a href="${base}components.html?mode=dashboard" class="mw-site-nav__menu-item">
+            <span class="mw-site-nav__menu-label">Dashboard</span>
+            <span class="mw-site-nav__menu-desc">Core + 대시보드 전용</span>
+          </a>
+          <a href="${base}components.html?mode=landing" class="mw-site-nav__menu-item">
+            <span class="mw-site-nav__menu-label">Landing Page</span>
+            <span class="mw-site-nav__menu-desc">Core + 랜딩 전용</span>
+          </a>
+        </div>
+      </div>
+      <div class="mw-site-nav__dropdown">
+        <button class="mw-site-nav__link mw-site-nav__link--dropdown${active === 'demo' ? ' mw-site-nav__link--active' : ''}" type="button">
+          Demo <span class="mw-site-nav__caret">▾</span>
+        </button>
+        <div class="mw-site-nav__menu">
+          <a href="${base}dashboard/acme.html" class="mw-site-nav__menu-item">
+            <span class="mw-site-nav__menu-label">Dashboard</span>
+            <span class="mw-site-nav__menu-desc">ACME 운영 대시보드</span>
+          </a>
+          <a href="${base}landing/startup.html" class="mw-site-nav__menu-item">
+            <span class="mw-site-nav__menu-label">Landing Page</span>
+            <span class="mw-site-nav__menu-desc">maging 랜딩 데모</span>
+          </a>
+        </div>
+      </div>
       ${link(base + 'stack.html', 'Stack', 'stack')}
       <a href="${GITHUB}" target="_blank" rel="noopener" class="mw-site-nav__link" aria-label="GitHub">${GH_ICON}</a>
     </div>
   </div>
 </nav>`;
+
+    // random theme button
+    const shuffleBtn = this.querySelector('.mw-theme-shuffle');
+    shuffleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const current = document.documentElement.getAttribute('data-theme');
+      let next;
+      do { next = ALL_THEMES[Math.floor(Math.random() * ALL_THEMES.length)]; } while (next === current && ALL_THEMES.length > 1);
+      document.documentElement.setAttribute('data-theme', next);
+      if (typeof Maging !== 'undefined' && Maging.refreshAll) {
+        requestAnimationFrame(() => requestAnimationFrame(() => Maging.refreshAll()));
+      }
+    });
 
     // hamburger menu
     const burger = this.querySelector('.mw-site-nav__burger');
@@ -98,41 +117,6 @@ class MagingNav extends HTMLElement {
       burger.classList.remove('is-open');
     });
 
-    // custom dropdown behavior
-    const picker = this.querySelector('#mw-mode-picker');
-    const trigger = picker.querySelector('.mw-mode__trigger');
-    const menu = picker.querySelector('.mw-mode__menu');
-
-    trigger.addEventListener('click', (e) => {
-      e.stopPropagation();
-      picker.classList.toggle('is-open');
-    });
-    document.addEventListener('click', () => picker.classList.remove('is-open'));
-
-    menu.addEventListener('click', (e) => {
-      const item = e.target.closest('.mw-mode__item');
-      if (!item) return;
-      const newMode = item.dataset.mode;
-      const newModeInfo = MODES[newMode] || MODES.core;
-
-      if (active === 'demo') {
-        if (newModeInfo.demo) {
-          window.location.href = base + newModeInfo.demo;
-        } else {
-          const url = new URL(base + 'components.html', window.location.href);
-          url.searchParams.set('mode', newMode);
-          window.location.href = url.toString();
-        }
-      } else if (active === 'components') {
-        const url = new URL(base + 'components.html', window.location.href);
-        url.searchParams.set('mode', newMode);
-        window.location.href = url.toString();
-      } else {
-        const url = new URL(base + 'components.html', window.location.href);
-        url.searchParams.set('mode', newMode);
-        window.location.href = url.toString();
-      }
-    });
   }
 }
 
@@ -179,14 +163,26 @@ class MagingFooter extends HTMLElement {
 customElements.define('maging-nav', MagingNav);
 customElements.define('maging-footer', MagingFooter);
 
-/* ── Random theme on every page load ── */
+/* ── Theme persistence: localStorage → last used, first visit → random ── */
 const ALL_THEMES = [
   'claude','linear','stripe','notion','airbnb','linkedin','instagram','youtube',
   'reddit','medium','apple','duolingo','vercel','github','x','slack','discord',
   'openai','spotify','twitch','netflix','figma','amazon','adobe','bloomberg',
 ];
-const randomTheme = ALL_THEMES[Math.floor(Math.random() * ALL_THEMES.length)];
-document.documentElement.setAttribute('data-theme', randomTheme);
+const THEME_KEY = 'maging-theme';
+const saved = localStorage.getItem(THEME_KEY);
+const theme = saved && ALL_THEMES.includes(saved)
+  ? saved
+  : ALL_THEMES[Math.floor(Math.random() * ALL_THEMES.length)];
+document.documentElement.setAttribute('data-theme', theme);
+localStorage.setItem(THEME_KEY, theme);
+
+// listen for theme changes (e.g. from Maging.setTheme) and persist
+new MutationObserver(() => {
+  const current = document.documentElement.getAttribute('data-theme');
+  if (current) localStorage.setItem(THEME_KEY, current);
+}).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
 // if Maging is loaded, refresh widgets
 if (typeof Maging !== 'undefined' && Maging.refreshAll) {
   requestAnimationFrame(() => requestAnimationFrame(() => Maging.refreshAll()));
@@ -213,9 +209,6 @@ if (!document.getElementById('mw-site-css')) {
   padding: 0 1.5rem; height: 44px; gap: 0.75rem;
   flex-wrap: wrap;
 }
-.mw-site-nav__left {
-  display: inline-flex; align-items: center; gap: 0.5rem;
-}
 .mw-site-nav__brand {
   display: inline-flex; align-items: center; gap: 0.5rem;
   text-decoration: none; color: inherit; transition: opacity 120ms;
@@ -235,54 +228,6 @@ if (!document.getElementById('mw-site-css')) {
 [data-theme="deere"] .mw-site-nav__mark { color: #000; }
 
 .mw-site-nav__name { font-size: 0.92rem; font-weight: 600; letter-spacing: -0.005em; }
-.mw-site-nav__sep {
-  font-size: 0.8rem; color: var(--mw-text-muted); opacity: 0.4;
-  font-weight: 300; margin: 0 -0.1rem;
-}
-
-/* ── custom mode picker ── */
-.mw-mode { position: relative; }
-.mw-mode__trigger {
-  display: inline-flex; align-items: center; gap: 0.375rem;
-  font-size: 0.75rem; font-family: var(--mw-font); font-weight: 500;
-  color: var(--mw-text); background: var(--mw-surface-2);
-  border: 1px solid var(--mw-border); border-radius: calc(var(--mw-radius) * 0.6);
-  padding: 0.25rem 0.5rem; cursor: pointer;
-  transition: border-color 150ms, box-shadow 150ms;
-}
-.mw-mode__trigger:hover { border-color: var(--mw-accent); }
-.mw-mode.is-open .mw-mode__trigger { border-color: var(--mw-accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--mw-accent) 20%, transparent); }
-.mw-mode__label { line-height: 1; }
-.mw-mode__chevron { opacity: 0.4; transition: transform 200ms; flex-shrink: 0; }
-.mw-mode.is-open .mw-mode__chevron { transform: rotate(180deg); }
-
-.mw-mode__dot {
-  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
-}
-.mw-mode__dot--core { background: var(--mw-accent); }
-.mw-mode__dot--dashboard { background: var(--mw-success, #22c55e); }
-.mw-mode__dot--landing { background: var(--mw-warning, #f59e0b); }
-
-.mw-mode__menu {
-  position: absolute; top: calc(100% + 6px); left: 0;
-  min-width: 160px; padding: 0.25rem;
-  background: var(--mw-surface); border: 1px solid var(--mw-border);
-  border-radius: var(--mw-radius); box-shadow: 0 8px 24px -8px rgba(0,0,0,0.18);
-  opacity: 0; visibility: hidden; transform: translateY(-4px);
-  transition: opacity 150ms, visibility 150ms, transform 150ms;
-  z-index: 200;
-}
-.mw-mode.is-open .mw-mode__menu { opacity: 1; visibility: visible; transform: translateY(0); }
-
-.mw-mode__item {
-  display: flex; align-items: center; gap: 0.5rem;
-  padding: 0.45rem 0.625rem; border-radius: calc(var(--mw-radius) * 0.5);
-  font-size: 0.75rem; font-family: var(--mw-font); font-weight: 500;
-  color: var(--mw-text-muted); cursor: pointer;
-  transition: background 120ms, color 120ms;
-}
-.mw-mode__item:hover { background: var(--mw-surface-2); color: var(--mw-text); }
-.mw-mode__item.is-active { color: var(--mw-text); font-weight: 600; }
 
 .mw-site-nav__ver {
   font-size: 0.62rem; font-family: var(--mw-mono-font); color: var(--mw-text-muted);
@@ -325,6 +270,33 @@ if (!document.getElementById('mw-site-css')) {
 }
 .mw-site-nav__link:hover { color: var(--mw-text); background: var(--mw-surface-2); }
 .mw-site-nav__link--active { color: var(--mw-text); background: var(--mw-surface-2); font-weight: 500; }
+.mw-site-nav__link--dropdown { cursor: pointer; border: none; background: none; }
+.mw-site-nav__caret { font-size: 0.6rem; opacity: 0.4; }
+
+/* dropdown */
+.mw-site-nav__dropdown { position: relative; }
+.mw-site-nav__menu {
+  position: absolute; top: calc(100% + 4px); left: 50%; transform: translateX(-50%);
+  min-width: 200px; padding: 0.375rem;
+  background: var(--mw-surface); border: 1px solid var(--mw-border);
+  border-radius: var(--mw-radius); box-shadow: 0 8px 24px -8px rgba(0,0,0,0.15);
+  opacity: 0; visibility: hidden; transition: opacity 150ms, visibility 150ms;
+  z-index: 100;
+}
+.mw-site-nav__dropdown:hover .mw-site-nav__menu,
+.mw-site-nav__dropdown:focus-within .mw-site-nav__menu {
+  opacity: 1; visibility: visible;
+}
+.mw-site-nav__menu-item {
+  display: block; padding: 0.5rem 0.75rem; border-radius: calc(var(--mw-radius) * 0.5);
+  text-decoration: none; color: inherit; transition: background 120ms;
+}
+.mw-site-nav__menu-item:hover { background: var(--mw-surface-2); }
+.mw-site-nav__menu-label { display: block; font-size: 0.78rem; font-weight: 600; font-family: var(--mw-font); }
+.mw-site-nav__menu-desc { display: block; font-size: 0.65rem; color: var(--mw-text-muted); font-family: var(--mw-font); margin-top: 0.1rem; }
+.mw-theme-shuffle { border: none; cursor: pointer; }
+.mw-theme-shuffle:hover svg { transform: rotate(180deg); }
+.mw-theme-shuffle svg { transition: transform 0.3s ease; }
 
 /* ── maging site footer ── */
 .mw-site-footer { border-top: 1px solid var(--mw-border); }

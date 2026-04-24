@@ -53,6 +53,7 @@
   @media (max-width: 960px) { .cg-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 640px) { .cg-grid { grid-template-columns: 1fr; } }
   .cg-card--wide { grid-column: span 2; }
+  .cg-card--tall .cg-card__preview { height: 320px; }
   @media (max-width: 640px) { .cg-card--wide { grid-column: span 1; } }
 
   .cg-card {
@@ -185,7 +186,7 @@
 
 <body class="mw-themed">
 
-<maging-nav active="components" mode="core" id="nav-el"></maging-nav>
+<maging-nav active="components"></maging-nav>
 
 <div class="cg-page">
   <div class="cg-header">
@@ -226,14 +227,14 @@
  * ============================================================ */
 var WIDGETS = {
   // ── Core: metrics ──
-  kpiCard:         { mode: 'core', cat: 'Metrics' },
-  heroTile:        { mode: 'core', cat: 'Metrics' },
+  heroTile:        { mode: 'core', cat: 'Metrics', tall: true },
   metricChart:     { mode: 'core', cat: 'Metrics' },
+  kpiCard:         { mode: 'core', cat: 'Metrics' },
+  ringProgress:    { mode: 'core', cat: 'Metrics' },
   metricStack:     { mode: 'core', cat: 'Metrics' },
   compareCard:     { mode: 'core', cat: 'Metrics' },
-  countdownTile:   { mode: 'core', cat: 'Metrics' },
-  ringProgress:    { mode: 'core', cat: 'Metrics' },
   bulletChart:     { mode: 'core', cat: 'Metrics' },
+  countdownTile:   { mode: 'core', cat: 'Metrics' },
 
   // ── Core: charts ──
   lineChart:       { mode: 'core', cat: 'Charts' },
@@ -257,29 +258,29 @@ var WIDGETS = {
   sparklineList:   { mode: 'core', cat: 'Lists' },
 
   // ── Core: calendar & progress ──
-  calendarHeatmap: { mode: 'core', cat: 'Calendar & Progress', wide: true },
-  eventCalendar:   { mode: 'core', cat: 'Calendar & Progress' },
-  progressStepper: { mode: 'core', cat: 'Calendar & Progress' },
+  calendarHeatmap: { mode: 'core', cat: 'Calendar & Progress', wide: true, tall: true },
+  eventCalendar:   { mode: 'core', cat: 'Calendar & Progress', tall: true },
+  progressStepper: { mode: 'core', cat: 'Calendar & Progress', wide: true, tall: true },
   goalGrid:        { mode: 'core', cat: 'Calendar & Progress' },
 
   // ── Core: layout ──
   pageHeader:      { mode: 'core', cat: 'Layout' },
   sectionHead:     { mode: 'core', cat: 'Layout' },
   alertBanner:     { mode: 'core', cat: 'Layout' },
-  mapChart:        { mode: 'core', cat: 'Specialized', wide: true },
-  cohortMatrix:    { mode: 'core', cat: 'Specialized', wide: true },
+  mapChart:        { mode: 'core', cat: 'Specialized', wide: true, tall: true },
+  cohortMatrix:    { mode: 'core', cat: 'Specialized', wide: true, tall: true },
 
   // ── Landing Page specific ──
-  stepGuide:       { mode: 'landing', cat: 'Landing Page', wide: true },
-  codeBlock:       { mode: 'landing', cat: 'Landing Page', wide: true },
-  comparisonTable: { mode: 'landing', cat: 'Landing Page', wide: true },
-  heroSection:     { mode: 'landing', cat: 'Landing Page', wide: true },
-  featureGrid:     { mode: 'landing', cat: 'Landing Page', wide: true },
-  pricingTable:    { mode: 'landing', cat: 'Landing Page', wide: true },
-  testimonialGrid: { mode: 'landing', cat: 'Landing Page' },
-  logoBar:         { mode: 'landing', cat: 'Landing Page' },
+  heroSection:     { mode: 'landing', cat: 'Landing Page', wide: true, tall: true },
+  featureGrid:     { mode: 'landing', cat: 'Landing Page', wide: true, tall: true },
+  pricingTable:    { mode: 'landing', cat: 'Landing Page', wide: true, tall: true },
+  stepGuide:       { mode: 'landing', cat: 'Landing Page', wide: true, tall: true },
+  comparisonTable: { mode: 'landing', cat: 'Landing Page', wide: true, tall: true },
+  testimonialGrid: { mode: 'landing', cat: 'Landing Page', tall: true },
   ctaSection:      { mode: 'landing', cat: 'Landing Page', wide: true },
-  faqAccordion:    { mode: 'landing', cat: 'Landing Page' },
+  faqAccordion:    { mode: 'landing', cat: 'Landing Page', tall: true },
+  codeBlock:       { mode: 'landing', cat: 'Landing Page', wide: true },
+  logoBar:         { mode: 'landing', cat: 'Landing Page' },
 };
 
 /* ── Sample data for live previews ── */
@@ -348,12 +349,6 @@ var SAMPLES = {
  * ============================================================ */
 var params = new URLSearchParams(window.location.search);
 var currentMode = params.get('mode') || 'core';
-
-// Update nav mode
-var navEl = document.getElementById('nav-el');
-navEl.setAttribute('mode', currentMode);
-// re-render nav (Web Component already connected, force re-render)
-navEl.connectedCallback && navEl.connectedCallback();
 
 // Mode descriptions
 var MODE_DESC = {
@@ -433,7 +428,8 @@ catOrder.forEach(function(cat) {
     var title = meta.title || key;
     var desc = meta.desc || '';
     var wideClass = WIDGETS[key].wide ? ' cg-card--wide' : '';
-    html += '<div class="cg-card' + wideClass + '">';
+    var tallClass = WIDGETS[key].tall ? ' cg-card--tall' : '';
+    html += '<div class="cg-card' + wideClass + tallClass + '">';
     html += '<div class="cg-card__preview"><div id="preview-' + key + '"></div></div>';
     html += '<div class="cg-card__info">';
     html += '<div class="cg-card__name">' + title + '</div>';
