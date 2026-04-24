@@ -436,20 +436,21 @@
   .ai-llm__logo {
     width: 20px; height: 20px; flex-shrink: 0;
   }
-  /* invert dark theme logos */
-  [data-theme="vercel"] .ai-llm__logo,
-  [data-theme="github"] .ai-llm__logo,
-  [data-theme="x"] .ai-llm__logo,
-  [data-theme="slack"] .ai-llm__logo,
-  [data-theme="discord"] .ai-llm__logo,
-  [data-theme="openai"] .ai-llm__logo,
-  [data-theme="spotify"] .ai-llm__logo,
-  [data-theme="twitch"] .ai-llm__logo,
-  [data-theme="netflix"] .ai-llm__logo,
-  [data-theme="figma"] .ai-llm__logo,
-  [data-theme="amazon"] .ai-llm__logo,
-  [data-theme="adobe"] .ai-llm__logo,
-  [data-theme="bloomberg"] .ai-llm__logo { filter: invert(1); }
+  /* invert X logo on dark themes (it's pure black) */
+  .ai-llm__logo--invert { filter: none; }
+  [data-theme="vercel"] .ai-llm__logo--invert,
+  [data-theme="github"] .ai-llm__logo--invert,
+  [data-theme="x"] .ai-llm__logo--invert,
+  [data-theme="slack"] .ai-llm__logo--invert,
+  [data-theme="discord"] .ai-llm__logo--invert,
+  [data-theme="openai"] .ai-llm__logo--invert,
+  [data-theme="spotify"] .ai-llm__logo--invert,
+  [data-theme="twitch"] .ai-llm__logo--invert,
+  [data-theme="netflix"] .ai-llm__logo--invert,
+  [data-theme="figma"] .ai-llm__logo--invert,
+  [data-theme="amazon"] .ai-llm__logo--invert,
+  [data-theme="adobe"] .ai-llm__logo--invert,
+  [data-theme="bloomberg"] .ai-llm__logo--invert { filter: invert(1); }
   .ai-llm__name { font-family: var(--mw-font); }
 
   /* Example bubbles */
@@ -1084,7 +1085,7 @@
             <span class="ai-llm__name">ChatGPT</span>
           </a>
           <a class="ai-llm" href="https://claude.ai" target="_blank" rel="noopener">
-            <img class="ai-llm__logo" src="./dist/icons/anthropic.svg" alt="Anthropic" width="20" height="20">
+            <img class="ai-llm__logo" src="./dist/icons/claude.svg" alt="Claude" width="20" height="20">
             <span class="ai-llm__name">Claude</span>
           </a>
           <a class="ai-llm" href="https://gemini.google.com" target="_blank" rel="noopener">
@@ -1092,7 +1093,7 @@
             <span class="ai-llm__name">Gemini</span>
           </a>
           <a class="ai-llm" href="https://grok.com" target="_blank" rel="noopener">
-            <img class="ai-llm__logo" src="./dist/icons/x.svg" alt="X" width="20" height="20">
+            <img class="ai-llm__logo ai-llm__logo--invert" src="./dist/icons/x.svg" alt="X" width="20" height="20">
             <span class="ai-llm__name">Grok</span>
           </a>
           <a class="ai-llm" href="https://www.perplexity.ai" target="_blank" rel="noopener">
