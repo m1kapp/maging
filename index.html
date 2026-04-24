@@ -376,6 +376,17 @@
   }
   .ai-split__inputbar-send:active { transform: scale(0.9); }
 
+  .ai-chat-replay {
+    margin: 0.75rem auto 0; display: flex; align-items: center; gap: 0.35rem;
+    padding: 0.35rem 0.85rem; font-size: 0.7rem; font-weight: 500;
+    border: 1px solid var(--mw-border); border-radius: 999px;
+    background: var(--mw-surface); color: var(--mw-text-muted);
+    cursor: pointer; font-family: var(--mw-font);
+    transition: color 150ms, border-color 150ms;
+    animation: splitFadeSlide 0.3s ease-out;
+  }
+  .ai-chat-replay:hover { color: var(--mw-text); border-color: var(--mw-accent); }
+
   @keyframes splitFadeSlide {
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
@@ -2643,6 +2654,9 @@ Then wait for my next message before generating anything.`;
     clearAnims();
     hideEl('step-system'); hideEl('step-handshake'); hideEl('step-request'); hideEl('step-result');
     hideEl('step-handshake-text'); hideEl('step-preview');
+    // remove previous replay button
+    var oldReplay = document.querySelector('.ai-chat-replay');
+    if (oldReplay) oldReplay.remove();
     document.getElementById('step-empty').style.display = '';
     var t1 = document.getElementById('step-typing-1');
     var t2 = document.getElementById('step-typing-2');
@@ -2732,6 +2746,15 @@ Then wait for my next message before generating anything.`;
               } catch(e) {}
             }
             scrollChat();
+            // show replay button after animation ends
+            delay(function() {
+              var replay = document.createElement('button');
+              replay.className = 'ai-chat-replay';
+              replay.innerHTML = '↻ Replay';
+              replay.addEventListener('click', function() { playAnimation(); });
+              var area = document.getElementById('ai-chat-area');
+              if (area) { area.appendChild(replay); scrollChat(); }
+            }, 800);
           }, 1800);
         }, 500);
       });
