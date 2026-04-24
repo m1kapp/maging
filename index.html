@@ -433,12 +433,23 @@
     border-color: var(--mw-accent);
     background: var(--mw-surface);
   }
-  .ai-llm__icon {
-    width: 24px; height: 24px; border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    color: #fff; font-weight: 700; font-size: 0.7rem;
-    flex-shrink: 0; font-family: var(--mw-font);
+  .ai-llm__logo {
+    width: 20px; height: 20px; flex-shrink: 0;
   }
+  /* invert dark theme logos */
+  [data-theme="vercel"] .ai-llm__logo,
+  [data-theme="github"] .ai-llm__logo,
+  [data-theme="x"] .ai-llm__logo,
+  [data-theme="slack"] .ai-llm__logo,
+  [data-theme="discord"] .ai-llm__logo,
+  [data-theme="openai"] .ai-llm__logo,
+  [data-theme="spotify"] .ai-llm__logo,
+  [data-theme="twitch"] .ai-llm__logo,
+  [data-theme="netflix"] .ai-llm__logo,
+  [data-theme="figma"] .ai-llm__logo,
+  [data-theme="amazon"] .ai-llm__logo,
+  [data-theme="adobe"] .ai-llm__logo,
+  [data-theme="bloomberg"] .ai-llm__logo { filter: invert(1); }
   .ai-llm__name { font-family: var(--mw-font); }
 
   /* Example bubbles */
@@ -1069,27 +1080,27 @@
         <div class="ai-step__desc">어느 모델이든 상관없습니다. 단일 HTML 출력만 되면 됩니다.</div>
         <div class="ai-llms mt-4">
           <a class="ai-llm" href="https://chatgpt.com" target="_blank" rel="noopener">
-            <span class="ai-llm__icon" style="background:#10A37F;">G</span>
+            <img class="ai-llm__logo" src="./dist/icons/openai.svg" alt="OpenAI" width="20" height="20">
             <span class="ai-llm__name">ChatGPT</span>
           </a>
           <a class="ai-llm" href="https://claude.ai" target="_blank" rel="noopener">
-            <span class="ai-llm__icon" style="background:#DA7756;">C</span>
+            <img class="ai-llm__logo" src="./dist/icons/anthropic.svg" alt="Anthropic" width="20" height="20">
             <span class="ai-llm__name">Claude</span>
           </a>
           <a class="ai-llm" href="https://gemini.google.com" target="_blank" rel="noopener">
-            <span class="ai-llm__icon" style="background:#4285F4;">G</span>
+            <img class="ai-llm__logo" src="./dist/icons/gemini.svg" alt="Gemini" width="20" height="20">
             <span class="ai-llm__name">Gemini</span>
           </a>
           <a class="ai-llm" href="https://grok.com" target="_blank" rel="noopener">
-            <span class="ai-llm__icon" style="background:var(--mw-text);">X</span>
+            <img class="ai-llm__logo" src="./dist/icons/x.svg" alt="X" width="20" height="20">
             <span class="ai-llm__name">Grok</span>
           </a>
           <a class="ai-llm" href="https://www.perplexity.ai" target="_blank" rel="noopener">
-            <span class="ai-llm__icon" style="background:#20B8CD;">P</span>
+            <img class="ai-llm__logo" src="./dist/icons/perplexity.svg" alt="Perplexity" width="20" height="20">
             <span class="ai-llm__name">Perplexity</span>
           </a>
           <a class="ai-llm" href="https://copilot.microsoft.com" target="_blank" rel="noopener">
-            <span class="ai-llm__icon" style="background:#6e40c9;">C</span>
+            <img class="ai-llm__logo" src="./dist/icons/copilot.svg" alt="Copilot" width="20" height="20">
             <span class="ai-llm__name">Copilot</span>
           </a>
         </div>
