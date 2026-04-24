@@ -150,19 +150,7 @@ class MagingFooter extends HTMLElement {
 customElements.define('maging-nav', MagingNav);
 customElements.define('maging-footer', MagingFooter);
 
-/* ── Theme persistence: localStorage → last used, first visit → random ── */
-const ALL_THEMES = [
-  'claude','linear','stripe','notion','airbnb','linkedin','instagram','youtube',
-  'reddit','medium','apple','duolingo','vercel','github','x','slack','discord',
-  'openai','spotify','twitch','netflix','figma','amazon','adobe','bloomberg',
-];
-const THEME_KEY = 'maging-theme';
-const saved = localStorage.getItem(THEME_KEY);
-const theme = saved && ALL_THEMES.includes(saved)
-  ? saved
-  : ALL_THEMES[Math.floor(Math.random() * ALL_THEMES.length)];
-document.documentElement.setAttribute('data-theme', theme);
-localStorage.setItem(THEME_KEY, theme);
+/* ── Theme: handled by inline <script> in <head> to avoid flash ── */
 
 // listen for theme changes (e.g. from Maging.setTheme) and persist
 new MutationObserver(() => {
