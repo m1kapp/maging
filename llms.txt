@@ -54,11 +54,11 @@ Flex row: `"index · kicker" + H2` on the left, tag badge on the right. Use as l
 
 **Pattern:**
 ```html
-<div id="page-hero" class="pt-12 pb-4"></div>
+<div id="page-hero" class="pt-4 pb-2"></div>
 
-<div class="mt-8 pt-6" style="border-top:1px solid var(--mw-border)">
+<div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
   <div id="section-01"></div>
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4" style="grid-auto-rows:400px">
+  <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-3 mt-3" style="grid-auto-rows:380px">
     <div id="chart-a"></div><div id="chart-b"></div>
   </div>
 </div>
@@ -398,19 +398,26 @@ Horizontal stripe — NOT a card. Place before the grid.
 
 ## Canonical Layouts
 
-Outer wrapper: `<main class="max-w-[1280px] mx-auto p-6">`. Stack sections with `mt-4`.
+Outer wrapper: `<main class="max-w-[1280px] mx-auto px-6 py-4">`. Stack sections with `mt-5 pt-4`.
+
+**CRITICAL — Asymmetric Layouts:**
+Do NOT repeat the same grid pattern across sections. Vary column ratios by information importance:
+- Main chart + side: `[3fr_1fr]` or `[5fr_2fr]`
+- Three unequal: `[2fr_2fr_3fr]` or `[2fr_3fr_2fr]`
+- Single item: `grid-cols-1`
+- Always use `gap-3` (never `gap-4` or larger).
 
 ### 1 · KPI Row
 ```html
-<div class="grid grid-cols-2 md:grid-cols-4 gap-4" style="grid-auto-rows:192px">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3" style="grid-auto-rows:140px">
   <div id="kpi-1"></div><div id="kpi-2"></div><div id="kpi-3"></div><div id="kpi-4"></div>
 </div>
 ```
-4× `kpiCard`. For 6 compact: `md:grid-cols-6 gap-3` + `grid-auto-rows:110px` + `compact:true`.
+4× `kpiCard`. For 6 compact: `md:grid-cols-6 gap-3` + `grid-auto-rows:96px` + `compact:true`.
 
-### 2 · Hero + Side (2:1)
+### 2 · Hero + Side (asymmetric)
 ```html
-<div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4" style="grid-auto-rows:400px">
+<div class="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-3" style="grid-auto-rows:380px">
   <div id="lead"></div><div id="side"></div>
 </div>
 ```
@@ -418,29 +425,29 @@ Left: `lineChart`/`barChart`/`funnelChart`. Right: `donutChart`/`leaderboard`/`s
 
 ### 3 · Equal Split (1:1)
 ```html
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-4" style="grid-auto-rows:400px">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-3" style="grid-auto-rows:380px">
   <div id="left"></div><div id="right"></div>
 </div>
 ```
 
-### 4 · Metric Trio (1:1:1)
+### 4 · Asymmetric Trio
 ```html
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4" style="grid-auto-rows:240px">
+<div class="grid grid-cols-1 lg:grid-cols-[2fr_2fr_3fr] gap-3" style="grid-auto-rows:220px">
   <div id="a"></div><div id="b"></div><div id="c"></div>
 </div>
 ```
-3× `gaugeChart` or `compareCard`.
+3× `gaugeChart` or `compareCard`. The last column is wider for the most important item.
 
 ### 5 · Full-Width Detail
 ```html
-<div class="grid grid-cols-1 gap-4" style="grid-auto-rows:520px">
+<div class="grid grid-cols-1 gap-3" style="grid-auto-rows:480px">
   <div id="detail"></div>
 </div>
 ```
-`treemapChart` · `sankeyChart` · `calendarHeatmap` · `cohortMatrix` · `mapChart` (use 600px).
+`treemapChart` · `sankeyChart` · `calendarHeatmap` · `cohortMatrix` · `mapChart`.
 
 ### Height tokens
-`mini 110px` · `tile 192px` · `gauge 240px` · `card 400px` · `detail 520px` · `tall 600px`
+`mini 96px` · `tile 140px` · `gauge 220px` · `card 380px` · `detail 480px` · `tall 560px`
 
 ---
 
@@ -460,15 +467,22 @@ Left: `lineChart`/`barChart`/`funnelChart`. Right: `donutChart`/`leaderboard`/`s
    - Retention → `cohortMatrix` · P&L → `waterfallChart` · Rankings → `leaderboard`
    - Events → `timeline`/`activityTable` · Health → `statusGrid`+`gaugeChart`
    - OKR → `goalGrid` · Multi-trend → `sparklineList` · Hero metric → `heroTile`
-7. KRW: `v => '₩' + (v/1e8).toFixed(1) + '억'` or `Maging.fmt.krw(v)`.
-8. Korean labels OK. Use `word-break: keep-all` for Korean text.
-9. Section order: at-a-glance → real-time → trends → deep-dive → operations.
-10. Output one fenced code block: ` ```html … ``` `. No text outside it.
+7. **KRW formatting:**
+   - Widget values (HTML context): `Maging.fmt.krw(v)` → `43.8<span class="mw-unit">억원</span>` (unit auto-styled smaller + muted)
+   - Chart axis/tooltip (plain text): `Maging.fmt.krwPlain(v)` → `43.8억원`
+   - NEVER use `₩` prefix — Korean convention is suffix `원`. NEVER write manual formatters like `v => '₩' + (v/1e8).toFixed(1) + '억'`.
+8. **Number safety:** Pass raw numbers to chart data (e.g. `4377800000`, not `43.8`). Use `Maging.fmt.krwPlain` as `yFormatter`. Never divide values before passing to charts — the formatter handles display.
+9. Korean labels OK. Use `word-break: keep-all` for Korean text.
+10. Section order: at-a-glance → real-time → trends → deep-dive → operations.
+11. **Layout density:** Use `gap-3` everywhere. Section spacing: `mt-5 pt-4`. Never use `gap-4`, `mt-8`, `pt-12`, or other large spacings — they create an "AI-generated" look with excessive whitespace.
+12. **Asymmetric grids:** Vary column ratios across sections. Never repeat the same `grid-cols-3` pattern more than once consecutively.
+13. Output one fenced code block: ` ```html … ``` `. No text outside it.
 
 ---
 
 ## NEVER DO
 
+### Code hygiene
 - **No code comments** (`//`, `/* */`, `<!-- -->`). Every comment burns output tokens. Widget calls + named IDs are self-documenting.
 - **No custom `<style>` with `:root { --bg, --card, --text … }`**. maging.css already defines all `--mw-*` tokens per theme. Redefining them breaks theme switching.
 - **No invented class names** like `.shell`, `.card`, `.dashboard`. Grid layout + Maging API only.
@@ -476,6 +490,13 @@ Left: `lineChart`/`barChart`/`funnelChart`. Right: `donutChart`/`leaderboard`/`s
 - If you need a color token, use existing: `var(--mw-accent)`, `var(--mw-text-muted)`, `var(--mw-surface-2)`, `var(--mw-border)`.
 - `<html data-theme="…">` is the single source of truth for styling. Trust it completely.
 - `pageHeader` / `sectionHead` are structural — mount on plain divs **outside** grid cells, not inside widget slots.
+
+### Design quality (avoid AI-generated look)
+- **No manual number formatters.** Use `Maging.fmt.krw` / `.num` / `.pct`. Manual `v/1e8` math causes double-division bugs and NaN.
+- **No raw large numbers** in `value` fields. Always format: `value: Maging.fmt.krw(4377800000)` → `'₩43.8억'`.
+- **No uniform grids.** Don't repeat `grid-cols-3` across every section. Use asymmetric ratios: `[2fr_1fr]`, `[3fr_2fr]`, `[2fr_3fr_2fr]`.
+- **No excessive whitespace.** `gap-3` max. Never `gap-4`, `pt-12`, `mt-8`, `mb-8`.
+- **No NaN/undefined exposure.** All `Maging.fmt` functions return `'-'` for bad input. Chart data uses `connectNulls: true`.
 
 ---
 
@@ -485,7 +506,8 @@ Left: `lineChart`/`barChart`/`funnelChart`. Right: `donutChart`/`leaderboard`/`s
 window.Maging  // main API object
 window.mw      // short alias (mw.kpiCard(…))
 
-Maging.fmt.krw(value)   // ₩X.X억 formatter
+Maging.fmt.krw(value)       // 43.8억원 (HTML — unit styled small)
+Maging.fmt.krwPlain(value)  // 43.8억원 (plain text — for chart axis/tooltip)
 Maging.setTheme(name)   // programmatically switch theme
 ```
 

@@ -18,7 +18,8 @@
   --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
-  --mw-shadow: 0 4px 12px -4px rgb(29 185 84 / 0.15);
+  --mw-shadow: 0 0 0 1px rgb(255 255 255 / 0.04);
+  --mw-shadow-hover: 0 0 0 1px rgb(255 255 255 / 0.1);
 }
 
 /* Spotify's signature button look — black text on green */

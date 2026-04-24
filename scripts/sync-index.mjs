@@ -23,6 +23,24 @@ import { SHORT_PROMPT, FULL_PROMPT } from './prompts.mjs';
 const __dir = dirname(fileURLToPath(import.meta.url));
 const indexPath = join(__dir, '../index.html');
 
+// ── version sync ──────────────────────────────────────────────────────────────
+const { version } = JSON.parse(readFileSync(join(__dir, '../package.json'), 'utf-8'));
+
+function syncVersion(filePath) {
+  let src = readFileSync(filePath, 'utf-8');
+  // CDN URLs:  @m1kapp/maging@x.y.z
+  src = src.replace(/@m1kapp\/maging@\d+\.\d+\.\d+/g, `@m1kapp/maging@${version}`);
+  // version badges/labels:  v0.1.xx  (but NOT inside release-history data in stack.html)
+  src = src.replace(/\bv\d+\.\d+\.\d+\b/g, `v${version}`);
+  writeFileSync(filePath, src, 'utf-8');
+  console.log(`✓  ${filePath.split('/').pop()} — version → v${version}`);
+}
+
+// index.html + demo.html 만 버전 교체 (stack.html 릴리즈 히스토리는 제외)
+syncVersion(indexPath);
+syncVersion(join(__dir, '../demo.html'));
+// ─────────────────────────────────────────────────────────────────────────────
+
 function escapeForTemplateLiteral(str) {
   return str
     .replace(/\\/g, '\\\\')

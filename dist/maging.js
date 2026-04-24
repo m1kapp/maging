@@ -51,8 +51,8 @@
     return {
       backgroundColor: c.surface,
       borderColor: c.border,
-      textStyle: { color: c.text, fontFamily: c.font, fontSize: 12 },
-      extraCssText: 'box-shadow: 0 6px 20px -8px rgba(0,0,0,0.25); border-radius: ' + c.radius + ';',
+      textStyle: { color: c.text, fontFamily: c.font, fontSize: 11 },
+      extraCssText: 'box-shadow: 0 4px 12px -4px rgba(0,0,0,0.15); border-radius: ' + c.radius + '; padding: 8px 12px;',
     };
   }
 
@@ -65,24 +65,43 @@
   }
 
   function escapeHTML(s) {
-    if (s == null) return '';
-    return String(s)
+    if (s == null || s === undefined) return '';
+    var str = String(s);
+    if (str === 'NaN' || str === 'undefined' || str === 'Infinity' || str === '-Infinity') return '-';
+    return str
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function safeNum(v) {
+    if (v == null || isNaN(v) || !isFinite(v)) return '-';
+    return Number(v).toLocaleString();
   }
 
   // ==========================================================
   // Formatters
   // ==========================================================
+  var U = '<span class="mw-unit">';
+  var UE = '</span>';
   var fmt = {
     krw: function (n) {
-      if (n == null || isNaN(n)) return '';
-      if (n >= 1_0000_0000) return '₩' + (n / 1_0000_0000).toFixed(1) + '억';
-      if (n >= 10000) return '₩' + Math.round(n / 10000).toLocaleString() + '만';
-      return '₩' + Number(n).toLocaleString();
+      if (n == null || isNaN(n) || !isFinite(n)) return '-';
+      var abs = Math.abs(n);
+      var sign = n < 0 ? '-' : '';
+      if (abs >= 1_0000_0000) return sign + (abs / 1_0000_0000).toFixed(1) + U + '억원' + UE;
+      if (abs >= 10000) return sign + Math.round(abs / 10000).toLocaleString() + U + '만원' + UE;
+      return sign + abs.toLocaleString() + U + '원' + UE;
     },
-    num: function (n) { return (n == null || isNaN(n)) ? '' : Number(n).toLocaleString(); },
-    pct: function (n) { return (n == null || isNaN(n)) ? '' : Number(n).toFixed(1) + '%'; },
+    krwPlain: function (n) {
+      if (n == null || isNaN(n) || !isFinite(n)) return '-';
+      var abs = Math.abs(n);
+      var sign = n < 0 ? '-' : '';
+      if (abs >= 1_0000_0000) return sign + (abs / 1_0000_0000).toFixed(1) + '억원';
+      if (abs >= 10000) return sign + Math.round(abs / 10000).toLocaleString() + '만원';
+      return sign + abs.toLocaleString() + '원';
+    },
+    num: function (n) { return (n == null || isNaN(n) || !isFinite(n)) ? '-' : Number(n).toLocaleString(); },
+    pct: function (n) { return (n == null || isNaN(n) || !isFinite(n)) ? '-' : Number(n).toFixed(1) + '%'; },
   };
 
   // ==========================================================
@@ -250,12 +269,15 @@
           name: s.name,
           type: 'line',
           stack: data.stack ? 'total' : undefined,
-          smooth: true,
+          smooth: 0.3,
           symbol: 'circle',
-          symbolSize: 4,
+          symbolSize: 3,
+          showSymbol: false,
+          emphasis: { focus: 'series', itemStyle: { borderWidth: 2 } },
           data: s.data,
-          lineStyle: { color: col, width: 2 },
+          lineStyle: { color: col, width: 1.5 },
           itemStyle: { color: col, borderColor: c.surface, borderWidth: 1 },
+          connectNulls: true,
           areaStyle: data.area ? {
             color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
               colorStops: [
@@ -267,11 +289,11 @@
       });
       return {
         textStyle: { fontFamily: c.font, color: c.text },
-        grid: { top: data.series.length > 1 ? 32 : 14, right: 14, bottom: 28, left: 54 },
+        grid: { top: data.series.length > 1 ? 32 : 14, right: 16, bottom: 28, left: 52 },
         legend: data.series.length > 1 ? {
           top: 0, right: 0,
           textStyle: { color: c.muted, fontFamily: c.font, fontSize: 11 },
-          icon: 'circle', itemWidth: 8, itemHeight: 8,
+          icon: 'circle', itemWidth: 6, itemHeight: 6, itemGap: 14,
           data: data.series.map(function (s) { return s.name; }),
         } : { show: false },
         tooltip: Object.assign({ trigger: 'axis' }, baseTooltip(c),
@@ -279,9 +301,9 @@
         xAxis: {
           type: 'category',
           data: data.categories,
-          axisLine: { lineStyle: { color: c.border } },
+          axisLine: { lineStyle: { color: c.border, width: 1 } },
           axisTick: { show: false },
-          axisLabel: { color: c.muted, fontSize: 11 },
+          axisLabel: { color: c.muted, fontSize: 11, fontFamily: c.font, margin: 10 },
         },
         yAxis: {
           type: 'value',
@@ -289,9 +311,9 @@
           max: data.yMax != null ? data.yMax : undefined,
           axisLine: { show: false },
           axisTick: { show: false },
-          axisLabel: Object.assign({ color: c.muted, fontSize: 11 },
+          axisLabel: Object.assign({ color: c.muted, fontSize: 10, fontFamily: c.mono, margin: 8 },
             data.yFormatter ? { formatter: data.yFormatter } : {}),
-          splitLine: { lineStyle: { color: c.border, type: 'dashed' } },
+          splitLine: { lineStyle: { color: c.border, type: [4, 4], opacity: 0.6 } },
         },
         series: series,
       };
@@ -330,7 +352,7 @@
             label: data.showLabels ? {
               show: true, position: 'right',
               color: c.muted, fontFamily: c.font, fontSize: 11,
-              formatter: function (p) { return tipFmt ? tipFmt(p.value) : Number(p.value).toLocaleString(); },
+              formatter: function (p) { return tipFmt ? tipFmt(p.value) : safeNum(p.value); },
             } : { show: false },
           }],
         };
@@ -342,14 +364,14 @@
           baseTooltip(c), tipFmt ? { valueFormatter: tipFmt } : {}),
         xAxis: {
           type: 'category', data: labels,
-          axisLine: { lineStyle: { color: c.border } }, axisTick: { show: false },
-          axisLabel: { color: c.muted, fontSize: 11 },
+          axisLine: { lineStyle: { color: c.border, width: 1 } }, axisTick: { show: false },
+          axisLabel: { color: c.muted, fontSize: 11, fontFamily: c.font, margin: 10 },
         },
         yAxis: {
           type: 'value',
           axisLine: { show: false }, axisTick: { show: false },
-          axisLabel: Object.assign({ color: c.muted, fontSize: 11 }, tipFmt ? { formatter: tipFmt } : {}),
-          splitLine: { lineStyle: { color: c.border, type: 'dashed' } },
+          axisLabel: Object.assign({ color: c.muted, fontSize: 10, fontFamily: c.mono, margin: 8 }, tipFmt ? { formatter: tipFmt } : {}),
+          splitLine: { lineStyle: { color: c.border, type: [4, 4], opacity: 0.6 } },
         },
         series: [{
           type: 'bar', data: values, barWidth: '50%',
@@ -397,14 +419,14 @@
       centerLabel: '합계', centerValue: null,
     }, 'donut-chart', function (data, c, palette) {
       var total = data.slices.reduce(function (s, x) { return s + (x.value || 0); }, 0);
-      var centerVal = data.centerValue != null ? data.centerValue : total.toLocaleString();
+      var centerVal = data.centerValue != null ? data.centerValue : safeNum(total);
       return {
         textStyle: { fontFamily: c.font },
         tooltip: baseTooltip(c),
         legend: {
           orient: 'vertical', right: 12, top: 'middle',
           textStyle: { color: c.muted, fontFamily: c.font, fontSize: 11 },
-          icon: 'circle', itemWidth: 8, itemHeight: 8, itemGap: 10,
+          icon: 'circle', itemWidth: 6, itemHeight: 6, itemGap: 14, itemGap: 10,
           type: 'scroll',
         },
         series: [{
@@ -651,16 +673,16 @@
         legend: data.series.length > 1 ? {
           bottom: 0, left: 'center',
           textStyle: { color: c.muted, fontFamily: c.font, fontSize: 11 },
-          icon: 'circle', itemWidth: 8, itemHeight: 8,
+          icon: 'circle', itemWidth: 6, itemHeight: 6, itemGap: 14,
         } : { show: false },
         radar: {
           indicator: data.indicators,
           center: ['50%', '48%'],
           radius: '60%',
           axisName: { color: c.muted, fontSize: 10, fontFamily: c.font },
-          splitLine: { lineStyle: { color: c.border, type: 'dashed' } },
+          splitLine: { lineStyle: { color: c.border, type: [4, 4], opacity: 0.5 } },
           splitArea: { show: false },
-          axisLine: { lineStyle: { color: c.border } },
+          axisLine: { lineStyle: { color: c.border, opacity: 0.5 } },
         },
         series: [{
           type: 'radar',
@@ -669,10 +691,10 @@
             return {
               name: s.name,
               value: s.data,
-              areaStyle: { color: col + '33' },
-              lineStyle: { color: col, width: 2 },
+              areaStyle: { color: col + '22' },
+              lineStyle: { color: col, width: 1.5 },
               itemStyle: { color: col },
-              symbolSize: 4,
+              symbolSize: 3,
             };
           }),
         }]
@@ -692,7 +714,7 @@
         textStyle: { fontFamily: c.font },
         tooltip: Object.assign({
           formatter: function (p) {
-            var v = data.valueFormatter ? data.valueFormatter(p.value) : Number(p.value).toLocaleString();
+            var v = data.valueFormatter ? data.valueFormatter(p.value) : safeNum(p.value);
             return '<b>' + p.name + '</b>: ' + v;
           }
         }, baseTooltip(c)),
@@ -770,7 +792,7 @@
         legend: data.series && data.series.length > 1 ? {
           top: 0, right: 0,
           textStyle: { color: c.muted, fontFamily: c.font, fontSize: 11 },
-          icon: 'circle', itemWidth: 8, itemHeight: 8,
+          icon: 'circle', itemWidth: 6, itemHeight: 6, itemGap: 14,
         } : { show: false },
         xAxis: {
           type: 'value',
@@ -809,7 +831,7 @@
           trigger: 'item',
           formatter: function (p) {
             if (p.dataType === 'edge') {
-              var v = data.valueFormatter ? data.valueFormatter(p.value) : Number(p.value).toLocaleString();
+              var v = data.valueFormatter ? data.valueFormatter(p.value) : safeNum(p.value);
               return p.data.source + ' → ' + p.data.target + ': <b>' + v + '</b>';
             }
             return '<b>' + p.name + '</b>';
@@ -922,7 +944,7 @@
             '</div>' +
             legendHTML +
           '</div>' +
-          '<div class="mw-mchrt__value">' + escapeHTML(data.value) + '</div>' +
+          '<div class="mw-mchrt__value">' + (data.valueHTML ? data.value : escapeHTML(data.value)) + '</div>' +
           '<div class="mw-mchrt__meta">' +
             (deltaHTML || '') +
             (data.context ? '<span class="mw-mchrt__context">' + escapeHTML(data.context) + '</span>' : '') +
@@ -1672,7 +1694,7 @@
           : 'var(--mw-surface-2)';
         var fg = hasVal && ratio > 0.55 ? '#fff' : 'var(--mw-text)';
         var formatted = hasVal
-          ? (data.valueFormatter ? data.valueFormatter(v) : Number(v).toLocaleString())
+          ? (data.valueFormatter ? data.valueFormatter(v) : safeNum(v))
           : '—';
         return '<div class="mw-mapchart__tile" ' +
           'style="grid-row:' + (t.row + 1) + ';grid-column:' + (t.col + 1) +
@@ -1686,9 +1708,9 @@
       // Legend
       var legendHTML =
         '<div class="mw-mapchart__legend">' +
-          '<span class="mw-mapchart__legend-lbl">' + escapeHTML(data.valueFormatter ? data.valueFormatter(min) : Number(min).toLocaleString()) + '</span>' +
+          '<span class="mw-mapchart__legend-lbl">' + escapeHTML(data.valueFormatter ? data.valueFormatter(min) : safeNum(min)) + '</span>' +
           '<span class="mw-mapchart__legend-bar"></span>' +
-          '<span class="mw-mapchart__legend-lbl">' + escapeHTML(data.valueFormatter ? data.valueFormatter(max) : Number(max).toLocaleString()) + '</span>' +
+          '<span class="mw-mapchart__legend-lbl">' + escapeHTML(data.valueFormatter ? data.valueFormatter(max) : safeNum(max)) + '</span>' +
         '</div>';
 
       el.innerHTML = headerHTML(data.title, data.subtitle) +
@@ -1746,7 +1768,7 @@
           cum -= amt;
         }
       });
-      var fmt = data.valueFormatter || function (v) { return Number(v).toLocaleString(); };
+      var fmt = data.valueFormatter || safeNum;
       var gainCol = data.gainColor || c.success;
       var lossCol = data.lossColor || c.danger;
       var totCol = data.totalColor || c.accent;
@@ -1821,7 +1843,7 @@
         var cells = '<div class="mw-cohort__row-label">' + escapeHTML(cohort) + '</div>';
         if (data.sizes) {
           var sz = data.sizes[ri];
-          cells += '<div class="mw-cohort__size">' + escapeHTML(sz != null ? Number(sz).toLocaleString() : '') + '</div>';
+          cells += '<div class="mw-cohort__size">' + escapeHTML(safeNum(sz)) + '</div>';
         }
         var values = data.data[ri] || [];
         data.periods.forEach(function (_, ci) {
@@ -1959,7 +1981,7 @@
     var data = Object.assign({
       title: '', subtitle: '',
       items: [],
-      valueFormatter: function (v) { return Number(v).toLocaleString(); },
+      valueFormatter: safeNum,
       thresholds: [[0.5, 'danger'], [0.85, 'warning'], [1.0, 'good']],
     }, config || {});
 
@@ -2131,7 +2153,7 @@
       valueFormatter: null,
       ranges: [],
     }, 'bullet-chart', function (data, c) {
-      var fmt = data.valueFormatter || function (v) { return Number(v).toLocaleString(); };
+      var fmt = data.valueFormatter || safeNum;
       var toAlpha = function (hex, a) {
         return hex + Math.round(a * 255).toString(16).padStart(2, '0');
       };

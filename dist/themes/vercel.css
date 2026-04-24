@@ -19,6 +19,7 @@
   --mw-display-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
   --mw-shadow: 0 0 0 1px rgb(255 255 255 / 0.06);
+  --mw-shadow-hover: 0 0 0 1px rgb(255 255 255 / 0.12);
 }
 
 /* White accent needs dark foreground on avatar pill */

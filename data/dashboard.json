@@ -10,7 +10,7 @@
   "kpis": [
     {
       "label": "이번 달 매출",
-      "value": "₩128억",
+      "value": "128억",
       "delta": 8.3,
       "deltaGoodWhen": "positive",
       "sparkline": [420, 445, 430, 468, 475, 490, 510, 505, 530, 548, 562, 580]
@@ -218,11 +218,11 @@
   },
   "heroTile": {
     "label": "이번 달 매출",
-    "value": "₩128억",
+    "value": "128억",
     "icon": "💎",
     "delta": 8.3,
     "sparkline": [420, 445, 430, 468, 475, 490, 510, 505, 530, 548, 562, 580],
-    "context": "vs 지난달 ₩118억 · 목표 ₩150억의 85%"
+    "context": "vs 지난달 118억 · 목표 150억의 85%"
   },
   "ringProgress": {
     "title": "분기 목표",
@@ -231,14 +231,14 @@
     "max": 100,
     "unit": "%",
     "label": "달성률",
-    "context": "₩128억 / 목표 ₩150억",
+    "context": "₩128억 / 목표 150억",
     "thresholds": [[0.5, "danger"], [0.8, "warning"], [1.0, "good"]]
   },
   "timeline": {
     "title": "최근 활동",
     "subtitle": "실시간 이벤트 스트림",
     "items": [
-      { "time": "10:23", "text": "김지훈님이 한빛테크 거래 성약 ₩45M",   "type": "success", "icon": "✓" },
+      { "time": "10:23", "text": "김지훈님이 한빛테크 거래 성약 4,500만",   "type": "success", "icon": "✓" },
       { "time": "10:15", "text": "서버 #3 재시작 완료",                  "type": "info",    "icon": "↻" },
       { "time": "09:58", "text": "박민재님이 신규 리드 5건 등록",         "type": "info",    "icon": "+" },
       { "time": "09:42", "text": "일일 매출 리포트 발송됨",               "type": "success" },
@@ -276,11 +276,11 @@
     "title": "매출 요약",
     "main": {
       "label": "이번 달 매출",
-      "value": "₩128억",
+      "value": "128억",
       "delta": 8.3
     },
     "items": [
-      { "label": "평균 거래액", "value": "₩45M" },
+      { "label": "평균 거래액", "value": "4,500만" },
       { "label": "신규 고객",   "value": "127" }
     ]
   },
@@ -299,10 +299,10 @@
   "compareCard": {
     "title": "주간 비교",
     "subtitle": "이번 주 vs 지난 주",
-    "left":  { "label": "지난 주", "value": "₩118억" },
-    "right": { "label": "이번 주", "value": "₩128억" },
+    "left":  { "label": "지난 주", "value": "118억" },
+    "right": { "label": "이번 주", "value": "128억" },
     "delta": 8.5,
-    "deltaLabel": "(+₩10억)"
+    "deltaLabel": "(+10억)"
   },
   "progressProject": {
     "title": "빌링센터 구축",
@@ -442,7 +442,7 @@
     "title": "주요 지표 트렌드",
     "subtitle": "최근 12주 · 전주 대비",
     "items": [
-      { "label": "주간 거래액",      "value": "₩42.8억", "delta":  6.2, "sparkline": [28, 31, 30, 34, 36, 35, 39, 38, 40, 41, 42, 43] },
+      { "label": "주간 거래액",      "value": "42.8억", "delta":  6.2, "sparkline": [28, 31, 30, 34, 36, 35, 39, 38, 40, 41, 42, 43] },
       { "label": "활성 사용자",      "value": "24.8K",   "delta":  4.1, "sparkline": [21000, 21500, 21800, 22400, 22800, 23100, 23500, 23800, 24100, 24400, 24600, 24800] },
       { "label": "신규 리드",        "value": "1,240",   "delta": -3.8, "sparkline": [1320, 1380, 1410, 1370, 1350, 1320, 1300, 1280, 1270, 1260, 1250, 1240] },
       { "label": "평균 체류 시간",   "value": "7m 42s",  "delta":  8.9, "sparkline": [6.2, 6.4, 6.5, 6.8, 6.9, 7.0, 7.1, 7.2, 7.3, 7.4, 7.5, 7.7] },

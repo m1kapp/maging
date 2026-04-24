@@ -19,5 +19,6 @@
   --mw-font: 'Inter', 'Pretendard Variable', system-ui, sans-serif;
   --mw-display-font: 'Playfair Display', 'Times New Roman', serif;
   --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
-  --mw-shadow: 0 4px 14px -4px rgb(139 119 97 / 0.15);
+  --mw-shadow: 0 1px 4px -2px rgb(139 119 97 / 0.12);
+  --mw-shadow-hover: 0 3px 10px -4px rgb(139 119 97 / 0.16);
 }
