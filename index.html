@@ -1044,6 +1044,10 @@
             <button class="ai-prompt__copy" id="copy-prompt-btn">📋 Copy Prompt</button>
           </div>
           <div class="ai-prompt__toolbar">
+            <div class="ai-prompt__output-modes" role="tablist" style="margin-bottom:0.5rem;">
+              <button type="button" class="ai-prompt__mode-btn is-active" data-output="dashboard">📊 Dashboard</button>
+              <button type="button" class="ai-prompt__mode-btn" data-output="landing">🏠 Landing Page</button>
+            </div>
             <div class="ai-prompt__modes" role="tablist">
               <button type="button" class="ai-prompt__mode-btn is-active" data-mode="short">Short (URL 참조)</button>
               <button type="button" class="ai-prompt__mode-btn" data-mode="full">Full (인라인)</button>
@@ -1063,10 +1067,10 @@
           <div class="ai-handshake__label">⬆︎ 복사 후 LLM에 붙여넣고 <strong>엔터</strong></div>
           <div class="ai-handshake__reply">
             <div class="ai-handshake__reply-lbl">LLM이 이렇게 답하면 준비 완료 :</div>
-            <div class="ai-handshake__reply-msg">
+            <div class="ai-handshake__reply-msg" id="handshake-msg">
               <span class="ai-handshake__cursor">▸</span>
               <code>안녕하세요! 결과물 서포터 매징(maging)입니다 ✦</code><br>
-              <code style="padding-left: 1.25rem;">데이터 파일을 첨부하거나, 만들고 싶은 대시보드를 자유롭게 설명해주세요.</code><br>
+              <code style="padding-left: 1.25rem;" id="handshake-line2">데이터 파일을 첨부하거나, 만들고 싶은 대시보드를 자유롭게 설명해주세요.</code><br>
               <code style="padding-left: 1.25rem;">어떤 걸 만들어 드릴까요? 🎨</code>
             </div>
           </div>
@@ -1116,18 +1120,30 @@
       <div class="ai-step__body">
         <div class="ai-step__title">데이터나 원하는 것을 설명</div>
         <div class="ai-step__desc">CSV 붙여넣기, 스크린샷 첨부, 자연어로 요청 — 뭐든 됩니다.</div>
-        <div class="ai-examples mt-4">
-          <div class="ai-example">
+        <div class="ai-examples mt-4" id="ai-examples">
+          <div class="ai-example" data-for="dashboard">
             <span class="ai-example__user">나</span>
             <span class="ai-example__text">"여기 우리 3월 매출 CSV야. 경영진 월간 리뷰용 대시보드 만들어줘. Stripe 스타일로."</span>
           </div>
-          <div class="ai-example">
+          <div class="ai-example" data-for="dashboard">
             <span class="ai-example__user">나</span>
             <span class="ai-example__text">"SaaS 리텐션 + 신규 가입 트래킹 위젯 조합해줘. Linear 느낌."</span>
           </div>
-          <div class="ai-example">
+          <div class="ai-example" data-for="dashboard">
             <span class="ai-example__user">나</span>
             <span class="ai-example__text">"DevOps 오퍼레이션 모니터 — 게이지, 상태 그리드, 타임라인. Bloomberg 톤으로."</span>
+          </div>
+          <div class="ai-example" data-for="landing" style="display:none;">
+            <span class="ai-example__user">나</span>
+            <span class="ai-example__text">"AI 코드 리뷰 SaaS 랜딩페이지 만들어줘. Hero, 기능 소개, 요금제, FAQ까지. Vercel 느낌."</span>
+          </div>
+          <div class="ai-example" data-for="landing" style="display:none;">
+            <span class="ai-example__user">나</span>
+            <span class="ai-example__text">"우리 앱 이름은 Chekly야. 팀 협업 도구고, 무료/프로/엔터프라이즈 3개 플랜. 랜딩 만들어줘."</span>
+          </div>
+          <div class="ai-example" data-for="landing" style="display:none;">
+            <span class="ai-example__user">나</span>
+            <span class="ai-example__text">"피트니스 앱 랜딩. 후기 3개, 비교표(우리 vs 경쟁), 온보딩 스텝 가이드 넣어줘. Claude 테마."</span>
           </div>
         </div>
       </div>
@@ -1150,8 +1166,8 @@
       </div>
     </div>
 
-    <div class="mt-10 text-center">
-      <a href="./llms.txt" class="pill">📄 전체 레퍼런스 (llms.txt) →</a>
+    <div class="mt-10 text-center" id="llms-link">
+      <a href="./llms-dashboard.txt" class="pill" id="llms-link-a">📄 전체 레퍼런스 (llms-dashboard.txt) →</a>
     </div>
   </div>
 </section>
@@ -2357,11 +2373,32 @@ Then wait for my next message before generating anything.`;
   };
   /* SYNC:END */
 
+  // Landing page prompts
+  var SHORT_PROMPT_LANDING = 'You are a maging landing page generator.\n\nFetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.15/llms-landing.txt\nIt has the complete setup, all widget APIs, 35 themes, and generation rules for landing pages.\n\n=== HANDSHAKE ===\nWhen you have fully understood the above, reply with EXACTLY this text (nothing else, no code fences, no preamble):\n\n안녕하세요! 결과물 서포터 매징(maging)입니다 ✦\n\n어떤 서비스의 랜딩페이지를 만들까요? 제품명, 핵심 기능, 타겟 고객을 알려주세요.\n바로 시작할게요! 🎨\n\nThen wait for my next message before generating anything.';
+  var FULL_PROMPT_LANDING = SHORT_PROMPT_LANDING; // TODO: inline full prompt for landing
+
+  var PROMPTS = {
+    dashboard: { short: SHORT_PROMPT, full: FULL_PROMPT },
+    landing:   { short: SHORT_PROMPT_LANDING, full: FULL_PROMPT_LANDING },
+  };
+
+  var HANDSHAKES = {
+    dashboard: '데이터 파일을 첨부하거나, 만들고 싶은 대시보드를 자유롭게 설명해주세요.',
+    landing: '어떤 서비스의 랜딩페이지를 만들까요? 제품명, 핵심 기능, 타겟 고객을 알려주세요.',
+  };
+
+  var LLMS_LINKS = {
+    dashboard: { href: './llms-dashboard.txt', text: '📄 전체 레퍼런스 (llms-dashboard.txt) →' },
+    landing:   { href: './llms-landing.txt', text: '📄 전체 레퍼런스 (llms-landing.txt) →' },
+  };
+
   var currentMode = 'short';
+  var currentOutput = 'dashboard';
 
   function setMode(mode) {
     currentMode = mode;
-    body.textContent = (mode === 'short' ? SHORT_PROMPT : FULL_PROMPT);
+    var prompt = PROMPTS[currentOutput][mode];
+    body.textContent = prompt;
 
     // token display update
     var t = TOKENS[mode];
@@ -2371,18 +2408,50 @@ Then wait for my next message before generating anything.`;
     if (tokenEls[1]) tokenEls[1].textContent = 'Claude ' + fmt(t.claude);
     if (tokenEls[2]) tokenEls[2].textContent = 'Gemini ' + fmt(t.gemini);
 
-    // active button state
-    document.querySelectorAll('.ai-prompt__mode-btn').forEach(function (b) {
+    // active button state (short/full)
+    document.querySelectorAll('.ai-prompt__modes .ai-prompt__mode-btn').forEach(function (b) {
       b.classList.toggle('is-active', b.dataset.mode === mode);
     });
   }
 
-  // Wire mode buttons
-  document.querySelectorAll('.ai-prompt__mode-btn').forEach(function (b) {
+  function setOutput(output) {
+    currentOutput = output;
+    setMode(currentMode);
+
+    // update handshake
+    var line2 = document.getElementById('handshake-line2');
+    if (line2) line2.textContent = HANDSHAKES[output];
+
+    // update examples
+    document.querySelectorAll('#ai-examples .ai-example').forEach(function (ex) {
+      ex.style.display = ex.dataset.for === output ? '' : 'none';
+    });
+
+    // update llms link
+    var linkA = document.getElementById('llms-link-a');
+    if (linkA) {
+      linkA.href = LLMS_LINKS[output].href;
+      linkA.textContent = LLMS_LINKS[output].text;
+    }
+
+    // active button state (dashboard/landing)
+    document.querySelectorAll('.ai-prompt__output-modes .ai-prompt__mode-btn').forEach(function (b) {
+      b.classList.toggle('is-active', b.dataset.output === output);
+    });
+  }
+
+  // Wire mode buttons (short/full)
+  document.querySelectorAll('.ai-prompt__modes .ai-prompt__mode-btn').forEach(function (b) {
     b.addEventListener('click', function () { setMode(b.dataset.mode); });
   });
 
+  // Wire output buttons (dashboard/landing)
+  document.querySelectorAll('.ai-prompt__output-modes .ai-prompt__mode-btn').forEach(function (b) {
+    b.addEventListener('click', function () { setOutput(b.dataset.output); });
+  });
+
   // Initial render
+  setOutput('dashboard');
   setMode('short');
 
   // Copy handler
