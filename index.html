@@ -75,7 +75,10 @@
   .pill.is-active { background: var(--mw-accent); color: #fff; border-color: var(--mw-accent); }
   [data-theme="terminal"] .pill.is-active { color: #000; }
   .pill--primary { background: var(--mw-accent); color: #fff; border-color: var(--mw-accent); padding: 0.625rem 1.25rem; font-weight: 500; }
-  [data-theme="terminal"] .pill--primary { color: #000; }
+  [data-theme="terminal"] .pill--primary,
+  [data-theme="vercel"] .pill--primary,
+  [data-theme="x"] .pill--primary,
+  [data-theme="notion"] .pill--primary { color: #000; background: var(--mw-text); border-color: var(--mw-text); }
   .hero-glow {
     background: radial-gradient(ellipse 80% 60% at 30% 0%,
       color-mix(in srgb, var(--mw-accent) 14%, transparent),

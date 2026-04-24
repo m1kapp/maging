@@ -72,6 +72,9 @@ class MagingNav extends HTMLElement {
         </div>
       </div>
     </div>
+    <button class="mw-site-nav__burger" type="button" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
     <div class="mw-site-nav__links">
       ${link(base + 'index.html', 'Home', 'home')}
       ${link(base + 'components.html', 'Components', 'components')}
@@ -81,6 +84,19 @@ class MagingNav extends HTMLElement {
     </div>
   </div>
 </nav>`;
+
+    // hamburger menu
+    const burger = this.querySelector('.mw-site-nav__burger');
+    const links = this.querySelector('.mw-site-nav__links');
+    burger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      links.classList.toggle('is-open');
+      burger.classList.toggle('is-open');
+    });
+    document.addEventListener('click', () => {
+      links.classList.remove('is-open');
+      burger.classList.remove('is-open');
+    });
 
     // custom dropdown behavior
     const picker = this.querySelector('#mw-mode-picker');
@@ -276,7 +292,31 @@ if (!document.getElementById('mw-site-css')) {
   font-size: 0.75rem; color: var(--mw-text-muted); font-weight: 400;
   font-family: var(--mw-mono-font);
 }
+/* hamburger */
+.mw-site-nav__burger {
+  display: none; background: none; border: none; color: var(--mw-text-muted);
+  cursor: pointer; padding: 0.25rem; border-radius: calc(var(--mw-radius) * 0.5);
+  transition: color 120ms;
+}
+.mw-site-nav__burger:hover { color: var(--mw-text); }
+
 .mw-site-nav__links { display: flex; align-items: center; gap: 0.25rem; }
+
+@media (max-width: 640px) {
+  .mw-site-nav__burger { display: flex; }
+  .mw-site-nav__links {
+    display: none; position: absolute; top: 44px; left: 0; right: 0;
+    flex-direction: column; align-items: stretch; gap: 0;
+    background: var(--mw-surface); border-bottom: 1px solid var(--mw-border);
+    padding: 0.5rem; box-shadow: 0 8px 24px -8px rgba(0,0,0,0.15);
+  }
+  .mw-site-nav__links.is-open { display: flex; }
+  .mw-site-nav__links .mw-site-nav__link {
+    padding: 0.6rem 0.75rem; border-radius: var(--mw-radius);
+    font-size: 0.82rem;
+  }
+  .mw-site-nav__inner { position: relative; }
+}
 .mw-site-nav__link {
   padding: 0.35rem 0.6rem; font-size: 0.75rem; color: var(--mw-text-muted);
   text-decoration: none; border-radius: calc(var(--mw-radius) * 0.6);

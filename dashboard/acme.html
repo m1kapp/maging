@@ -1108,7 +1108,7 @@ function renderDashboard(data) {
     items: data.team.items.map(function (m) {
       return {
         name: m.name, initial: m.initial, percent: m.percent,
-        meta: m.percent + '% · ' + Maging.fmt.krw(m.revenue)
+        meta: m.percent + '% · ' + Maging.fmt.krwPlain(m.revenue)
       };
     })
   });
