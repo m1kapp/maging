@@ -207,8 +207,8 @@
   .ai-split__content { padding: 1rem; flex: 1; overflow: hidden; }
   .ai-split__content--left { display: flex; flex-direction: column; gap: 0.625rem; }
   .ai-split__content--right {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 1rem; min-height: 320px; position: relative;
+    display: flex; flex-direction: column; gap: 0.75rem;
+    min-height: 440px; padding: 1rem 0.875rem; overflow-y: auto;
   }
 
   /* Left panel */
@@ -249,58 +249,86 @@
   .ai-split__copy:active { transform: scale(0.98); }
   .ai-split__copy.is-copied { background: var(--mw-success); }
 
-  /* Right panel */
-  .ai-split__logo { transition: opacity 0.4s; }
-  .ai-split__logo img { opacity: 0.2; }
-
-  .ai-split__pasted {
-    animation: splitFadeSlide 0.5s ease-out;
-    background: color-mix(in srgb, var(--mw-accent) 8%, transparent);
-    border: 1px solid color-mix(in srgb, var(--mw-accent) 20%, transparent);
-    border-radius: calc(var(--mw-radius) * 0.5);
-    padding: 0.5rem 1rem; width: 85%;
-  }
-  .ai-split__pasted-label {
-    font-size: 0.7rem; color: var(--mw-accent); font-weight: 500;
-    font-family: var(--mw-mono-font);
+  /* Right panel — chat messages */
+  .ai-chat-empty {
+    flex: 1; display: flex; align-items: center; justify-content: center;
   }
 
-  .ai-split__input {
-    background: var(--mw-surface-2); border: 1px solid var(--mw-border);
-    border-radius: calc(var(--mw-radius) * 0.5); padding: 0.6rem 1rem;
-    width: 85%; font-size: 0.78rem; color: var(--mw-text);
-    font-family: var(--mw-font); animation: splitFadeSlide 0.4s ease-out;
+  .ai-chat-msg {
+    display: flex; gap: 0.5rem; animation: splitFadeSlide 0.35s ease-out;
   }
-  .ai-split__cursor {
-    animation: cursorBlink 0.8s step-end infinite; color: var(--mw-accent);
+  .ai-chat-msg__icon {
+    width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.55rem; font-weight: 700; background: var(--mw-surface-2);
+    color: var(--mw-text-muted);
   }
-  @keyframes cursorBlink { 50% { opacity: 0; } }
+  .ai-chat-msg__icon--ai { color: var(--mw-accent); font-size: 0.7rem; }
+  .ai-chat-msg__body { flex: 1; min-width: 0; }
+  .ai-chat-msg__label { font-size: 0.7rem; font-weight: 600; color: var(--mw-text); }
+  .ai-chat-msg__sub { font-size: 0.6rem; color: var(--mw-text-muted); font-family: var(--mw-mono-font); margin-top: 0.1rem; }
+  .ai-chat-msg__text { font-size: 0.75rem; line-height: 1.6; color: var(--mw-text); }
 
-  .ai-split__response { width: 85%; animation: splitFadeSlide 0.4s ease-out; }
+  .ai-chat-msg--system .ai-chat-msg__body {
+    background: color-mix(in srgb, var(--mw-accent) 6%, transparent);
+    border: 1px solid color-mix(in srgb, var(--mw-accent) 15%, transparent);
+    border-radius: calc(var(--mw-radius) * 0.5); padding: 0.5rem 0.75rem;
+  }
+  .ai-chat-msg--user .ai-chat-msg__body--user {
+    background: var(--mw-surface-2); border-radius: calc(var(--mw-radius) * 0.5);
+    padding: 0.45rem 0.75rem; font-size: 0.75rem; color: var(--mw-text);
+    margin-left: 1.75rem;
+  }
 
-  .ai-split__typing { display: flex; gap: 4px; padding: 0.5rem 0; }
-  .ai-split__typing span {
-    width: 6px; height: 6px; border-radius: 50%;
+  .ai-chat-msg__typing { display: flex; gap: 4px; padding: 0.35rem 0; }
+  .ai-chat-msg__typing span {
+    width: 5px; height: 5px; border-radius: 50%;
     background: var(--mw-text-muted); opacity: 0.4;
     animation: typingBounce 1.2s infinite;
   }
-  .ai-split__typing span:nth-child(2) { animation-delay: 0.2s; }
-  .ai-split__typing span:nth-child(3) { animation-delay: 0.4s; }
+  .ai-chat-msg__typing span:nth-child(2) { animation-delay: 0.2s; }
+  .ai-chat-msg__typing span:nth-child(3) { animation-delay: 0.4s; }
   @keyframes typingBounce {
     0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-    30% { transform: translateY(-4px); opacity: 1; }
+    30% { transform: translateY(-3px); opacity: 1; }
   }
 
-  .ai-split__reply {
-    font-size: var(--mw-text-sm); line-height: 1.65; color: var(--mw-text);
-    animation: splitFadeIn 0.5s ease-out;
+  .ai-split__cursor { animation: cursorBlink 0.8s step-end infinite; color: var(--mw-accent); font-weight: 300; }
+  @keyframes cursorBlink { 50% { opacity: 0; } }
+
+  /* Dashboard preview card */
+  .ai-chat-msg__preview {
+    border: 1px solid var(--mw-border); border-radius: calc(var(--mw-radius) * 0.5);
+    overflow: hidden; animation: splitFadeSlide 0.4s ease-out;
   }
+  .ai-chat-preview__bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.35rem 0.625rem; background: var(--mw-surface-2);
+    border-bottom: 1px solid var(--mw-border);
+  }
+  .ai-chat-preview__body {
+    padding: 0.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem;
+    min-height: 80px;
+  }
+  .ai-chat-preview__body > div { min-height: 0; }
+  .ai-chat-preview__body .mw-card { font-size: 0.55rem; padding: 0.35rem; border-radius: 4px; }
+  .ai-chat-preview__body .mw-header { display: none; }
+
+  /* Input bar */
+  .ai-split__inputbar {
+    padding: 0.5rem 0.875rem; border-top: 1px solid var(--mw-border);
+  }
+  .ai-split__inputbar-field {
+    background: var(--mw-surface-2); border: 1px solid var(--mw-border);
+    border-radius: calc(var(--mw-radius) * 0.5); padding: 0.45rem 0.75rem;
+    font-size: 0.72rem; color: var(--mw-text-muted);
+  }
+  .ai-split__inputbar-placeholder { opacity: 0.5; }
 
   @keyframes splitFadeSlide {
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
   }
-  @keyframes splitFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
   /* LLM bar at bottom right */
   .ai-split__llms {
@@ -1163,7 +1191,7 @@
           <div class="ai-split__dots">
             <span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span>
           </div>
-          <div class="ai-split__url">maging.vercel.app</div>
+          <div class="ai-split__url">maging.m1k.app</div>
         </div>
         <div class="ai-split__content ai-split__content--left">
           <div class="ai-split__tabs">
@@ -1190,42 +1218,70 @@
           </div>
           <div class="ai-split__url" id="ai-url">chatgpt.com</div>
         </div>
-        <div class="ai-split__content ai-split__content--right">
-          <!-- AI logo -->
-          <div class="ai-split__logo" id="ai-logo">
-            <img src="./dist/icons/openai.svg" width="32" height="32" alt="">
+        <div class="ai-split__content ai-split__content--right" id="ai-chat-area">
+          <!-- Step A: empty state with logo -->
+          <div class="ai-chat-empty" id="step-empty">
+            <img src="./dist/icons/openai.svg" width="28" height="28" alt="" style="opacity:0.15;">
           </div>
 
-          <!-- Pasted message -->
-          <div class="ai-split__pasted" id="ai-pasted" style="display:none;">
-            <div class="ai-split__pasted-label">System prompt pasted</div>
-          </div>
-
-          <!-- User input -->
-          <div class="ai-split__input" id="ai-input" style="display:none;">
-            <span id="ai-input-text"></span>
-            <span class="ai-split__cursor">|</span>
-          </div>
-
-          <!-- AI response -->
-          <div class="ai-split__response" id="ai-response" style="display:none;">
-            <div class="ai-split__typing" id="ai-typing">
-              <span></span><span></span><span></span>
+          <!-- Step B: system prompt pasted (collapsed) -->
+          <div class="ai-chat-msg ai-chat-msg--system" id="step-system" style="display:none;">
+            <div class="ai-chat-msg__icon">S</div>
+            <div class="ai-chat-msg__body">
+              <div class="ai-chat-msg__label">System prompt applied</div>
+              <div class="ai-chat-msg__sub">maging v0.1.15 · 32 widgets · 35 themes</div>
             </div>
-            <div class="ai-split__reply" id="ai-reply" style="display:none;">
-              <strong>안녕하세요! 결과물 서포터 매징(maging)입니다 ✦</strong><br><br>
-              <span id="handshake-line2">데이터 파일을 첨부하거나, 만들고 싶은 대시보드를 자유롭게 설명해주세요.</span><br>
-              어떤 걸 만들어 드릴까요?
+          </div>
+
+          <!-- Step C: AI handshake -->
+          <div class="ai-chat-msg ai-chat-msg--ai" id="step-handshake" style="display:none;">
+            <div class="ai-chat-msg__icon ai-chat-msg__icon--ai">✦</div>
+            <div class="ai-chat-msg__body">
+              <div class="ai-chat-msg__typing" id="step-typing-1"><span></span><span></span><span></span></div>
+              <div class="ai-chat-msg__text" id="step-handshake-text" style="display:none;">
+                <strong>안녕하세요! 결과물 서포터 매징(maging)입니다 ✦</strong><br>
+                <span id="handshake-line2">데이터 파일을 첨부하거나, 만들고 싶은 대시보드를 자유롭게 설명해주세요.</span><br>
+                어떤 걸 만들어 드릴까요?
+              </div>
+            </div>
+          </div>
+
+          <!-- Step D: User request -->
+          <div class="ai-chat-msg ai-chat-msg--user" id="step-request" style="display:none;">
+            <div class="ai-chat-msg__body ai-chat-msg__body--user">
+              <span id="step-request-text"></span><span class="ai-split__cursor" id="step-cursor">|</span>
+            </div>
+          </div>
+
+          <!-- Step E: AI generates dashboard -->
+          <div class="ai-chat-msg ai-chat-msg--ai" id="step-result" style="display:none;">
+            <div class="ai-chat-msg__icon ai-chat-msg__icon--ai">✦</div>
+            <div class="ai-chat-msg__body">
+              <div class="ai-chat-msg__typing" id="step-typing-2"><span></span><span></span><span></span></div>
+              <div class="ai-chat-msg__preview" id="step-preview" style="display:none;">
+                <div class="ai-chat-preview__bar">
+                  <span style="font-size:0.6rem;color:var(--mw-text-muted);font-family:var(--mw-mono-font);">dashboard.html</span>
+                  <span style="font-size:0.55rem;color:var(--mw-success);">Generated</span>
+                </div>
+                <div class="ai-chat-preview__body" id="step-preview-body"></div>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- LLM selector at bottom -->
+        <!-- Input bar at bottom -->
+        <div class="ai-split__inputbar">
+          <div class="ai-split__inputbar-field" id="ai-inputbar">
+            <span class="ai-split__inputbar-placeholder">Message...</span>
+          </div>
+        </div>
+
+        <!-- LLM selector -->
         <div class="ai-split__llms">
-          <a href="https://chatgpt.com" target="_blank" class="ai-split__llm is-active" data-llm="chatgpt" data-icon="./dist/icons/openai.svg" data-url="chatgpt.com"><img src="./dist/icons/openai.svg" width="14" height="14"></a>
-          <a href="https://claude.ai" target="_blank" class="ai-split__llm" data-llm="claude" data-icon="./dist/icons/claude.svg" data-url="claude.ai"><img src="./dist/icons/claude.svg" width="14" height="14"></a>
-          <a href="https://gemini.google.com" target="_blank" class="ai-split__llm" data-llm="gemini" data-icon="./dist/icons/gemini.svg" data-url="gemini.google.com"><img src="./dist/icons/gemini.svg" width="14" height="14"></a>
-          <a href="https://grok.com" target="_blank" class="ai-split__llm" data-llm="grok" data-icon="./dist/icons/x.svg" data-url="grok.com"><img class="ai-llm__logo--invert" src="./dist/icons/x.svg" width="14" height="14"></a>
+          <a href="https://chatgpt.com" target="_blank" class="ai-split__llm is-active"><img src="./dist/icons/openai.svg" width="14" height="14"></a>
+          <a href="https://claude.ai" target="_blank" class="ai-split__llm"><img src="./dist/icons/claude.svg" width="14" height="14"></a>
+          <a href="https://gemini.google.com" target="_blank" class="ai-split__llm"><img src="./dist/icons/gemini.svg" width="14" height="14"></a>
+          <a href="https://grok.com" target="_blank" class="ai-split__llm"><img class="ai-llm__logo--invert" src="./dist/icons/x.svg" width="14" height="14"></a>
           <span class="ai-split__llm-sep">|</span>
           <a href="./llms-dashboard.txt" class="ai-split__ref" id="llms-link-a">llms.txt</a>
         </div>
@@ -2454,22 +2510,26 @@ Then wait for my next message before generating anything.`;
     landing:   { href: './llms-landing.txt', text: '📄 전체 레퍼런스 (llms-landing.txt) →' },
   };
 
-  var EXAMPLES = {
-    dashboard: '3월 매출 CSV 기반으로 경영진 리뷰용 대시보드 만들어줘. Stripe 스타일로.',
-    landing: 'AI 코드 리뷰 SaaS 랜딩페이지 만들어줘. Hero, 기능, 요금제, FAQ. Vercel 느낌.'
+  var REQUESTS = {
+    dashboard: '3월 매출 CSV 기반으로 경영진 리뷰용 대시보드 만들어줘',
+    landing: 'AI 코드 리뷰 SaaS 랜딩페이지 만들어줘. Hero, 기능, 요금제까지'
   };
 
   var currentMode = 'full';
   var currentOutput = 'dashboard';
-  var animTimer = null;
+  var animTimers = [];
 
-  var aiLogo = document.getElementById('ai-logo');
-  var aiPasted = document.getElementById('ai-pasted');
-  var aiInput = document.getElementById('ai-input');
-  var aiInputText = document.getElementById('ai-input-text');
-  var aiResponse = document.getElementById('ai-response');
-  var aiTyping = document.getElementById('ai-typing');
-  var aiReply = document.getElementById('ai-reply');
+  function clearAnims() { animTimers.forEach(clearTimeout); animTimers = []; }
+  function delay(fn, ms) { animTimers.push(setTimeout(fn, ms)); }
+
+  function showEl(id) {
+    var el = document.getElementById(id);
+    if (!el) return el;
+    el.style.display = '';
+    el.style.animation = 'none'; el.offsetHeight; el.style.animation = '';
+    return el;
+  }
+  function hideEl(id) { var el = document.getElementById(id); if (el) el.style.display = 'none'; }
 
   function setMode(mode) {
     currentMode = mode;
@@ -2479,57 +2539,80 @@ Then wait for my next message before generating anything.`;
     });
   }
 
+  function typeText(el, text, speed, cb) {
+    el.textContent = '';
+    var i = 0;
+    var iv = setInterval(function() {
+      el.textContent = text.slice(0, ++i);
+      if (i >= text.length) { clearInterval(iv); if (cb) cb(); }
+    }, speed);
+  }
+
   function playAnimation() {
-    clearTimeout(animTimer);
-    // reset all
-    aiPasted.style.display = 'none';
-    aiInput.style.display = 'none';
-    aiResponse.style.display = 'none';
-    aiTyping.style.display = 'flex';
-    aiReply.style.display = 'none';
-    aiLogo.style.opacity = '1';
+    clearAnims();
+    // hide everything
+    hideEl('step-system');
+    hideEl('step-handshake');
+    hideEl('step-request');
+    hideEl('step-result');
+    hideEl('step-handshake-text');
+    hideEl('step-preview');
+    document.getElementById('step-empty').style.display = '';
+    var t1 = document.getElementById('step-typing-1');
+    var t2 = document.getElementById('step-typing-2');
+    if (t1) t1.style.display = 'flex';
+    if (t2) t2.style.display = 'flex';
+    var cursor = document.getElementById('step-cursor');
+    var previewBody = document.getElementById('step-preview-body');
 
-    // Step 1: after 0.6s — "pasted" appears
-    animTimer = setTimeout(function() {
-      aiPasted.style.display = '';
-      aiPasted.style.animation = 'none';
-      aiPasted.offsetHeight;
-      aiPasted.style.animation = '';
+    // Step 1 (0.5s): system prompt pasted
+    delay(function() {
+      hideEl('step-empty');
+      showEl('step-system');
+    }, 500);
 
-      // Step 2: after 1s — user types example
-      setTimeout(function() {
-        aiInput.style.display = '';
-        aiInput.style.animation = 'none';
-        aiInput.offsetHeight;
-        aiInput.style.animation = '';
-        var text = EXAMPLES[currentOutput];
-        aiInputText.textContent = '';
-        var i = 0;
-        var typeInterval = setInterval(function() {
-          aiInputText.textContent = text.slice(0, ++i);
-          if (i >= text.length) {
-            clearInterval(typeInterval);
+    // Step 2 (1.5s): AI handshake — typing
+    delay(function() {
+      showEl('step-handshake');
+    }, 1500);
 
-            // Step 3: after typing done — AI responds
-            setTimeout(function() {
-              aiResponse.style.display = '';
-              aiResponse.style.animation = 'none';
-              aiResponse.offsetHeight;
-              aiResponse.style.animation = '';
+    // Step 3 (2.8s): handshake text appears
+    delay(function() {
+      if (t1) t1.style.display = 'none';
+      showEl('step-handshake-text');
+    }, 2800);
 
-              // Step 4: typing dots → reply
-              setTimeout(function() {
-                aiTyping.style.display = 'none';
-                aiReply.style.display = '';
-                aiReply.style.animation = 'none';
-                aiReply.offsetHeight;
-                aiReply.style.animation = '';
-              }, 1000);
-            }, 400);
+    // Step 4 (3.8s): user types request
+    delay(function() {
+      showEl('step-request');
+      var reqText = document.getElementById('step-request-text');
+      if (cursor) cursor.style.display = '';
+      typeText(reqText, REQUESTS[currentOutput], 30, function() {
+        if (cursor) cursor.style.display = 'none';
+
+        // Step 5 (after typing): AI generates
+        delay(function() {
+          showEl('step-result');
+        }, 400);
+
+        // Step 6: preview appears
+        delay(function() {
+          if (t2) t2.style.display = 'none';
+          showEl('step-preview');
+          // render mini widgets
+          if (previewBody && typeof Maging !== 'undefined') {
+            previewBody.innerHTML = '<div id="mini-kpi"></div><div id="mini-chart"></div>';
+            try {
+              Maging.kpiCard('#mini-kpi', { label: '매출', value: '128억', delta: 8.3, compact: true });
+              Maging.lineChart('#mini-chart', { categories: ['1월','2월','3월','4월'], series: [{ name: '매출', data: [72,88,91,128] }] });
+            } catch(e) {}
+            // scroll chat area to bottom
+            var area = document.getElementById('ai-chat-area');
+            if (area) area.scrollTop = area.scrollHeight;
           }
-        }, 25);
-      }, 800);
-    }, 600);
+        }, 1500);
+      });
+    }, 3800);
   }
 
   function setOutput(output) {
