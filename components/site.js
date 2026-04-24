@@ -91,19 +91,6 @@ class MagingNav extends HTMLElement {
   </div>
 </nav>`;
 
-    // random theme button
-    const shuffleBtn = this.querySelector('.mw-theme-shuffle');
-    shuffleBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const current = document.documentElement.getAttribute('data-theme');
-      let next;
-      do { next = ALL_THEMES[Math.floor(Math.random() * ALL_THEMES.length)]; } while (next === current && ALL_THEMES.length > 1);
-      document.documentElement.setAttribute('data-theme', next);
-      if (typeof Maging !== 'undefined' && Maging.refreshAll) {
-        requestAnimationFrame(() => requestAnimationFrame(() => Maging.refreshAll()));
-      }
-    });
-
     // hamburger menu
     const burger = this.querySelector('.mw-site-nav__burger');
     const links = this.querySelector('.mw-site-nav__links');
