@@ -280,10 +280,24 @@
   .ai-chat-msg__sub { font-size: 0.6rem; color: var(--mw-text-muted); font-family: var(--mw-mono-font); margin-top: 0.1rem; }
   .ai-chat-msg__text { font-size: 0.75rem; line-height: 1.6; color: var(--mw-text); }
 
-  .ai-chat-msg--system .ai-chat-msg__body {
-    background: color-mix(in srgb, var(--mw-accent) 6%, transparent);
-    border: 1px solid color-mix(in srgb, var(--mw-accent) 15%, transparent);
+  .ai-chat-msg__body--collapsed {
+    background: var(--mw-surface-2);
+    border: 1px solid var(--mw-border);
     border-radius: calc(var(--mw-radius) * 0.5); padding: 0.5rem 0.75rem;
+    margin-left: 0;
+  }
+  .ai-chat-msg__collapsed-head {
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .ai-chat-msg__collapsed-label { font-size: 0.68rem; font-weight: 600; color: var(--mw-text); }
+  .ai-chat-msg__collapsed-badge {
+    font-size: 0.55rem; color: var(--mw-text-muted); font-family: var(--mw-mono-font);
+    background: var(--mw-surface); padding: 0.1rem 0.35rem; border-radius: 3px;
+  }
+  .ai-chat-msg__collapsed-preview {
+    font-size: 0.6rem; color: var(--mw-text-muted); margin-top: 0.25rem;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    font-family: var(--mw-mono-font);
   }
   .ai-chat-msg--user .ai-chat-msg__body--user {
     background: var(--mw-surface-2); border-radius: calc(var(--mw-radius) * 0.5);
@@ -328,13 +342,27 @@
   /* Input bar */
   .ai-split__inputbar {
     padding: 0.5rem 0.875rem; border-top: 1px solid var(--mw-border);
+    display: flex; gap: 0.375rem; align-items: center;
   }
   .ai-split__inputbar-field {
-    background: var(--mw-surface-2); border: 1px solid var(--mw-border);
+    flex: 1; background: var(--mw-surface-2); border: 1px solid var(--mw-border);
     border-radius: calc(var(--mw-radius) * 0.5); padding: 0.45rem 0.75rem;
-    font-size: 0.72rem; color: var(--mw-text-muted);
+    font-size: 0.72rem; color: var(--mw-text); min-height: 1.4em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    transition: border-color 200ms;
   }
-  .ai-split__inputbar-placeholder { opacity: 0.5; }
+  .ai-split__inputbar-field.is-active { border-color: var(--mw-accent); }
+  .ai-split__inputbar-placeholder { color: var(--mw-text-muted); opacity: 0.5; }
+  .ai-split__inputbar-text { font-family: var(--mw-font); }
+  .ai-split__inputbar-cursor { color: var(--mw-accent); animation: cursorBlink 0.8s step-end infinite; }
+  .ai-split__inputbar-send {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--mw-accent); color: #fff; border: none;
+    font-size: 0.8rem; cursor: pointer; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.15s;
+  }
+  .ai-split__inputbar-send:active { transform: scale(0.9); }
 
   @keyframes splitFadeSlide {
     from { opacity: 0; transform: translateY(8px); }
@@ -1238,12 +1266,14 @@
             <div class="ai-chat-play__label">Click to preview</div>
           </div>
 
-          <!-- Step B: system prompt pasted (collapsed) -->
-          <div class="ai-chat-msg ai-chat-msg--system" id="step-system" style="display:none;">
-            <div class="ai-chat-msg__icon">S</div>
-            <div class="ai-chat-msg__body">
-              <div class="ai-chat-msg__label">System prompt applied</div>
-              <div class="ai-chat-msg__sub">maging v0.1.15 · 32 widgets · 35 themes</div>
+          <!-- Step B: prompt sent (collapsed) -->
+          <div class="ai-chat-msg ai-chat-msg--user" id="step-system" style="display:none;">
+            <div class="ai-chat-msg__body ai-chat-msg__body--user ai-chat-msg__body--collapsed">
+              <div class="ai-chat-msg__collapsed-head">
+                <span class="ai-chat-msg__collapsed-label">maging prompt</span>
+                <span class="ai-chat-msg__collapsed-badge">4.4K tokens</span>
+              </div>
+              <div class="ai-chat-msg__collapsed-preview">You are a maging dashboard generator...</div>
             </div>
           </div>
 
@@ -1286,8 +1316,11 @@
         <!-- Input bar at bottom -->
         <div class="ai-split__inputbar">
           <div class="ai-split__inputbar-field" id="ai-inputbar">
-            <span class="ai-split__inputbar-placeholder">Message...</span>
+            <span class="ai-split__inputbar-text" id="ai-inputbar-text"></span>
+            <span class="ai-split__inputbar-placeholder" id="ai-inputbar-ph">Message...</span>
+            <span class="ai-split__inputbar-cursor" id="ai-inputbar-cursor" style="display:none;">|</span>
           </div>
+          <button class="ai-split__inputbar-send" id="ai-inputbar-send" style="display:none;">↑</button>
         </div>
 
         <!-- LLM selector -->
@@ -2562,72 +2595,123 @@ Then wait for my next message before generating anything.`;
     }, speed);
   }
 
+  var inputField = document.getElementById('ai-inputbar');
+  var inputText = document.getElementById('ai-inputbar-text');
+  var inputPh = document.getElementById('ai-inputbar-ph');
+  var inputCursor = document.getElementById('ai-inputbar-cursor');
+  var inputSend = document.getElementById('ai-inputbar-send');
+  var copyBtn = document.getElementById('copy-prompt-btn');
+
+  function resetInput() {
+    inputText.textContent = '';
+    inputPh.style.display = '';
+    inputCursor.style.display = 'none';
+    inputSend.style.display = 'none';
+    inputField.classList.remove('is-active');
+  }
+
+  function scrollChat() {
+    var area = document.getElementById('ai-chat-area');
+    if (area) area.scrollTop = area.scrollHeight;
+  }
+
   function playAnimation() {
     clearAnims();
-    // hide everything
-    hideEl('step-system');
-    hideEl('step-handshake');
-    hideEl('step-request');
-    hideEl('step-result');
-    hideEl('step-handshake-text');
-    hideEl('step-preview');
+    hideEl('step-system'); hideEl('step-handshake'); hideEl('step-request'); hideEl('step-result');
+    hideEl('step-handshake-text'); hideEl('step-preview');
     document.getElementById('step-empty').style.display = '';
     var t1 = document.getElementById('step-typing-1');
     var t2 = document.getElementById('step-typing-2');
     if (t1) t1.style.display = 'flex';
     if (t2) t2.style.display = 'flex';
-    var cursor = document.getElementById('step-cursor');
+    resetInput();
     var previewBody = document.getElementById('step-preview-body');
 
-    // Step 1 (0.5s): system prompt pasted
+    // Step 1 (0.3s): Copy button highlights on left
+    delay(function() {
+      copyBtn.classList.add('is-copied');
+      copyBtn.querySelector('.ai-split__copy-idle').style.display = 'none';
+      copyBtn.querySelector('.ai-split__copy-done').style.display = '';
+    }, 300);
+
+    // Step 2 (1s): prompt text appears in input bar
     delay(function() {
       hideEl('step-empty');
-      showEl('step-system');
-    }, 500);
+      inputPh.style.display = 'none';
+      inputField.classList.add('is-active');
+      inputCursor.style.display = '';
+      inputText.textContent = 'You are a maging dashboard generator...';
+      inputText.style.fontSize = '0.62rem';
+      inputText.style.fontFamily = 'var(--mw-mono-font)';
+      inputText.style.color = 'var(--mw-text-muted)';
+      inputSend.style.display = '';
+    }, 1000);
 
-    // Step 2 (1.5s): AI handshake — typing
+    // Step 3 (1.8s): "enter" — prompt sends, collapses, input resets
+    delay(function() {
+      copyBtn.classList.remove('is-copied');
+      copyBtn.querySelector('.ai-split__copy-idle').style.display = '';
+      copyBtn.querySelector('.ai-split__copy-done').style.display = 'none';
+      resetInput();
+      inputText.style = '';
+      showEl('step-system');
+      scrollChat();
+    }, 1800);
+
+    // Step 4 (2.5s): AI typing
     delay(function() {
       showEl('step-handshake');
-    }, 1500);
+      scrollChat();
+    }, 2500);
 
-    // Step 3 (2.8s): handshake text appears
+    // Step 5 (3.8s): handshake text
     delay(function() {
       if (t1) t1.style.display = 'none';
       showEl('step-handshake-text');
-    }, 2800);
-
-    // Step 4 (3.8s): user types request
-    delay(function() {
-      showEl('step-request');
-      var reqText = document.getElementById('step-request-text');
-      if (cursor) cursor.style.display = '';
-      typeText(reqText, REQUESTS[currentOutput], 30, function() {
-        if (cursor) cursor.style.display = 'none';
-
-        // Step 5 (after typing): AI generates
-        delay(function() {
-          showEl('step-result');
-        }, 400);
-
-        // Step 6: preview appears
-        delay(function() {
-          if (t2) t2.style.display = 'none';
-          showEl('step-preview');
-          // render mini widgets
-          if (previewBody && typeof Maging !== 'undefined') {
-            previewBody.innerHTML = '<div id="mini-kpi-1"></div><div id="mini-kpi-2"></div><div id="mini-chart" style="grid-column:span 2;height:100px;"></div>';
-            try {
-              Maging.kpiCard('#mini-kpi-1', { label: '매출', value: '128억', delta: 8.3, compact: true });
-              Maging.kpiCard('#mini-kpi-2', { label: 'DAU', value: '48,291', delta: 12.4, compact: true });
-              Maging.lineChart('#mini-chart', { categories: ['1월','2월','3월','4월','5월','6월'], series: [{ name: '매출', data: [72,78,81,88,91,128] }] });
-            } catch(e) {}
-            // scroll chat area to bottom
-            var area = document.getElementById('ai-chat-area');
-            if (area) area.scrollTop = area.scrollHeight;
-          }
-        }, 1500);
-      });
+      scrollChat();
     }, 3800);
+
+    // Step 6 (5s): user types in input bar
+    delay(function() {
+      inputPh.style.display = 'none';
+      inputField.classList.add('is-active');
+      inputCursor.style.display = '';
+      var reqText = REQUESTS[currentOutput];
+      typeText(inputText, reqText, 35, function() {
+        inputSend.style.display = '';
+
+        // Step 7 (after typing +0.5s): "enter" — send request
+        delay(function() {
+          var sentText = inputText.textContent;
+          resetInput();
+          showEl('step-request');
+          document.getElementById('step-request-text').textContent = sentText;
+          document.getElementById('step-cursor').style.display = 'none';
+          scrollChat();
+
+          // Step 8 (+0.4s): AI typing
+          delay(function() {
+            showEl('step-result');
+            scrollChat();
+          }, 400);
+
+          // Step 9 (+1.8s): dashboard preview
+          delay(function() {
+            if (t2) t2.style.display = 'none';
+            showEl('step-preview');
+            if (previewBody && typeof Maging !== 'undefined') {
+              previewBody.innerHTML = '<div id="mini-kpi-1"></div><div id="mini-kpi-2"></div><div id="mini-chart" style="grid-column:span 2;height:100px;"></div>';
+              try {
+                Maging.kpiCard('#mini-kpi-1', { label: '매출', value: '128억', delta: 8.3, compact: true });
+                Maging.kpiCard('#mini-kpi-2', { label: 'DAU', value: '48,291', delta: 12.4, compact: true });
+                Maging.lineChart('#mini-chart', { categories: ['1월','2월','3월','4월','5월','6월'], series: [{ name: '매출', data: [72,78,81,88,91,128] }] });
+              } catch(e) {}
+            }
+            scrollChat();
+          }, 1800);
+        }, 500);
+      });
+    }, 5000);
   }
 
   function setOutput(output) {
