@@ -1,4 +1,4 @@
-/*! maging-landing v0.1.14 — Landing-page widgets for maging | MIT
+/*! maging-landing v0.1.15 — Landing-page widgets for maging | MIT
  *  Requires maging.js loaded first.
  *  Usage:
  *    <script src="maging.js"></script>

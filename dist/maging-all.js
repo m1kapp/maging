@@ -1,6 +1,6 @@
-/*! maging-all v0.1.14 — single-tag bootstrap | MIT
+/*! maging-all v0.1.15 — single-tag bootstrap | MIT
  *
- *  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.14/dist/maging-all.js"></script>
+ *  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.15/dist/maging-all.js"></script>
  *
  *  Auto-injects (in this order):
  *    ① Fonts (via maging.css @import):
@@ -19,7 +19,7 @@
  *  CSS loads in parallel; JS runs after ECharts is ready.
  *
  *  Skip a default via data-attributes on this script tag:
- *    <script src="...maging-all.js" data-no-tailwind data-version="v0.1.14"></script>
+ *    <script src="...maging-all.js" data-no-tailwind data-version="v0.1.15"></script>
  *
  *  Events dispatched on window:
  *    'maging:ready'  — everything loaded, widgets can mount
@@ -38,7 +38,7 @@
   })();
 
   var ds = (self && self.dataset) || {};
-  var VERSION = ds.version || '0.1.14';
+  var VERSION = ds.version || '0.1.15';
   var BASE    = ds.base || 'https://cdn.jsdelivr.net/npm/@m1kapp/maging@' + VERSION + '/dist/';
 
   var SKIP_TAILWIND   = ds.noTailwind   != null;
