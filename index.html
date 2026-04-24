@@ -178,7 +178,123 @@
   }
 
 
-  /* ========= USE WITH AI section ========= */
+  /* ========= AI CHAT SIMULATION ========= */
+  .ai-chat {
+    background: var(--mw-surface); border: 1px solid var(--mw-border);
+    border-radius: var(--mw-radius); overflow: hidden;
+    max-width: 720px; margin: 0 auto;
+  }
+  .ai-chat__head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.625rem 1rem; border-bottom: 1px solid var(--mw-border);
+    gap: 0.75rem; flex-wrap: wrap;
+  }
+  .ai-chat__head-left { display: flex; align-items: center; gap: 0.5rem; }
+  .ai-chat__head-right { display: flex; align-items: center; gap: 0.5rem; }
+
+  .ai-chat__tabs { display: flex; gap: 0.25rem; }
+  .ai-chat__tab {
+    padding: 0.3rem 0.65rem; font-size: 0.72rem; font-weight: 500;
+    border: 1px solid var(--mw-border); border-radius: calc(var(--mw-radius) * 0.5);
+    background: none; color: var(--mw-text-muted); cursor: pointer;
+    font-family: var(--mw-font); transition: all 150ms;
+  }
+  .ai-chat__tab:hover { color: var(--mw-text); border-color: var(--mw-accent); }
+  .ai-chat__tab.is-active { background: var(--mw-accent); color: #fff; border-color: var(--mw-accent); }
+  [data-theme="terminal"] .ai-chat__tab.is-active { color: #000; }
+
+  .ai-chat__len-tabs { display: flex; gap: 0.125rem; background: var(--mw-surface-2); border-radius: calc(var(--mw-radius) * 0.4); padding: 0.15rem; }
+  .ai-chat__len {
+    padding: 0.2rem 0.5rem; font-size: 0.65rem; font-weight: 500;
+    border: none; border-radius: calc(var(--mw-radius) * 0.3);
+    background: none; color: var(--mw-text-muted); cursor: pointer;
+    font-family: var(--mw-font); transition: all 120ms;
+  }
+  .ai-chat__len.is-active { background: var(--mw-surface); color: var(--mw-text); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+  .ai-chat__copy {
+    padding: 0.3rem 0.7rem; font-size: 0.7rem; font-weight: 600;
+    border: 1px solid var(--mw-border); border-radius: calc(var(--mw-radius) * 0.5);
+    background: var(--mw-accent); color: #fff; cursor: pointer;
+    font-family: var(--mw-font); transition: opacity 150ms;
+  }
+  .ai-chat__copy:hover { opacity: 0.85; }
+  .ai-chat__copy.is-copied { background: var(--mw-success); border-color: var(--mw-success); }
+
+  .ai-chat__body { padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; max-height: 420px; overflow-y: auto; }
+
+  .ai-chat__msg { display: flex; gap: 0.75rem; animation: chatSlideIn 0.4s ease-out; }
+  .ai-chat__msg--ai { }
+  .ai-chat__msg--example { animation: chatSlideIn 0.5s ease-out 0.8s both; }
+
+  @keyframes chatSlideIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .ai-chat__avatar {
+    width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; font-weight: 700;
+  }
+  .ai-chat__avatar--user { background: var(--mw-accent); color: #fff; }
+  [data-theme="terminal"] .ai-chat__avatar--user { color: #000; }
+  .ai-chat__avatar--ai { background: var(--mw-surface-2); color: var(--mw-accent); font-size: 0.85rem; }
+
+  .ai-chat__bubble { flex: 1; min-width: 0; }
+  .ai-chat__bubble--user {
+    background: var(--mw-surface-2); border-radius: var(--mw-radius);
+    padding: 0.875rem 1rem;
+  }
+  .ai-chat__bubble--ai {
+    padding: 0.5rem 0;
+    font-size: var(--mw-text-sm); line-height: 1.65; color: var(--mw-text);
+  }
+  .ai-chat__bubble--example {
+    font-size: var(--mw-text-sm); line-height: 1.5;
+    font-style: italic; color: var(--mw-text-muted);
+  }
+
+  .ai-chat__prompt {
+    margin: 0; font-size: 0.72rem; line-height: 1.55;
+    color: var(--mw-text); font-family: var(--mw-mono-font);
+    white-space: pre-wrap; word-break: break-all;
+    max-height: 200px; overflow-y: auto;
+  }
+
+  /* typing indicator */
+  .ai-chat__typing { display: flex; gap: 4px; padding: 0.5rem 0; }
+  .ai-chat__typing span {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--mw-text-muted); opacity: 0.4;
+    animation: typingBounce 1.2s infinite;
+  }
+  .ai-chat__typing span:nth-child(2) { animation-delay: 0.2s; }
+  .ai-chat__typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-4px); opacity: 1; }
+  }
+
+  .ai-chat__reply { animation: chatFadeIn 0.5s ease-out; }
+  @keyframes chatFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .ai-chat__foot {
+    display: flex; align-items: center; gap: 0.625rem;
+    padding: 0.625rem 1rem; border-top: 1px solid var(--mw-border);
+    flex-wrap: wrap;
+  }
+  .ai-chat__foot-label { font-size: 0.65rem; color: var(--mw-text-muted); font-family: var(--mw-font); }
+  .ai-chat__foot a { display: flex; opacity: 0.4; transition: opacity 150ms; }
+  .ai-chat__foot a:hover { opacity: 1; }
+  .ai-chat__foot-sep { color: var(--mw-border); font-size: 0.7rem; }
+  .ai-chat__foot-ref { font-size: 0.65rem; color: var(--mw-text-muted) !important; text-decoration: none; opacity: 1 !important; }
+  .ai-chat__foot-ref:hover { color: var(--mw-accent) !important; }
+
+  /* ========= USE WITH AI section (legacy) ========= */
   .ai-step {
     display: flex; gap: 1.25rem;
     padding: 1.5rem;
@@ -1020,148 +1136,69 @@
       </p>
     </div>
 
-    <!-- Step 1: Copy prompt -->
-    <div class="ai-step mb-5">
-      <div class="ai-step__num">01</div>
-      <div class="ai-step__body">
-        <div class="ai-step__title">프롬프트 복사</div>
-        <div class="ai-step__desc">아래 프롬프트가 LLM에게 "maging 라이브러리를 써서 HTML을 만들어라"를 가르칩니다.</div>
-
-        <div class="ai-prompt mt-4">
-          <div class="ai-prompt__head">
-            <div class="ai-prompt__lang">
-              <span class="ai-prompt__dot" style="background:#ff5f57"></span>
-              <span class="ai-prompt__dot" style="background:#febc2e"></span>
-              <span class="ai-prompt__dot" style="background:#28c840"></span>
-              <span class="ai-prompt__filename">maging-prompt.txt</span>
-            </div>
-            <button class="ai-prompt__copy" id="copy-prompt-btn">📋 Copy Prompt</button>
+    <!-- AI Chat Simulation -->
+    <div class="ai-chat">
+      <!-- Header -->
+      <div class="ai-chat__head">
+        <div class="ai-chat__head-left">
+          <div class="ai-chat__tabs">
+            <button class="ai-chat__tab is-active" data-output="dashboard">📊 Dashboard</button>
+            <button class="ai-chat__tab" data-output="landing">🏠 Landing Page</button>
           </div>
-          <div class="ai-prompt__toolbar">
-            <div class="ai-prompt__output-modes" role="tablist" style="margin-bottom:0.5rem;">
-              <button type="button" class="ai-prompt__mode-btn is-active" data-output="dashboard">📊 Dashboard</button>
-              <button type="button" class="ai-prompt__mode-btn" data-output="landing">🏠 Landing Page</button>
-            </div>
-            <div class="ai-prompt__modes" role="tablist">
-              <button type="button" class="ai-prompt__mode-btn" data-mode="short">Short (URL 참조)</button>
-              <button type="button" class="ai-prompt__mode-btn is-active" data-mode="full">Full (인라인)</button>
-            </div>
-            <div class="ai-prompt__tokens" id="ai-prompt-tokens" title="Measured via real tokenizers (gpt-tokenizer, @anthropic-ai/tokenizer)">
-              <span class="ai-prompt__tokens-val" data-api="gpt">GPT 953</span>
-              <span class="ai-prompt__tokens-sep">·</span>
-              <span class="ai-prompt__tokens-val" data-api="claude">Claude 1073</span>
-              <span class="ai-prompt__tokens-sep">·</span>
-              <span class="ai-prompt__tokens-val" data-api="gemini">Gemini 1010</span>
-            </div>
-          </div>
-          <pre class="ai-prompt__body" id="ai-prompt-body"></pre>
         </div>
-
-        <div class="ai-handshake mt-4">
-          <div class="ai-handshake__label">⬆︎ 복사 후 LLM에 붙여넣고 <strong>엔터</strong></div>
-          <div class="ai-handshake__reply">
-            <div class="ai-handshake__reply-lbl">LLM이 이렇게 답하면 준비 완료 :</div>
-            <div class="ai-handshake__reply-msg" id="handshake-msg">
-              <span class="ai-handshake__cursor">▸</span>
-              <code>안녕하세요! 결과물 서포터 매징(maging)입니다 ✦</code><br>
-              <code style="padding-left: 1.25rem;" id="handshake-line2">데이터 파일을 첨부하거나, 만들고 싶은 대시보드를 자유롭게 설명해주세요.</code><br>
-              <code style="padding-left: 1.25rem;">어떤 걸 만들어 드릴까요? 🎨</code>
-            </div>
+        <div class="ai-chat__head-right">
+          <div class="ai-chat__len-tabs">
+            <button class="ai-chat__len" data-mode="short">Short</button>
+            <button class="ai-chat__len is-active" data-mode="full">Full</button>
           </div>
-          <div class="ai-handshake__next">이후 원하는 걸 자연어로 요청하면 HTML이 돌아옵니다.</div>
+          <button class="ai-chat__copy" id="copy-prompt-btn">Copy</button>
         </div>
       </div>
-    </div>
 
-    <!-- Step 2: Paste into LLM -->
-    <div class="ai-step mb-5">
-      <div class="ai-step__num">02</div>
-      <div class="ai-step__body">
-        <div class="ai-step__title">원하는 LLM에 붙여넣기</div>
-        <div class="ai-step__desc">어느 모델이든 상관없습니다. 단일 HTML 출력만 되면 됩니다.</div>
-        <div class="ai-llms mt-4">
-          <a class="ai-llm" href="https://chatgpt.com" target="_blank" rel="noopener">
-            <img class="ai-llm__logo" src="./dist/icons/openai.svg" alt="OpenAI" width="20" height="20">
-            <span class="ai-llm__name">ChatGPT</span>
-          </a>
-          <a class="ai-llm" href="https://claude.ai" target="_blank" rel="noopener">
-            <img class="ai-llm__logo" src="./dist/icons/claude.svg" alt="Claude" width="20" height="20">
-            <span class="ai-llm__name">Claude</span>
-          </a>
-          <a class="ai-llm" href="https://gemini.google.com" target="_blank" rel="noopener">
-            <img class="ai-llm__logo" src="./dist/icons/gemini.svg" alt="Gemini" width="20" height="20">
-            <span class="ai-llm__name">Gemini</span>
-          </a>
-          <a class="ai-llm" href="https://grok.com" target="_blank" rel="noopener">
-            <img class="ai-llm__logo ai-llm__logo--invert" src="./dist/icons/x.svg" alt="X" width="20" height="20">
-            <span class="ai-llm__name">Grok</span>
-          </a>
-          <a class="ai-llm" href="https://www.perplexity.ai" target="_blank" rel="noopener">
-            <img class="ai-llm__logo" src="./dist/icons/perplexity.svg" alt="Perplexity" width="20" height="20">
-            <span class="ai-llm__name">Perplexity</span>
-          </a>
-          <a class="ai-llm" href="https://copilot.microsoft.com" target="_blank" rel="noopener">
-            <img class="ai-llm__logo" src="./dist/icons/copilot.svg" alt="Copilot" width="20" height="20">
-            <span class="ai-llm__name">Copilot</span>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Step 3: Describe -->
-    <div class="ai-step mb-5">
-      <div class="ai-step__num">03</div>
-      <div class="ai-step__body">
-        <div class="ai-step__title">데이터나 원하는 것을 설명</div>
-        <div class="ai-step__desc">CSV 붙여넣기, 스크린샷 첨부, 자연어로 요청 — 뭐든 됩니다.</div>
-        <div class="ai-examples mt-4" id="ai-examples">
-          <div class="ai-example" data-for="dashboard">
-            <span class="ai-example__user">나</span>
-            <span class="ai-example__text">"여기 우리 3월 매출 CSV야. 경영진 월간 리뷰용 대시보드 만들어줘. Stripe 스타일로."</span>
-          </div>
-          <div class="ai-example" data-for="dashboard">
-            <span class="ai-example__user">나</span>
-            <span class="ai-example__text">"SaaS 리텐션 + 신규 가입 트래킹 위젯 조합해줘. Linear 느낌."</span>
-          </div>
-          <div class="ai-example" data-for="dashboard">
-            <span class="ai-example__user">나</span>
-            <span class="ai-example__text">"DevOps 오퍼레이션 모니터 — 게이지, 상태 그리드, 타임라인. Bloomberg 톤으로."</span>
-          </div>
-          <div class="ai-example" data-for="landing" style="display:none;">
-            <span class="ai-example__user">나</span>
-            <span class="ai-example__text">"AI 코드 리뷰 SaaS 랜딩페이지 만들어줘. Hero, 기능 소개, 요금제, FAQ까지. Vercel 느낌."</span>
-          </div>
-          <div class="ai-example" data-for="landing" style="display:none;">
-            <span class="ai-example__user">나</span>
-            <span class="ai-example__text">"우리 앱 이름은 Chekly야. 팀 협업 도구고, 무료/프로/엔터프라이즈 3개 플랜. 랜딩 만들어줘."</span>
-          </div>
-          <div class="ai-example" data-for="landing" style="display:none;">
-            <span class="ai-example__user">나</span>
-            <span class="ai-example__text">"피트니스 앱 랜딩. 후기 3개, 비교표(우리 vs 경쟁), 온보딩 스텝 가이드 넣어줘. Claude 테마."</span>
+      <!-- Messages -->
+      <div class="ai-chat__body">
+        <!-- User message: prompt -->
+        <div class="ai-chat__msg ai-chat__msg--user">
+          <div class="ai-chat__avatar ai-chat__avatar--user">나</div>
+          <div class="ai-chat__bubble ai-chat__bubble--user">
+            <pre class="ai-chat__prompt" id="ai-prompt-body"></pre>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Step 4: Result -->
-    <div class="ai-step">
-      <div class="ai-step__num">04</div>
-      <div class="ai-step__body">
-        <div class="ai-step__title">HTML 파일이 나옵니다</div>
-        <div class="ai-step__desc">브라우저에서 바로 열리고, 파일 하나만 공유하면 어디서든 돌아갑니다.</div>
-        <div class="ai-result mt-4">
-          <div class="ai-result__item">✓ 단일 HTML 파일</div>
-          <div class="ai-result__item">✓ 빌드 없음</div>
-          <div class="ai-result__item">✓ 35개 테마 중 선택</div>
-          <div class="ai-result__item">✓ Claude Artifact/Gemini Canvas 호환</div>
-          <div class="ai-result__item">✓ 모바일 반응형</div>
-          <div class="ai-result__item">✓ 테마만 바꾸면 룩 완전 변경</div>
+        <!-- AI response: handshake -->
+        <div class="ai-chat__msg ai-chat__msg--ai" id="ai-response">
+          <div class="ai-chat__avatar ai-chat__avatar--ai">✦</div>
+          <div class="ai-chat__bubble ai-chat__bubble--ai">
+            <div class="ai-chat__typing" id="ai-typing">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="ai-chat__reply" id="ai-reply" style="display:none;">
+              안녕하세요! 결과물 서포터 매징(maging)입니다 ✦<br><br>
+              <span id="handshake-line2">데이터 파일을 첨부하거나, 만들고 싶은 대시보드를 자유롭게 설명해주세요.</span><br>
+              어떤 걸 만들어 드릴까요? 🎨
+            </div>
+          </div>
+        </div>
+
+        <!-- User follow-up examples -->
+        <div class="ai-chat__msg ai-chat__msg--user ai-chat__msg--example" id="ai-example-msg" style="display:none;">
+          <div class="ai-chat__avatar ai-chat__avatar--user">나</div>
+          <div class="ai-chat__bubble ai-chat__bubble--user ai-chat__bubble--example" id="ai-example-text"></div>
         </div>
       </div>
-    </div>
 
-    <div class="mt-10 text-center" id="llms-link">
-      <a href="./llms-dashboard.txt" class="pill" id="llms-link-a">📄 전체 레퍼런스 (llms-dashboard.txt) →</a>
+      <!-- LLM links -->
+      <div class="ai-chat__foot">
+        <span class="ai-chat__foot-label">지원 모델 :</span>
+        <a href="https://chatgpt.com" target="_blank"><img src="./dist/icons/openai.svg" width="16" height="16" alt="ChatGPT"></a>
+        <a href="https://claude.ai" target="_blank"><img src="./dist/icons/claude.svg" width="16" height="16" alt="Claude"></a>
+        <a href="https://gemini.google.com" target="_blank"><img src="./dist/icons/gemini.svg" width="16" height="16" alt="Gemini"></a>
+        <a href="https://grok.com" target="_blank"><img class="ai-llm__logo--invert" src="./dist/icons/x.svg" width="16" height="16" alt="Grok"></a>
+        <a href="https://www.perplexity.ai" target="_blank"><img src="./dist/icons/perplexity.svg" width="16" height="16" alt="Perplexity"></a>
+        <a href="https://copilot.microsoft.com" target="_blank"><img src="./dist/icons/copilot.svg" width="16" height="16" alt="Copilot"></a>
+        <span class="ai-chat__foot-sep">|</span>
+        <a href="./llms-dashboard.txt" class="ai-chat__foot-ref" id="llms-link-a">llms.txt →</a>
+      </div>
     </div>
   </div>
 </section>
@@ -2386,26 +2423,59 @@ Then wait for my next message before generating anything.`;
     landing:   { href: './llms-landing.txt', text: '📄 전체 레퍼런스 (llms-landing.txt) →' },
   };
 
-  var currentMode = 'short';
+  var EXAMPLES = {
+    dashboard: [
+      '"여기 우리 3월 매출 CSV야. 경영진 월간 리뷰용 대시보드 만들어줘. Stripe 스타일로."',
+      '"SaaS 리텐션 + 신규 가입 트래킹 위젯 조합해줘. Linear 느낌."',
+      '"DevOps 오퍼레이션 모니터 — 게이지, 상태 그리드, 타임라인. Bloomberg 톤으로."'
+    ],
+    landing: [
+      '"AI 코드 리뷰 SaaS 랜딩페이지 만들어줘. Hero, 기능 소개, 요금제, FAQ까지. Vercel 느낌."',
+      '"우리 앱 이름은 Chekly야. 팀 협업 도구고, 무료/프로/엔터프라이즈 3개 플랜."',
+      '"피트니스 앱 랜딩. 후기 3개, 비교표, 온보딩 스텝 가이드 넣어줘. Claude 테마."'
+    ]
+  };
+
+  var currentMode = 'full';
   var currentOutput = 'dashboard';
+  var typingTimer = null;
+
+  var aiTyping = document.getElementById('ai-typing');
+  var aiReply = document.getElementById('ai-reply');
+  var exampleMsg = document.getElementById('ai-example-msg');
+  var exampleText = document.getElementById('ai-example-text');
 
   function setMode(mode) {
     currentMode = mode;
-    var prompt = PROMPTS[currentOutput][mode];
-    body.textContent = prompt;
-
-    // token display update
-    var t = TOKENS[mode];
-    var fmt = function (n) { return n >= 1000 ? (n / 1000).toFixed(1).replace(/\.0$/, '') + 'K' : n; };
-    var tokenEls = document.querySelectorAll('#ai-prompt-tokens .ai-prompt__tokens-val');
-    if (tokenEls[0]) tokenEls[0].textContent = 'GPT ' + fmt(t.gpt);
-    if (tokenEls[1]) tokenEls[1].textContent = 'Claude ' + fmt(t.claude);
-    if (tokenEls[2]) tokenEls[2].textContent = 'Gemini ' + fmt(t.gemini);
-
-    // active button state (short/full)
-    document.querySelectorAll('.ai-prompt__modes .ai-prompt__mode-btn').forEach(function (b) {
+    body.textContent = PROMPTS[currentOutput][mode];
+    document.querySelectorAll('.ai-chat__len').forEach(function(b) {
       b.classList.toggle('is-active', b.dataset.mode === mode);
     });
+  }
+
+  function playTyping() {
+    // reset
+    aiTyping.style.display = 'flex';
+    aiReply.style.display = 'none';
+    exampleMsg.style.display = 'none';
+    clearTimeout(typingTimer);
+
+    // show reply after delay
+    typingTimer = setTimeout(function() {
+      aiTyping.style.display = 'none';
+      aiReply.style.display = '';
+
+      // show example after another delay
+      setTimeout(function() {
+        var examples = EXAMPLES[currentOutput];
+        var randomExample = examples[Math.floor(Math.random() * examples.length)];
+        exampleText.textContent = randomExample;
+        exampleMsg.style.display = '';
+        exampleMsg.style.animation = 'none';
+        exampleMsg.offsetHeight; // force reflow
+        exampleMsg.style.animation = '';
+      }, 600);
+    }, 1200);
   }
 
   function setOutput(output) {
@@ -2416,32 +2486,27 @@ Then wait for my next message before generating anything.`;
     var line2 = document.getElementById('handshake-line2');
     if (line2) line2.textContent = HANDSHAKES[output];
 
-    // update examples
-    document.querySelectorAll('#ai-examples .ai-example').forEach(function (ex) {
-      ex.style.display = ex.dataset.for === output ? '' : 'none';
-    });
-
     // update llms link
     var linkA = document.getElementById('llms-link-a');
     if (linkA) {
       linkA.href = LLMS_LINKS[output].href;
-      linkA.textContent = LLMS_LINKS[output].text;
+      linkA.textContent = 'llms-' + output + '.txt →';
     }
 
-    // active button state (dashboard/landing)
-    document.querySelectorAll('.ai-prompt__output-modes .ai-prompt__mode-btn').forEach(function (b) {
+    // active tab
+    document.querySelectorAll('.ai-chat__tab').forEach(function(b) {
       b.classList.toggle('is-active', b.dataset.output === output);
     });
+
+    playTyping();
   }
 
-  // Wire mode buttons (short/full)
-  document.querySelectorAll('.ai-prompt__modes .ai-prompt__mode-btn').forEach(function (b) {
-    b.addEventListener('click', function () { setMode(b.dataset.mode); });
+  // Wire tabs
+  document.querySelectorAll('.ai-chat__tab').forEach(function(b) {
+    b.addEventListener('click', function() { setOutput(b.dataset.output); });
   });
-
-  // Wire output buttons (dashboard/landing)
-  document.querySelectorAll('.ai-prompt__output-modes .ai-prompt__mode-btn').forEach(function (b) {
-    b.addEventListener('click', function () { setOutput(b.dataset.output); });
+  document.querySelectorAll('.ai-chat__len').forEach(function(b) {
+    b.addEventListener('click', function() { setMode(b.dataset.mode); });
   });
 
   // Initial render
@@ -2454,17 +2519,13 @@ Then wait for my next message before generating anything.`;
     navigator.clipboard.writeText(text).then(function () {
       btn.classList.add('is-copied');
       btn.textContent = '✓ Copied';
-      if (toast) {
-        toast.classList.add('is-show');
-        setTimeout(function () { toast.classList.remove('is-show'); }, 2800);
-      }
       setTimeout(function () {
         btn.classList.remove('is-copied');
-        btn.textContent = '📋 Copy Prompt';
-      }, 2400);
+        btn.textContent = 'Copy';
+      }, 2000);
     }).catch(function () {
-      btn.textContent = '복사 실패';
-      setTimeout(function () { btn.textContent = '📋 Copy Prompt'; }, 2000);
+      btn.textContent = 'Failed';
+      setTimeout(function () { btn.textContent = 'Copy'; }, 2000);
     });
   });
 })();
