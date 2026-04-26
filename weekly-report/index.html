@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>SaaS 주간보고 — 2026년 4월 4주차</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="tw.css">
+    <link rel="stylesheet" href="../dist/maging.css">
+    <script defer src="../dist/maging-all.js" data-base="../dist/" data-no-tailwind></script>
+    <script type="module" src="../components/site.js"></script>
+    <script defer src="../dist/maging-weekly.js"></script>
+  </head>
+  <body class="mw-themed">
+    <maging-nav active="demo"></maging-nav>
+    <div class="flex">
+    <weekly-sidebar active="cover" data-spa data-title="SaaS 주간보고" data-date="2026.04.27 · 4월 4주차"></weekly-sidebar>
+    <main class="flex-1 px-6 py-4" style="word-break: keep-all; min-width: 0">
+
+      <!-- ── Code view panel ──────────────────────────────────── -->
+      <div id="code-view">
+        <div id="cv-header">
+          <span id="cv-title">// cover.js</span>
+          <div style="display:flex;gap:8px">
+            <button class="cv-btn" id="cv-copy">복사</button>
+            <button class="cv-btn cv-btn--accent" id="cv-back">← 미리보기</button>
+          </div>
+        </div>
+        <pre id="cv-pre"><code id="cv-code"></code></pre>
+      </div>
+
+      <div class="max-w-[1240px] mx-auto" id="slides-wrap">
+
+        <!-- ═══ Slide 1: Cover ════════════════════════════════ -->
+        <section class="slide cover-slide" id="cover" data-active>
+          <div class="cover-host"></div>
+        </section>
+
+        <!-- ═══ Slide 2: Sales KPI ════════════════════════════ -->
+        <section class="slide" id="sales-kpi" data-label="KPI 1. 신규 매출 30억" data-bu="SaaS B/U" data-team="컨설팅 &amp; CSM팀">
+          <div class="sk-hero pt-4 pb-2"></div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
+            <div class="sk-kpi-1"></div><div class="sk-kpi-2"></div>
+            <div class="sk-kpi-3"></div><div class="sk-kpi-4"></div>
+          </div>
+          <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
+            <div class="sk-sec-01"></div>
+            <div class="table-block sk-block-target mt-3"></div>
+            <div class="table-block sk-block-actual mt-3"></div>
+          </div>
+          <div class="mt-4"><div class="sk-review"></div></div>
+        </section>
+
+        <!-- ═══ Slide 7: Pricing ═════════════════════════════ -->
+        <section class="slide" id="pricing" data-label="KPI 2. 신규상품 매출 6.5억" data-bu="SaaS B/U" data-team="컨설팅 &amp; CSM팀">
+          <div class="pr-hero pt-4 pb-2"></div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
+            <div class="pr-kpi-1"></div><div class="pr-kpi-2"></div>
+            <div class="pr-kpi-3"></div><div class="pr-kpi-4"></div>
+          </div>
+          <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
+            <div class="pr-sec-01"></div>
+            <div class="pr-table mt-3 scroll-table" style="height:320px"></div>
+          </div>
+          <div class="mt-4"><div class="pr-review"></div></div>
+        </section>
+
+        <!-- ═══ Slide 8: Education ════════════════════════════ -->
+        <section class="slide" id="education" data-label="KPI 3. 고객 교육 강화" data-bu="SaaS B/U" data-team="컨설팅 &amp; CSM팀">
+          <div class="ed-hero pt-4 pb-2"></div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2">
+            <div class="ed-kpi-1"></div><div class="ed-kpi-2"></div><div class="ed-kpi-3"></div>
+          </div>
+          <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
+            <div class="ed-sec-01"></div>
+            <div class="ed-table mt-3 scroll-table" style="height:320px"></div>
+          </div>
+          <div class="mt-4"><div class="ed-review"></div></div>
+        </section>
+
+        <!-- ═══ Slide 3: Retention ════════════════════════════ -->
+        <section class="slide" id="retention" data-label="KPI 1. 기고객 리텐션" data-bu="SaaS B/U" data-team="CX팀">
+          <div class="ret-hero pt-4 pb-2"></div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2">
+            <div class="ret-kpi-1"></div><div class="ret-kpi-2"></div><div class="ret-kpi-3"></div>
+          </div>
+          <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
+            <div class="ret-sec-01"></div>
+            <div class="table-block mt-3">
+              <div class="table-toolbar">
+                <div>
+                  <span class="table-toolbar__title">2026년 월별 현황</span>
+                  <span class="table-toolbar__sub">해지·신규·유료전체 추이</span>
+                </div>
+              </div>
+              <div class="ret-table-2026 scroll-table" style="height:300px"></div>
+            </div>
+            <div class="table-block mt-3">
+              <div class="table-toolbar">
+                <div>
+                  <span class="table-toolbar__title">2025년 동월 비교</span>
+                  <span class="table-toolbar__sub">전년 기준</span>
+                </div>
+              </div>
+              <div class="ret-table-2025 scroll-table" style="height:220px"></div>
+            </div>
+          </div>
+          <div class="mt-4"><div class="ret-review"></div></div>
+        </section>
+
+        <!-- ═══ Slide 4: Customer Insight ════════════════════ -->
+        <section class="slide" id="customer-insight" data-label="KPI 2. 핵심고객 관계관리" data-bu="SaaS B/U" data-team="CX팀">
+          <div class="ci-hero pt-4 pb-2"></div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2">
+            <div class="ci-kpi-1"></div><div class="ci-kpi-2"></div><div class="ci-kpi-3"></div>
+          </div>
+          <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
+            <div class="ci-sec-01"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+              <div class="ci-card-1"></div>
+              <div class="ci-card-2"></div>
+              <div class="ci-card-3"></div>
+              <div class="ci-card-4"></div>
+            </div>
+          </div>
+          <div class="mt-4"><div class="ci-review"></div></div>
+        </section>
+
+        <!-- ═══ Slide 5: Feedback ═════════════════════════════ -->
+        <section class="slide" id="feedback" data-label="KPI 3. 고객 피드백 프로세스" data-bu="SaaS B/U" data-team="CX팀">
+          <div class="fb-hero pt-4 pb-2"></div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
+            <div class="fb-kpi-1"></div><div class="fb-kpi-2"></div>
+            <div class="fb-kpi-3"></div><div class="fb-kpi-4"></div>
+          </div>
+          <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
+            <div class="fb-sec-nps"></div>
+            <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-3 mt-3">
+              <div class="def-card">
+                <div class="def-card__title">2026년 1분기 NPS 분포</div>
+                <div class="def-card__sub">유료 사용자 대상 분기별 form 발송</div>
+                <div class="hbar mt-3">
+                  <div class="hbar__seg hbar__seg--good"    style="width:54%">54%</div>
+                  <div class="hbar__seg hbar__seg--neutral" style="width:24%">24%</div>
+                  <div class="hbar__seg hbar__seg--bad"     style="width:22%">22%</div>
+                </div>
+                <div class="hbar-legend">
+                  <span class="hbar-legend__item"><span class="hbar-legend__dot" style="background:var(--mw-success)"></span>추천자 (9~10점)<span class="hbar-legend__sub">업계 우수 ≥70%</span></span>
+                  <span class="hbar-legend__item"><span class="hbar-legend__dot" style="background:var(--mw-text-muted)"></span>중립자 (7~8점)</span>
+                  <span class="hbar-legend__item"><span class="hbar-legend__dot" style="background:var(--mw-danger)"></span>비추천 (0~6점)</span>
+                </div>
+              </div>
+              <div class="def-card">
+                <div class="def-card__title">NPS 정의</div>
+                <div class="def-card__sub">Net Promoter Score · 분기별</div>
+                <div class="def-card__row"><div class="def-card__key">정의</div><div class="def-card__val">"우리 서비스를 동료에게 추천하시겠습니까?" → 충성도·성장 잠재력</div></div>
+                <div class="def-card__row"><div class="def-card__key">측정</div><div class="def-card__val">1~10점 form, 분기별 발송</div></div>
+                <div class="def-card__row"><div class="def-card__key">담당</div><div class="def-card__val">박진웅 · 1차 발송 완료</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
+            <div class="fb-sec-csat"></div>
+            <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-3 mt-3">
+              <div class="table-block">
+                <div class="table-toolbar">
+                  <div>
+                    <span class="table-toolbar__title">CSAT 담당자별 응대 만족도</span>
+                    <span class="table-toolbar__sub">4월 현재 · 만점 2.0 / 목표 1.8</span>
+                  </div>
+                </div>
+                <div class="fb-csat-table scroll-table" style="height:240px"></div>
+              </div>
+              <div class="def-card">
+                <div class="def-card__title">CSAT 정의</div>
+                <div class="def-card__sub">Customer Satisfaction · 상시</div>
+                <div class="def-card__row"><div class="def-card__key">정의</div><div class="def-card__val">"방금 경험한 상담에 얼마나 만족?"</div></div>
+                <div class="def-card__row"><div class="def-card__key">도구</div><div class="def-card__val">HubSpot 인박스 · 상시 표시</div></div>
+                <div class="def-card__row"><div class="def-card__key">담당</div><div class="def-card__val">CX 전체</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
+            <div class="fb-sec-issues"></div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+              <div class="issue-card issue-card--danger">
+                <div class="issue-card__head"><span class="issue-card__icon">🔍</span><span class="issue-card__label">검색 기능</span><span class="issue-card__tag">전 구간 공통</span></div>
+                <div class="issue-card__sub">추천/중립/비추천 모든 점수 구간에서 반복 등장한 불편 이슈</div>
+              </div>
+              <div class="issue-card issue-card--warning">
+                <div class="issue-card__head"><span class="issue-card__icon">⚡</span><span class="issue-card__label">속도 / 성능</span><span class="issue-card__tag">헤비유저</span></div>
+                <div class="issue-card__sub">사용량 많은 고객의 이탈 위험 신호. 우선 대응 필요</div>
+              </div>
+              <div class="issue-card issue-card--info">
+                <div class="issue-card__head"><span class="issue-card__icon">🔔</span><span class="issue-card__label">알림 불편</span><span class="issue-card__tag">설정</span></div>
+                <div class="issue-card__sub">불필요 알림 과다 — 알림 설정 세분화 필요</div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4"><div class="fb-review"></div></div>
+        </section>
+
+        <!-- ═══ Slide 6: Dev Progress ═════════════════════════ -->
+        <section class="slide" id="dev-progress" data-label="KPI 1. 플랫폼 매출 확대" data-bu="SaaS B/U" data-team="AX &amp; 플랫폼팀">
+          <div class="dp-hero pt-4 pb-2"></div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2">
+            <div class="dp-kpi-1"></div><div class="dp-kpi-2"></div><div class="dp-kpi-3"></div>
+          </div>
+          <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
+            <div class="dp-sec-01"></div>
+            <div class="rag-row dp-rag-row"></div>
+            <div class="dp-table mt-3 scroll-table" style="height:320px"></div>
+          </div>
+          <div class="mt-4"><div class="dp-review"></div></div>
+        </section>
+
+        <!-- ═══ Slide 9: AI & 자동화 ══════════════════════════ -->
+        <section class="slide" id="ai-auto" data-label="KPI 2. AI &amp; 업무 자동화" data-bu="SaaS B/U" data-team="AX &amp; 플랫폼팀">
+          <div class="ai-hero pt-4 pb-2"></div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2">
+            <div class="ai-kpi-1"></div><div class="ai-kpi-2"></div><div class="ai-kpi-3"></div>
+          </div>
+          <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
+            <div class="ai-sec-01"></div>
+            <div class="rag-row ai-rag-row"></div>
+            <div class="ai-table mt-3 scroll-table" style="height:280px"></div>
+          </div>
+          <div class="mt-4"><div class="ai-review"></div></div>
+        </section>
+
+        <!-- ═══ Slide 10: Enterprise 수주 요약 ════════════════ -->
+        <section class="slide" id="ent-summary" data-label="수주 실적 요약" data-bu="Enterprise B/U" data-team="컨설팅팀">
+          <div class="ent-hero pt-4 pb-2"></div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
+            <div class="ent-kpi-1"></div><div class="ent-kpi-2"></div>
+            <div class="ent-kpi-3"></div><div class="ent-kpi-4"></div>
+          </div>
+          <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
+            <div class="ent-sec-01"></div>
+            <div class="ent-table mt-3 scroll-table" style="height:320px"></div>
+          </div>
+          <div class="mt-4"><div class="ent-review"></div></div>
+        </section>
+
+        <!-- ═══ Slide 11: Revenue Summary ══════════════════════ -->
+        <section class="slide" id="revenue-summary">
+          <div class="rs-hero pt-4 pb-2"></div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
+            <div class="rs-kpi-1"></div><div class="rs-kpi-2"></div>
+            <div class="rs-kpi-3"></div><div class="rs-kpi-4"></div>
+          </div>
+          <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
+            <div class="rs-sec-01"></div>
+            <div class="rs-bar mt-3"></div>
+          </div>
+          <div class="mt-4"><div class="rs-review"></div></div>
+        </section>
+
+      </div><!-- /slides-wrap -->
+    </main>
+    </div>
+
+    <!-- ── Deck floating nav (SPA — managed by JS) ───────────── -->
+    <a class="wrn wrn--prev" id="deck-prev" style="display:none" href="#" aria-label="이전 슬라이드">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </a>
+    <a class="wrn wrn--next" id="deck-next" style="display:none" href="#" aria-label="다음 슬라이드">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+    <div class="wrn-bar">
+      <span class="wrn-bar__indicator" id="deck-ind">1 <span class="wrn-bar__sep">/</span> 11</span>
+      <span class="wrn-bar__divider"></span>
+      <button class="wrn-bar__btn" id="deck-code" type="button" title="코드보기 (C)" aria-label="코드보기">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      </button>
+      <button class="wrn-bar__btn" id="deck-fs" type="button" title="전체화면 (F)" aria-label="전체화면 토글">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 21 3 21 3 15"/><polyline points="15 3 21 3 21 9"/><line x1="3" y1="21" x2="10" y2="14"/><line x1="14" y1="10" x2="21" y2="3"/></svg>
+      </button>
+    </div>
+
+    <script>
+      window.addEventListener('maging:ready', () => {
+        const { kpiCard, sectionCover, pageHeader, sectionHead, activityTable, barChart, lineChart, alertBanner, insightCard, ragChip, shareBar } = Maging;
+
+        // [단위] → <span class="mw-unit">단위</span>
+        const u = s => String(s).replace(/\[(.+?)\]/g, '<span class="mw-unit">$1</span>');
+        const kpiCards = (root, cards) => cards.forEach(([cls, label, value, delta, dGW]) => {
+          const cfg = { label, value: u(value), valueHTML: true };
+          if (delta != null) { cfg.delta = delta; cfg.deltaGoodWhen = dGW; }
+          kpiCard(root.querySelector('.' + cls), cfg);
+        });
+
+        function mountCover() {
+          const root = document.getElementById('cover');
+          sectionCover(root.querySelector('.cover-host'), {
+            style: 'classic',
+            kicker: 'WEEKLY REPORT · 2026년 4월 4주차',
+            title: 'SaaS 주간보고',
+            subtitle: 'SaaS B/U · Enterprise B/U',
+            brand: 'flow.team',
+            meta: '기준일 2026.04.27(월)',
+          });
+        }
+
+        function mountSalesKpi() {
+          const root   = document.getElementById('sales-kpi');
+          const months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+
+          const targets = {
+            신규:           [99000000, 175000000, 142000000, 223000000, 290000000, 248000000, 385000000, 332000000, 227000000, 173000000, 479000000, 227000000],
+            기고객:         [522199453, 685150178, 523438974, 633610647, 567273854, 641914284, 653631582, 545451915, 547977217, 539356007, 660862069, 532267794],
+            '추가/업셀링':  [3971153, 25120771, 3741348, 29371700, 2957400, 29702595, 3038185, 25899600, 41308220, 19786097, 19573620, 11505459],
+            'Add-On':       [0, 15000000, 28671730, 52878844, 68766210, 58806966, 91293072, 78725454, 47424972, 41022601, 113582808, 53827343],
+          };
+          const actuals = {
+            신규:           [100308000, 109067000, 71941000, null, null, null, null, null, null, null, null, null],
+            기고객:         [597009572, 576833422, 518279322, null, null, null, null, null, null, null, null, null],
+            '추가/업셀링':  [15527600, 21424500, 16852100, null, null, null, null, null, null, null, null, null],
+            'Add-On':       [6000000, 0, 8432000, null, null, null, null, null, null, null, null, null],
+          };
+
+          const fmtKPI = (v) => (v / 1e8).toFixed(2) + '<span class="mw-unit"> 억원</span>';
+          const kpiData = [
+            { label: '3월 신규 매출 · 목표 1.42억원',     value: 71941000,  target: 142000000  },
+            { label: '1Q 신규 매출 · 목표 4.16억원',      value: 281316000, target: 416000000  },
+            { label: '상반기 신규 매출 · 목표 11.7억원',  value: 281316000, target: 1170000000 },
+            { label: '2026 누적 신규 매출 · 목표 30억원', value: 322000000, target: 3000000000 },
+          ];
+          ['sk-kpi-1','sk-kpi-2','sk-kpi-3','sk-kpi-4'].forEach((cls, i) => {
+            kpiCard(root.querySelector('.' + cls), {
+              label: kpiData[i].label,
+              value: fmtKPI(kpiData[i].value), valueHTML: true,
+              delta: (kpiData[i].value / kpiData[i].target * 100) - 100, deltaGoodWhen: 'positive',
+            });
+          });
+
+          pageHeader(root.querySelector('.sk-hero'), {
+            kicker: 'KPI 1 · 신규 매출 30억 달성',
+            title: '월별 매출 현황',
+            subtitle: 'SaaS 컨설팅 & CSM팀',
+            meta: 'SaaS B/U · 기준일 2026.04.27(월)',
+          });
+          sectionHead(root.querySelector('.sk-sec-01'), { index: '01', kicker: 'MONTHLY', title: '월별 목표 · 실적' });
+
+          const toRows = obj => Object.entries(obj).map(([name, data]) => ({ name, data }));
+
+          Maging.monthlyTable(root.querySelector('.sk-block-target'), {
+            title: '2026년 목표 매출', sub: '월별 카테고리 합계',
+            categories: months,
+            rows: toRows(targets),
+            summaryRow: '합계', unitToggle: true, viewToggle: true, defaultUnit: '만원',
+          });
+          Maging.monthlyTable(root.querySelector('.sk-block-actual'), {
+            title: '2026년 실적', sub: '4월 이후 데이터 미입력',
+            categories: months,
+            rows: toRows(actuals),
+            summaryRow: '합계', unitToggle: true, viewToggle: true, defaultUnit: '만원',
+          });
+
+          alertBanner(root.querySelector('.sk-review'), {
+            type: 'info', icon: '📋', title: '리뷰',
+            message: '전체 매출은 1분기 목표 대비 92.5% 달성. 신규 매출은 1분기 목표 대비 약 1.3억원 미달 — 4월 신규 회복이 우선 과제.',
+          });
+        }
+
+        function mountRetention() {
+          const root   = document.getElementById('retention');
+          const months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+
+          const data2026 = [
+            { name: '해지',     unit: '건', values: [174, 138, 135, 89, null, null, null, null, null, null, null, null], total: 312 },
+            { name: '신규',     unit: '건', values: [117, 89,  92,  null, null, null, null, null, null, null, null, null], total: 206 },
+            { name: '유료전체', unit: '개', values: [4662, 4621, 4592, null, null, null, null, null, null, null, null, null], total: 4621 },
+            { name: '해지비율', unit: '%',  values: ['149%', '156%', '146%', null, null, null, null, null, null, null, null, null], total: '153%' },
+            { name: '해지율',   unit: '%',  values: ['3.7%', '3.0%', '2.9%', null, null, null, null, null, null, null, null, null], total: '3.2%' },
+          ];
+          const data2025 = [
+            { name: '해지', unit: '건', values: [185, 164, 147, 146, 121, 134, 121, 111, 133, 106, 118, 140], total: 1598 },
+            { name: '신규', unit: '건', values: [126, 173, 146, 162, 132, 149, 169, 142, 139, 96,  114, 134], total: 1682 },
+            { name: '비율', unit: '%',  values: ['144%','95%','104%','90%','91%','89%','72%','78%','76%','110%','103%','105%'], total: '95%' },
+          ];
+
+          pageHeader(root.querySelector('.ret-hero'), {
+            kicker: 'KPI 1 · 기고객 리텐션 50% 향상', title: '월별 해지 및 순증감 현황',
+            subtitle: 'SaaS CX팀 — 2026년 4월 4주차', meta: 'SaaS 지원센터 · 기준일 2026.04.27(월)',
+          });
+          kpiCards(root, [
+            ['ret-kpi-1','3월 해지율 · 전년 동월 3.3%',        '2.9[%]',    -3.4, 'negative'],
+            ['ret-kpi-2','3월 해지비율 · 신규 92 < 해지 135',  '146[%]',    -10,  'negative'],
+            ['ret-kpi-3','3월 유료 기업 수 · 2월 4,621 → 3월', '4,592[개]', -0.6, 'positive'],
+          ]);
+
+          sectionHead(root.querySelector('.ret-sec-01'), { index: '01', kicker: 'CHURN & GROWTH', title: '월별 해지·신규 추이' });
+
+          const fmtCell = (v) => v == null ? '<span style="color:var(--mw-text-muted)">−</span>' : typeof v === 'string' ? v : v.toLocaleString();
+          const cols = () => [
+            { key: 'name', label: '구분', align: 'left', render: (v, row) => v + (row.unit ? ' <span class="row-unit">(' + row.unit + ')</span>' : '') },
+            ...months.map((m, i) => ({ key: 'm' + i, label: m, align: 'right', render: fmtCell })),
+            { key: 'total', label: '합계', align: 'right', render: (v) => '<strong>' + fmtCell(v) + '</strong>' },
+          ];
+          const toRows = (defs) => defs.map(d => { const r = { name: d.name, unit: d.unit, total: d.total }; d.values.forEach((v, i) => r['m' + i] = v); return r; });
+
+          activityTable(root.querySelector('.ret-table-2026'), { columns: cols(), rows: toRows(data2026) });
+          activityTable(root.querySelector('.ret-table-2025'), { columns: cols(), rows: toRows(data2025) });
+
+          alertBanner(root.querySelector('.ret-review'), {
+            type: 'info', icon: '📋', title: '리뷰',
+            message: '3월 해지율 2.9%로 전월 -0.1%p 개선. 그러나 신규 92 < 해지 135 — 4월 신규 회복이 우선 과제.',
+          });
+        }
+
+        function mountCustomerInsight() {
+          const root = document.getElementById('customer-insight');
+          pageHeader(root.querySelector('.ci-hero'), {
+            kicker: 'KPI 2 · 핵심고객 관계관리', title: '핵심고객 현황 및 인사이트',
+            subtitle: 'SaaS CX팀 — 2026년 4월 4주차', meta: 'SaaS B/U · 기준일 2026.04.27(월)',
+          });
+          kpiCards(root, [
+            ['ci-kpi-1','관리 대상 핵심고객',         '42[개사]', 2,   'positive'],
+            ['ci-kpi-2','평균 월정액 ARR',             '28[만원]', 3.7, 'positive'],
+            ['ci-kpi-3','이탈위험 고객 (EBR 미진행)', '7[개사]',  2,   'negative'],
+          ]);
+
+          sectionHead(root.querySelector('.ci-sec-01'), { index: '01', kicker: 'KEY INSIGHTS', title: '핵심 고객 인사이트' });
+
+          insightCard(root.querySelector('.ci-card-1'), {
+            icon: '🏆', status: 'accent', title: '상위 5개사 ARR 집중도', meta: '총 매출 23%',
+            bullets: ['(주)다온티앤씨 · 38만원/월 · 3년 갱신 예정','에이블씨엔씨 · 31만원/월 · 증설 요청 접수','서울반도체 · 28만원/월 · QBR 5월 예정'],
+            highlight: '상위 5개사 이탈 시 월 155만원 손실 — 전담 CSM 배정 필요',
+          });
+          insightCard(root.querySelector('.ci-card-2'), {
+            icon: '⚠️', status: 'red', title: '이탈위험 고객 7개사', meta: '4월 EBR 미완료', tag: '긴급',
+            bullets: ['로그인 30일 이상 없음 3개사 — 즉시 컨택 필요','갱신 60일 내 도래 4개사 — 리뷰 미진행'],
+            highlight: '4월 말까지 7개사 EBR 완료 필수 — 담당: 조윤경 책임',
+          });
+          insightCard(root.querySelector('.ci-card-3'), {
+            icon: '📈', status: 'green', title: '업셀링 파이프라인', meta: '진행 중 12개사',
+            bullets: ['사용자 수 50% 이상 증가 6개사 → 요금제 업그레이드 제안','Add-On 미구독 고객 중 고사용률 4개사 → 번들 제안 준비'],
+            highlight: '전환 예상 월 추가 매출 약 42만원',
+          });
+          insightCard(root.querySelector('.ci-card-4'), {
+            icon: '✅', status: 'green', title: '고객 성공 사례 — D사', meta: '업무시간 -31%', tag: '성과 확인',
+            bullets: ['Flow 도입 3개월 — 결재 프로세스 디지털화 완료','사용자 148명 → 210명 증설 완료'],
+            highlight: '도입 ROI 리포트 완성 → 영업팀 레퍼런스 공유 예정',
+          });
+
+          alertBanner(root.querySelector('.ci-review'), {
+            type: 'info', icon: '📋', title: '리뷰',
+            message: '이탈위험 7개사 EBR 4월 말 완료 목표. 업셀링 파이프라인 12개사 전환 시 월 +42만원 매출 효과.',
+          });
+        }
+
+        function mountFeedback() {
+          const root = document.getElementById('feedback');
+          pageHeader(root.querySelector('.fb-hero'), {
+            kicker: 'KPI 3 · 고객 피드백 프로세스 구축', title: 'NPS · CSAT 측정 체계',
+            subtitle: 'SaaS B/U — 2026년 4월 4주차', meta: 'CX팀 · 기준일 2026.04.27(월)',
+          });
+          kpiCards(root, [
+            ['fb-kpi-1','1Q NPS 추천 비율 · 업계 우수 ≥70%','54[%]',        -16, 'positive'],
+            ['fb-kpi-2','1Q NPS 중립자',                     '24[%]',        null, null],
+            ['fb-kpi-3','1Q NPS 비추천자',                   '22[%]',        null, null],
+            ['fb-kpi-4','4월 CSAT 현재 · 목표 1.8',         '1.66[ / 2.0]', 0,   'positive'],
+          ]);
+
+          sectionHead(root.querySelector('.fb-sec-nps'),    { index: '01', kicker: 'NPS',        title: '순수 추천 지수 (분기)' });
+          sectionHead(root.querySelector('.fb-sec-csat'),   { index: '02', kicker: 'CSAT',       title: '응대 만족도 (상시)' });
+          sectionHead(root.querySelector('.fb-sec-issues'), { index: '03', kicker: 'TOP ISSUES', title: '최우선 해결 과제 — 전 구간 공통 반복' });
+
+          activityTable(root.querySelector('.fb-csat-table'), {
+            columns: [
+              { key: 'who',   label: '담당자', align: 'left' },
+              { key: 'score', label: '점수 (만점 2.0)', align: 'right',
+                render: (v) => '<span style="font-weight:500;color:' + (v >= 1.8 ? 'var(--mw-success)' : 'var(--mw-danger)') + '">' + v.toFixed(2) + '</span>' },
+              { key: 'gap', label: '목표 대비', align: 'right',
+                render: (_v, row) => { const d = row.score - 1.8; return '<span style="color:var(--mw-text-muted)">' + (d >= 0 ? '+' : '') + d.toFixed(2) + '</span>'; } },
+            ],
+            rows: [{ who: '박진웅 팀장', score: 1.84 },{ who: '신현민 책임', score: 1.85 },{ who: '강지우 책임', score: 1.75 },{ who: '조윤경 책임', score: 1.25 }],
+          });
+
+          alertBanner(root.querySelector('.fb-review'), {
+            type: 'info', icon: '📋', title: '리뷰',
+            message: '1Q NPS 추천 54%로 업계 우수(70%) 미달. CSAT 4월 1.66점, 목표 대비 -0.14점. 전 구간 공통 이슈(검색·속도·알림) 우선 대응 필요.',
+          });
+        }
+
+        function mountDevProgress() {
+          const root = document.getElementById('dev-progress');
+          pageHeader(root.querySelector('.dp-hero'), {
+            kicker: 'KPI 1 · 플랫폼 매출 확대', title: '개발 진행 현황',
+            subtitle: 'AX & 플랫폼팀 — 2026년 4월 4주차', meta: 'SaaS B/U · 기준일 2026.04.27(월)',
+          });
+          kpiCards(root, [
+            ['dp-kpi-1','이번 주 배포 건수',  '3[건]',    0,    'positive'],
+            ['dp-kpi-2','4월 완료 피처 누적', '18[개]',   12.5, 'positive'],
+            ['dp-kpi-3','API 가용성 (4월)',   '99.2[%]', -0.1, 'positive'],
+          ]);
+
+          sectionHead(root.querySelector('.dp-sec-01'), { index: '01', kicker: 'SPRINT STATUS', title: '4월 4주차 스프린트 현황' });
+
+          const ragItems = [
+            { label: 'API 게이트웨이 v2',    status: 'green'  },
+            { label: '플로우 마켓 연동',      status: 'green'  },
+            { label: '사용량 분석 대시보드',  status: 'yellow' },
+            { label: '멀티테넌트 격리',       status: 'yellow' },
+            { label: '엔터프라이즈 SSO',      status: 'red'    },
+            { label: 'AI 자동화 파이프라인',  status: 'gray'   },
+          ];
+          const ragRow = root.querySelector('.dp-rag-row');
+          ragItems.forEach(item => { const s = document.createElement('span'); ragRow.appendChild(s); ragChip(s, item); });
+
+          const statusColor = { '완료': 'var(--mw-success)', '진행': 'var(--mw-warning)', '지연': 'var(--mw-danger)', '대기': 'var(--mw-text-muted)' };
+          activityTable(root.querySelector('.dp-table'), {
+            columns: [
+              { key: 'feature', label: '피처',    align: 'left' },
+              { key: 'owner',   label: '담당',    align: 'left' },
+              { key: 'status',  label: '상태',    align: 'left', render: (v) => '<span style="color:' + (statusColor[v] || 'var(--mw-text)') + ';font-weight:500">' + v + '</span>' },
+              { key: 'due',     label: '완료예정', align: 'right' },
+              { key: 'note',    label: '비고',    align: 'left'  },
+            ],
+            rows: [
+              { feature: 'API 게이트웨이 v2',    owner: '김태현', status: '완료', due: '4/25', note: '배포 완료 · 레이턴시 -18%' },
+              { feature: '플로우 마켓 연동',      owner: '이수진', status: '완료', due: '4/25', note: '파트너사 3곳 온보딩 완료' },
+              { feature: '사용량 분석 대시보드',  owner: '박민호', status: '진행', due: '5/2',  note: '차트 UI 리뷰 중' },
+              { feature: '멀티테넌트 격리',       owner: '정유진', status: '진행', due: '5/9',  note: 'DB 스키마 설계 검토 중' },
+              { feature: '엔터프라이즈 SSO',      owner: '김태현', status: '지연', due: '4/18', note: '인증 서버 이슈 — 재일정 5/16' },
+              { feature: 'AI 자동화 파이프라인',  owner: '이수진', status: '대기', due: 'TBD',  note: '요구사항 정의 중' },
+            ],
+          });
+
+          alertBanner(root.querySelector('.dp-review'), {
+            type: 'warning', icon: '📋', title: '리뷰',
+            message: '엔터프라이즈 SSO 1주 지연, 5/16 재완료 목표. API 게이트웨이 개선으로 응답속도 -18% 달성 — 플랫폼 매출 연계 효과 모니터링 필요.',
+          });
+        }
+
+        function mountPricing() {
+          const root = document.getElementById('pricing');
+          pageHeader(root.querySelector('.pr-hero'), {
+            kicker: 'KPI 2 · 신규상품 매출 6.5억 달성', title: '신규상품 라인업 매출 현황',
+            subtitle: 'SaaS 컨설팅 & CSM팀 — 2026년 4월 4주차', meta: 'SaaS B/U · 기준일 2026.04.27(월)',
+          });
+          kpiCards(root, [
+            ['pr-kpi-1','Q1 신규상품 매출 · 목표 1.6억','1.23[ 억원]', -23.1, 'positive'],
+            ['pr-kpi-2','4월 파이프라인',                '0.48[ 억원]',  12.4, 'positive'],
+            ['pr-kpi-3','활성 신규상품 고객',             '34[개사]',      6.2, 'positive'],
+            ['pr-kpi-4','월 평균 계약 단가',              '361[만원]',     3.1, 'positive'],
+          ]);
+          sectionHead(root.querySelector('.pr-sec-01'), { index: '01', kicker: 'PRODUCT REVENUE', title: '신규상품별 매출 현황' });
+          activityTable(root.querySelector('.pr-table'), {
+            columns: [
+              { key: 'product', label: '상품명',     align: 'left'  },
+              { key: 'type',    label: '유형',       align: 'left'  },
+              { key: 'jan',     label: '1월',        align: 'right' },
+              { key: 'feb',     label: '2월',        align: 'right' },
+              { key: 'mar',     label: '3월',        align: 'right' },
+              { key: 'pipeline',label: '4월 파이프라인', align: 'right' },
+              { key: 'total',   label: 'Q1 합계',    align: 'right', render: (v) => '<strong>' + v + '</strong>' },
+              { key: 'note',    label: '비고',       align: 'left'  },
+            ],
+            rows: [
+              { product: 'Flow AI 어시스턴트',   type: 'Add-On',   jan: '1,200만', feb: '2,100만', mar: '1,800만', pipeline: '2,400만', total: '5,100만', note: '1Q 목표 초과 달성' },
+              { product: '업무 자동화 플러그인', type: 'Add-On',   jan: '900만',   feb: '1,400만', mar: '1,200만', pipeline: '1,800만', total: '3,500만', note: '파이프라인 3건 협상 중' },
+              { product: 'HR 전자결재 모듈',     type: '모듈',     jan: '600만',   feb: '800만',   mar: '750만',   pipeline: '600만',   total: '2,150만', note: '공공기관 2곳 PoC' },
+              { product: '모바일 고급플랜',      type: '요금제',   jan: '400만',   feb: '550만',   mar: '480만',   pipeline: '450만',   total: '1,430만', note: '' },
+              { product: 'API 엔터프라이즈',     type: 'B2B',      jan: '0',       feb: '0',       mar: '0',       pipeline: '1,550만', total: '0',       note: '5월 계약 체결 예정' },
+              { product: '합계',                 type: '',         jan: '3,100만', feb: '4,850만', mar: '4,230만', pipeline: '6,800만', total: '12,180만', note: '' },
+            ],
+          });
+          alertBanner(root.querySelector('.pr-review'), {
+            type: 'warning', icon: '📋', title: '리뷰',
+            message: 'Q1 신규상품 매출 1.23억원으로 목표(1.6억) 대비 23.1% 부진. API 엔터프라이즈 5월 계약 체결 시 회복 가능. 4월 파이프라인 0.48억원 집중 클로징 필요.',
+          });
+        }
+
+        function mountEducation() {
+          const root = document.getElementById('education');
+          pageHeader(root.querySelector('.ed-hero'), {
+            kicker: 'KPI 3 · 고객 교육 강화', title: '고객 교육 프로그램 현황',
+            subtitle: 'SaaS 컨설팅 & CSM팀 — 2026년 4월 4주차', meta: 'SaaS B/U · 기준일 2026.04.27(월)',
+          });
+          kpiCards(root, [
+            ['ed-kpi-1','4월 교육 세션수 · 목표 12회','9[회]',        -25,  'positive'],
+            ['ed-kpi-2','누적 참여 고객사 · 4월 기준', '128[개사]',    14.3, 'positive'],
+            ['ed-kpi-3','교육 만족도 · 5점 만점',      '4.3[ / 5.0]',  1.2, 'positive'],
+          ]);
+          sectionHead(root.querySelector('.ed-sec-01'), { index: '01', kicker: 'EDUCATION LOG', title: '4월 교육 세션 현황' });
+          activityTable(root.querySelector('.ed-table'), {
+            columns: [
+              { key: 'date',      label: '일자',    align: 'left'  },
+              { key: 'topic',     label: '과정명',  align: 'left'  },
+              { key: 'type',      label: '유형',    align: 'left'  },
+              { key: 'attendees', label: '참여 (명)', align: 'right' },
+              { key: 'score',     label: '만족도',  align: 'right', render: (v) => '<span style="color:' + (v >= 4.0 ? 'var(--mw-success)' : 'var(--mw-warning)') + ';font-weight:500">' + v.toFixed(1) + '</span>' },
+              { key: 'owner',     label: '담당',    align: 'left'  },
+              { key: 'note',      label: '비고',    align: 'left'  },
+            ],
+            rows: [
+              { date: '4/2',  topic: 'Flow 기초 온보딩',    type: '웨비나',   attendees: 42, score: 4.5, owner: '김지현', note: '신규 도입 고객사 집중' },
+              { date: '4/7',  topic: '업무 자동화 활용법',  type: '온라인',   attendees: 28, score: 4.2, owner: '박민호', note: '' },
+              { date: '4/10', topic: 'HR 결재 모듈 심화',   type: '오프라인', attendees: 15, score: 4.6, owner: '이수진', note: '현장 Q&A 호평' },
+              { date: '4/16', topic: '관리자 설정 마스터',  type: '웨비나',   attendees: 36, score: 4.1, owner: '김지현', note: '' },
+              { date: '4/22', topic: 'AI 어시스턴트 입문',  type: '온라인',   attendees: 51, score: 4.4, owner: '박민호', note: 'AI 기능 첫 교육' },
+              { date: '4/25', topic: 'API 연동 개발자 세션', type: '오프라인', attendees: 12, score: 3.9, owner: '정유진', note: '기술 난도 피드백' },
+            ],
+          });
+          alertBanner(root.querySelector('.ed-review'), {
+            type: 'warning', icon: '📋', title: '리뷰',
+            message: '4월 세션 9회 진행으로 목표(12회) 대비 25% 부진. 온라인 웨비나 추가 편성 검토 필요. 만족도 4.3점으로 목표 달성 중.',
+          });
+        }
+
+        function mountAiAuto() {
+          const root = document.getElementById('ai-auto');
+          pageHeader(root.querySelector('.ai-hero'), {
+            kicker: 'KPI 2 · AI & 업무 자동화', title: 'AI 기능 배포 및 자동화 현황',
+            subtitle: 'AX & 플랫폼팀 — 2026년 4월 4주차', meta: 'SaaS B/U · 기준일 2026.04.27(월)',
+          });
+          kpiCards(root, [
+            ['ai-kpi-1','배포 완료 AI 기능',         '7[개]',       0,    'positive'],
+            ['ai-kpi-2','자동화 절감 업무시간 (4월)', '1,240[시간]', 18.2, 'positive'],
+            ['ai-kpi-3','AI 기능 활성 사용률',        '31[%]',       4.1,  'positive'],
+          ]);
+          sectionHead(root.querySelector('.ai-sec-01'), { index: '01', kicker: 'AI ROADMAP', title: 'AI 기능 개발 로드맵' });
+          const aiRag = [
+            { label: 'AI 요약 (메시지)',     status: 'green'  },
+            { label: '스마트 분류 태그',     status: 'green'  },
+            { label: 'AI 회의록 초안',       status: 'green'  },
+            { label: '이상 탐지 알림',       status: 'yellow' },
+            { label: 'AI 고객 응대 초안',    status: 'yellow' },
+            { label: '예측 이탈 분석',       status: 'red'    },
+            { label: 'AI 기반 보고서 생성',  status: 'gray'   },
+          ];
+          const aiRow = root.querySelector('.ai-rag-row');
+          aiRag.forEach(item => { const s = document.createElement('span'); aiRow.appendChild(s); ragChip(s, item); });
+          const statusColor = { '운영': 'var(--mw-success)', '베타': 'var(--mw-warning)', '개발': 'var(--mw-accent)', '검토': 'var(--mw-text-muted)' };
+          activityTable(root.querySelector('.ai-table'), {
+            columns: [
+              { key: 'feature', label: 'AI 기능',      align: 'left'  },
+              { key: 'status',  label: '상태',          align: 'left', render: (v) => '<span style="color:' + (statusColor[v] || 'var(--mw-text)') + ';font-weight:500">' + v + '</span>' },
+              { key: 'users',   label: '활성 사용자',  align: 'right' },
+              { key: 'saves',   label: '절감 시간/주', align: 'right' },
+              { key: 'next',    label: '다음 액션',     align: 'left'  },
+            ],
+            rows: [
+              { feature: 'AI 요약 (메시지)',    status: '운영', users: '1,842명', saves: '320시간', next: '요약 품질 A/B 테스트' },
+              { feature: '스마트 분류 태그',    status: '운영', users: '986명',   saves: '180시간', next: '커스텀 태그 확장' },
+              { feature: 'AI 회의록 초안',      status: '운영', users: '573명',   saves: '210시간', next: '음성인식 정확도 개선' },
+              { feature: '이상 탐지 알림',      status: '베타', users: '124명',   saves: '미측정',  next: '5월 전체 배포 예정' },
+              { feature: 'AI 고객 응대 초안',   status: '베타', users: '38명',    saves: '미측정',  next: 'CX팀 내부 검증 중' },
+              { feature: '예측 이탈 분석',      status: '개발', users: '−',       saves: '−',       next: '데이터 파이프라인 구축' },
+            ],
+          });
+          alertBanner(root.querySelector('.ai-review'), {
+            type: 'info', icon: '📋', title: '리뷰',
+            message: '운영 중 AI 기능 3개에서 월 약 1,240시간 절감 효과. 이탈 탐지·응대 초안 5월 전사 배포 목표. 활성 사용률 31% → 2Q 목표 45%.',
+          });
+        }
+
+        function mountEntSummary() {
+          const root = document.getElementById('ent-summary');
+          pageHeader(root.querySelector('.ent-hero'), {
+            kicker: 'Enterprise B/U · 수주 실적 요약', title: '엔터프라이즈 수주 및 파이프라인',
+            subtitle: 'Enterprise 컨설팅팀 — 2026년 4월 4주차', meta: 'Enterprise B/U · 기준일 2026.04.27(월)',
+          });
+          kpiCards(root, [
+            ['ent-kpi-1','Q1 수주 총액 · 목표 8억', '6.2[ 억원]', -22.5, 'positive'],
+            ['ent-kpi-2','4월 클로징 목표',          '2.1[ 억원]',   0,   'positive'],
+            ['ent-kpi-3','활성 파이프라인 건수',      '14[건]',       7.7, 'positive'],
+            ['ent-kpi-4','평균 계약 기간',            '18[개월]',     0,   'positive'],
+          ]);
+          sectionHead(root.querySelector('.ent-sec-01'), { index: '01', kicker: 'PIPELINE', title: '엔터프라이즈 수주 파이프라인' });
+          const stageColor = { '계약완료': 'var(--mw-success)', '협상': 'var(--mw-warning)', 'PoC': 'var(--mw-accent)', '제안': 'var(--mw-text-muted)', '발굴': 'var(--mw-text-muted)' };
+          activityTable(root.querySelector('.ent-table'), {
+            columns: [
+              { key: 'company',  label: '고객사',      align: 'left'  },
+              { key: 'industry', label: '업종',        align: 'left'  },
+              { key: 'stage',    label: '단계',        align: 'left', render: (v) => '<span style="color:' + (stageColor[v] || 'var(--mw-text)') + ';font-weight:500">' + v + '</span>' },
+              { key: 'amount',   label: '예상 계약액', align: 'right' },
+              { key: 'users',    label: '예상 사용자', align: 'right' },
+              { key: 'close',    label: '클로징 예정', align: 'right' },
+              { key: 'owner',    label: '담당 AM',     align: 'left'  },
+            ],
+            rows: [
+              { company: '(주)에스케이네트웍스',  industry: '유통',   stage: '계약완료', amount: '1.8억',  users: '320명', close: '4/15 완료', owner: '최인혁' },
+              { company: 'KDB생명보험',           industry: '금융',   stage: '계약완료', amount: '1.1억',  users: '180명', close: '3/31 완료', owner: '박수연' },
+              { company: '현대모비스',             industry: '제조',   stage: '협상',     amount: '2.3억',  users: '450명', close: '4/30',      owner: '최인혁' },
+              { company: 'CJ대한통운',             industry: '물류',   stage: '협상',     amount: '1.6억',  users: '290명', close: '5/15',      owner: '박수연' },
+              { company: '삼성바이오로직스',       industry: '제약',   stage: 'PoC',      amount: '3.2억',  users: '600명', close: '6월 예상',  owner: '최인혁' },
+              { company: '한국도로공사',           industry: '공공',   stage: 'PoC',      amount: '0.9억',  users: '120명', close: '7월 예상',  owner: '이도형' },
+              { company: '롯데쇼핑',               industry: '유통',   stage: '제안',     amount: '2.8억',  users: '520명', close: 'Q3 목표',   owner: '박수연' },
+              { company: '대한항공',               industry: '항공',   stage: '발굴',     amount: '미정',   users: '미정',  close: 'TBD',       owner: '이도형' },
+            ],
+          });
+          alertBanner(root.querySelector('.ent-review'), {
+            type: 'warning', icon: '📋', title: '리뷰',
+            message: 'Q1 수주 6.2억으로 목표(8억) 대비 22.5% 부진. 현대모비스·CJ대한통운 4~5월 클로징 집중 필요. 삼성바이오로직스 3.2억 규모 PoC 진행 중 — 2Q 최대 딜.',
+          });
+        }
+
+        function mountRevenueSummary() {
+          const root = document.getElementById('revenue-summary');
+          pageHeader(root.querySelector('.rs-hero'), {
+            kicker: '2026 매출 총괄 · 4월 4주차', title: 'SaaS B/U 전체 매출 현황',
+            subtitle: 'Q1 실적 기준 · 신규 + 기고객 + 추가/업셀링 + Add-On',
+            meta: 'SaaS B/U · 기준일 2026.04.27(월)',
+          });
+
+          const q1New    = 281316000;
+          const q1Exist  = 1692122316;
+          const q1Upsell = 53804200;
+          const q1Addon  = 14432000;
+          const q1Total  = q1New + q1Exist + q1Upsell + q1Addon;
+          const fmt = (v) => (v / 1e8).toFixed(2) + '<span class="mw-unit"> 억원</span>';
+
+          kpiCards(root, [
+            ['rs-kpi-1','Q1 총매출 · 목표 달성률',  fmt(q1Total),            -7.5,  'positive'],
+            ['rs-kpi-2','Q1 신규 · 목표 4.16억원',  fmt(q1New),             -32.4,  'positive'],
+            ['rs-kpi-3','Q1 기고객',                fmt(q1Exist),             2.1,  'positive'],
+            ['rs-kpi-4','Q1 추가/업셀 + Add-On',    fmt(q1Upsell + q1Addon), -5.8,  'positive'],
+          ]);
+
+          sectionHead(root.querySelector('.rs-sec-01'), { index: '01', kicker: 'Q1 BREAKDOWN', title: 'Q1 매출 구성 비율' });
+
+          shareBar(root.querySelector('.rs-bar'), {
+            segments: [
+              { label: '기고객',      value: q1Exist,  sub: Math.round(q1Exist  / q1Total * 100) + '%', status: 'gray',   color: 'var(--mw-accent)' },
+              { label: '신규',        value: q1New,    sub: Math.round(q1New    / q1Total * 100) + '%', status: 'green'  },
+              { label: '추가/업셀링', value: q1Upsell, sub: Math.round(q1Upsell / q1Total * 100) + '%', status: 'yellow' },
+              { label: 'Add-On',     value: q1Addon,  sub: Math.round(q1Addon  / q1Total * 100) + '%', status: 'gray'   },
+            ],
+            height: 48,
+          });
+
+          alertBanner(root.querySelector('.rs-review'), {
+            type: 'warning', icon: '📊', title: '리뷰',
+            message: 'Q1 총매출 20.4억원. 신규 2.8억원으로 목표(4.2억원) 대비 -32.4% 부진. 기고객 16.9억원 안정적 유지. 2Q 신규 파이프라인 강화 필요.',
+          });
+        }
+
+        window.DECK_MOUNT = {
+          cover:               mountCover,
+          'sales-kpi':         mountSalesKpi,
+          retention:           mountRetention,
+          'customer-insight':  mountCustomerInsight,
+          feedback:            mountFeedback,
+          'dev-progress':      mountDevProgress,
+          pricing:             mountPricing,
+          education:           mountEducation,
+          'ai-auto':           mountAiAuto,
+          'ent-summary':       mountEntSummary,
+          'revenue-summary':   mountRevenueSummary,
+        };
+      });
+    </script>
+  </body>
+</html>

@@ -4,7 +4,7 @@
  *        <maging-nav active="home" mode="core"></maging-nav>
  *        <maging-footer></maging-footer>
  *
- * mode: "core" | "dashboard" | "landing" — controls mode selector + Demo link
+ * mode: "core" | "dashboard" | "landing" | "weekly" — controls mode selector + Demo link
  */
 
 const VERSION = '0.1.15';
@@ -16,6 +16,7 @@ const MODES = {
   core:      { label: 'Core',         demo: null },
   dashboard: { label: 'Dashboard',    demo: 'dashboard/acme.html' },
   landing:   { label: 'Landing Page', demo: 'landing/startup.html' },
+  weekly:    { label: 'Weekly Report', demo: 'weekly-report/index.html' },
 };
 
 /* ── resolve base path from <script src> ── */
@@ -50,42 +51,46 @@ class MagingNav extends HTMLElement {
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
     </button>
     <div class="mw-site-nav__links">
-      ${link(base + 'index.html', 'Home', 'home')}
+      ${link(base + 'index.html', '홈', 'home')}
       <div class="mw-site-nav__dropdown">
         <button class="mw-site-nav__link mw-site-nav__link--dropdown${active === 'components' ? ' mw-site-nav__link--active' : ''}" type="button">
-          Components <span class="mw-site-nav__caret">▾</span>
+          컴포넌트 <span class="mw-site-nav__caret">▾</span>
         </button>
         <div class="mw-site-nav__menu">
           <a href="${base}components.html?mode=core" class="mw-site-nav__menu-item">
-            <span class="mw-site-nav__menu-label">Core</span>
-            <span class="mw-site-nav__menu-desc">모든 모드 공통 위젯</span>
+            <span class="mw-site-nav__menu-label">대시보드</span>
+            <span class="mw-site-nav__menu-desc">Metrics · Charts · Lists 공통 위젯</span>
           </a>
-          <a href="${base}components.html?mode=dashboard" class="mw-site-nav__menu-item">
-            <span class="mw-site-nav__menu-label">Dashboard</span>
-            <span class="mw-site-nav__menu-desc">Core + 대시보드 전용</span>
+          <a href="${base}components.html?mode=weekly" class="mw-site-nav__menu-item">
+            <span class="mw-site-nav__menu-label">주간보고</span>
+            <span class="mw-site-nav__menu-desc">Section Cover · Insight Card</span>
           </a>
           <a href="${base}components.html?mode=landing" class="mw-site-nav__menu-item">
-            <span class="mw-site-nav__menu-label">Landing Page</span>
-            <span class="mw-site-nav__menu-desc">Core + 랜딩 전용</span>
+            <span class="mw-site-nav__menu-label">랜딩페이지</span>
+            <span class="mw-site-nav__menu-desc">Hero · Pricing · Testimonial</span>
           </a>
         </div>
       </div>
       <div class="mw-site-nav__dropdown">
         <button class="mw-site-nav__link mw-site-nav__link--dropdown${active === 'demo' ? ' mw-site-nav__link--active' : ''}" type="button">
-          Demo <span class="mw-site-nav__caret">▾</span>
+          데모 <span class="mw-site-nav__caret">▾</span>
         </button>
         <div class="mw-site-nav__menu">
           <a href="${base}dashboard/acme.html" class="mw-site-nav__menu-item">
-            <span class="mw-site-nav__menu-label">Dashboard</span>
+            <span class="mw-site-nav__menu-label">대시보드</span>
             <span class="mw-site-nav__menu-desc">ACME 운영 대시보드</span>
           </a>
+          <a href="${base}weekly-report/index.html" class="mw-site-nav__menu-item">
+            <span class="mw-site-nav__menu-label">주간보고</span>
+            <span class="mw-site-nav__menu-desc">SaaS 주간보고 덱 (8 슬라이드)</span>
+          </a>
           <a href="${base}landing/startup.html" class="mw-site-nav__menu-item">
-            <span class="mw-site-nav__menu-label">Landing Page</span>
+            <span class="mw-site-nav__menu-label">랜딩페이지</span>
             <span class="mw-site-nav__menu-desc">maging 랜딩 데모</span>
           </a>
         </div>
       </div>
-      ${link(base + 'stack.html', 'Stack', 'stack')}
+      ${link(base + 'stack.html', '스택', 'stack')}
       <a href="${GITHUB}" target="_blank" rel="noopener" class="mw-site-nav__link" aria-label="GitHub">${GH_ICON}</a>
     </div>
   </div>
@@ -135,10 +140,11 @@ class MagingFooter extends HTMLElement {
       <div class="mw-muted" style="font-size:var(--mw-text-xs);">v${VERSION} · MIT License · Built with ECharts + Tailwind + Pretendard</div>
     </div>
     <div style="display:flex;gap:1.25rem;font-size:var(--mw-text-xs);" class="mw-muted">
-      <a href="${base}components.html" style="color:inherit;">Components</a>
-      <a href="${base}dashboard/acme.html" style="color:inherit;">Dashboard Demo</a>
-      <a href="${base}landing/startup.html" style="color:inherit;">Landing Demo</a>
-      <a href="${base}stack.html" style="color:inherit;">Stack</a>
+      <a href="${base}components.html" style="color:inherit;">컴포넌트</a>
+      <a href="${base}dashboard/acme.html" style="color:inherit;">대시보드 데모</a>
+      <a href="${base}weekly-report/index.html" style="color:inherit;">주간보고 데모</a>
+      <a href="${base}landing/startup.html" style="color:inherit;">랜딩페이지 데모</a>
+      <a href="${base}stack.html" style="color:inherit;">스택</a>
       <a href="${base}llms.txt" style="color:inherit;">llms.txt</a>
       <a href="${GITHUB}" target="_blank" rel="noopener" style="color:inherit;">GitHub</a>
     </div>
@@ -153,9 +159,10 @@ customElements.define('maging-footer', MagingFooter);
 /* ── Theme: handled by inline <script> in <head> to avoid flash ── */
 
 // listen for theme changes (e.g. from Maging.setTheme) and persist
+const _THEME_KEY = 'maging-theme';
 new MutationObserver(() => {
   const current = document.documentElement.getAttribute('data-theme');
-  if (current) localStorage.setItem(THEME_KEY, current);
+  if (current) localStorage.setItem(_THEME_KEY, current);
 }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
 // if Maging is loaded, refresh widgets

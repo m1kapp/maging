@@ -180,7 +180,7 @@
     el = q(el);
     if (!el) return null;
     var data = Object.assign({
-      label: '', value: '', delta: null, sparkline: [],
+      label: '', value: '', valueHTML: false, delta: null, sparkline: [],
       icon: '', compact: false,
       deltaGoodWhen: 'positive',
     }, config || {});
@@ -206,7 +206,7 @@
       el.innerHTML =
         '<div class="mw-kpi__label">' + iconHTML + '<span>' + escapeHTML(data.label) + '</span></div>' +
         '<div class="mw-kpi__row">' +
-          '<div class="mw-kpi__value">' + escapeHTML(data.value) + '</div>' +
+          '<div class="mw-kpi__value">' + (data.valueHTML ? data.value : escapeHTML(data.value)) + '</div>' +
           deltaHTML +
         '</div>' +
         (showSpark ? '<div class="mw-kpi__spark"></div>' : '');
@@ -326,8 +326,55 @@
   function barChart(el, config) {
     return _chartBase(el, config, {
       items: [], horizontal: true,
+      categories: [], series: [], stack: false,
       yFormatter: null, showLabels: true,
-    }, 'bar-chart', function (data, c) {
+    }, 'bar-chart', function (data, c, palette) {
+      // ── Multi-series mode (categories + series, vertical, optional stack) ──
+      if (data.series && data.series.length > 0) {
+        var multi = data.series.map(function (s, i) {
+          var col = s.color || palette[i % palette.length];
+          return {
+            name: s.name,
+            type: 'bar',
+            stack: data.stack ? 'total' : undefined,
+            data: s.data,
+            barWidth: data.stack ? '54%' : undefined,
+            itemStyle: {
+              color: col,
+              borderRadius: data.stack ? 0 : [3, 3, 0, 0],
+            },
+            emphasis: { focus: 'series' },
+          };
+        });
+        return {
+          textStyle: { fontFamily: c.font, color: c.text },
+          grid: { top: data.series.length > 1 ? 32 : 14, right: 16, bottom: 28, left: 52 },
+          legend: data.series.length > 1 ? {
+            top: 0, right: 0,
+            textStyle: { color: c.muted, fontFamily: c.font, fontSize: 11 },
+            icon: 'circle', itemWidth: 6, itemHeight: 6, itemGap: 14,
+            data: data.series.map(function (s) { return s.name; }),
+          } : { show: false },
+          tooltip: Object.assign({ trigger: 'axis', axisPointer: { type: 'shadow' } },
+            baseTooltip(c), data.yFormatter ? { valueFormatter: data.yFormatter } : {}),
+          xAxis: {
+            type: 'category', data: data.categories,
+            axisLine: { lineStyle: { color: c.border, width: 1 } }, axisTick: { show: false },
+            axisLabel: { color: c.muted, fontSize: 11, fontFamily: c.font, margin: 10 },
+          },
+          yAxis: {
+            type: 'value',
+            axisLine: { show: false }, axisTick: { show: false },
+            axisLabel: Object.assign(
+              { color: c.muted, fontSize: 10, fontFamily: c.mono, margin: 8 },
+              data.yFormatter ? { formatter: data.yFormatter } : {}
+            ),
+            splitLine: { lineStyle: { color: c.border, type: [4, 4], opacity: 0.6 } },
+          },
+          series: multi,
+        };
+      }
+      // ── Single-series mode (items, horizontal/vertical) ──
       var labels = data.items.map(function (i) { return i.label; });
       var values = data.items.map(function (i) { return i.value; });
       var tipFmt = data.yFormatter || undefined;
@@ -2313,6 +2360,221 @@
   }
 
   // ==========================================================
+  // Widget: Section Cover — PDF 표지/섹션 디바이더 (큰 타이틀 + accent hero band)
+  // ==========================================================
+  function sectionCover(el, config) {
+    el = q(el);
+    if (!el) return null;
+    var data = Object.assign({
+      kicker: '',           // 작은 라벨 (WEEKLY REPORT · 날짜 등)
+      title: '',            // 큰 H1
+      subtitle: '',         // 부제 / 팀명
+      brand: '',            // 브랜드 / 서비스명
+      meta: '',             // 날짜 · 기준일 등 하단 메타
+      style: 'classic',     // 'classic' | 'centered' | 'split'
+    }, config || {});
+
+    function render() {
+      var s = data.style || 'classic';
+      el.className = 'mw-cover mw-cover--' + s;
+
+      var kicker   = data.kicker   ? '<div class="mw-cover__kicker">'   + escapeHTML(data.kicker)   + '</div>' : '';
+      var title    = '<h1 class="mw-cover__title">' + escapeHTML(data.title) + '</h1>';
+      var subtitle = data.subtitle ? '<div class="mw-cover__subtitle">' + escapeHTML(data.subtitle) + '</div>' : '';
+      var brand    = data.brand    ? '<div class="mw-cover__brand">'    + escapeHTML(data.brand)    + '</div>' : '';
+      var meta     = data.meta     ? '<div class="mw-cover__meta">'     + escapeHTML(data.meta)     + '</div>' : '';
+
+      if (s === 'centered') {
+        el.innerHTML =
+          '<div class="mw-cover__accent-bar"></div>' +
+          kicker + title + subtitle +
+          '<div class="mw-cover__divider"></div>' +
+          brand + meta;
+
+      } else if (s === 'split') {
+        el.innerHTML =
+          '<div class="mw-cover__aside">' + brand + meta + '</div>' +
+          '<div class="mw-cover__main">' + kicker + title + subtitle + '</div>';
+
+      } else {
+        // classic
+        el.innerHTML =
+          '<div class="mw-cover__header">' + kicker + brand + '</div>' +
+          '<div class="mw-cover__body">' + title + subtitle + '</div>' +
+          '<div class="mw-cover__footer"><div class="mw-cover__rule"></div>' + meta + '</div>';
+      }
+    }
+    render();
+
+    var handle = {
+      el: el, type: 'section-cover',
+      refresh: render,
+      update: function (newData) { data = Object.assign(data, newData || {}); render(); },
+      destroy: function () { el.innerHTML = ''; el.className = ''; registry.delete(handle); },
+    };
+    return register(handle);
+  }
+
+  // ==========================================================
+  // Widget: Insight Card — 좌측 컬러 보더 + 헤더(아이콘/타이틀/메타/태그) + bullet + highlight
+  // PDF의 고객사 카드, 이슈 카드, 영업 인사이트 카드 등 다목적
+  // ==========================================================
+  function insightCard(el, config) {
+    el = q(el);
+    if (!el) return null;
+    var data = Object.assign({
+      title: '',                  // 카드 헤드라인 (회사명, 이슈명 등)
+      meta: '',                   // 헤드 우측 메타 (인원, 점수 등)
+      tag: '',                    // 작은 태그 (Owner 이름 등)
+      icon: '',                   // 헤드 아이콘 (이모지 또는 텍스트)
+      status: 'gray',             // 좌측 컬러 보더: 'green'|'yellow'|'red'|'gray'|'accent'
+      bullets: [],                // [{text}] 또는 [string]
+      highlight: '',              // 🎯 강조 메시지 (하단)
+      highlightIcon: '🎯',
+    }, config || {});
+
+    function statusToVar(s) {
+      if (s === 'green' || s === 'good')   return 'var(--mw-success)';
+      if (s === 'yellow' || s === 'warn')  return 'var(--mw-warning)';
+      if (s === 'red' || s === 'bad')      return 'var(--mw-danger)';
+      if (s === 'accent')                  return 'var(--mw-accent)';
+      return 'var(--mw-border)';
+    }
+
+    function render() {
+      el.classList.add('mw-card', 'mw-insight');
+      el.style.setProperty('--mw-insight-bar', statusToVar(data.status));
+
+      var iconHTML = data.icon ? '<span class="mw-insight__icon">' + escapeHTML(data.icon) + '</span>' : '';
+      var metaHTML = data.meta ? '<span class="mw-insight__meta">' + escapeHTML(data.meta) + '</span>' : '';
+      var tagHTML  = data.tag  ? '<span class="mw-insight__tag">'  + escapeHTML(data.tag)  + '</span>' : '';
+
+      var bulletsHTML = (data.bullets || []).slice(0, 100).map(function (b) {
+        var t = (typeof b === 'string') ? b : (b.text || '');
+        return '<li class="mw-insight__bullet">' + escapeHTML(t) + '</li>';
+      }).join('');
+
+      var highlightHTML = data.highlight
+        ? '<div class="mw-insight__highlight">' +
+            '<span class="mw-insight__highlight-icon">' + escapeHTML(data.highlightIcon || '🎯') + '</span>' +
+            '<span>' + escapeHTML(data.highlight) + '</span>' +
+          '</div>'
+        : '';
+
+      el.innerHTML =
+        '<div class="mw-insight__head">' +
+          '<span class="mw-insight__dot"></span>' +
+          iconHTML +
+          '<span class="mw-insight__title">' + escapeHTML(data.title) + '</span>' +
+          metaHTML +
+          tagHTML +
+        '</div>' +
+        (bulletsHTML ? '<ul class="mw-insight__bullets">' + bulletsHTML + '</ul>' : '') +
+        highlightHTML;
+    }
+    render();
+
+    var handle = {
+      el: el, type: 'insight-card',
+      refresh: render,
+      update: function (newData) { data = Object.assign(data, newData || {}); render(); },
+      destroy: function () { el.innerHTML = ''; el.classList.remove('mw-insight'); registry.delete(handle); },
+    };
+    return register(handle);
+  }
+
+  // ==========================================================
+  // Widget: Share Bar — 100% stacked horizontal bar + optional legend
+  // ==========================================================
+  function shareBar(el, config) {
+    el = q(el);
+    if (!el) return null;
+    var data = Object.assign({
+      segments: [],     // [{label, value, status?: 'green'|'yellow'|'red'|'gray', color?, sub?}]
+      total: null,      // null → auto sum
+      showLabels: true, // segment 안에 % 표시
+      legend: true,     // 하단 범례
+      height: 36,
+    }, config || {});
+
+    function statusToVar(s) {
+      if (s === 'green' || s === 'good')   return 'var(--mw-success)';
+      if (s === 'yellow' || s === 'warn')  return 'var(--mw-warning)';
+      if (s === 'red' || s === 'bad')      return 'var(--mw-danger)';
+      return 'var(--mw-text-muted)';
+    }
+
+    function render() {
+      var segs = data.segments || [];
+      var total = data.total || segs.reduce(function (s, x) { return s + (Number(x.value) || 0); }, 0);
+      if (!total) { el.innerHTML = ''; return; }
+
+      var bars = segs.map(function (s) {
+        var pct = (Number(s.value) || 0) / total * 100;
+        var bg = s.color ? s.color : statusToVar(s.status);
+        var label = data.showLabels && pct > 7 ? Math.round(pct) + '%' : '';
+        return '<div class="mw-sharebar__seg" style="width:' + pct.toFixed(3) + '%;background:' + bg + '">' +
+               escapeHTML(label) + '</div>';
+      }).join('');
+
+      var legend = data.legend ? (
+        '<div class="mw-sharebar__legend">' +
+        segs.map(function (s) {
+          var status = s.status || 'gray';
+          return '<span class="mw-sharebar__leg-item">' +
+                 '<span class="mw-sharebar__leg-dot mw-sharebar__leg-dot--' + escapeHTML(status) + '"' +
+                 (s.color ? ' style="background:' + s.color + '"' : '') + '></span>' +
+                 escapeHTML(s.label || '') +
+                 (s.sub ? ' <span class="mw-sharebar__leg-sub">' + escapeHTML(s.sub) + '</span>' : '') +
+                 '</span>';
+        }).join('') + '</div>'
+      ) : '';
+
+      el.innerHTML =
+        '<div class="mw-sharebar" style="height:' + Number(data.height) + 'px">' + bars + '</div>' +
+        legend;
+    }
+    render();
+
+    var handle = {
+      el: el, type: 'share-bar',
+      refresh: render,
+      update: function (newData) { data = Object.assign(data, newData || {}); render(); },
+      destroy: function () { el.innerHTML = ''; registry.delete(handle); },
+    };
+    return register(handle);
+  }
+
+  // ==========================================================
+  // Widget: RAG Chip — small status pill (red/yellow/green/gray) + label
+  // ==========================================================
+  function ragChip(el, config) {
+    el = q(el);
+    if (!el) return null;
+    var data = Object.assign({
+      label: '', status: 'gray', // 'green' | 'yellow' | 'red' | 'gray'
+    }, config || {});
+
+    function render() {
+      var s = String(data.status || 'gray').toLowerCase();
+      el.innerHTML =
+        '<span class="mw-rag mw-rag--' + escapeHTML(s) + '">' +
+          '<span class="mw-rag__dot"></span>' +
+          '<span class="mw-rag__lbl">' + escapeHTML(data.label) + '</span>' +
+        '</span>';
+    }
+    render();
+
+    var handle = {
+      el: el, type: 'rag-chip',
+      refresh: render,
+      update: function (newData) { data = Object.assign(data, newData || {}); render(); },
+      destroy: function () { el.innerHTML = ''; registry.delete(handle); },
+    };
+    return register(handle);
+  }
+
+  // ==========================================================
   // Public API
   // ==========================================================
   var api = {
@@ -2351,6 +2613,10 @@
     bulletChart: bulletChart,
     pageHeader: pageHeader,
     sectionHead: sectionHead,
+    ragChip: ragChip,
+    shareBar: shareBar,
+    insightCard: insightCard,
+    sectionCover: sectionCover,
 
     // Widget metadata (title + short description) — for documentation, pickers, galleries.
     // Demo and other consumers can derive UI from this instead of duplicating labels.
@@ -2392,6 +2658,13 @@
       bulletChart:     { title: 'Bullet Chart',      desc: '목표 vs 실적 vs 벤치마크 · 정성 밴드 + 타겟 마커 (gauge 상위).' },
       pageHeader:      { title: 'Page Header',       desc: '페이지 최상단 hero 헤더 · kicker + H1 + subtitle + meta.' },
       sectionHead:     { title: 'Section Head',      desc: 'grid 그룹 위 라벨 · index + kicker + H2 + tag.' },
+      ragChip:         { title: 'RAG Chip',          desc: '신호등 상태 칩 · green/yellow/red/gray + 라벨. 위클리 보고서·고객 인사이트에 자주.' },
+      shareBar:        { title: 'Share Bar',         desc: '100% 비율 누적 가로바 + 범례 · NPS 분포, 만족도 분포, 예산 비중 등. status별 색.' },
+      insightCard:     { title: 'Insight Card',      desc: '상태 dot + 헤드(아이콘/타이틀/메타/태그) + bullets + 🎯 highlight. 고객사·이슈·영업 인사이트 다목적.' },
+      monthlyTable:    { title: 'Monthly Table',     desc: '12개월 표 + 합계행 + 단위(원/만원/억원) 토글 + view(table/line/bar) 토글 올인원. maging-weekly.js 필요.' },
+      sectionCoverClassic:  { title: 'Cover — Classic',   desc: '보고서 커버 · kicker(좌) + brand(우) / 큰 타이틀 + subtitle / accent rule + meta. 컨설팅 보고서 스타일.' },
+      sectionCoverCentered: { title: 'Cover — Centered',  desc: '보고서 커버 · 모든 요소 중앙 정렬. accent bar → kicker → 타이틀 → 구분선 → brand. 프레젠테이션 표지 스타일.' },
+      sectionCoverSplit:    { title: 'Cover — Split',     desc: '보고서 커버 · 좌측 accent 컬러 패널(brand·날짜) + 우측 흰 배경(타이틀·subtitle). 에디토리얼 스타일.' },
     },
 
     setTheme: function (name) {

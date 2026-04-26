@@ -11,6 +11,7 @@
     "llms.txt",
     "llms-dashboard.txt",
     "llms-landing.txt",
+    "llms-weekly-report.txt",
     "README.md",
     "LICENSE"
   ],
@@ -31,6 +32,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "build:tw": "tailwindcss -i weekly-report/tw-input.css -o weekly-report/tw.css --content weekly-report/index.html --minify",
     "build:llms": "node scripts/build-llms.mjs",
     "sync": "node scripts/sync-index.mjs",
     "count-tokens": "node scripts/count-prompt-tokens.mjs",
@@ -38,7 +40,9 @@
   },
   "devDependencies": {
     "@anthropic-ai/tokenizer": "^0.0.4",
+    "@tailwindcss/cli": "^4.2.4",
     "gpt-tokenizer": "^2.9.0",
+    "tailwindcss": "^4.2.4",
     "vite": "^8.0.10"
   }
 }

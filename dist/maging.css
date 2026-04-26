@@ -2404,3 +2404,297 @@
   .mw-theme-fab__label { max-width: 100px; }
 }
 
+
+
+/* ==========================================================
+   RAG Chip — status pill (red/yellow/green/gray) + label
+   ========================================================== */
+.mw-rag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mw-space-1-5);
+  padding: 3px 10px;
+  border-radius: var(--mw-radius-full);
+  font-size: var(--mw-text-xs);
+  font-weight: 500;
+  background: var(--mw-surface-2);
+  color: var(--mw-text);
+  line-height: var(--mw-leading-snug);
+  letter-spacing: 0.005em;
+}
+.mw-rag__dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--mw-text-muted);
+}
+.mw-rag__lbl { font-variant-numeric: tabular-nums; }
+.mw-rag--green  .mw-rag__dot { background: var(--mw-success); }
+.mw-rag--yellow .mw-rag__dot { background: var(--mw-warning); }
+.mw-rag--red    .mw-rag__dot { background: var(--mw-danger); }
+.mw-rag--gray   .mw-rag__dot { background: var(--mw-text-muted); }
+
+
+
+/* ==========================================================
+   Share Bar — 100% stacked horizontal bar + optional legend
+   ========================================================== */
+.mw-sharebar {
+  display: flex;
+  border-radius: var(--mw-radius);
+  overflow: hidden;
+  font-variant-numeric: tabular-nums;
+}
+.mw-sharebar__seg {
+  display: flex; align-items: center; justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: var(--mw-text-sm);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  line-height: var(--mw-leading-none);
+}
+.mw-sharebar__legend {
+  display: flex; flex-wrap: wrap; gap: var(--mw-space-4);
+  margin-top: var(--mw-space-2);
+}
+.mw-sharebar__leg-item {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: var(--mw-text-xs); color: var(--mw-text);
+}
+.mw-sharebar__leg-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--mw-text-muted);
+  flex-shrink: 0;
+}
+.mw-sharebar__leg-dot--green  { background: var(--mw-success); }
+.mw-sharebar__leg-dot--yellow { background: var(--mw-warning); }
+.mw-sharebar__leg-dot--red    { background: var(--mw-danger); }
+.mw-sharebar__leg-dot--gray   { background: var(--mw-text-muted); }
+.mw-sharebar__leg-sub { color: var(--mw-text-muted); margin-left: 4px; }
+
+
+
+/* ==========================================================
+   Insight Card — 좌측 컬러 보더 + 헤드 + bullets + highlight
+   ========================================================== */
+.mw-insight {
+  padding: var(--mw-space-4) var(--mw-space-4);
+  display: flex; flex-direction: column;
+  gap: var(--mw-space-3);
+}
+.mw-insight__head {
+  display: flex; align-items: center; gap: var(--mw-space-2);
+  flex-wrap: wrap;
+}
+.mw-insight__dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--mw-insight-bar, var(--mw-text-muted));
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+.mw-insight__icon {
+  font-size: 1.1rem; line-height: 1;
+}
+.mw-insight__title {
+  font-size: var(--mw-text-md);
+  font-weight: 600;
+  color: var(--mw-text);
+  letter-spacing: -0.005em;
+  flex: 1;
+  min-width: 0;
+}
+.mw-insight__meta {
+  font-size: var(--mw-text-xs);
+  color: var(--mw-text-muted);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.mw-insight__tag {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: var(--mw-radius-full);
+  background: var(--mw-surface-2);
+  color: var(--mw-text-muted);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.mw-insight__bullets {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: flex; flex-direction: column;
+  gap: var(--mw-space-1-5);
+}
+.mw-insight__bullet {
+  font-size: var(--mw-text-sm);
+  color: var(--mw-text);
+  line-height: var(--mw-leading-snug);
+  padding-left: var(--mw-space-3);
+  position: relative;
+}
+.mw-insight__bullet::before {
+  content: "";
+  position: absolute;
+  left: 4px; top: 0.55em;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--mw-text-muted);
+  opacity: 0.5;
+}
+.mw-insight__highlight {
+  display: flex; align-items: flex-start; gap: var(--mw-space-2);
+  margin-top: var(--mw-space-1);
+  padding: var(--mw-space-2-5) var(--mw-space-3);
+  border-radius: var(--mw-radius);
+  background: var(--mw-surface-2);
+  font-size: var(--mw-text-xs);
+  color: var(--mw-text);
+  line-height: var(--mw-leading-snug);
+}
+.mw-insight__highlight-icon {
+  font-size: 0.95rem; line-height: 1;
+  flex-shrink: 0;
+}
+
+
+
+/* ==========================================================
+   Section Cover — PDF 표지/섹션 디바이더 (큰 타이틀 + accent band)
+   ========================================================== */
+/* ==========================================================
+   Section Cover — 보고서 커버 (3종 스타일)
+   style: 'classic' | 'centered' | 'split'
+   ========================================================== */
+.mw-cover {
+  display: flex;
+  flex-direction: column;
+  background: var(--mw-bg);
+  min-height: calc(100vh - 200px);
+  font-family: var(--mw-font);
+}
+
+/* ── Shared elements ─────────────────────────────────────── */
+.mw-cover__kicker {
+  font-size: var(--mw-text-xs);
+  color: var(--mw-text-muted);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.mw-cover__title {
+  font-size: 2.75rem;
+  font-family: var(--mw-display-font, var(--mw-font));
+  font-weight: 700;
+  color: var(--mw-text);
+  letter-spacing: -0.025em;
+  line-height: var(--mw-leading-tight);
+  margin: 0;
+}
+.mw-cover__subtitle {
+  font-size: var(--mw-text-md);
+  color: var(--mw-text-muted);
+  line-height: var(--mw-leading-snug);
+}
+.mw-cover__brand {
+  font-size: var(--mw-text-sm);
+  color: var(--mw-text-muted);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.mw-cover__meta {
+  font-size: var(--mw-text-xs);
+  color: var(--mw-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Classic ─────────────────────────────────────────────── */
+/* header: kicker(left) + brand(right) / body: title+subtitle / footer: rule + meta */
+.mw-cover--classic {
+  padding: var(--mw-space-7) var(--mw-space-7);
+  gap: var(--mw-space-5);
+}
+.mw-cover--classic .mw-cover__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.mw-cover--classic .mw-cover__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mw-space-2-5);
+}
+.mw-cover--classic .mw-cover__title { font-size: 2.75rem; }
+.mw-cover--classic .mw-cover__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--mw-space-3);
+  padding-top: var(--mw-space-4);
+  border-top: 1px solid var(--mw-border);
+  margin-top: auto;
+}
+.mw-cover--classic .mw-cover__rule {
+  width: 28px;
+  height: 3px;
+  background: var(--mw-accent);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ── Centered ────────────────────────────────────────────── */
+/* 모든 요소 가운데 정렬. accent bar → kicker → title → subtitle / divider / brand + meta */
+.mw-cover--centered {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--mw-space-3);
+  padding: var(--mw-space-12) var(--mw-space-8);
+}
+.mw-cover--centered .mw-cover__accent-bar {
+  width: 40px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--mw-accent);
+  margin-bottom: var(--mw-space-1);
+}
+.mw-cover--centered .mw-cover__divider {
+  width: 1px;
+  height: 32px;
+  background: var(--mw-border);
+  margin: var(--mw-space-2) 0;
+}
+.mw-cover--centered .mw-cover__brand { font-size: var(--mw-text-base); }
+
+/* ── Split ───────────────────────────────────────────────── */
+/* left accent 패널(38%) brand·meta / right(62%) kicker·title·subtitle */
+.mw-cover--split {
+  flex-direction: row;
+}
+.mw-cover--split .mw-cover__aside {
+  width: 38%;
+  flex-shrink: 0;
+  background: var(--mw-accent);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--mw-space-7) var(--mw-space-6);
+  gap: var(--mw-space-1-5);
+}
+.mw-cover--split .mw-cover__aside .mw-cover__brand {
+  color: rgba(255,255,255,0.95);
+  font-size: var(--mw-text-md);
+  font-weight: 700;
+}
+.mw-cover--split .mw-cover__aside .mw-cover__meta {
+  color: rgba(255,255,255,0.55);
+}
+.mw-cover--split .mw-cover__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--mw-space-8) var(--mw-space-8);
+  gap: var(--mw-space-3);
+}
+

@@ -88,6 +88,8 @@
   .cg-card__preview .mw-section-head { font-size: 0.75rem; }
   .cg-card__preview .mw-section-head h2 { font-size: 1rem; }
   /* map chart — just hide the legend bar, let tiles fill */
+  .cg-card__preview .mw-cover { min-height: 0 !important; height: 100%; font-size: 0.8rem; }
+  .cg-card__preview .mw-cover__title { font-size: 1.6rem !important; }
   .cg-card__preview .mw-mapchart { min-height: 0 !important; padding: 0.5rem !important; }
   .cg-card__preview .mw-mapchart__legend { display: none; }
   .cg-card__preview .mw-mapchart__grid { font-size: 0.6rem; gap: 2px; }
@@ -166,22 +168,20 @@
   .cg-card__name { font-size: var(--mw-text-sm); font-weight: 600; margin-bottom: 0.2rem; }
   .cg-card__desc { font-size: var(--mw-text-xs); color: var(--mw-text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-  /* upsell banner */
-  .cg-upsell {
-    display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    margin-top: 2rem;
+  /* mode tabs */
+  .cg-tabs {
+    display: flex; gap: 2px; margin-bottom: 2rem;
+    background: var(--mw-surface-2); border: 1px solid var(--mw-border);
+    border-radius: var(--mw-radius); padding: 3px; width: fit-content;
   }
-  .cg-upsell__card {
-    background: var(--mw-surface); border: 1px solid var(--mw-border);
-    border-radius: var(--mw-radius); padding: 1.25rem;
-    text-decoration: none; color: inherit;
-    transition: border-color 0.2s, transform 0.2s;
-    display: flex; align-items: center; gap: 1rem;
+  .cg-tab {
+    padding: 0.35rem 1rem; font-size: var(--mw-text-sm); font-weight: 500;
+    color: var(--mw-text-muted); border: none; background: none; cursor: pointer;
+    border-radius: calc(var(--mw-radius) - 2px); font-family: var(--mw-font);
+    transition: color 120ms; text-decoration: none; display: inline-block;
   }
-  .cg-upsell__card:hover { border-color: var(--mw-accent); transform: translateY(-1px); }
-  .cg-upsell__icon { font-size: 1.5rem; flex-shrink: 0; }
-  .cg-upsell__label { font-size: var(--mw-text-sm); font-weight: 600; }
-  .cg-upsell__hint { font-size: var(--mw-text-xs); color: var(--mw-text-muted); }
+  .cg-tab:hover { color: var(--mw-text); }
+  .cg-tab.is-active { background: var(--mw-surface); color: var(--mw-text); box-shadow: var(--mw-shadow); }
 </style>
 </head>
 
@@ -195,6 +195,7 @@
     <p class="cg-header__desc" id="cg-desc"></p>
     <div class="cg-header__count" id="cg-count"></div>
   </div>
+  <div class="cg-tabs" id="cg-tabs"></div>
   <div id="cg-content"></div>
 </div>
 
@@ -268,8 +269,17 @@ var WIDGETS = {
   pageHeader:      { mode: 'core', cat: 'Layout' },
   sectionHead:     { mode: 'core', cat: 'Layout' },
   alertBanner:     { mode: 'core', cat: 'Layout' },
+  ragChip:         { mode: 'core', cat: 'Lists' },
+  shareBar:        { mode: 'core', cat: 'Charts' },
   mapChart:        { mode: 'core', cat: 'Specialized', wide: true, tall: true },
   cohortMatrix:    { mode: 'core', cat: 'Specialized', wide: true, tall: true },
+
+  // ── Weekly Report specific ──
+  monthlyTable:         { mode: 'weekly', cat: 'Weekly Report', wide: true, tall: true },
+  sectionCoverClassic:  { mode: 'weekly', cat: 'Weekly Report', wide: true, tall: true },
+  sectionCoverCentered: { mode: 'weekly', cat: 'Weekly Report', wide: true, tall: true },
+  sectionCoverSplit:    { mode: 'weekly', cat: 'Weekly Report', wide: true, tall: true },
+  insightCard:          { mode: 'weekly', cat: 'Weekly Report', tall: true },
 
   // ── Landing Page specific ──
   heroSection:     { mode: 'landing', cat: 'Landing Page', wide: true, tall: true },
@@ -327,6 +337,30 @@ var SAMPLES = {
   pageHeader:    function(el) { Maging.pageHeader(el, { kicker: 'DASHBOARD', title: '운영 현황', subtitle: '실시간 모니터링' }); },
   sectionHead:   function(el) { Maging.sectionHead(el, { index: '01', kicker: 'OVERVIEW', title: '핵심 지표', tag: 'Live' }); },
   alertBanner:   function(el) { Maging.alertBanner(el, { type: 'success', title: '배포 완료', message: 'v2.4.1' }); },
+  ragChip:       function(el) { el.innerHTML = '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px"></div>'; var box = el.firstChild; ['green','yellow','red','gray'].forEach(function(s, i){ var d = document.createElement('span'); box.appendChild(d); Maging.ragChip(d, { label: ['플로우 AI 관심','검토 중','이탈 위험','초기 컨택'][i], status: s }); }); },
+  shareBar:      function(el) { el.innerHTML = '<div style="padding:16px"></div>'; Maging.shareBar(el.firstChild, { segments: [{ label: '추천자', value: 54, status: 'green', sub: '9~10점' },{ label: '중립자', value: 24, status: 'gray', sub: '7~8점' },{ label: '비추천', value: 22, status: 'red', sub: '0~6점' }] }); },
+  insightCard: function(el) {
+    el.style.cssText = 'display:flex;flex-direction:column;gap:8px;overflow:auto';
+    var cards = [
+      { title: '베타 솔루션', meta: '63인', tag: 'Owner · 김재훈', status: 'green',  bullets: ['도구 통합 — 분산 도구를 하나로 일원화 필요', '업무 가시성 — 인수인계 단절 해소', '회계 자동화 공백 대응 시급'], highlight: '통합·가시성 명분 명확. 회계 공백 해소가 의사결정 핵심 변수.' },
+      { title: 'KDB생명보험', meta: '180인', tag: 'AM · 박수연',    status: 'yellow', bullets: ['5월 계약 클로징 목표 — 법무 검토 완료 대기', '사용자 범위 확대 협의 중'], highlight: '계약서 최종본 4/30 수령 예정. 기한 내 서명 필요.' },
+      { title: '삼성바이오로직스', meta: '600인', tag: 'AM · 최인혁', status: 'red',   bullets: ['PoC 결과 지연 — 데이터 파이프라인 이슈', 'IT팀 협조 요청 단계'], highlight: '6월 전체 배포 일정 리스크. 이번 주 내 대응 방안 확정 필요.' },
+    ];
+    cards.forEach(function(cfg) { var d = document.createElement('div'); el.appendChild(d); Maging.insightCard(d, cfg); });
+  },
+  monthlyTable: function(el) {
+    Maging.monthlyTable(el, {
+      title: '월별 매출', sub: '2026년',
+      rows: [
+        { name: '신규', data: [99,175,142,223,290,248,385,332,227,173,479,227].map(function(v){return v*1e6;}) },
+        { name: '기고객', data: [522,685,523,633,567,641,653,545,547,539,660,532].map(function(v){return v*1e6;}) },
+      ],
+      summaryRow: '합계', unitToggle: true, viewToggle: true, defaultUnit: '만원',
+    });
+  },
+  sectionCoverClassic:  function(el) { Maging.sectionCover(el, { style: 'classic',  kicker: 'WEEKLY REPORT · 4월 4주차', title: 'SaaS 주간보고', subtitle: 'SaaS B/U · Enterprise B/U', brand: 'flow.team', meta: '기준일 2026.04.27(월)' }); },
+  sectionCoverCentered: function(el) { Maging.sectionCover(el, { style: 'centered', kicker: 'WEEKLY REPORT · 4월 4주차', title: 'SaaS 주간보고', subtitle: 'SaaS B/U · Enterprise B/U', brand: 'flow.team', meta: '기준일 2026.04.27(월)' }); },
+  sectionCoverSplit:    function(el) { Maging.sectionCover(el, { style: 'split',    kicker: 'WEEKLY REPORT · 4월 4주차', title: 'SaaS 주간보고', subtitle: 'SaaS B/U · Enterprise B/U', brand: 'flow.team', meta: '기준일 2026.04.27(월)' }); },
 
   // ── Specialized ──
   mapChart:      function(el) { Maging.mapChart(el, { items: [{ region: '서울', value: 45 },{ region: '경기', value: 30 },{ region: '부산', value: 15 },{ region: '인천', value: 20 },{ region: '대구', value: 18 }] }); },
@@ -351,30 +385,41 @@ var SAMPLES = {
 var params = new URLSearchParams(window.location.search);
 var currentMode = params.get('mode') || 'core';
 
-// Mode descriptions
-var MODE_DESC = {
-  core: 'maging 코어 위젯입니다. 모든 모드에서 공통으로 사용할 수 있습니다.',
-  dashboard: 'Core 위젯 + Dashboard 전용 위젯입니다. 데이터 모니터링과 운영 대시보드에 최적화되어 있습니다.',
-  landing: 'Core 위젯 + Landing Page 전용 위젯입니다. 마케팅 랜딩페이지와 전환 최적화에 특화되어 있습니다.',
-};
+// Mode tab definitions
+var MODES = [
+  { key: 'core',    label: '대시보드',  desc: '대시보드·운영 모니터링에 공통으로 쓰이는 기본 위젯입니다. Metrics, Charts, Lists 등 모든 모드의 기반.' },
+  { key: 'weekly',  label: '주간보고',  desc: '주간보고·정기보고서 전용 위젯입니다. Section Cover, Insight Card 등 보고서 특화 컴포넌트.' },
+  { key: 'landing', label: '랜딩페이지', desc: '마케팅 랜딩페이지 전용 위젯입니다. Hero, Pricing, Testimonial 등 전환 최적화 컴포넌트.' },
+];
 
-// Filter widgets by mode
+// Build mode tabs
+var tabsEl = document.getElementById('cg-tabs');
+MODES.forEach(function(m) {
+  var a = document.createElement('a');
+  a.className = 'cg-tab' + (m.key === currentMode ? ' is-active' : '');
+  a.textContent = m.label;
+  a.href = 'components.html?mode=' + m.key;
+  tabsEl.appendChild(a);
+});
+
+var modeInfo = MODES.find(function(m) { return m.key === currentMode; }) || MODES[0];
+
+// Filter: each mode shows only its own widgets
 function getFilteredWidgets() {
   var result = {};
   Object.keys(WIDGETS).forEach(function(key) {
     var w = WIDGETS[key];
-    if (currentMode === 'core' && w.mode === 'core') result[key] = w;
-    else if (currentMode === 'dashboard' && w.mode === 'core') result[key] = w;
-    else if (currentMode === 'landing' && (w.mode === 'core' || w.mode === 'landing')) result[key] = w;
+    if (w.mode === currentMode) result[key] = w;
   });
   return result;
 }
+
 
 var filtered = getFilteredWidgets();
 var count = Object.keys(filtered).length;
 
 // Header
-document.getElementById('cg-desc').textContent = MODE_DESC[currentMode];
+document.getElementById('cg-desc').textContent = modeInfo.desc;
 document.getElementById('cg-count').textContent = count + '개 컴포넌트';
 
 // Group by category
@@ -399,11 +444,11 @@ var LANDING_META = {
   faqAccordion: { title: 'FAQ Accordion', desc: '아코디언 FAQ.' },
 };
 
-// Category display order — mode-specific first
+// Category display order
 var CAT_ORDER_BY_MODE = {
-  core: ['Metrics', 'Charts', 'Lists', 'Calendar & Progress', 'Layout', 'Specialized'],
-  dashboard: ['Metrics', 'Charts', 'Lists', 'Calendar & Progress', 'Layout', 'Specialized'],
-  landing: ['Landing Page', 'Metrics', 'Charts', 'Lists', 'Calendar & Progress', 'Layout', 'Specialized'],
+  core:    ['Metrics', 'Charts', 'Lists', 'Calendar & Progress', 'Layout', 'Specialized'],
+  weekly:  ['Weekly Report'],
+  landing: ['Landing Page'],
 };
 
 var catOrder = CAT_ORDER_BY_MODE[currentMode] || CAT_ORDER_BY_MODE.core;
@@ -416,6 +461,7 @@ catOrder.forEach(function(cat) {
 
   var badgeClass = 'cg-section__badge--core';
   if (cat === 'Landing Page') badgeClass = 'cg-section__badge--landing';
+  if (cat === 'Weekly Report') badgeClass = 'cg-section__badge--dashboard';
 
   html += '<div class="cg-section">';
   html += '<div class="cg-section__head">';
@@ -441,19 +487,6 @@ catOrder.forEach(function(cat) {
   html += '</div></div>';
 });
 
-// Upsell banner (only for core mode)
-if (currentMode === 'core') {
-  html += '<div class="cg-upsell">';
-  html += '<a href="components.html?mode=dashboard" class="cg-upsell__card">';
-  html += '<span class="cg-upsell__icon">📊</span>';
-  html += '<div><div class="cg-upsell__label">Dashboard 모드 보기</div>';
-  html += '<div class="cg-upsell__hint">Core + 대시보드 전용 위젯</div></div></a>';
-  html += '<a href="components.html?mode=landing" class="cg-upsell__card">';
-  html += '<span class="cg-upsell__icon">🏠</span>';
-  html += '<div><div class="cg-upsell__label">Landing Page 모드 보기</div>';
-  html += '<div class="cg-upsell__hint">Core + 랜딩페이지 전용 위젯</div></div></a>';
-  html += '</div>';
-}
 
 content.innerHTML = html;
 
@@ -505,6 +538,7 @@ var CODE = {
   alertBanner:   "const config = {\n  type: 'success',\n  title: '배포 완료',\n  message: 'v2.4.1'\n};\n\nMaging.alertBanner('#el', config);",
   mapChart:      "const config = {\n  items: [\n    { region: '서울', value: 45 },\n    { region: '경기', value: 30 },\n    { region: '부산', value: 15 }\n  ]\n};\n\nMaging.mapChart('#el', config);",
   cohortMatrix:  "const config = {\n  cohorts: ['1월','2월','3월'],\n  periods: ['M0','M1','M2'],\n  data: [\n    [100, 60, 40],\n    [100, 55, 35],\n    [100, 58, null]\n  ]\n};\n\nMaging.cohortMatrix('#el', config);",
+  monthlyTable:  "const config = {\n  title: '월별 매출',\n  sub: '2026년',\n  rows: [\n    { name: '신규',   data: [99,175,142,223,290,248,385,332,227,173,479,227].map(v => v * 1e6) },\n    { name: '기고객', data: [522,685,523,633,567,641,653,545,547,539,660,532].map(v => v * 1e6) },\n  ],\n  summaryRow: '합계',\n  unitToggle: true,\n  viewToggle: true,\n  defaultUnit: '만원',\n};\n\nMaging.monthlyTable('#el', config);",
   stepGuide:     "const config = {\n  steps: [\n    { title: 'CDN 추가',\n      desc: 'script 태그 한 줄이면 됩니다.',\n      code: '<script src=\"maging.js\"><\\/script>' },\n    { title: '위젯 마운트',\n      desc: 'HTML에 div 하나, JS로 호출.' },\n    { title: '테마 변경',\n      desc: '35개 테마 즉시 전환.' }\n  ]\n};\n\nMaging.stepGuide('#el', config);",
   codeBlock:     "const config = {\n  lang: 'html',\n  code: '<div id=\"chart\"></div>\\n<script>\\n  Maging.lineChart(\"#chart\", { ... });\\n<\\/script>'\n};\n\nMaging.codeBlock('#el', config);",
   comparisonTable:"const config = {\n  columns: ['maging', 'Recharts', 'Chart.js'],\n  highlight: 0,\n  rows: [\n    { label: '빌드 불필요', values: [true, false, false] },\n    { label: '35 테마', values: [true, false, false] },\n    { label: 'CDN 한 줄', values: [true, false, true] }\n  ]\n};\n\nMaging.comparisonTable('#el', config);",
