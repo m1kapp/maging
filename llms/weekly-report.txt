@@ -12,6 +12,8 @@
 ```
 `maging:ready` 안에서 마운트. `DOMContentLoaded` 금지.
 
+**KRW:** `Maging.fmt.krw(v)` (HTML), `Maging.fmt.krwPlain(v)` (차트 축). NEVER `₩` prefix.
+
 ---
 
 ### KPI 카드
@@ -57,9 +59,7 @@ Maging.activityTable('#tbl', {
   ],
 });
 ```
-```css
-.row-unit{color:var(--mw-text-muted);font-size:.85em;margin-left:4px}
-```
+`.row-unit`은 maging-all.js에 포함 — `<style>` 태그 불필요.
 
 **컬럼 그룹 헤더 (연도비교):**
 ```js
@@ -70,17 +70,87 @@ Maging.activityTable('#tbl', {
 });
 ```
 
+**scroll-table:** 12개월 표는 가로 스크롤 + 첫/끝 열 고정이 필수.
+```html
+<div id="tbl" class="scroll-table" style="height:300px"></div>
+```
+`monthlyTable`은 자동 적용. `activityTable` 직접 사용 시 위 wrapper 필수.
+
 ⚠️ **듀얼 Y축 금지** — `barChart` + `lineChart` 두 개로 분리.
+
+**차트 선택:**
+- 추이(월별) → `lineChart` · 비교(카테고리) → `barChart` · 비율 → `donutChart`
+- 목표 대비 달성 → `bulletChart` / `ringProgress` · 순위 → `leaderboard`
 
 ---
 
-### Sidebar (다중 페이지)
+### HTML 컴포넌트 (maging-all.js 자동 포함)
+
+**이슈 카드** — 문제/리스크를 3열 그리드로:
 ```html
-<div class="flex">
-  <weekly-sidebar active="page-id"></weekly-sidebar>
-  <main class="flex-1 px-6 py-4 min-w-0" style="word-break:keep-all">…</main>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+  <div class="issue-card issue-card--danger">
+    <div class="issue-card__head">
+      <span class="issue-card__icon">🔍</span>
+      <span class="issue-card__label">이슈명</span>
+      <span class="issue-card__tag">영향 범위</span>
+    </div>
+    <div class="issue-card__sub">상세 설명</div>
+  </div>
+  <div class="issue-card issue-card--warning">…</div>
+  <div class="issue-card issue-card--info">…</div>
 </div>
 ```
+`issue-card--danger` / `--warning` / `--info`
+
+**지표 정의 카드 + 수평 분포 바:**
+```html
+<div class="def-card">
+  <div class="def-card__title">NPS 1분기 분포</div>
+  <div class="def-card__sub">유료 사용자 대상</div>
+  <div class="hbar mt-3">
+    <div class="hbar__seg hbar__seg--good"    style="width:54%">54%</div>
+    <div class="hbar__seg hbar__seg--neutral" style="width:24%">24%</div>
+    <div class="hbar__seg hbar__seg--bad"     style="width:22%">22%</div>
+  </div>
+</div>
+```
+`hbar__seg--good` (success) / `--neutral` (muted) / `--bad` (danger)
+
+**정의 카드 (KPI 맥락 설명):**
+```html
+<div class="def-card">
+  <div class="def-card__title">지표명</div>
+  <div class="def-card__sub">측정 주기</div>
+  <div class="def-card__row"><div class="def-card__key">정의</div><div class="def-card__val">…</div></div>
+  <div class="def-card__row"><div class="def-card__key">담당</div><div class="def-card__val">…</div></div>
+</div>
+```
+
+---
+
+### 다중 슬라이드 (덱 모드)
+
+```html
+<div class="flex">
+  <weekly-sidebar active="cover" data-title="SaaS 주간보고" data-date="2026.04.27"></weekly-sidebar>
+  <main class="flex-1 min-w-0 px-6 py-4" style="word-break:keep-all">
+    <div id="slides-wrap" class="max-w-[1240px] mx-auto">
+      <section class="slide cover-slide" id="cover" data-active></section>
+      <section class="slide" id="sales" data-label="KPI 1. 신규매출" data-bu="SaaS B/U" data-team="영업팀"></section>
+    </div>
+  </main>
+</div>
+```
+```js
+window.addEventListener('maging:ready', () => {
+  Maging.deck({
+    cover: () => { Maging.sectionCover('#cover .cover-host', {style:'classic',kicker:'WEEKLY REPORT · 날짜',title:'주간보고',subtitle:'팀명',brand:'서비스명',meta:'기준일'}); },
+    sales: () => { Maging.pageHeader(…); Maging.kpiCard(…); },
+  });
+});
+```
+`weekly-sidebar`는 `section.slide[data-label]` 자동 수집 → nav 생성. 단일 페이지는 sidebar 불필요.
 
 ---
 
@@ -88,7 +158,7 @@ Maging.activityTable('#tbl', {
 
 1. **1페이지 = 1 KPI 1주제.**
 2. `<html data-theme="…">` + `<body class="mw-themed">` + theme 선택.
-3. **단위 필수** — 명/건/개/원/% 모두.
+3. **단위 필수** — 명/건/개/원/% 모두. 금액은 `Maging.fmt.krw`.
 4. **KPI label에 목표 포함** — `'3월 신규 · 목표 1.42억원'`.
 5. **delta:** 목표 대비 또는 전월/전년 대비 %.
 6. **마지막은 alertBanner** — `icon='📋' type='info'` 1-2문장 요약.
@@ -104,7 +174,6 @@ Maging.activityTable('#tbl', {
 <head>
   <meta charset="UTF-8"><title>주간보고</title>
   <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.16/dist/maging-all.js"></script>
-  <style>.row-unit{color:var(--mw-text-muted);font-size:.85em;margin-left:4px}</style>
 </head>
 <body class="mw-themed">
   <main class="max-w-[1240px] mx-auto px-6 py-4" style="word-break:keep-all">
