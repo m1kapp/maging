@@ -1,233 +1,91 @@
 # maging — AI Output Formatter
 
-> **AI 답변을, 쓸 수 있는 결과물로.**
-> 코딩 없이, 디자인 없이 — LLM이 위젯·테마로 단일 HTML 결과물을 바로 생성합니다.
+> LLM이 위젯·테마로 단일 HTML 결과물을 즉시 생성. 코딩·디자인 불필요.
 
 ---
 
-## Themes (35)
+## Themes (37)
 
-Set on `<html data-theme="NAME">`. Each theme bundles palette, typography, radius, shadow. Changing the attribute instantly re-styles every widget.
+`<html data-theme="NAME">` — 팔레트·폰트·반경·그림자 즉시 교체.
 
-**Light (18):** `claude` (warm cream+terracotta) · `linear` (indigo minimal) · `stripe` (payment purple) · `notion` (off-white) · `airbnb` (coral) · `linkedin` (corporate blue) · `instagram` (vivid) · `youtube` (red) · `reddit` (orange) · `medium` (editorial green serif) · `apple` (system blue) · `duolingo` (owl green) · `tiffany` (robin-egg blue+gold) · `mailchimp` (cavendish yellow) · `tmobile` (magenta) · `fedex` (purple+orange) · `hermes` (cream serif) · `barbie` (pastel pink)
+**Light:** `flow` `morningmate` `claude` `linear` `stripe` `notion` `airbnb` `linkedin` `instagram` `youtube` `reddit` `medium` `apple` `duolingo` `barbie` `fedex` `hermes` `mailchimp` `tiffany` `tmobile` `ups` `nasa` `deere` `heineken`
 
-**Dark (17):** `vercel` (pure black) · `github` (dimmed) · `x` (sharp mono) · `slack` (aubergine) · `discord` (blurple) · `openai` (AI teal) · `spotify` (neon green) · `twitch` (gaming purple) · `netflix` (cinematic red) · `figma` (multi) · `amazon` (navy) · `adobe` (creative red) · `bloomberg` (terminal amber) · `nasa` (worm blue+red) · `heineken` (bottle green) · `deere` (tractor green+yellow) · `ups` (pullman brown)
+**Dark:** `vercel` `github` `x` `slack` `discord` `openai` `spotify` `twitch` `netflix` `figma` `amazon` `adobe` `bloomberg`
 
-Pick by intent: minimal→`linear`/`vercel` · warm→`claude`/`notion` · corporate→`linkedin`/`stripe` · bold→`netflix`/`adobe` · luxury→`hermes`/`tiffany` · playful→`barbie`/`duolingo` · terminal→`bloomberg` · engineering→`nasa`. Default: `claude`.
+선택 힌트: minimal→`linear`/`vercel` · warm→`claude`/`notion` · corporate→`linkedin`/`stripe` · bold→`netflix`/`adobe` · luxury→`hermes`/`tiffany` · playful→`barbie`/`duolingo`. Default: `claude`.
 
 ---
 
-## Core Widgets
+## Widgets
 
-Mount: `window.Maging.<name>(selector, config)`. All auto-refresh on theme change.
+`Maging.<name>(sel, config)` — 테마 변경 시 전체 자동 새로고침.
 
-### METRIC TILES
-
-**`kpiCard`** — Label + value + delta% + sparkline. `compact: true` for mini mode.
-```js
-Maging.kpiCard(sel, { label, value, delta?, deltaGoodWhen?, sparkline?, icon?, compact? })
-```
-
-**`heroTile`** — Typography-first hero. No chart. Use for the single most important number.
-```js
-Maging.heroTile(sel, { kicker?, value, tagline?, stats?: [{ label, value }] })
-```
-
-**`metricChart`** — Hero number + labeled mini line chart. Current vs previous period.
-```js
-Maging.metricChart(sel, { label, value, delta?, icon?, context?, categories, series: [{ name, data }], target?, yFormatter? })
-```
-
-**`metricStack`** — Bento: main metric + 2×2 sub-metrics.
-```js
-Maging.metricStack(sel, { title, main: { label, value, delta? }, items: [{ label, value }] })
-```
-
-**`compareCard`** — A vs B comparison with delta.
-```js
-Maging.compareCard(sel, { title, left: { label, value }, right: { label, value }, delta?, deltaLabel? })
-```
-
-**`countdownTile`** — Real-time days/hrs/min countdown.
-```js
-Maging.countdownTile(sel, { title, target, label?, context? })
-```
-
-**`ringProgress`** — Circular progress + center value + threshold colors.
-```js
-Maging.ringProgress(sel, { value, max, unit, label, context?, thresholds? })
-```
-
-**`bulletChart`** — Target vs actual vs benchmark.
-```js
-Maging.bulletChart(sel, { value, target?, benchmark?, max, min?, ranges?, valueFormatter?, unit? })
-```
-
-**`sparklineList`** — Row list: label + value + delta + mini-sparkline.
-```js
-Maging.sparklineList(sel, { title, items: [{ label, value, delta, sparkline, deltaGoodWhen? }] })
-```
-
-**`goalGrid`** — Multi-goal progress bars (OKR-style).
-```js
-Maging.goalGrid(sel, { title, items: [{ label, value, max, unit?, sublabel? }], thresholds? })
-```
+### METRIC
+**`kpiCard`** `{ label, value, delta?, deltaGoodWhen?, sparkline?, icon?, compact? }`
+**`heroTile`** `{ kicker?, value, tagline?, stats?:[{label,value}] }`
+**`metricChart`** `{ label, value, delta?, icon?, context?, categories, series:[{name,data}], target?, yFormatter? }`
+**`metricStack`** `{ title, main:{label,value,delta?}, items:[{label,value}] }`
+**`compareCard`** `{ title, left:{label,value}, right:{label,value}, delta?, deltaLabel? }`
+**`countdownTile`** `{ title, target, label?, context? }`
+**`ringProgress`** `{ value, max, unit, label, context?, thresholds? }`
+**`bulletChart`** `{ value, target?, benchmark?, max, min?, ranges?, valueFormatter?, unit? }`
+**`sparklineList`** `{ title, items:[{label,value,delta,sparkline,deltaGoodWhen?}] }`
+**`goalGrid`** `{ title, items:[{label,value,max,unit?,sublabel?}], thresholds? }`
 
 ### CHARTS
-
-**`lineChart`** — Multi-series line/area chart.
-```js
-Maging.lineChart(sel, { title?, categories, series: [{ name, data }], stack?, area?, yFormatter? })
-```
-
-**`barChart`** — Horizontal (default) or vertical bars.
-```js
-Maging.barChart(sel, { title?, items: [{ label, value }], horizontal?, yFormatter?, showLabels? })
-```
-
-**`donutChart`** — Proportion visualization + center label.
-```js
-Maging.donutChart(sel, { title?, slices: [{ label, value, color? }], centerLabel?, centerValue? })
-```
-
-**`funnelChart`** — Stage-by-stage conversion.
-```js
-Maging.funnelChart(sel, { title?, stages: [{ label, value }], valueSuffix? })
-```
-
-**`gaugeChart`** — Semi-circle gauge with thresholds.
-```js
-Maging.gaugeChart(sel, { title?, label, value, max, unit, thresholds? })
-```
-
-**`radarChart`** — Multi-axis comparison.
-```js
-Maging.radarChart(sel, { title?, indicators: [{ name, max }], series: [{ name, data }] })
-```
-
-**`heatmapChart`** — 2D density (weekday × hour, etc.).
-```js
-Maging.heatmapChart(sel, { title?, xAxis, yAxis, matrix, tooltipFormatter? })
-```
-
-**`treemapChart`** — Area = value distribution.
-```js
-Maging.treemapChart(sel, { title?, items: [{ name, value }], valueFormatter? })
-```
-
-**`scatterChart`** — X/Y correlation + bubble sizes.
-```js
-Maging.scatterChart(sel, { title?, points: [{ label, x, y, size? }], xLabel?, yLabel? })
-```
-
-**`sankeyChart`** — Node-link flow.
-```js
-Maging.sankeyChart(sel, { title?, nodes: [{ name }], links: [{ source, target, value }], valueFormatter? })
-```
-
-**`waterfallChart`** — Start→gains→losses→total.
-```js
-Maging.waterfallChart(sel, { title?, items: [{ label, value, type? }], valueFormatter? })
-```
-
-**`mapChart`** — Korean province hex-tilemap.
-```js
-Maging.mapChart(sel, { title?, items: [{ region, value }], valueFormatter? })
-```
-
-**`cohortMatrix`** — Cohort × period retention matrix.
-```js
-Maging.cohortMatrix(sel, { title?, cohorts, periods, data, sizes?, valueFormatter? })
-```
+**`lineChart`** `{ title?, categories, series:[{name,data}], stack?, area?, yFormatter? }`
+**`barChart`** `{ title?, items:[{label,value}], horizontal?, yFormatter?, showLabels? }`
+**`donutChart`** `{ title?, slices:[{label,value,color?}], centerLabel?, centerValue? }`
+**`funnelChart`** `{ title?, stages:[{label,value}], valueSuffix? }`
+**`gaugeChart`** `{ title?, label, value, max, unit, thresholds? }`
+**`radarChart`** `{ title?, indicators:[{name,max}], series:[{name,data}] }`
+**`heatmapChart`** `{ title?, xAxis, yAxis, matrix, tooltipFormatter? }`
+**`treemapChart`** `{ title?, items:[{name,value}], valueFormatter? }`
+**`scatterChart`** `{ title?, points:[{label,x,y,size?}], xLabel?, yLabel? }`
+**`sankeyChart`** `{ title?, nodes:[{name}], links:[{source,target,value}], valueFormatter? }`
+**`waterfallChart`** `{ title?, items:[{label,value,type?}], valueFormatter? }`
+**`mapChart`** `{ title?, items:[{region,value}], valueFormatter? }`
+**`cohortMatrix`** `{ title?, cohorts, periods, data, sizes?, valueFormatter? }`
 
 ### LISTS & STATUS
-
-**`leaderboard`** — Avatar + progress bar + rank.
-```js
-Maging.leaderboard(sel, { title?, items: [{ name, initial?, percent, meta? }] })
-```
-
-**`activityTable`** — Table with optional LIVE badge and optional grouped column headers.
-```js
-Maging.activityTable(sel, {
-  title?, columns: [{ key, label, align?, render? }], rows: [...], live?,
-  headerGroups?: [{ label, span, align? }]  // colspan 그룹 헤더 (선택)
-})
-```
-`headerGroups`: 컬럼 위에 span 그룹 행 추가. `span`은 묶을 columns 수. 예) `[{ label: '26년', span: 3 }, { label: '25년', span: 2 }]`
-
-**`timeline`** — Vertical event feed.
-```js
-Maging.timeline(sel, { title?, items: [{ time, text, type? }] })
-```
-
-**`inboxPreview`** — Notification/email list.
-```js
-Maging.inboxPreview(sel, { title?, items: [{ icon?, text, time, type? }] })
-```
-
-**`statusGrid`** — Service health dot matrix.
-```js
-Maging.statusGrid(sel, { title?, columns?, items: [{ label, status, value? }] })
-```
+**`leaderboard`** `{ title?, items:[{name,initial?,percent,meta?}] }`
+**`activityTable`** `{ title?, columns:[{key,label,align?,render?}], rows:[...], live?, headerGroups?:[{label,span,align?}] }`
+  `headerGroups` — colspan 그룹 헤더. 예) `[{label:'26년',span:3},{label:'25년',span:2}]`
+**`timeline`** `{ title?, items:[{time,text,type?}] }`
+**`inboxPreview`** `{ title?, items:[{icon?,text,time,type?}] }`
+**`statusGrid`** `{ title?, columns?, items:[{label,status,value?}] }`
 
 ### CALENDAR & PROJECT
-
-**`calendarHeatmap`** — GitHub-contribution style.
-```js
-Maging.calendarHeatmap(sel, { title?, year?, values: [[date, value]], max?, cellSize? })
-```
-
-**`eventCalendar`** — Month grid.
-```js
-Maging.eventCalendar(sel, { title?, year?, month?, events: [{ date, label, type? }] })
-```
-
-**`progressStepper`** — Phase tracker (done/active/pending).
-```js
-Maging.progressStepper(sel, { title?, steps: [{ label, status, date?, badge? }] })
-```
+**`calendarHeatmap`** `{ title?, year?, values:[[date,value]], max?, cellSize? }`
+**`eventCalendar`** `{ title?, year?, month?, events:[{date,label,type?}] }`
+**`progressStepper`** `{ title?, steps:[{label,status,date?,badge?}] }`
 
 ### STRUCTURAL
-
-**`pageHeader`** — Full-width H1 block.
-```js
-Maging.pageHeader(sel, { kicker?, title, subtitle?, meta? })
-```
-
-**`sectionHead`** — Section divider.
-```js
-Maging.sectionHead(sel, { index?, kicker?, title, tag? })
-```
-
-**`alertBanner`** — Horizontal stripe (not a card).
-```js
-Maging.alertBanner(sel, { type, title, message?, icon?, action?: { label, href? }, dismissable? })
-```
+**`pageHeader`** `{ kicker?, title, subtitle?, meta? }`
+**`sectionHead`** `{ index?, kicker?, title, tag? }`
+**`alertBanner`** `{ type, title, message?, icon?, action?:{label,href?}, dismissable? }`
 
 ---
 
 ## Utility
 
 ```js
-Maging.fmt.krw(value)       // 43.8억원 (HTML — unit styled small)
-Maging.fmt.krwPlain(value)  // 43.8억원 (plain text — for chart axis/tooltip)
-Maging.fmt.num(value)       // 48,291
-Maging.fmt.pct(value)       // 85.3%
-Maging.setTheme(name)       // switch theme at runtime
+Maging.fmt.krw(v)       // 43.8억원 (HTML — unit styled small)
+Maging.fmt.krwPlain(v)  // 43.8억원 (plain — chart axis/tooltip)
+Maging.fmt.num(v)       // 48,291
+Maging.fmt.pct(v)       // 85.3%
+Maging.setTheme(name)
 ```
 
 ---
 
-## NEVER DO
+## NEVER
 
-- **No `₩` prefix** — Korean convention is suffix `원`. Use `Maging.fmt.krw`.
-- **No `DOMContentLoaded`** — use `maging:ready` (dashboard) or place `<script>` after maging.js (landing).
-- **No custom `:root` CSS variables** — maging.css defines all `--mw-*` tokens per theme.
-- **No invented class names** — Grid layout + Maging API only.
-- **No code comments** — burns tokens.
-- **No manual number formatters** — use `Maging.fmt.*`.
-
-## License
+- `₩` prefix 금지 — suffix `원`. `Maging.fmt.krw` 사용.
+- `DOMContentLoaded` 금지 — `maging:ready` 또는 maging.js 뒤 `<script>`.
+- `:root` CSS 변수 금지 — 모든 `--mw-*` 토큰은 maging.css 정의.
+- 임의 클래스명 금지 — Grid + Maging API만.
+- 코드 주석 금지 — 토큰 낭비.
+- 수동 숫자 포맷터 금지 — `Maging.fmt.*` 사용.
 
 MIT

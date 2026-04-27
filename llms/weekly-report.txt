@@ -3,29 +3,19 @@
 
 ## Mode: Weekly Report (주간보고)
 
-> 정기 보고용 — KPI 카드 + 월별 표 + 차트 + 리뷰 박스가 위계 있게 배치된 한 페이지(또는 여러 페이지) 보고서.
+> KPI 카드 + 월별 표 + 차트 + 리뷰 박스를 위계 있게 배치한 정기 보고서.
 
-### Concept
-
-위클리리포트 = "narrative 순서대로 배열된 KPI 카드들". prose 위주가 아니라 데이터 카드 위주. 각 페이지는 보통 **1 KPI = 1 슬라이드** 룰.
-
-5개 코어 패턴 (이 5개 조합으로 90% 커버):
-1. **Page header** — 보고 메타 (KPI 번호, 제목, 팀, 기준일)
-2. **KPI hero strip** — 큰 색 숫자 + 작은 단위 + delta + 색상 상태
-3. **Monthly table** — 12개월 컬럼 + 합계, sticky 첫/끝 컬럼
-4. **View-switchable chart** — table/line/bar 토글 (같은 단위 시리즈일 때만)
-5. **📋 Review box** — `alertBanner`로 한두 줄 요약
+**5개 코어 패턴:** pageHeader → KPI strip → sectionHead → monthlyTable/chart → alertBanner(리뷰)
 
 ---
 
-### Setup (Dashboard와 동일)
+### Setup
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.16/dist/maging-all.js"></script>
 <body class="mw-themed">
 ```
-
-Mount inside `maging:ready`. NEVER use `DOMContentLoaded`.
+`maging:ready` 이벤트 안에서 마운트. `DOMContentLoaded` 금지.
 
 ---
 
@@ -33,317 +23,176 @@ Mount inside `maging:ready`. NEVER use `DOMContentLoaded`.
 
 ```html
 <body class="mw-themed">
-  <main class="max-w-[1240px] mx-auto px-6 py-4" style="word-break: keep-all">
-
-    <!-- 1. Page header (메타) -->
-    <div id="page-hero" class="pt-4 pb-2"></div>
-
-    <!-- 2. KPI hero strip — 자연 높이 (grid-auto-rows 쓰지 않음) -->
+  <main class="max-w-[1240px] mx-auto px-6 py-4" style="word-break:keep-all">
+    <div id="hero" class="pt-4 pb-2"></div>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
-      <div id="kpi-1"></div><div id="kpi-2"></div>
-      <div id="kpi-3"></div><div id="kpi-4"></div>
+      <div id="k1"></div><div id="k2"></div><div id="k3"></div><div id="k4"></div>
     </div>
-
-    <!-- 3. Section + tables/charts -->
     <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
-      <div id="section-01"></div>
-      <div class="table-block mt-3"> ... </div>
+      <div id="sec1"></div>
+      <div class="table-block mt-3"><div id="tbl"></div></div>
     </div>
-
-    <!-- 4. Review -->
-    <div class="mt-4"><div id="review-box"></div></div>
+    <div class="mt-4"><div id="review"></div></div>
   </main>
 </body>
 ```
 
 ---
 
-### KPI Hero (큰 숫자 + 작은 단위)
-
-`kpiCard`에 `valueHTML: true` 옵션 + `<span class="mw-unit">` 으로 단위 시각 위계:
+### KPI 카드 (큰 숫자 + 단위)
 
 ```js
-Maging.kpiCard('#kpi-1', {
+Maging.kpiCard('#k1', {
   label: '3월 신규 매출 · 목표 1.42억원',
-  value: '0.72<span class="mw-unit"> 억원</span>',
-  valueHTML: true,
-  delta: -49.3,                    // 달성률 50.7% → 목표 대비 -49.3
-  deltaGoodWhen: 'positive',
+  value: '0.72<span class="mw-unit"> 억원</span>', valueHTML: true,
+  delta: -49.3, deltaGoodWhen: 'positive',
 });
 ```
-
-**Delta 방향 (deltaGoodWhen):**
-- `'positive'` (default) — 매출/사용자/달성률 등 클수록 좋음
-- `'negative'` — 해지율/이탈/응답시간 등 작을수록 좋음
-
-**KPI 카드 행은 `grid-auto-rows` 쓰지 말 것.** 자연 높이가 정답 (~96px). row 높이 강제하면 카드 위쪽 정렬 + 아래 빈 공간 생김.
+`deltaGoodWhen`: 매출/사용자 = `'positive'` · 해지율/이탈 = `'negative'`
+`grid-auto-rows` 금지 — KPI 카드는 자연 높이.
 
 ---
 
-### Toggle 룰 (단위 / view) — 데이터 보고 자동 결정
+### Monthly Table 결정 트리
 
-#### 단위 토글 (원/만원/억원 등)
+```
+모든 row 같은 단위?
+  YES → Maging.monthlyTable(…)  +  unitToggle/viewToggle
+        단, data max < 1억 → unitToggle 생략
+  NO  → Maging.activityTable(…) + row.unit 인라인
+```
 
-데이터 max 값으로 표시 여부 결정:
-
-| 데이터 max | 토글 |
-|---|---|
-| 1억 이상 (큰 통화 — 매출, ARR 등) | ✅ 원/만원/억원 |
-| 작은 수치 (해지건수, 사용자, %) | ❌ 빼기 |
-| 단위가 정해진 데이터 (%, 점수) | ❌ 빼기 |
-
-#### View 토글 (table / line / bar)
-
-- 모든 row가 **같은 단위**의 N 시리즈 → ✅ 활성 (table/line/bar 자유 전환)
-- row마다 단위 다름 (건+%+개 섞임) → ❌ 빼기. 표만 (차트로 못 묶음)
-
-### `Maging.monthlyTable(sel, config)` — 월별 표 + 토글 올인원
-
-12개월 컬럼 표 + 합계행 + 단위/view 토글을 **한 줄 호출**로 생성. HTML은 빈 `<div>`만.
-
+**`Maging.monthlyTable(sel, config)`**
 ```js
-Maging.monthlyTable('#container', {
-  title,               // toolbar 제목
-  sub?,                // toolbar 부제목 (muted)
-  categories?,         // 기본값: ['1월'…'12월']
-  rows: [{ name, data: [v, …] }],  // data[i] = i번째 month 값 (null 허용)
-  summaryRow?,         // string → 자동 합계 row 이름 (예: '합계')
-  unitToggle?,         // true → 원/만원/억원 토글 표시
-  viewToggle?,         // true → table/line/bar 토글 표시
-  defaultUnit?,        // '원'|'만원'|'억원'  (기본 '만원')
-  defaultView?,        // 'table'|'line'|'bar' (기본 'table')
+Maging.monthlyTable('#tbl', {
+  title, sub?,
+  rows: [{ name, data:[v,…] }],  // null 허용
+  summaryRow?,                    // '합계' 등
+  unitToggle?, viewToggle?,
+  defaultUnit?,                   // '만원'(기본)
+  defaultView?,                   // 'table'(기본)
 });
 ```
 
-**같은 단위 시리즈 (매출 카테고리 등):**
+**단위 혼합 → `activityTable` 직접:**
 ```js
-Maging.monthlyTable('#revenue-target', {
-  title: '2026년 목표 매출', sub: '월별 카테고리 합계',
-  rows: [
-    { name: '신규',          data: [99000000, 175000000, 142000000, /*…*/] },
-    { name: '기고객',        data: [522199453, 685150178, /*…*/] },
-    { name: '추가/업셀링',   data: [3971153, 25120771, /*…*/] },
-  ],
-  summaryRow: '합계',
-  unitToggle: true, viewToggle: true, defaultUnit: '만원',
-});
-```
-
-**토글 결정 룰:**
-- 모든 row 같은 단위 → `unitToggle: true, viewToggle: true`
-- row마다 단위 다름 → 둘 다 생략 (표만, 차트 불가). 대신 `activityTable` 직접 사용 + `row.unit` 인라인 표기
-
-**⚠️ 듀얼 Y축 / 콤보차트 금지:** maging은 dual-axis 콤보차트를 지원하지 않음. "바 + 달성률 꺾은선" 같은 구성이 필요하면 **두 개로 분리** — `barChart` 하나 + `lineChart` 하나. 한 ECharts 인스턴스에 우측 Y축 추가하지 말 것.
-
-**컬럼 그룹 헤더 (연도비교 표 등):** `activityTable`의 `headerGroups`로 colspan 그룹행 추가.
-```js
-Maging.activityTable('#table', {
-  headerGroups: [
-    { label: '',     span: 1 },           // 구분 열 (빈 헤더)
-    { label: '26년', span: 3, align: 'right' },
-    { label: '25년', span: 2, align: 'right' },
-  ],
-  columns: [
-    { key: 'name', label: '구분',   align: 'left' },
-    { key: 't26',  label: '목표',   align: 'right', render: fmt },
-    { key: 'a26',  label: '실적',   align: 'right', render: fmt },
-    { key: 'r26',  label: '달성률', align: 'right', render: fmtPct },
-    { key: 'a25',  label: '실적',   align: 'right', render: fmt },
-    { key: 'r25',  label: '성장률', align: 'right', render: fmtPct },
-  ],
-  rows: [...],
-});
-```
-
-**Mixed-unit 케이스 (토글 없음) — `activityTable` 직접 사용:**
-```js
+const fmt = v => v==null
+  ? '<span style="color:var(--mw-text-muted)">−</span>'
+  : (typeof v==='string' ? v : v.toLocaleString());
 const months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
-const rows = [
-  { name: '해지',     unit: '건', m0:174, m1:138, m2:135, total:447 },
-  { name: '신규',     unit: '건', m0:117, m1:89,  m2:92,  total:298 },
-  { name: '해지율',   unit: '%',  m0:'3.7%', m1:'3.0%', m2:'2.9%', total:'3.2%' },
-];
-const fmt = v => v == null ? '<span style="color:var(--mw-text-muted)">−</span>'
-  : (typeof v === 'string' ? v : v.toLocaleString());
 
-Maging.activityTable('#table', {
+Maging.activityTable('#tbl', {
   columns: [
-    { key: 'name', label: '구분', align: 'left',
-      render: (v, row) => v + (row.unit ? ' <span class="row-unit">('+row.unit+')</span>' : '') },
-    ...months.map((m, i) => ({ key: 'm'+i, label: m, align: 'right', render: fmt })),
-    { key: 'total', label: '합계', align: 'right',
-      render: v => '<strong>' + fmt(v) + '</strong>' },
+    { key:'name', label:'구분', align:'left',
+      render:(v,r) => v + (r.unit ? ` <span class="row-unit">(${r.unit})</span>` : '') },
+    ...months.map((m,i) => ({ key:'m'+i, label:m, align:'right', render:fmt })),
+    { key:'total', label:'합계', align:'right', render:v=>'<strong>'+fmt(v)+'</strong>' },
   ],
-  rows,
+  rows: [
+    { name:'해지', unit:'건', m0:174, m1:138, m2:135, total:447 },
+    { name:'해지율', unit:'%', m0:'3.7%', m1:'3.0%', m2:'2.9%', total:'3.2%' },
+  ],
 });
 ```
 ```css
-.row-unit { color: var(--mw-text-muted); font-size: 0.85em; font-weight: 400; margin-left: 4px; }
+.row-unit { color:var(--mw-text-muted); font-size:0.85em; margin-left:4px; }
 ```
+
+**컬럼 그룹 헤더 (연도비교):**
+```js
+Maging.activityTable('#tbl', {
+  headerGroups: [{label:'',span:1},{label:'26년',span:3},{label:'25년',span:2}],
+  columns: [
+    { key:'name', label:'구분', align:'left' },
+    { key:'t26', label:'목표', align:'right', render:fmt },
+    { key:'a26', label:'실적', align:'right', render:fmt },
+    { key:'r26', label:'달성률', align:'right', render:fmt },
+    { key:'a25', label:'실적', align:'right', render:fmt },
+    { key:'r25', label:'성장률', align:'right', render:fmt },
+  ],
+  rows:[…],
+});
+```
+
+⚠️ **듀얼 Y축 금지** — `barChart` + `lineChart` 두 개로 분리.
 
 ---
 
-### Sidebar (선택, 여러 페이지일 때)
-
-여러 페이지를 묶어 한 보고서 형태로 만들 때만 사용:
+### Sidebar (다중 페이지)
 
 ```html
-<body class="mw-themed">
-  <maging-nav active="demo"></maging-nav>
-  <div class="flex">
-    <weekly-sidebar active="페이지-id"></weekly-sidebar>
-    <main class="flex-1 px-6 py-4" style="word-break: keep-all; min-width: 0">
-      <div class="max-w-[1240px] mx-auto">
-        <!-- 기존 페이지 내용 -->
-      </div>
-    </main>
-  </div>
-</body>
+<div class="flex">
+  <weekly-sidebar active="page-id"></weekly-sidebar>
+  <main class="flex-1 px-6 py-4 min-w-0" style="word-break:keep-all">…</main>
+</div>
 ```
 
-`weekly-sidebar`는 별도 web component. 부서/팀 트리 + active 표시.
+---
+
+### Generation Rules
+
+1. **1페이지 = 1 KPI 1주제.** 여러 KPI 한 페이지에 묶지 말 것.
+2. Setup 한 줄 + `<body class="mw-themed">` + theme 선택.
+3. **단위 표기 필수** — 명/건/개/원/% 모두.
+4. **KPI label에 목표 컨텍스트 포함** — `'3월 신규 · 목표 1.42억원'`.
+5. **delta:** 목표 대비 또는 전월/전년 대비 %.
+6. **마지막은 항상 alertBanner** — icon='📋' type='info' 1-2문장 요약.
+7. **Anti-AI:** hover accent/glow 금지 · 균일 3등분 grid 금지 · shadow tint 금지.
 
 ---
 
-### Generation Rules (Weekly Report)
-
-0. **Default = 1 페이지 = 1 KPI 1 주제.** 페이지를 잘게 쪼개기. 한 페이지에 여러 KPI 묶지 말 것.
-1. Setup 한 줄 + `<body class="mw-themed">` + theme 선택.
-2. **Monthly Table 결정:**
-   - 모든 row 같은 단위 → `Maging.monthlyTable(…, { unitToggle: true, viewToggle: true })`
-   - row마다 단위 다름 → `Maging.activityTable` 직접 사용 + `row.unit` 인라인
-   - 데이터 max 1억 미만 → `unitToggle` 생략
-3. **KPI 카드:** label에 "목표 X" 같은 컨텍스트 합치기. value는 valueHTML로 큰 숫자 + 작은 단위. delta는 목표 대비 또는 전월/전년 대비.
-4. **deltaGoodWhen:** 매출/사용자 = 'positive', 해지율/이탈 = 'negative'.
-5. **단위 절대 빼지 말 것** — 명/건/개/원/% 어떤 단위든 표기.
-6. **Typography 위계:** 헤더 500 muted, 셀 400, 강조(합계) 600. 마지막 row(합계)에 미세 surface-2 배경.
-7. **Sticky 컬럼:** 표가 12개월처럼 길면 첫/끝 sticky 필수.
-8. **KPI row:** `grid-auto-rows` 쓰지 말기. 자연 높이가 정답.
-9. **차트 view 토글:** 같은 단위 N 시리즈만. 단위 섞이면 표만.
-9a. **듀얼축 필요 시 분리:** "실적(건) + 달성률(%)" 같이 단위 다른 데이터를 한 차트에 넣지 말 것. `barChart` + `lineChart` 두 개로 나눠 배치.
-10. **Section divider:** `mt-5 pt-4` + `border-top:1px solid var(--mw-border)`. `sectionHead`로 라벨.
-11. **Review box (마지막):** `alertBanner` icon='📋', type='info', 1-2문장 핵심 요약 + 액션.
-12. **Korean labels OK.** `word-break: keep-all`. KRW formatting은 `Maging.fmt.krw` (HTML), `Maging.fmt.krwPlain` (chart axis).
-13. **Anti-AI design 룰 (DESIGN.md 준수):**
-    - hover 시 accent border 금지 / glow ring 금지 / `transform: translateY` hover 금지
-    - 균일 3등분 grid 반복 금지 — 정보 중요도에 따라 비대칭
-    - shadow에 accent tint 금지
-
----
-
-### Reference: Page 1장 (KPI 1. 기고객 리텐션 — 단위 섞임 케이스)
-
-표마다 단위 다름 → 토글 빼고 row name에 단위 인라인 표기.
+### Reference (완성 예제 — 단위 혼합)
 
 ```html
 <!DOCTYPE html>
 <html lang="ko" data-theme="claude">
 <head>
-  <meta charset="UTF-8" />
-  <title>SaaS CX팀 주간보고 — KPI 1. 기고객 리텐션</title>
+  <meta charset="UTF-8">
+  <title>주간보고</title>
   <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.16/dist/maging-all.js"></script>
-  <style>
-    .table-block { display: flex; flex-direction: column; gap: var(--mw-space-2); }
-    .table-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0 var(--mw-space-1); }
-    .table-toolbar__title { font-size: var(--mw-text-base); font-weight: 600; }
-    .table-toolbar__sub { font-size: var(--mw-text-sm); color: var(--mw-text-muted); margin-left: var(--mw-space-2); }
-    .scroll-table .mw-card { display: flex; flex-direction: column; overflow: hidden; }
-    .scroll-table .mw-table__wrap { flex: 1; min-height: 0; overflow: auto; }
-    .scroll-table .mw-table { width: 100%; height: 100%; font-size: var(--mw-text-xs); border-collapse: separate; border-spacing: 0; }
-    .scroll-table .mw-table th, .scroll-table .mw-table td {
-      padding: var(--mw-space-2-5) var(--mw-space-3); white-space: nowrap;
-      font-variant-numeric: tabular-nums; background: var(--mw-surface); }
-    .scroll-table .mw-table th { font-weight: 500; color: var(--mw-text-muted); letter-spacing: 0.01em; }
-    .scroll-table .mw-table td { font-weight: 400; letter-spacing: -0.005em; }
-    .scroll-table .mw-table td strong { font-weight: 600; }
-    .scroll-table .mw-table tbody tr:last-child td { background: var(--mw-surface-2); }
-    .row-unit { color: var(--mw-text-muted); font-size: 0.85em; font-weight: 400; margin-left: 4px; }
-  </style>
+  <style>.row-unit{color:var(--mw-text-muted);font-size:.85em;margin-left:4px}</style>
 </head>
 <body class="mw-themed">
-  <main class="max-w-[1240px] mx-auto px-6 py-4" style="word-break: keep-all">
-    <div id="page-hero" class="pt-4 pb-2"></div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2">
-      <div id="kpi-1"></div><div id="kpi-2"></div><div id="kpi-3"></div>
+  <main class="max-w-[1240px] mx-auto px-6 py-4" style="word-break:keep-all">
+    <div id="hero" class="pt-4 pb-2"></div>
+    <div class="grid grid-cols-3 gap-3 mt-2">
+      <div id="k1"></div><div id="k2"></div><div id="k3"></div>
     </div>
     <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
-      <div id="section-01"></div>
+      <div id="sec1"></div>
       <div class="table-block mt-3">
-        <div class="table-toolbar">
-          <div>
-            <span class="table-toolbar__title">2026년 월별 현황</span>
-            <span class="table-toolbar__sub">해지·신규·유료전체 추이</span>
-          </div>
-        </div>
-        <div id="table-2026" class="scroll-table" style="height:300px"></div>
+        <div id="tbl" class="scroll-table" style="height:300px"></div>
       </div>
     </div>
-    <div class="mt-4"><div id="review-box"></div></div>
+    <div class="mt-4"><div id="review"></div></div>
   </main>
   <script>
-    window.addEventListener('maging:ready', () => {
-      Maging.kpiCard('#kpi-1', { label: '3월 해지율 · 전년 동월 3.3%',
-        value: '2.9<span class="mw-unit">%</span>', valueHTML: true,
-        delta: -3.4, deltaGoodWhen: 'negative' });
-      Maging.kpiCard('#kpi-2', { label: '3월 해지비율 · 신규 92 < 해지 135',
-        value: '146<span class="mw-unit">%</span>', valueHTML: true,
-        delta: -10, deltaGoodWhen: 'negative' });
-      Maging.kpiCard('#kpi-3', { label: '3월 유료 기업 수 · 2월 4,621 →',
-        value: '4,592<span class="mw-unit">개</span>', valueHTML: true,
-        delta: -0.6, deltaGoodWhen: 'positive' });
+  window.addEventListener('maging:ready', () => {
+    Maging.pageHeader('#hero', { kicker:'KPI 1 · 기고객 리텐션', title:'월별 해지 현황', subtitle:'SaaS CX팀', meta:'기준일 2026.04.27' });
+    Maging.kpiCard('#k1', { label:'3월 해지율 · 전년 3.3%', value:'2.9<span class="mw-unit">%</span>', valueHTML:true, delta:-3.4, deltaGoodWhen:'negative' });
+    Maging.kpiCard('#k2', { label:'3월 신규', value:'92<span class="mw-unit">건</span>', valueHTML:true, delta:-20, deltaGoodWhen:'positive' });
+    Maging.kpiCard('#k3', { label:'유료 기업', value:'4,592<span class="mw-unit">개</span>', valueHTML:true, delta:-0.6, deltaGoodWhen:'positive' });
+    Maging.sectionHead('#sec1', { index:'01', kicker:'CHURN', title:'월별 해지·신규 추이' });
 
-      Maging.pageHeader('#page-hero', {
-        kicker: 'KPI 1 · 기고객 리텐션 50% 향상',
-        title: '월별 해지 및 순증감 현황',
-        subtitle: 'SaaS CX팀 — 2026년 4월 4주차',
-        meta: 'SaaS 지원센터 · 기준일 2026.04.27(월)',
-      });
-      Maging.sectionHead('#section-01', { index: '01', kicker: 'CHURN & GROWTH', title: '월별 해지·신규 추이' });
-
-      const months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
-      const rows = [
-        { name: '해지',     unit: '건', m0:174,m1:138,m2:135,m3:89, total:312 },
-        { name: '신규',     unit: '건', m0:117,m1:89, m2:92, total:206 },
-        { name: '유료전체', unit: '개', m0:4662,m1:4621,m2:4592, total:4621 },
-        { name: '해지비율', unit: '%',  m0:'149%',m1:'156%',m2:'146%', total:'153%' },
-        { name: '해지율',   unit: '%',  m0:'3.7%',m1:'3.0%',m2:'2.9%', total:'3.2%' },
-      ];
-      const fmtCell = (v) => v == null ? '<span style="color:var(--mw-text-muted)">−</span>'
-        : (typeof v === 'string' ? v : v.toLocaleString());
-
-      Maging.activityTable('#table-2026', {
-        columns: [
-          { key: 'name', label: '구분', align: 'left',
-            render: (v, row) => v + (row.unit ? ' <span class="row-unit">('+row.unit+')</span>' : '') },
-          ...months.map((m, i) => ({ key: 'm'+i, label: m, align: 'right', render: fmtCell })),
-          { key: 'total', label: '합계', align: 'right',
-            render: (v) => '<strong>' + fmtCell(v) + '</strong>' },
-        ],
-        rows,
-      });
-
-      Maging.alertBanner('#review-box', {
-        type: 'info', icon: '📋', title: '리뷰',
-        message: '3월 해지율 -0.1%p 개선됐으나 신규 92 < 해지 135 — 4월 신규 회복이 우선 과제.',
-      });
+    const months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+    const fmt = v => v==null ? '<span style="color:var(--mw-text-muted)">−</span>' : (typeof v==='string'?v:v.toLocaleString());
+    Maging.activityTable('#tbl', {
+      columns: [
+        { key:'name', label:'구분', align:'left', render:(v,r)=>v+(r.unit?` <span class="row-unit">(${r.unit})</span>`:'') },
+        ...months.map((m,i)=>({key:'m'+i,label:m,align:'right',render:fmt})),
+        { key:'total', label:'합계', align:'right', render:v=>'<strong>'+fmt(v)+'</strong>' },
+      ],
+      rows: [
+        { name:'해지', unit:'건', m0:174,m1:138,m2:135,m3:89, total:536 },
+        { name:'신규', unit:'건', m0:117,m1:89, m2:92,  total:298 },
+        { name:'해지율', unit:'%', m0:'3.7%',m1:'3.0%',m2:'2.9%', total:'3.2%' },
+      ],
     });
+    Maging.alertBanner('#review', { type:'info', icon:'📋', title:'리뷰', message:'3월 해지율 개선됐으나 신규<해지 지속 — 4월 신규 회복 우선.' });
+  });
   </script>
 </body>
 </html>
 ```
 
----
-
-### Quick Reference
-
-**Required:** pageHeader → KPI strip → sectionHead → table/chart → alertBanner
-
-**Monthly Table 결정:**
-```
-모든 row 같은 단위?
-  YES → Maging.monthlyTable(…, { unitToggle: true, viewToggle: true })
-        단, max < 1억 → unitToggle 생략
-  NO  → Maging.activityTable 직접 + row.unit 인라인
-```
-
-**Output:** 단일 fenced ` ```html … ``` ` 코드 블록.
+**Output:** 단일 ` ```html … ``` ` 블록.
