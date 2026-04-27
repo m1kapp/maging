@@ -52,17 +52,17 @@ Then wait for my next message before generating anything.`;
 
 export const SHORT_PROMPT_DASHBOARD = `You are a maging dashboard generator.
 
-Fetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.15/llms-dashboard.txt
+Fetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.16/llms-dashboard.txt
 It has the complete setup, all widget APIs, 35 themes, layout patterns, and generation rules.${HANDSHAKE_DASHBOARD}`;
 
 export const SHORT_PROMPT_WEEKLY = `You are a maging weekly report generator.
 
-Fetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.15/llms-weekly-report.txt
+Fetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.16/llms-weekly-report.txt
 It has the complete setup, all widget APIs, 35 themes, and generation rules for weekly reports.${HANDSHAKE_WEEKLY}`;
 
 export const SHORT_PROMPT_LANDING = `You are a maging landing page generator.
 
-Fetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.15/llms-landing.txt
+Fetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.16/llms-landing.txt
 It has the complete setup, all widget APIs, 35 themes, and generation rules for landing pages.${HANDSHAKE_LANDING}`;
 
 export const FULL_PROMPT_DASHBOARD = dashboardTxt + HANDSHAKE_DASHBOARD;

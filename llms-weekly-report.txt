@@ -255,7 +255,7 @@ MIT
 ### Setup (Dashboard와 동일)
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.15/dist/maging-all.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.16/dist/maging-all.js"></script>
 <body class="mw-themed">
 ```
 
@@ -475,7 +475,7 @@ Maging.activityTable('#table', {
 <head>
   <meta charset="UTF-8" />
   <title>SaaS CX팀 주간보고 — KPI 1. 기고객 리텐션</title>
-  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.15/dist/maging-all.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.16/dist/maging-all.js"></script>
   <style>
     .table-block { display: flex; flex-direction: column; gap: var(--mw-space-2); }
     .table-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0 var(--mw-space-1); }
