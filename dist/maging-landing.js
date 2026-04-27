@@ -446,6 +446,33 @@
   }
 
   // ──────────────────────────────────────────────
+  // Syntax highlighter (HTML + JS)
+  // ──────────────────────────────────────────────
+  function highlightCode(code) {
+    var parts = code.split(/(<[^>]+>)/g);
+    return parts.map(function(part) {
+      if (/^</.test(part)) {
+        var e = part.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        // colorize tag name, attributes, and string values inside tag
+        e = e.replace(/^(&lt;\/?)([\w-]+)/, '$1<span class="mwc-tag">$2</span>');
+        e = e.replace(/([\w-]+)(=)("(?:[^"\\]|\\.)*")/g, '<span class="mwc-attr">$1</span>$2<span class="mwc-str">$3</span>');
+        return '<span class="mwc-bracket">' + e + '</span>';
+      }
+      var s = part.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      s = s.replace(/(\/\/.*$)/gm, '<span class="mwc-cmt">$1</span>');
+      s = s.replace(/('(?:[^'\\]|\\.)*')/g, '<span class="mwc-str">$1</span>');
+      s = s.replace(/("(?:[^"\\]|\\.)*")/g, function(m) {
+        return m.indexOf('mwc-') >= 0 ? m : '<span class="mwc-str">' + m + '</span>';
+      });
+      s = s.replace(/\b(Maging)\.([\w]+)/g, '<span class="mwc-fn">$1.$2</span>');
+      s = s.replace(/\b(const|let|var|function|return|new|if|else|true|false|null)\b/g, '<span class="mwc-kw">$1</span>');
+      s = s.replace(/\b(\d+\.?\d*)\b/g, '<span class="mwc-num">$1</span>');
+      s = s.replace(/^(\s*)([\w]+)(\s*:)/gm, '$1<span class="mwc-prop">$2</span>$3');
+      return s;
+    }).join('');
+  }
+
+  // ──────────────────────────────────────────────
   // Widget: Code Block (syntax display + copy)
   // ──────────────────────────────────────────────
   function codeBlock(el, config) {
@@ -460,7 +487,7 @@
         (d.title ? '<span class="mw-codeblock__title">' + esc(d.title) + '</span>' : '') +
         '<button class="mw-codeblock__copy" type="button">Copy</button>' +
       '</div>' +
-      '<pre class="mw-codeblock__body"><code>' + esc(d.code) + '</code></pre>';
+      '<pre class="mw-codeblock__body"><code>' + highlightCode(d.code) + '</code></pre>';
 
     el.querySelector('.mw-codeblock__copy').addEventListener('click', function () {
       var btn = this;
@@ -573,6 +600,15 @@
       '  color: #cdd6f4; overflow-x: auto;',
       '}',
       '.mw-codeblock__body code { font-family: var(--mw-mono-font); }',
+      '.mwc-bracket { color: #89b4fa; }',
+      '.mwc-tag   { color: #f38ba8; }',
+      '.mwc-attr  { color: #f9e2af; }',
+      '.mwc-str   { color: #a6e3a1; }',
+      '.mwc-kw    { color: #cba6f7; }',
+      '.mwc-fn    { color: #89dceb; }',
+      '.mwc-num   { color: #fab387; }',
+      '.mwc-prop  { color: #b4befe; }',
+      '.mwc-cmt   { color: #6c7086; font-style: italic; }',
 
       /* ── comparison table ── */
       '.mw-cmp { width: 100%; }',

@@ -54,8 +54,9 @@
   .cg-grid { display: grid; gap: 1rem; grid-template-columns: repeat(3, 1fr); }
   @media (max-width: 960px) { .cg-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 640px) { .cg-grid { grid-template-columns: 1fr; } }
-  .cg-card--wide { grid-column: span 2; }
-  .cg-card--tall .cg-card__preview { height: 320px; }
+  .cg-card--wide { grid-column: 1 / -1; }
+  .cg-card--tall .cg-card__preview { min-height: 240px; }
+  .cg-card--tall:has(.mw-cover) .cg-card__preview { min-height: auto; }
   @media (max-width: 640px) { .cg-card--wide { grid-column: span 1; } }
 
   .cg-card {
@@ -68,38 +69,49 @@
     border-color: var(--mw-accent);
     box-shadow: 0 4px 16px -4px color-mix(in srgb, var(--mw-accent) 12%, transparent);
   }
+  /*
+   * ═══ PREVIEW CSS 원칙 ═══
+   * 1. 컨테이너만 제어: 배경, 크기, overflow, 정렬
+   * 2. 위젯 내부 스타일(padding, gap, border, font-size) 절대 오버라이드 금지
+   * 3. 유일한 예외: min-height:0 (overflow 방지), 차트 height 바인딩 (ECharts 필수)
+   * 4. 위젯은 프로덕션과 100% 동일하게 렌더. 안 맞으면 위젯 자체를 고칠 것.
+   */
+
+  /* ── 1. 프리뷰 컨테이너 ── */
   .cg-card__preview {
     overflow: hidden;
     background: var(--mw-bg); border-bottom: 1px solid var(--mw-border);
-    height: 180px; flex-shrink: 0;
+    flex: 1; min-height: 180px;
     padding: 0.75rem;
     display: flex; align-items: center; justify-content: center;
   }
   .cg-card__preview > div { width: 100%; }
+
+  /* ── 2. min-height 리셋 (overflow 방지, 레이아웃 변경 아님) ── */
+  .cg-card__preview .mw-card,
+  .cg-card__preview .mw-cover,
+  .cg-card__preview .mw-mapchart { min-height: 0 !important; }
+
+  /* ── 3. 차트 height 바인딩 (ECharts 렌더링 필수) ── */
   .cg-card__preview:has(.mw-chart__body) > div { height: 100%; }
-  .cg-card__preview .mw-header { display: none; }
-  .cg-card__preview .mw-card { border: none; box-shadow: none; background: transparent; padding: 0; min-height: 0 !important; height: 100%; display: flex; flex-direction: column; }
+  .cg-card__preview:has(.mw-chart__body) .mw-card { height: 100%; }
   .cg-card__preview .mw-chart__body { flex: 1; min-height: 0; height: 0 !important; }
-  /* hide legend in compact preview */
   .cg-card__preview .mw-chart__body [class*="legend"] { display: none !important; }
-  /* non-card widgets — fit content height */
-  .cg-card__preview .mw-alert { font-size: 0.8rem; }
-  .cg-card__preview .mw-page-header { font-size: 0.8rem; }
-  .cg-card__preview .mw-page-header h1 { font-size: 1.5rem; }
-  .cg-card__preview .mw-section-head { font-size: 0.75rem; }
-  .cg-card__preview .mw-section-head h2 { font-size: 1rem; }
-  /* map chart — just hide the legend bar, let tiles fill */
-  .cg-card__preview .mw-cover { min-height: 0 !important; height: 100%; font-size: 0.8rem; }
-  .cg-card__preview .mw-cover__title { font-size: 1.6rem !important; }
-  .cg-card__preview .mw-mapchart { min-height: 0 !important; padding: 0.5rem !important; }
-  .cg-card__preview .mw-mapchart__legend { display: none; }
-  .cg-card__preview .mw-mapchart__grid { font-size: 0.6rem; gap: 2px; }
-  .cg-card__preview .mw-mapchart__tile { padding: 0.15rem 0.25rem; }
-  .cg-card__preview .mw-mapchart__val { display: none; }
-  /* monthlyTable preview: restore mw-card padding that cg-card__preview strips */
-  .cg-card__preview .view-host.mw-card { padding: 0.75rem 0 0; }
+
+  /* ── 4. 커버: A4 가로 비율 래퍼 (컨테이너 제어만) ── */
+  .cg-card__preview:has(.mw-cover) > div { width: 100%; aspect-ratio: 297 / 210; }
+  .cg-card__preview .mw-cover { height: 100%; border-radius: var(--mw-radius); overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.1); }
+
+  /* ── 5. mw-card 없는 위젯: 래퍼 div에 카드 외형 부여 (위젯 내부 아닌 래퍼) ── */
+  .cg-card__preview > div:not(:has(.mw-card)):not(:has(.mw-cover)):not(:has(.mw-chart__body)):not(.mw-codeblock):not(:has(.mw-codeblock)):not(:has(.table-toolbar)) {
+    background: var(--mw-surface);
+    border: 1px solid var(--mw-border);
+    border-radius: var(--mw-radius);
+    padding: 0.75rem;
+    box-sizing: border-box;
+  }
   .cg-card { cursor: pointer; }
-  .cg-card__info { padding: 0.75rem 1rem; height: 72px; flex-shrink: 0; box-sizing: border-box; }
+  .cg-card__info { padding: 0.75rem 1rem; height: 72px; flex-shrink: 0; box-sizing: border-box; overflow: hidden; }
 
   /* ── dialog ── */
   .cg-dlg { position: fixed; inset: 0; z-index: 500; display: none; align-items: center; justify-content: center; }
@@ -168,7 +180,7 @@
   .cg-dlg__code .hl-fn { color: #89dceb; }
   .cg-dlg__code .hl-bool { color: #fab387; }
   .cg-dlg__code .hl-prop { color: #b4befe; }
-  .cg-card__name { font-size: var(--mw-text-sm); font-weight: 600; margin-bottom: 0.2rem; }
+  .cg-card__name { font-size: var(--mw-text-sm); font-weight: 600; margin-bottom: 0.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .cg-card__desc { font-size: var(--mw-text-xs); color: var(--mw-text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
   /* mode tabs */
@@ -281,8 +293,7 @@ var WIDGETS = {
   monthlyTable:         { mode: 'weekly', cat: 'Weekly Report', wide: true, tall: true },
   sectionCoverClassic:  { mode: 'weekly', cat: 'Weekly Report', wide: true, tall: true },
   sectionCoverCentered: { mode: 'weekly', cat: 'Weekly Report', wide: true, tall: true },
-  sectionCoverSplit:    { mode: 'weekly', cat: 'Weekly Report', wide: true, tall: true },
-  insightCard:          { mode: 'weekly', cat: 'Weekly Report', tall: true },
+  insightCard:             { mode: 'weekly', cat: 'Weekly Report', tall: true },
 
   // ── Landing Page specific ──
   heroSection:     { mode: 'landing', cat: 'Landing Page', wide: true, tall: true },
@@ -343,13 +354,7 @@ var SAMPLES = {
   ragChip:       function(el) { el.innerHTML = '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px"></div>'; var box = el.firstChild; ['green','yellow','red','gray'].forEach(function(s, i){ var d = document.createElement('span'); box.appendChild(d); Maging.ragChip(d, { label: ['플로우 AI 관심','검토 중','이탈 위험','초기 컨택'][i], status: s }); }); },
   shareBar:      function(el) { el.innerHTML = '<div style="padding:16px"></div>'; Maging.shareBar(el.firstChild, { segments: [{ label: '추천자', value: 54, status: 'green', sub: '9~10점' },{ label: '중립자', value: 24, status: 'gray', sub: '7~8점' },{ label: '비추천', value: 22, status: 'red', sub: '0~6점' }] }); },
   insightCard: function(el) {
-    el.style.cssText = 'display:flex;flex-direction:column;gap:8px;overflow:auto';
-    var cards = [
-      { title: '베타 솔루션', meta: '63인', tag: 'Owner · 김재훈', status: 'green',  bullets: ['도구 통합 — 분산 도구를 하나로 일원화 필요', '업무 가시성 — 인수인계 단절 해소', '회계 자동화 공백 대응 시급'], highlight: '통합·가시성 명분 명확. 회계 공백 해소가 의사결정 핵심 변수.' },
-      { title: 'KDB생명보험', meta: '180인', tag: 'AM · 박수연',    status: 'yellow', bullets: ['5월 계약 클로징 목표 — 법무 검토 완료 대기', '사용자 범위 확대 협의 중'], highlight: '계약서 최종본 4/30 수령 예정. 기한 내 서명 필요.' },
-      { title: '삼성바이오로직스', meta: '600인', tag: 'AM · 최인혁', status: 'red',   bullets: ['PoC 결과 지연 — 데이터 파이프라인 이슈', 'IT팀 협조 요청 단계'], highlight: '6월 전체 배포 일정 리스크. 이번 주 내 대응 방안 확정 필요.' },
-    ];
-    cards.forEach(function(cfg) { var d = document.createElement('div'); el.appendChild(d); Maging.insightCard(d, cfg); });
+    Maging.insightCard(el, { title: 'KDB생명보험', meta: '180인', tag: 'AM · 박수연', status: 'yellow', bullets: ['5월 계약 클로징 목표 — 법무 검토 완료 대기', '사용자 범위 확대 협의 중'], highlight: '계약서 최종본 4/30 수령 예정. 기한 내 서명 필요.' });
   },
   monthlyTable: function(el) {
     Maging.monthlyTable(el, {
@@ -363,7 +368,6 @@ var SAMPLES = {
   },
   sectionCoverClassic:  function(el) { Maging.sectionCover(el, { style: 'classic',  kicker: 'WEEKLY REPORT · 4월 4주차', title: 'SaaS 주간보고', subtitle: 'SaaS B/U · Enterprise B/U', brand: 'flow.team', meta: '기준일 2026.04.27(월)' }); },
   sectionCoverCentered: function(el) { Maging.sectionCover(el, { style: 'centered', kicker: 'WEEKLY REPORT · 4월 4주차', title: 'SaaS 주간보고', subtitle: 'SaaS B/U · Enterprise B/U', brand: 'flow.team', meta: '기준일 2026.04.27(월)' }); },
-  sectionCoverSplit:    function(el) { Maging.sectionCover(el, { style: 'split',    kicker: 'WEEKLY REPORT · 4월 4주차', title: 'SaaS 주간보고', subtitle: 'SaaS B/U · Enterprise B/U', brand: 'flow.team', meta: '기준일 2026.04.27(월)' }); },
 
   // ── Specialized ──
   mapChart:      function(el) { Maging.mapChart(el, { items: [{ region: '서울', value: 45 },{ region: '경기', value: 30 },{ region: '부산', value: 15 },{ region: '인천', value: 20 },{ region: '대구', value: 18 }] }); },
@@ -379,7 +383,7 @@ var SAMPLES = {
   testimonialGrid: function(el) { Maging.testimonialGrid(el, { cols: 1, items: [{ quote: '정말 좋습니다.', name: '김철수', role: 'PM' }] }); },
   logoBar:         function(el) { Maging.logoBar(el, { items: [{ name: 'Kakao' },{ name: 'Toss' },{ name: 'LINE' }] }); },
   ctaSection:      function(el) { Maging.ctaSection(el, { title: '시작하세요', desc: '무료 체험', ctas: [{ label: '시작', primary: true }], padding: '2rem 1rem' }); },
-  faqAccordion:    function(el) { Maging.faqAccordion(el, { items: [{ q: '질문입니다', a: '답변입니다.' }] }); },
+  faqAccordion:    function(el) { Maging.faqAccordion(el, { items: [{ q: 'CDN으로 바로 쓸 수 있나요?', a: '네, script 태그 한 줄이면 됩니다.' }, { q: '테마 변경은 어떻게 하나요?', a: 'Maging.setTheme() 호출로 즉시 전환됩니다.' }, { q: 'React에서도 사용 가능한가요?', a: '네, useEffect 안에서 마운트하면 됩니다.' }] }); },
 };
 
 /* ============================================================
@@ -541,6 +545,10 @@ var CODE = {
   alertBanner:   "const config = {\n  type: 'success',\n  title: '배포 완료',\n  message: 'v2.4.1'\n};\n\nMaging.alertBanner('#el', config);",
   mapChart:      "const config = {\n  items: [\n    { region: '서울', value: 45 },\n    { region: '경기', value: 30 },\n    { region: '부산', value: 15 }\n  ]\n};\n\nMaging.mapChart('#el', config);",
   cohortMatrix:  "const config = {\n  cohorts: ['1월','2월','3월'],\n  periods: ['M0','M1','M2'],\n  data: [\n    [100, 60, 40],\n    [100, 55, 35],\n    [100, 58, null]\n  ]\n};\n\nMaging.cohortMatrix('#el', config);",
+  sectionCoverClassic:  "const config = {\n  style: 'classic',\n  kicker: 'WEEKLY REPORT · 4월 4주차',\n  title: 'SaaS 주간보고',\n  subtitle: 'SaaS B/U · Enterprise B/U',\n  brand: 'flow.team',\n  meta: '기준일 2026.04.27(월)',\n};\n\nMaging.sectionCover('#el', config);",
+  sectionCoverCentered: "const config = {\n  style: 'centered',\n  kicker: 'WEEKLY REPORT · 4월 4주차',\n  title: 'SaaS 주간보고',\n  subtitle: 'SaaS B/U · Enterprise B/U',\n  brand: 'flow.team',\n  meta: '기준일 2026.04.27(월)',\n};\n\nMaging.sectionCover('#el', config);",
+  sectionCoverSplit:       "const config = {\n  style: 'split',\n  kicker: 'WEEKLY REPORT · 4월 4주차',\n  title: 'SaaS 주간보고',\n  subtitle: 'SaaS B/U · Enterprise B/U',\n  brand: 'flow.team',\n  meta: '기준일 2026.04.27(월)',\n};\n\nMaging.sectionCover('#el', config);",
+  insightCard:   "const config = {\n  title: 'KDB생명보험',\n  meta: '180인',\n  tag: 'AM · 박수연',\n  status: 'yellow',  // 'green' | 'yellow' | 'red'\n  bullets: [\n    '5월 계약 클로징 목표 — 법무 검토 완료 대기',\n    '사용자 범위 확대 협의 중',\n  ],\n  highlight: '계약서 최종본 4/30 수령 예정. 기한 내 서명 필요.',\n};\n\nMaging.insightCard('#el', config);",
   monthlyTable:  "const config = {\n  title: '월별 매출',\n  sub: '2026년',\n  rows: [\n    { name: '신규',   data: [99,175,142,223,290,248,385,332,227,173,479,227].map(v => v * 1e6) },\n    { name: '기고객', data: [522,685,523,633,567,641,653,545,547,539,660,532].map(v => v * 1e6) },\n  ],\n  summaryRow: '합계',\n  unitToggle: true,\n  viewToggle: true,\n  defaultUnit: '만원',\n};\n\nMaging.monthlyTable('#el', config);",
   stepGuide:     "const config = {\n  steps: [\n    { title: 'CDN 추가',\n      desc: 'script 태그 한 줄이면 됩니다.',\n      code: '<script src=\"maging.js\"><\\/script>' },\n    { title: '위젯 마운트',\n      desc: 'HTML에 div 하나, JS로 호출.' },\n    { title: '테마 변경',\n      desc: '35개 테마 즉시 전환.' }\n  ]\n};\n\nMaging.stepGuide('#el', config);",
   codeBlock:     "const config = {\n  lang: 'html',\n  code: '<div id=\"chart\"></div>\\n<script>\\n  Maging.lineChart(\"#chart\", { ... });\\n<\\/script>'\n};\n\nMaging.codeBlock('#el', config);",

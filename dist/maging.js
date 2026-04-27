@@ -2406,6 +2406,18 @@
           '<div class="mw-cover__aside">' + brand + meta + '</div>' +
           '<div class="mw-cover__main">' + kicker + title + subtitle + '</div>';
 
+      } else if (s === 'fullbleed') {
+        el.innerHTML =
+          kicker + title + subtitle +
+          '<div class="mw-cover__divider"></div>' +
+          brand + meta;
+
+      } else if (s === 'topband') {
+        el.innerHTML =
+          '<div class="mw-cover__topband">' + kicker + brand + '</div>' +
+          '<div class="mw-cover__body">' + title + subtitle + '</div>' +
+          '<div class="mw-cover__footer"><div class="mw-cover__rule"></div>' + meta + '</div>';
+
       } else {
         // classic
         el.innerHTML =
@@ -2674,7 +2686,6 @@
       monthlyTable:    { title: 'Monthly Table',     desc: '12개월 표 + 합계행 + 단위(원/만원/억원) 토글 + view(table/line/bar) 토글 올인원.' },
       sectionCoverClassic:  { title: 'Cover — Classic',   desc: '보고서 커버 · kicker(좌) + brand(우) / 큰 타이틀 + subtitle / accent rule + meta. 컨설팅 보고서 스타일.' },
       sectionCoverCentered: { title: 'Cover — Centered',  desc: '보고서 커버 · 모든 요소 중앙 정렬. accent bar → kicker → 타이틀 → 구분선 → brand. 프레젠테이션 표지 스타일.' },
-      sectionCoverSplit:    { title: 'Cover — Split',     desc: '보고서 커버 · 좌측 accent 컬러 패널(brand·날짜) + 우측 흰 배경(타이틀·subtitle). 에디토리얼 스타일.' },
     },
 
     setTheme: function (name) {
@@ -2918,3 +2929,80 @@
   global.Maging = api;
   global.mw = api;
 })(typeof window !== 'undefined' ? window : this);
+
+// ── Web Components (declarative HTML sugar) ────────────────────────────────
+(function () {
+  if (typeof customElements === 'undefined') return;
+
+  function onMaging(cb) {
+    if (window.Maging && window.Maging.kpiCard) { cb(); return; }
+    window.addEventListener('maging:ready', cb, { once: true });
+  }
+
+  function attr(el, name) { return el.getAttribute(name) || ''; }
+  function has(el, name)  { return el.hasAttribute(name); }
+
+  // <maging-kpi label="" value="" unit="" delta="" delta-good-when="" icon="" compact>
+  // unit: 억원 | 만원 | 명 | 건 | % etc. → auto-wraps in <span class="mw-unit">
+  customElements.define('maging-kpi', class extends HTMLElement {
+    connectedCallback() {
+      onMaging(() => {
+        var val  = attr(this, 'value');
+        var unit = attr(this, 'unit');
+        var cfg  = {
+          label:     attr(this, 'label'),
+          value:     unit ? val + '<span class="mw-unit"> ' + unit + '</span>' : val,
+          valueHTML: !!unit || val.includes('<'),
+        };
+        var d = attr(this, 'delta');
+        if (d) { cfg.delta = parseFloat(d); cfg.deltaGoodWhen = attr(this, 'delta-good-when') || 'positive'; }
+        if (has(this, 'compact')) cfg.compact = true;
+        var icon = attr(this, 'icon');
+        if (icon) cfg.icon = icon;
+        window.Maging.kpiCard(this, cfg);
+      });
+    }
+  });
+
+  // <maging-header kicker="" title="" subtitle="" meta="">
+  customElements.define('maging-header', class extends HTMLElement {
+    connectedCallback() {
+      onMaging(() => {
+        window.Maging.pageHeader(this, {
+          kicker:   attr(this, 'kicker'),
+          title:    attr(this, 'title'),
+          subtitle: attr(this, 'subtitle'),
+          meta:     attr(this, 'meta'),
+        });
+      });
+    }
+  });
+
+  // <maging-section index="" kicker="" title="" tag="">
+  customElements.define('maging-section', class extends HTMLElement {
+    connectedCallback() {
+      onMaging(() => {
+        window.Maging.sectionHead(this, {
+          index:  attr(this, 'index'),
+          kicker: attr(this, 'kicker'),
+          title:  attr(this, 'title'),
+          tag:    attr(this, 'tag'),
+        });
+      });
+    }
+  });
+
+  // <maging-alert type="info" icon="📋" title="" message="">
+  customElements.define('maging-alert', class extends HTMLElement {
+    connectedCallback() {
+      onMaging(() => {
+        window.Maging.alertBanner(this, {
+          type:    attr(this, 'type') || 'info',
+          icon:    attr(this, 'icon'),
+          title:   attr(this, 'title'),
+          message: attr(this, 'message'),
+        });
+      });
+    }
+  });
+})();

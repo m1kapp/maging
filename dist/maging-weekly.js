@@ -22,7 +22,7 @@
   .slide[data-active] { display: block; }
 
   .table-block { display: flex; flex-direction: column; gap: var(--mw-space-2); }
-  .table-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0 var(--mw-space-1); }
+  .table-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0 var(--mw-space-1); margin-bottom: var(--mw-space-3); }
   .table-toolbar__title { font-size: var(--mw-text-base); font-weight: 600; color: var(--mw-text); }
   .table-toolbar__sub   { font-size: var(--mw-text-sm); color: var(--mw-text-muted); margin-left: var(--mw-space-2); }
 
@@ -36,7 +36,7 @@
   .view-host { height: 340px; }
   .view-host > .mw-card { height: 100%; display: flex; flex-direction: column; overflow: hidden; }
 
-  .scroll-table .mw-card { padding-top: var(--mw-space-3); }
+  .scroll-table.mw-card { padding: 0; overflow: hidden; }
   .scroll-table .mw-table__wrap { flex: 1; min-height: 0; overflow: auto; scrollbar-width: thin; }
   .scroll-table .mw-table { width: 100%; height: 100%; font-size: var(--mw-text-xs); border-collapse: separate; border-spacing: 0; }
   .scroll-table .mw-table th, .scroll-table .mw-table td { padding: var(--mw-space-3-5) var(--mw-space-3); white-space: nowrap; font-variant-numeric: tabular-nums; background: var(--mw-surface); }

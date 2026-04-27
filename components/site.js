@@ -54,7 +54,7 @@ class MagingNav extends HTMLElement {
       ${link(base + 'index.html', '홈', 'home')}
       <div class="mw-site-nav__dropdown">
         <button class="mw-site-nav__link mw-site-nav__link--dropdown${active === 'components' ? ' mw-site-nav__link--active' : ''}" type="button">
-          컴포넌트 <span class="mw-site-nav__caret">▾</span>
+          컴포넌트 <svg class="mw-site-nav__caret" width="8" height="5" viewBox="0 0 8 5" fill="currentColor"><path d="M0 0L4 5L8 0Z"/></svg>
         </button>
         <div class="mw-site-nav__menu">
           <a href="${base}components.html?mode=core" class="mw-site-nav__menu-item">
@@ -73,7 +73,7 @@ class MagingNav extends HTMLElement {
       </div>
       <div class="mw-site-nav__dropdown">
         <button class="mw-site-nav__link mw-site-nav__link--dropdown${active === 'demo' ? ' mw-site-nav__link--active' : ''}" type="button">
-          데모 <span class="mw-site-nav__caret">▾</span>
+          데모 <svg class="mw-site-nav__caret" width="8" height="5" viewBox="0 0 8 5" fill="currentColor"><path d="M0 0L4 5L8 0Z"/></svg>
         </button>
         <div class="mw-site-nav__menu">
           <a href="${base}dashboard/acme.html" class="mw-site-nav__menu-item">
@@ -253,7 +253,7 @@ if (!document.getElementById('mw-site-css')) {
 .mw-site-nav__link:hover { color: var(--mw-text); background: var(--mw-surface-2); }
 .mw-site-nav__link--active { color: var(--mw-text); background: var(--mw-surface-2); font-weight: 500; }
 .mw-site-nav__link--dropdown { cursor: pointer; border: none; background: none; }
-.mw-site-nav__caret { font-size: 0.6rem; opacity: 0.4; }
+.mw-site-nav__caret { opacity: 0.55; vertical-align: middle; margin-left: 2px; display: inline-block; }
 
 /* dropdown */
 .mw-site-nav__dropdown { position: relative; }
