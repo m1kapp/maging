@@ -39,7 +39,7 @@
   .scroll-table .mw-card { padding-top: var(--mw-space-3); }
   .scroll-table .mw-table__wrap { flex: 1; min-height: 0; overflow: auto; scrollbar-width: thin; }
   .scroll-table .mw-table { width: 100%; height: 100%; font-size: var(--mw-text-xs); border-collapse: separate; border-spacing: 0; }
-  .scroll-table .mw-table th, .scroll-table .mw-table td { padding: var(--mw-space-2-5) var(--mw-space-3); white-space: nowrap; font-variant-numeric: tabular-nums; background: var(--mw-surface); }
+  .scroll-table .mw-table th, .scroll-table .mw-table td { padding: var(--mw-space-3-5) var(--mw-space-3); white-space: nowrap; font-variant-numeric: tabular-nums; background: var(--mw-surface); }
   .scroll-table .mw-table th { font-weight: 500; color: var(--mw-text-muted); letter-spacing: 0.01em; }
   .scroll-table .mw-table td { font-weight: 400; letter-spacing: -0.005em; }
   .scroll-table .mw-table td strong { font-weight: 600; letter-spacing: -0.01em; }
@@ -121,7 +121,7 @@
   .wrs__team-label { font-size: 11px; color: var(--mw-text-muted); padding: 4px 8px; font-weight: 500; }
   .wrs__link  { display: flex; align-items: center; gap: 8px; padding: 5px 8px 5px 12px; font-size: 12.5px; color: var(--mw-text); border-radius: 4px; text-decoration: none; line-height: 1.4; }
   .wrs__link:hover { background: var(--mw-surface-2); }
-  .wrs__link--active { background: var(--mw-surface-2); font-weight: 600; box-shadow: inset 2px 0 0 var(--mw-accent); }
+  .wrs__link--active { background: var(--mw-surface-2); font-weight: 600; }
   .wrs__dot  { width: 5px; height: 5px; border-radius: 50%; background: var(--mw-text-muted); opacity: 0.4; flex-shrink: 0; }
   .wrs__link--active .wrs__dot { background: var(--mw-accent); opacity: 1; }
   .wrs__lbl  { flex: 1; }
@@ -421,7 +421,13 @@
     }
   }
 
-  // Expose Maging.deck() + Maging.monthlyTable() + auto-run DECK_MOUNT
+  // Expose Maging.deck() + Maging.monthlyTable()
+  // — 즉시 등록: maging.js를 sync로 로드한 환경(components 갤러리 등)
+  if (window.Maging) {
+    window.Maging.deck = initDeck;
+    window.Maging.monthlyTable = monthlyTable;
+  }
+  // — maging:ready 이벤트: maging-all.js 환경 + DECK_MOUNT 자동 실행
   window.addEventListener('maging:ready', () => {
     if (window.Maging) {
       window.Maging.deck = initDeck;

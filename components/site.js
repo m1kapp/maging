@@ -63,7 +63,7 @@ class MagingNav extends HTMLElement {
           </a>
           <a href="${base}components.html?mode=weekly" class="mw-site-nav__menu-item">
             <span class="mw-site-nav__menu-label">주간보고</span>
-            <span class="mw-site-nav__menu-desc">Section Cover · Insight Card</span>
+            <span class="mw-site-nav__menu-desc">Monthly Table · Cover · Insight Card</span>
           </a>
           <a href="${base}components.html?mode=landing" class="mw-site-nav__menu-item">
             <span class="mw-site-nav__menu-label">랜딩페이지</span>

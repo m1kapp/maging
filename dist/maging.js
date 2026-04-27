@@ -2661,7 +2661,7 @@
       ragChip:         { title: 'RAG Chip',          desc: '신호등 상태 칩 · green/yellow/red/gray + 라벨. 위클리 보고서·고객 인사이트에 자주.' },
       shareBar:        { title: 'Share Bar',         desc: '100% 비율 누적 가로바 + 범례 · NPS 분포, 만족도 분포, 예산 비중 등. status별 색.' },
       insightCard:     { title: 'Insight Card',      desc: '상태 dot + 헤드(아이콘/타이틀/메타/태그) + bullets + 🎯 highlight. 고객사·이슈·영업 인사이트 다목적.' },
-      monthlyTable:    { title: 'Monthly Table',     desc: '12개월 표 + 합계행 + 단위(원/만원/억원) 토글 + view(table/line/bar) 토글 올인원. maging-weekly.js 필요.' },
+      monthlyTable:    { title: 'Monthly Table',     desc: '12개월 표 + 합계행 + 단위(원/만원/억원) 토글 + view(table/line/bar) 토글 올인원.' },
       sectionCoverClassic:  { title: 'Cover — Classic',   desc: '보고서 커버 · kicker(좌) + brand(우) / 큰 타이틀 + subtitle / accent rule + meta. 컨설팅 보고서 스타일.' },
       sectionCoverCentered: { title: 'Cover — Centered',  desc: '보고서 커버 · 모든 요소 중앙 정렬. accent bar → kicker → 타이틀 → 구분선 → brand. 프레젠테이션 표지 스타일.' },
       sectionCoverSplit:    { title: 'Cover — Split',     desc: '보고서 커버 · 좌측 accent 컬러 패널(brand·날짜) + 우측 흰 배경(타이틀·subtitle). 에디토리얼 스타일.' },
@@ -2672,13 +2672,15 @@
       requestAnimationFrame(function () { requestAnimationFrame(refreshAll); });
     },
     getTheme: function () {
-      return document.documentElement.getAttribute('data-theme') || 'claude';
+      return document.documentElement.getAttribute('data-theme') || 'flow';
     },
     themes: [
-      // Light (12)
-      'claude', 'linear', 'stripe', 'notion', 'airbnb',
+      // Light (24)
+      'flow', 'morningmate', 'claude', 'linear', 'stripe', 'notion', 'airbnb',
       'linkedin', 'instagram', 'youtube', 'reddit', 'medium',
-      'apple', 'duolingo',
+      'apple', 'duolingo', 'barbie', 'deere', 'fedex',
+      'heineken', 'hermes', 'mailchimp', 'tiffany', 'tmobile',
+      'ups', 'nasa',
       // Dark (13)
       'vercel', 'github', 'x', 'slack', 'discord', 'openai',
       'spotify', 'twitch', 'netflix', 'figma', 'amazon', 'adobe',
@@ -2693,6 +2695,8 @@
 
   // Theme metadata for the FAB picker (ordered mainstream → distinctive)
   var THEME_DATA = [
+    { value: 'flow',      brand: 'Flow',       desc: '라벤더 퍼플',        accent: '#5f49dc', accent2: '#0ba898', bg: '#f7f6ff',  warning: '#f5a520', danger: '#e84545' },
+    { value: 'morningmate', brand: 'Morningmate', desc: '딥 퍼플 마젠타',   accent: '#9f00ba', accent2: '#ff7a00', bg: '#fef8ff',  warning: '#ffc700', danger: '#ff3d00' },
     { value: 'notion',    brand: 'Notion',     desc: '웜 오프화이트',      accent: '#37352f', accent2: '#2eaadc', bg: '#ffffff', warning: '#cb912f', danger: '#d44c47' },
     { value: 'vercel',    brand: 'Vercel',     desc: '퓨어 미니멀',        accent: '#ffffff', accent2: '#7928ca', bg: '#000000', warning: '#f5a623', danger: '#ff0080' },
     { value: 'linear',    brand: 'Linear',     desc: '인디고 미니멀',      accent: '#5e6ad2', accent2: '#a78bfa', bg: '#fcfcfd', warning: '#f2994a', danger: '#eb5757' },
@@ -2800,7 +2804,7 @@
       }
       return arr;
     }
-    function current() { return document.documentElement.getAttribute('data-theme') || 'claude'; }
+    function current() { return document.documentElement.getAttribute('data-theme') || 'flow'; }
     function itemHtml(t, i) {
       var active = t.value === current() ? ' is-active' : '';
       var tileStyle = '--mw-tile-accent:' + t.accent + ';';

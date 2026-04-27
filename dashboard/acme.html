@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<script>!function(){var T=["claude","linear","stripe","airbnb","linkedin","apple","duolingo","github","spotify","netflix","figma","adobe","bloomberg"],k="maging-theme",s=localStorage.getItem(k);if(!s||T.indexOf(s)<0)s=T[Math.floor(Math.random()*T.length)];document.documentElement.setAttribute("data-theme",s);localStorage.setItem(k,s)}();</script>
+<script>!function(){var T=["flow","claude","linear","stripe","airbnb","linkedin","apple","duolingo","github","spotify","netflix","figma","adobe","bloomberg"],k="maging-theme",s=localStorage.getItem(k);if(!s||T.indexOf(s)<0)s="flow";document.documentElement.setAttribute("data-theme",s);localStorage.setItem(k,s)}();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ACME KOREA — 통합 운영 대시보드 · maging demo</title>
 
@@ -702,9 +702,6 @@
 
 </main>
 
-<div id="loading" class="error-box" style="display:none;">
-  <div class="mw-muted">Loading ./data/dashboard.json ...</div>
-</div>
 
 <div id="error" class="error-box" style="display:none;">
   <div class="font-semibold" style="color: var(--mw-danger);">데이터 로드 실패</div>
@@ -961,8 +958,6 @@ function whenReady(fn) {
   }, 30);
 }
 
-document.getElementById('loading').style.display = 'block';
-
 whenReady(function () {
   fetch('../data/dashboard.json')
     .then(function (r) {
@@ -971,14 +966,12 @@ whenReady(function () {
     })
     .then(renderDashboard)
     .catch(function (err) {
-      document.getElementById('loading').style.display = 'none';
       document.getElementById('error').style.display = 'block';
       document.getElementById('error-detail').textContent = String(err);
     });
 });
 
 function renderDashboard(data) {
-  document.getElementById('loading').style.display = 'none';
   document.getElementById('dashboard').style.display = '';
 
   // Size tokens — S(120) / M(240) / L(360)

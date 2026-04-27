@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<script>!function(){var T=['claude','linear','stripe','airbnb','linkedin','apple','duolingo','github','spotify','netflix','figma','adobe','bloomberg'],k='maging-theme',s=localStorage.getItem(k);if(!s||T.indexOf(s)<0)s=T[Math.floor(Math.random()*T.length)];document.documentElement.setAttribute('data-theme',s);localStorage.setItem(k,s)}();</script>
+<script>!function(){var T=['flow','claude','linear','stripe','airbnb','linkedin','apple','duolingo','github','spotify','netflix','figma','adobe','bloomberg'],k='maging-theme',s=localStorage.getItem(k);if(!s||T.indexOf(s)<0)s='flow';document.documentElement.setAttribute('data-theme',s);localStorage.setItem(k,s)}();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>maging — AI 답변을, 쓸 수 있는 결과물로.</title>
 <meta name="description" content="코딩 없이, 디자인 없이 — 대시보드·주간보고를 HTML로 바로 생성합니다. ChatGPT·Claude·Gemini가 쓰는 엔터프라이즈 리포트 UI 라이브러리. 31개 위젯 · 35개 브랜드 테마 · 빌드 없음.">
@@ -1181,7 +1181,7 @@
     <div class="hero-meta">
       <span>ChatGPT · Claude · Gemini</span>
       <span class="hero-meta__sep">·</span>
-      <span>31 widgets · 35 themes</span>
+      <span>40+ widgets · 35 themes</span>
       <span class="hero-meta__sep">·</span>
       <span>Pretendard 내장</span>
     </div>
@@ -1578,9 +1578,9 @@
   <div class="max-w-[1280px] mx-auto px-6 py-16">
     <div style="text-align: center; max-width: 640px; margin: 0 auto 2.5rem;">
       <div class="kicker">THEME SYSTEM</div>
-      <h2 class="text-3xl md:text-4xl font-bold mt-2">같은 데이터. 25가지 인격.</h2>
+      <h2 class="text-3xl md:text-4xl font-bold mt-2">같은 데이터. 35가지 인격.</h2>
       <p class="mw-muted mt-3">상단의 테마 토글을 눌러보세요. 아래 차트들은 CSS 변수만 바뀌고, 데이터와 레이아웃은 그대로입니다.</p>
-      <p class="mw-muted mt-2 text-xs">Light 12 · Dark 13 — 각 테마는 <code>dist/themes/&lt;name&gt;.css</code>로 분리 사용 가능.</p>
+      <p class="mw-muted mt-2 text-xs">Light 22 · Dark 13 — 각 테마는 <code>dist/themes/&lt;name&gt;.css</code>로 분리 사용 가능.</p>
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <div id="showcase-line"></div>
@@ -1594,10 +1594,11 @@
   <div class="max-w-[1280px] mx-auto px-6 py-16">
     <div style="max-width: 640px; margin-bottom: 2.5rem;">
       <div class="kicker">WIDGET GALLERY</div>
-      <h2 class="text-3xl md:text-4xl font-bold mt-2">31종 위젯.</h2>
+      <h2 class="text-3xl md:text-4xl font-bold mt-2">40+ 위젯.</h2>
       <p class="mw-muted mt-3">
-        아래는 대표 7종의 라이브 예제입니다. 나머지 18종 (Heatmap · Gauge · Radar · Treemap · Scatter · Sankey · StatCard · HeroTile · RingProgress · Compare · MetricStack · Countdown · StatusGrid · Timeline · InboxPreview · CalendarHeatmap · EventCalendar · ProgressStepper)은
-        <a href="dashboard/acme.html" style="color: var(--mw-accent); text-decoration: underline;">전체 데모</a>에서 실전 사용 예시를 볼 수 있습니다.
+        아래는 대표 7종의 라이브 예제입니다. 나머지 위젯 (Heatmap · Gauge · Radar · Treemap · Scatter · Sankey · HeroTile · RingProgress · CompareCard · MetricStack · Countdown · StatusGrid · Timeline · InboxPreview · CalendarHeatmap · EventCalendar · ProgressStepper · Waterfall · Cohort · SparklineList · GoalGrid · BulletChart · MapChart 등)은
+        <a href="dashboard/acme.html" style="color: var(--mw-accent); text-decoration: underline;">대시보드 데모</a>와
+        <a href="weekly-report/index.html" style="color: var(--mw-accent); text-decoration: underline;">주간보고 데모</a>에서 실전 사용 예시를 볼 수 있습니다.
       </p>
     </div>
 
@@ -1853,7 +1854,8 @@ Maging.setTheme('bloomberg');
     </p>
     <div class="mt-10 flex gap-3 flex-wrap justify-center">
       <a href="#use-with-ai" class="pill pill--primary" style="padding: 0.9rem 1.75rem; font-size: 1rem;">Try maging →</a>
-      <a href="dashboard/acme.html" class="pill" style="padding: 0.9rem 1.75rem; font-size: 1rem;">View demo</a>
+      <a href="dashboard/acme.html" class="pill" style="padding: 0.9rem 1.75rem; font-size: 1rem;">대시보드 데모</a>
+      <a href="weekly-report/index.html" class="pill" style="padding: 0.9rem 1.75rem; font-size: 1rem;">주간보고 데모</a>
     </div>
   </div>
 </section>

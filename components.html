@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<script>!function(){var T=["claude","linear","stripe","airbnb","linkedin","apple","duolingo","github","spotify","netflix","figma","adobe","bloomberg"],k="maging-theme",s=localStorage.getItem(k);if(!s||T.indexOf(s)<0)s=T[Math.floor(Math.random()*T.length)];document.documentElement.setAttribute("data-theme",s);localStorage.setItem(k,s)}();</script>
+<script>!function(){var T=["flow","claude","linear","stripe","airbnb","linkedin","apple","duolingo","github","spotify","netflix","figma","adobe","bloomberg"],k="maging-theme",s=localStorage.getItem(k);if(!s||T.indexOf(s)<0)s="flow";document.documentElement.setAttribute("data-theme",s);localStorage.setItem(k,s)}();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Components — maging</title>
 <meta name="description" content="maging 위젯 갤러리. Core, Dashboard, Landing Page 모드별 컴포넌트를 확인하세요.">
@@ -11,6 +11,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js"></script>
 <link rel="stylesheet" href="./dist/maging.css">
 <script src="./dist/maging.js"></script>
+<script src="./dist/maging-weekly.js"></script>
 <script src="./dist/maging-landing.js"></script>
 <script type="module" src="./components/site.js"></script>
 
@@ -95,6 +96,8 @@
   .cg-card__preview .mw-mapchart__grid { font-size: 0.6rem; gap: 2px; }
   .cg-card__preview .mw-mapchart__tile { padding: 0.15rem 0.25rem; }
   .cg-card__preview .mw-mapchart__val { display: none; }
+  /* monthlyTable preview: restore mw-card padding that cg-card__preview strips */
+  .cg-card__preview .view-host.mw-card { padding: 0.75rem 0 0; }
   .cg-card { cursor: pointer; }
   .cg-card__info { padding: 0.75rem 1rem; height: 72px; flex-shrink: 0; box-sizing: border-box; }
 
@@ -645,7 +648,9 @@ function openDlg(key) {
 
   // render code — full working snippet with syntax highlighting
   var isLanding = WIDGETS[key] && WIDGETS[key].mode === 'landing';
+  var isWeekly  = WIDGETS[key] && WIDGETS[key].mode === 'weekly';
   var cdnHead = '<!-- CDN -->\n<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@m1kapp/maging/dist/maging.css">\n<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging/dist/maging.js"><\/script>';
+  if (isWeekly)  cdnHead += '\n<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging/dist/maging-weekly.js"><\/script>';
   if (isLanding) cdnHead += '\n<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging/dist/maging-landing.js"><\/script>';
   var codeBody = CODE[key] || '// code not available';
   var fullCode = cdnHead + '\n\n<!-- HTML -->\n<div id="el"></div>\n\n<script>\n' + codeBody + '\n<\/script>';

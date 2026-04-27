@@ -934,7 +934,7 @@
 .mw-cover {
   display: flex;
   flex-direction: column;
-  background: var(--mw-bg);
+  background: linear-gradient(150deg, color-mix(in srgb, var(--mw-accent) 8%, var(--mw-bg)) 0%, var(--mw-bg) 55%);
 }
 .mw-cover__top {
   display: flex; align-items: flex-start; justify-content: space-between;
@@ -943,30 +943,30 @@
 }
 .mw-cover__text { display: flex; flex-direction: column; gap: var(--mw-space-2); flex: 1; min-width: 0; }
 .mw-cover__kicker {
-  font-size: var(--mw-text-xs);
+  font-size: var(--mw-text-sm);
   color: var(--mw-text-muted);
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 .mw-cover__title {
-  font-size: 2.5rem;
+  font-size: 3.5rem;
   font-family: var(--mw-display-font, var(--mw-font));
   font-weight: 700;
   color: var(--mw-text);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   line-height: var(--mw-leading-tight);
   margin: 0;
 }
 .mw-cover__subtitle {
-  font-size: var(--mw-text-md);
+  font-size: var(--mw-text-lg);
   color: var(--mw-text-muted);
   margin-top: var(--mw-space-1);
 }
 .mw-cover__brand {
-  font-size: var(--mw-text-sm);
-  color: var(--mw-text-muted);
-  font-weight: 500;
+  font-size: var(--mw-text-base);
+  color: var(--mw-accent);
+  font-weight: 600;
   letter-spacing: 0.02em;
 }
 .mw-cover__band {
