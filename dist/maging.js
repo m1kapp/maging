@@ -548,7 +548,7 @@
     if (!el) return null;
     var data = Object.assign({
       title: '', subtitle: '', live: false,
-      columns: [], rows: [],
+      columns: [], rows: [], headerGroups: null,
     }, config || {});
 
     function render() {
@@ -560,6 +560,16 @@
         var cls = col.align === 'right' ? ' class="mw-table__right"' : '';
         return '<th' + cls + '>' + escapeHTML(col.label) + '</th>';
       }).join('');
+      var theadHtml;
+      if (data.headerGroups && data.headerGroups.length) {
+        var groupRow = data.headerGroups.map(function (g) {
+          var cls = (g.align === 'right' ? 'mw-table__right ' : '') + 'mw-table__group';
+          return '<th class="' + cls + '" colspan="' + (g.span || 1) + '">' + escapeHTML(g.label) + '</th>';
+        }).join('');
+        theadHtml = '<thead><tr class="mw-table__group-row">' + groupRow + '</tr><tr>' + ths + '</tr></thead>';
+      } else {
+        theadHtml = '<thead><tr>' + ths + '</tr></thead>';
+      }
       var trs = (data.rows || []).slice(0, 100).map(function (row) {
         var tds = data.columns.map(function (col) {
           var v = row[col.key];
@@ -573,7 +583,7 @@
       }).join('');
       el.innerHTML = headerHTML(data.title, data.subtitle, rightEl) +
         '<div class="mw-table__wrap"><table class="mw-table">' +
-        '<thead><tr>' + ths + '</tr></thead><tbody>' + trs + '</tbody></table></div>';
+        theadHtml + '<tbody>' + trs + '</tbody></table></div>';
     }
     render();
     var handle = {

@@ -147,10 +147,14 @@ Maging.cohortMatrix(sel, { title?, cohorts, periods, data, sizes?, valueFormatte
 Maging.leaderboard(sel, { title?, items: [{ name, initial?, percent, meta? }] })
 ```
 
-**`activityTable`** — Table with optional LIVE badge.
+**`activityTable`** — Table with optional LIVE badge and optional grouped column headers.
 ```js
-Maging.activityTable(sel, { title?, columns: [{ key, label, align?, render? }], rows: [...], live? })
+Maging.activityTable(sel, {
+  title?, columns: [{ key, label, align?, render? }], rows: [...], live?,
+  headerGroups?: [{ label, span, align? }]  // colspan 그룹 헤더 (선택)
+})
 ```
+`headerGroups`: 컬럼 위에 span 그룹 행 추가. `span`은 묶을 columns 수. 예) `[{ label: '26년', span: 3 }, { label: '25년', span: 2 }]`
 
 **`timeline`** — Vertical event feed.
 ```js

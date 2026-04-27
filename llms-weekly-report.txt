@@ -147,10 +147,14 @@ Maging.cohortMatrix(sel, { title?, cohorts, periods, data, sizes?, valueFormatte
 Maging.leaderboard(sel, { title?, items: [{ name, initial?, percent, meta? }] })
 ```
 
-**`activityTable`** — Table with optional LIVE badge.
+**`activityTable`** — Table with optional LIVE badge and optional grouped column headers.
 ```js
-Maging.activityTable(sel, { title?, columns: [{ key, label, align?, render? }], rows: [...], live? })
+Maging.activityTable(sel, {
+  title?, columns: [{ key, label, align?, render? }], rows: [...], live?,
+  headerGroups?: [{ label, span, align? }]  // colspan 그룹 헤더 (선택)
+})
 ```
+`headerGroups`: 컬럼 위에 span 그룹 행 추가. `span`은 묶을 columns 수. 예) `[{ label: '26년', span: 3 }, { label: '25년', span: 2 }]`
 
 **`timeline`** — Vertical event feed.
 ```js
@@ -363,6 +367,28 @@ Maging.monthlyTable('#revenue-target', {
 - 모든 row 같은 단위 → `unitToggle: true, viewToggle: true`
 - row마다 단위 다름 → 둘 다 생략 (표만, 차트 불가). 대신 `activityTable` 직접 사용 + `row.unit` 인라인 표기
 
+**⚠️ 듀얼 Y축 / 콤보차트 금지:** maging은 dual-axis 콤보차트를 지원하지 않음. "바 + 달성률 꺾은선" 같은 구성이 필요하면 **두 개로 분리** — `barChart` 하나 + `lineChart` 하나. 한 ECharts 인스턴스에 우측 Y축 추가하지 말 것.
+
+**컬럼 그룹 헤더 (연도비교 표 등):** `activityTable`의 `headerGroups`로 colspan 그룹행 추가.
+```js
+Maging.activityTable('#table', {
+  headerGroups: [
+    { label: '',     span: 1 },           // 구분 열 (빈 헤더)
+    { label: '26년', span: 3, align: 'right' },
+    { label: '25년', span: 2, align: 'right' },
+  ],
+  columns: [
+    { key: 'name', label: '구분',   align: 'left' },
+    { key: 't26',  label: '목표',   align: 'right', render: fmt },
+    { key: 'a26',  label: '실적',   align: 'right', render: fmt },
+    { key: 'r26',  label: '달성률', align: 'right', render: fmtPct },
+    { key: 'a25',  label: '실적',   align: 'right', render: fmt },
+    { key: 'r25',  label: '성장률', align: 'right', render: fmtPct },
+  ],
+  rows: [...],
+});
+```
+
 **Mixed-unit 케이스 (토글 없음) — `activityTable` 직접 사용:**
 ```js
 const months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
@@ -428,6 +454,7 @@ Maging.activityTable('#table', {
 7. **Sticky 컬럼:** 표가 12개월처럼 길면 첫/끝 sticky 필수.
 8. **KPI row:** `grid-auto-rows` 쓰지 말기. 자연 높이가 정답.
 9. **차트 view 토글:** 같은 단위 N 시리즈만. 단위 섞이면 표만.
+9a. **듀얼축 필요 시 분리:** "실적(건) + 달성률(%)" 같이 단위 다른 데이터를 한 차트에 넣지 말 것. `barChart` + `lineChart` 두 개로 나눠 배치.
 10. **Section divider:** `mt-5 pt-4` + `border-top:1px solid var(--mw-border)`. `sectionHead`로 라벨.
 11. **Review box (마지막):** `alertBanner` icon='📋', type='info', 1-2문장 핵심 요약 + 액션.
 12. **Korean labels OK.** `word-break: keep-all`. KRW formatting은 `Maging.fmt.krw` (HTML), `Maging.fmt.krwPlain` (chart axis).

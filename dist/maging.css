@@ -1562,6 +1562,9 @@
 .mw-table tbody tr:hover { background: var(--mw-surface-2); }
 .mw-table__right { text-align: right; }
 .mw-nowrap { white-space: nowrap; }
+.mw-table__group-row th { background: var(--mw-surface-2); font-size: var(--mw-text-xs); font-weight: 600; color: var(--mw-text-muted); text-align: center; border-bottom: 1px solid var(--mw-border); padding: var(--mw-space-1-5) var(--mw-space-2); }
+.mw-table__group { border-right: 1px solid var(--mw-border); }
+.mw-table__group:last-child { border-right: none; }
 
 /* ========================================================
    WIDGET: EVENT CALENDAR (month grid with dot/badge markers)
