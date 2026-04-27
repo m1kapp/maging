@@ -1,0 +1,25 @@
+/*! magicwiget theme: flow — flow.team 실사이트 스크린샷 기반 | MIT
+ *  Signature: 라벤더 배경 #f7f6ff + 브랜드 퍼플 #5f49dc (로고 SVG + CTA 버튼 확인)
+ *  틸 대비 #0ba898, 딥 네이비 텍스트 #1b1630, Inter, 10px radius
+ *  Source: logo SVG (#5f49dc) + hero/card screenshots from https://flow.team/
+ */
+[data-theme="flow"] {
+  --mw-bg: #f7f6ff;
+  --mw-surface: #ffffff;
+  --mw-surface-2: #eeebfa;
+  --mw-border: #ddd8f7;
+  --mw-text: #1b1630;
+  --mw-text-muted: #6b6390;
+  --mw-accent: #5f49dc;
+  --mw-accent-2: #0ba898;
+  --mw-success: #29a871;
+  --mw-danger: #e84545;
+  --mw-warning: #f5a520;
+  --mw-radius: 10px;
+  --mw-border-w: 1px;
+  --mw-font: 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 2px 10px -3px rgb(95 73 220 / 0.1);
+  --mw-shadow-hover: 0 4px 18px -4px rgb(95 73 220 / 0.16);
+}

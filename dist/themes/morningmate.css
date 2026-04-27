@@ -1,0 +1,25 @@
+/*! magicwiget theme: morningmate — morningmate.com 실CSS 추출 | MIT
+ *  Signature: 딥 퍼플 텍스트 #520060 + 비비드 마젠타 #9f00ba + 오렌지 보색 #ff7a00
+ *  더스티 모브 뮤트 #876e8a, 초라벤더 bg #fef8ff, Poppins + Noto Sans KR, 6px radius
+ *  Source: CSS parsed from https://d28gmcqwccw3t6.cloudfront.net/flow-renewal/dist/css/morningmate-homepage-renewal/main.css
+ */
+[data-theme="morningmate"] {
+  --mw-bg: #fef8ff;
+  --mw-surface: #ffffff;
+  --mw-surface-2: #f5edf6;
+  --mw-border: #e0cce8;
+  --mw-text: #520060;
+  --mw-text-muted: #876e8a;
+  --mw-accent: #9f00ba;
+  --mw-accent-2: #ff7a00;
+  --mw-success: #57ae00;
+  --mw-danger: #ff3d00;
+  --mw-warning: #ffc700;
+  --mw-radius: 6px;
+  --mw-border-w: 1px;
+  --mw-font: 'Poppins', 'Noto Sans KR', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-display-font: 'Poppins', 'Noto Sans KR', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 2px 8px -2px rgb(159 0 186 / 0.1);
+  --mw-shadow-hover: 0 4px 16px -4px rgb(159 0 186 / 0.18);
+}
