@@ -205,12 +205,8 @@
   }
 
   .ai-split__content { padding: 1rem; overflow: hidden; height: 420px; }
-  .ai-split__content--left { display: flex; flex-direction: column; gap: 0.5rem; }
+  .ai-split__content--left { display: flex; flex-direction: column; gap: 0; }
   .ai-split__code { flex: 1; min-height: 0; }
-  .ai-split__toolbar {
-    display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 0.5rem;
-  }
   .ai-split__token-count {
     font-size: 0.58rem; color: var(--mw-text-muted); font-family: var(--mw-mono-font);
     white-space: nowrap;
@@ -221,26 +217,33 @@
   }
 
   /* Left panel */
-  .ai-split__tabs { display: flex; gap: 0.25rem; }
-  .ai-split__tab {
-    padding: 0.3rem 0.6rem; font-size: 0.7rem; font-weight: 500;
-    border: 1px solid var(--mw-border); border-radius: calc(var(--mw-radius) * 0.5);
-    background: none; color: var(--mw-text-muted); cursor: pointer;
-    font-family: var(--mw-font); transition: all 150ms;
+  /* Filter row — shared layout for all chip rows */
+  .ai-split__filter {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.35rem 0.75rem; border-bottom: 1px solid var(--mw-border);
   }
-  .ai-split__tab:hover { color: var(--mw-text); border-color: var(--mw-accent); }
-  .ai-split__tab.is-active { background: var(--mw-accent); color: #fff; border-color: var(--mw-accent); }
+  .ai-split__filter-label {
+    font-size: 0.55rem; font-weight: 600; color: var(--mw-text-muted);
+    text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;
+    min-width: 28px;
+  }
+  .ai-split__chips { display: flex; gap: 0.25rem; }
 
-  .ai-split__len-row { display: flex; gap: 0.125rem; background: var(--mw-surface-2); border-radius: 4px; padding: 0.15rem; width: fit-content; }
-  .ai-split__len {
-    padding: 0.15rem 0.45rem; font-size: 0.6rem; font-weight: 500;
-    border: none; border-radius: 3px; background: none;
-    color: var(--mw-text-muted); cursor: pointer; font-family: var(--mw-font);
+  /* Chip — unified style for all filter items */
+  .ai-split__chip {
+    display: flex; align-items: center; gap: 0.3rem;
+    padding: 0.2rem 0.55rem; border-radius: 4px;
+    font-size: 0.65rem; font-weight: 500; color: var(--mw-text-muted);
+    background: transparent; border: 1px solid transparent;
+    cursor: pointer; transition: all 150ms; white-space: nowrap;
+    font-family: var(--mw-font);
   }
-  .ai-split__len.is-active { background: var(--mw-surface); color: var(--mw-text); box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+  .ai-split__chip img { width: 14px; height: 14px; border-radius: 3px; }
+  .ai-split__chip:hover { color: var(--mw-text); background: var(--mw-surface-2); }
+  .ai-split__chip.is-active { color: var(--mw-text); background: var(--mw-surface-2); border-color: var(--mw-border); }
 
   .ai-split__code {
-    flex: 1; margin: 0; padding: 0.75rem;
+    flex: 1; margin: 0.5rem 0 0; padding: 0.75rem;
     font-size: 0.62rem; line-height: 1.5; font-family: var(--mw-mono-font);
     color: var(--mw-text-muted); background: var(--mw-bg);
     border: 1px solid var(--mw-border); border-radius: calc(var(--mw-radius) * 0.5);
@@ -249,18 +252,18 @@
 
   .ai-split__copybar {
     padding: 0.5rem 1rem 0.75rem; border-top: 1px solid var(--mw-border);
-    display: flex; flex-direction: column; gap: 0.5rem;
+    display: flex; gap: 0.5rem;
   }
   .ai-split__copy {
-    padding: 0.55rem 1rem; font-size: 0.75rem; font-weight: 600;
+    flex: 1; padding: 0.55rem 1rem; font-size: 0.75rem; font-weight: 600;
     border: none; border-radius: calc(var(--mw-radius) * 0.5);
     background: var(--mw-accent); color: #fff; cursor: pointer;
     font-family: var(--mw-font); transition: opacity 150ms, transform 150ms;
-    width: 100%;
   }
   .ai-split__copy:hover { opacity: 0.9; }
   .ai-split__copy:active { transform: scale(0.98); }
   .ai-split__copy.is-copied { background: var(--mw-success); }
+  .ai-split__copy--dl { background: var(--mw-surface-2); color: var(--mw-text); border: 1px solid var(--mw-border); }
 
   /* Right panel — chat messages */
   .ai-chat-empty {
@@ -393,16 +396,18 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* LLM bar at bottom right */
-  .ai-split__llms {
+  /* Filter meta row (llms link + stats) */
+  .ai-split__filter-meta {
     display: flex; align-items: center; gap: 0.5rem;
-    padding: 0.5rem 0.75rem; border-top: 1px solid var(--mw-border);
+    padding: 0.35rem 0.75rem; border-bottom: 1px solid var(--mw-border);
+    min-height: 32px;
   }
-  .ai-split__llm { display: flex; opacity: 0.3; transition: opacity 150ms; padding: 0.15rem; }
-  .ai-split__llm:hover, .ai-split__llm.is-active { opacity: 1; }
-  .ai-split__llm-sep { color: var(--mw-border); font-size: 0.6rem; }
   .ai-split__ref { font-size: 0.6rem; color: var(--mw-text-muted); text-decoration: none; font-family: var(--mw-mono-font); }
   .ai-split__ref:hover { color: var(--mw-accent); }
+  .ai-split__stats {
+    margin-left: auto; font-size: 0.6rem; color: var(--mw-text-muted);
+    font-family: var(--mw-mono-font); white-space: nowrap;
+  }
 
   /* ========= USE WITH AI section (legacy) ========= */
   .ai-step {
@@ -1255,23 +1260,38 @@
           <div class="ai-split__url">maging.m1k.app</div>
         </div>
         <div class="ai-split__content ai-split__content--left">
-          <div class="ai-split__toolbar">
-            <div class="ai-split__tabs">
-              <button class="ai-split__tab is-active" data-output="dashboard">대시보드</button>
-              <button class="ai-split__tab" data-output="weekly">주간보고</button>
-              <button class="ai-split__tab" data-output="landing">랜딩페이지</button>
+          <div class="ai-split__filter">
+            <span class="ai-split__filter-label">LLM</span>
+            <div class="ai-split__chips">
+              <button class="ai-split__chip is-active" data-service="flowai"><img src="./dist/logo.png">flowAI</button>
+              <button class="ai-split__chip" data-service="chatgpt"><img src="./dist/icons/openai.svg">ChatGPT</button>
+              <button class="ai-split__chip" data-service="claude"><img src="./dist/icons/claude.svg">Claude</button>
+              <button class="ai-split__chip" data-service="gemini"><img src="./dist/icons/gemini.svg">Gemini</button>
             </div>
+          </div>
+          <div class="ai-split__filter">
+            <span class="ai-split__filter-label">Mode</span>
+            <div class="ai-split__chips">
+              <button class="ai-split__chip is-active" data-output="dashboard">대시보드</button>
+              <button class="ai-split__chip" data-output="weekly">주간보고</button>
+              <button class="ai-split__chip" data-output="landing">랜딩페이지</button>
+            </div>
+          </div>
+          <div class="ai-split__filter">
+            <span class="ai-split__filter-label">Size</span>
+            <div class="ai-split__chips">
+              <button class="ai-split__chip" data-mode="short">Short</button>
+              <button class="ai-split__chip is-active" data-mode="full">Full</button>
+            </div>
+          </div>
+          <div class="ai-split__filter-meta">
+            <a href="./llms-dashboard.md" class="ai-split__ref" id="llms-link-a">llms-dashboard.md</a>
+            <span class="ai-split__stats" id="ai-token-count"></span>
           </div>
           <pre class="ai-split__code" id="ai-prompt-body"></pre>
         </div>
         <div class="ai-split__copybar">
-          <div style="display:flex;align-items:center;justify-content:space-between;">
-            <div class="ai-split__len-row">
-              <button class="ai-split__len" data-mode="short">Short</button>
-              <button class="ai-split__len is-active" data-mode="full">Full</button>
-            </div>
-            <span class="ai-split__token-count" id="ai-token-count"></span>
-          </div>
+          <button class="ai-split__copy ai-split__copy--dl" id="download-prompt-btn">Download .md</button>
           <button class="ai-split__copy" id="copy-prompt-btn">
             <span class="ai-split__copy-idle">Copy Prompt</span>
             <span class="ai-split__copy-done" style="display:none">Copied!</span>
@@ -1353,15 +1373,6 @@
           <button class="ai-split__inputbar-send" id="ai-inputbar-send" style="display:none;">↑</button>
         </div>
 
-        <!-- LLM selector -->
-        <div class="ai-split__llms">
-          <a href="https://chatgpt.com" target="_blank" class="ai-split__llm is-active"><img src="./dist/icons/openai.svg" width="14" height="14"></a>
-          <a href="https://claude.ai" target="_blank" class="ai-split__llm"><img src="./dist/icons/claude.svg" width="14" height="14"></a>
-          <a href="https://gemini.google.com" target="_blank" class="ai-split__llm"><img src="./dist/icons/gemini.svg" width="14" height="14"></a>
-          <a href="https://grok.com" target="_blank" class="ai-split__llm"><img class="ai-llm__logo--invert" src="./dist/icons/x.svg" width="14" height="14"></a>
-          <span class="ai-split__llm-sep">|</span>
-          <a href="./llms-dashboard.txt" class="ai-split__ref" id="llms-link-a">llms.txt</a>
-        </div>
       </div>
     </div>
   </div>
@@ -2040,21 +2051,11 @@ whenReady(function () {
   var toast = document.getElementById('ai-toast');
   if (!btn || !body) return;
 
-                        /* SYNC:START — auto-generated by `npm run sync`. Do not edit manually. */
+                                  /* SYNC:START — auto-generated by `npm run sync`. Do not edit manually. */
   var SHORT_PROMPT = `You are a maging dashboard generator.
 
-Fetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.16/llms-dashboard.txt
-It has the complete setup, all widget APIs, 35 themes, layout patterns, and generation rules.
-
-=== HANDSHAKE ===
-When you have fully understood the above, reply with EXACTLY this text (nothing else, no code fences, no preamble):
-
-안녕하세요! 결과물 서포터 매징(maging)입니다 ✦
-
-데이터 파일을 첨부하거나, 만들고 싶은 대시보드를 자유롭게 설명해주세요.
-어떤 걸 만들어 드릴까요? 🎨
-
-Then wait for my next message before generating anything.`;
+Fetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging/llms-dashboard-full.md
+It has the complete setup, all widget APIs, themes, and generation rules.`;
   var FULL_PROMPT = `# maging — AI Output Formatter
 
 > LLM이 위젯·테마로 단일 HTML 결과물을 즉시 생성. 코딩·디자인 불필요.
@@ -2144,6 +2145,15 @@ Maging.setTheme(name)
 - 임의 클래스명 금지 — Grid + Maging API만.
 - 코드 주석 금지 — 토큰 낭비.
 - 수동 숫자 포맷터 금지 — \`Maging.fmt.*\` 사용.
+
+---
+
+## Output Rules
+
+- **항상 완전한 코드를 출력하라.** \`<!DOCTYPE html>\`부터 \`</html>\`까지 단일 HTML 파일.
+- **생략 절대 금지.** "이전과 동일", \`…\`, \`// 나머지 코드\`, \`<!-- 위와 같음 -->\` 등 모든 형태의 생략·축약·placeholder 금지.
+- **수정 요청 시에도 전체 파일을 처음부터 끝까지 다시 출력하라.** 부분 diff·patch 금지.
+- **매 턴마다 즉시 실행 가능한 코드를 출력하라.** 사용자가 복사·붙여넣기만으로 브라우저에서 실행할 수 있어야 한다.
 
 MIT
 
@@ -2247,35 +2257,11 @@ Outer wrapper: \`<main class="max-w-[1100px] mx-auto px-6 py-4">\`. Stack sectio
 11. **Density:** \`gap-3\` everywhere. \`mt-5 pt-4\` for sections. No large spacings.
 12. **Asymmetric grids:** Vary column ratios. Never repeat same pattern consecutively.
 13. Output one fenced code block: \` \`\`\`html … \`\`\` \`.
-
-
-=== HANDSHAKE ===
-When you have fully understood the above, reply with EXACTLY this text (nothing else, no code fences, no preamble):
-
-안녕하세요! 결과물 서포터 매징(maging)입니다 ✦
-
-데이터 파일을 첨부하거나, 만들고 싶은 대시보드를 자유롭게 설명해주세요.
-어떤 걸 만들어 드릴까요? 🎨
-
-Then wait for my next message before generating anything.`;
-  var TOKENS = {
-    short: { gpt: 148,  claude: 209,  gemini: 157 },
-    full:  { gpt: 2564, claude: 2986, gemini: 2718 },
-  };
+`;
   var SHORT_PROMPT_WEEKLY = `You are a maging weekly report generator.
 
-Fetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.16/llms-weekly-report.txt
-It has the complete setup, all widget APIs, 35 themes, and generation rules for weekly reports.
-
-=== HANDSHAKE ===
-When you have fully understood the above, reply with EXACTLY this text (nothing else, no code fences, no preamble):
-
-안녕하세요! 결과물 서포터 매징(maging)입니다 ✦
-
-어떤 팀·사업부의 주간보고를 만들까요? 기간, 핵심 지표, 주요 이슈를 알려주세요.
-바로 시작할게요! 🎨
-
-Then wait for my next message before generating anything.`;
+Fetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging/llms-weekly-report-full.md
+It has the complete setup, all widget APIs, themes, and generation rules for weekly reports.`;
   var FULL_PROMPT_WEEKLY = `# maging — AI Output Formatter
 
 > LLM이 위젯·테마로 단일 HTML 결과물을 즉시 생성. 코딩·디자인 불필요.
@@ -2365,6 +2351,15 @@ Maging.setTheme(name)
 - 임의 클래스명 금지 — Grid + Maging API만.
 - 코드 주석 금지 — 토큰 낭비.
 - 수동 숫자 포맷터 금지 — \`Maging.fmt.*\` 사용.
+
+---
+
+## Output Rules
+
+- **항상 완전한 코드를 출력하라.** \`<!DOCTYPE html>\`부터 \`</html>\`까지 단일 HTML 파일.
+- **생략 절대 금지.** "이전과 동일", \`…\`, \`// 나머지 코드\`, \`<!-- 위와 같음 -->\` 등 모든 형태의 생략·축약·placeholder 금지.
+- **수정 요청 시에도 전체 파일을 처음부터 끝까지 다시 출력하라.** 부분 diff·patch 금지.
+- **매 턴마다 즉시 실행 가능한 코드를 출력하라.** 사용자가 복사·붙여넣기만으로 브라우저에서 실행할 수 있어야 한다.
 
 MIT
 
@@ -2586,35 +2581,11 @@ window.addEventListener('maging:ready', () => {
 \`\`\`
 
 **Output:** 단일 \` \`\`\`html … \`\`\` \` 블록.
-
-
-=== HANDSHAKE ===
-When you have fully understood the above, reply with EXACTLY this text (nothing else, no code fences, no preamble):
-
-안녕하세요! 결과물 서포터 매징(maging)입니다 ✦
-
-어떤 팀·사업부의 주간보고를 만들까요? 기간, 핵심 지표, 주요 이슈를 알려주세요.
-바로 시작할게요! 🎨
-
-Then wait for my next message before generating anything.`;
-  var TOKENS_WEEKLY = {
-    short: { gpt: 157,  claude: 212,  gemini: 166 },
-    full:  { gpt: 4311, claude: 5209, gemini: 4570 },
-  };
+`;
   var SHORT_PROMPT_LANDING = `You are a maging landing page generator.
 
-Fetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.16/llms-landing.txt
-It has the complete setup, all widget APIs, 35 themes, and generation rules for landing pages.
-
-=== HANDSHAKE ===
-When you have fully understood the above, reply with EXACTLY this text (nothing else, no code fences, no preamble):
-
-안녕하세요! 결과물 서포터 매징(maging)입니다 ✦
-
-어떤 서비스의 랜딩페이지를 만들까요? 제품명, 핵심 기능, 타겟 고객을 알려주세요.
-바로 시작할게요! 🎨
-
-Then wait for my next message before generating anything.`;
+Fetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging/llms-landing-full.md
+It has the complete setup, all widget APIs, themes, and generation rules.`;
   var FULL_PROMPT_LANDING = `# maging — AI Output Formatter
 
 > LLM이 위젯·테마로 단일 HTML 결과물을 즉시 생성. 코딩·디자인 불필요.
@@ -2704,6 +2675,15 @@ Maging.setTheme(name)
 - 임의 클래스명 금지 — Grid + Maging API만.
 - 코드 주석 금지 — 토큰 낭비.
 - 수동 숫자 포맷터 금지 — \`Maging.fmt.*\` 사용.
+
+---
+
+## Output Rules
+
+- **항상 완전한 코드를 출력하라.** \`<!DOCTYPE html>\`부터 \`</html>\`까지 단일 HTML 파일.
+- **생략 절대 금지.** "이전과 동일", \`…\`, \`// 나머지 코드\`, \`<!-- 위와 같음 -->\` 등 모든 형태의 생략·축약·placeholder 금지.
+- **수정 요청 시에도 전체 파일을 처음부터 끝까지 다시 출력하라.** 부분 diff·patch 금지.
+- **매 턴마다 즉시 실행 가능한 코드를 출력하라.** 사용자가 복사·붙여넣기만으로 브라우저에서 실행할 수 있어야 한다.
 
 MIT
 
@@ -2857,39 +2837,120 @@ Landing pages use **section-based vertical scroll**, not dashboard grids.
 9. **FAQ:** Short, conversational answers. "아뇨" > "아닙니다, 저희 서비스는~".
 10. **No ₩ prefix.** Use Korean units: 4.9만, 128억.
 11. Output one fenced code block: \` \`\`\`html … \`\`\` \`.
+`;
+  var SERVICE_RULES = {
+    flowai: ``,
+    claude: `
+## Service: Claude (Artifact)
 
+- 결과물은 반드시 **Artifact**로 출력하라. type: \`text/html\`.
+- Artifact 제목은 결과물 내용을 설명하는 한국어 제목 (예: "SaaS 주간보고 대시보드").
+- Artifact 하나에 전체 HTML을 담아라. 여러 Artifact로 분할 금지.
+- Artifact 외부(대화 본문)에는 코드를 넣지 마라.`,
+    chatgpt: `
+## Service: ChatGPT (Canvas)
+
+- 결과물은 반드시 **Canvas**에 전체 HTML 코드를 출력하라.
+- Canvas 하나에 전체 코드를 담아라. 대화 본문에 코드 조각을 넣지 마라.
+- Canvas 출력 후 "Preview" 탭에서 즉시 실행 가능해야 한다.
+- 수정 요청 시 Canvas 내용을 전체 교체하라. 부분 수정 금지.`,
+    gemini: `
+## Service: Gemini (Canvas)
+
+- 결과물은 반드시 **Canvas**의 Code 탭에 전체 HTML을 출력하라.
+- Preview 탭에서 즉시 렌더링 가능해야 한다.
+- 대화 본문에 코드를 넣지 마라 — Canvas에만 출력.
+- 수정 요청 시 전체 코드를 다시 출력하라.`,
+  };
+  var HANDSHAKES = {
+    dashboard: `
 
 === HANDSHAKE ===
 When you have fully understood the above, reply with EXACTLY this text (nothing else, no code fences, no preamble):
 
-안녕하세요! 결과물 서포터 매징(maging)입니다 ✦
+**안녕하세요! 결과물 서포터 매징(maging)입니다** ✦
+
+데이터 파일을 첨부하거나, 만들고 싶은 대시보드를 자유롭게 설명해주세요.
+어떤 걸 만들어 드릴까요? 🎨
+
+Then wait for my next message before generating anything.`,
+    landing: `
+
+=== HANDSHAKE ===
+When you have fully understood the above, reply with EXACTLY this text (nothing else, no code fences, no preamble):
+
+**안녕하세요! 결과물 서포터 매징(maging)입니다** ✦
 
 어떤 서비스의 랜딩페이지를 만들까요? 제품명, 핵심 기능, 타겟 고객을 알려주세요.
 바로 시작할게요! 🎨
 
-Then wait for my next message before generating anything.`;
-  var TOKENS_LANDING = {
-    short: { gpt: 154,  claude: 219,  gemini: 163 },
-    full:  { gpt: 2755, claude: 3264, gemini: 2920 },
+Then wait for my next message before generating anything.`,
+    weekly: `
+
+=== HANDSHAKE ===
+When you have fully understood the above, reply with EXACTLY this text (nothing else, no code fences, no preamble):
+
+**안녕하세요! 결과물 서포터 매징(maging)입니다** ✦
+
+어떤 팀·사업부의 주간보고를 만들까요? 기간, 핵심 지표, 주요 이슈를 알려주세요.
+바로 시작할게요! 🎨
+
+Then wait for my next message before generating anything.`,
   };
+  var TOKENS_BY_SERVICE = {
+    flowai: {
+      dashboard: { short: { gpt: 140, claude: 203, gemini: 148 }, full: { gpt: 2716, claude: 3214, gemini: 2879 } },
+      weekly: { short: { gpt: 152, claude: 209, gemini: 161 }, full: { gpt: 4463, claude: 5437, gemini: 4731 } },
+      landing: { short: { gpt: 146, claude: 213, gemini: 155 }, full: { gpt: 2907, claude: 3492, gemini: 3081 } },
+    },
+    claude: {
+      dashboard: { short: { gpt: 230, claude: 342, gemini: 244 }, full: { gpt: 2806, claude: 3354, gemini: 2974 } },
+      weekly: { short: { gpt: 242, claude: 348, gemini: 257 }, full: { gpt: 4553, claude: 5577, gemini: 4826 } },
+      landing: { short: { gpt: 236, claude: 352, gemini: 250 }, full: { gpt: 2997, claude: 3632, gemini: 3177 } },
+    },
+    chatgpt: {
+      dashboard: { short: { gpt: 224, claude: 343, gemini: 237 }, full: { gpt: 2800, claude: 3355, gemini: 2968 } },
+      weekly: { short: { gpt: 236, claude: 349, gemini: 250 }, full: { gpt: 4547, claude: 5578, gemini: 4820 } },
+      landing: { short: { gpt: 230, claude: 353, gemini: 244 }, full: { gpt: 2991, claude: 3633, gemini: 3170 } },
+    },
+    gemini: {
+      dashboard: { short: { gpt: 212, claude: 315, gemini: 225 }, full: { gpt: 2788, claude: 3327, gemini: 2955 } },
+      weekly: { short: { gpt: 224, claude: 321, gemini: 237 }, full: { gpt: 4535, claude: 5550, gemini: 4807 } },
+      landing: { short: { gpt: 218, claude: 325, gemini: 231 }, full: { gpt: 2979, claude: 3605, gemini: 3158 } },
+    },
+  };
+  var TOKENS = TOKENS_BY_SERVICE.flowai.dashboard;
+  var TOKENS_WEEKLY = TOKENS_BY_SERVICE.flowai.weekly;
+  var TOKENS_LANDING = TOKENS_BY_SERVICE.flowai.landing;
   /* SYNC:END */
 
-  var PROMPTS = {
+  var BASE_PROMPTS = {
     dashboard: { short: SHORT_PROMPT, full: FULL_PROMPT },
     weekly:    { short: SHORT_PROMPT_WEEKLY, full: FULL_PROMPT_WEEKLY },
     landing:   { short: SHORT_PROMPT_LANDING, full: FULL_PROMPT_LANDING },
   };
 
-  var HANDSHAKES = {
+  function getPrompt(output, mode, service) {
+    return BASE_PROMPTS[output][mode] + (SERVICE_RULES[service] || '') + (HANDSHAKES[output] || '');
+  }
+
+  var HANDSHAKE_LABELS = {
     dashboard: '데이터 파일을 첨부하거나, 만들고 싶은 대시보드를 자유롭게 설명해주세요.',
     weekly:    '어떤 팀·사업부의 주간보고를 만들까요? 기간, 핵심 지표, 주요 이슈를 알려주세요.',
     landing:   '어떤 서비스의 랜딩페이지를 만들까요? 제품명, 핵심 기능, 타겟 고객을 알려주세요.',
   };
 
   var LLMS_LINKS = {
-    dashboard: { href: './llms-dashboard.txt', text: 'llms-dashboard.txt' },
-    weekly:    { href: './llms-weekly-report.txt', text: 'llms-weekly-report.txt' },
-    landing:   { href: './llms-landing.txt', text: 'llms-landing.txt' },
+    dashboard: { href: './llms-dashboard.md', text: 'llms-dashboard.md' },
+    weekly:    { href: './llms-weekly-report.md', text: 'llms-weekly-report.md' },
+    landing:   { href: './llms-landing.md', text: 'llms-landing.md' },
+  };
+
+  var SERVICE_URLS = {
+    flowai: 'maging.m1k.app',
+    chatgpt: 'chatgpt.com',
+    claude: 'claude.ai',
+    gemini: 'gemini.google.com',
   };
 
   var REQUESTS = {
@@ -2900,6 +2961,7 @@ Then wait for my next message before generating anything.`;
 
   var currentMode = 'full';
   var currentOutput = 'dashboard';
+  var currentService = 'flowai';
   var animTimers = [];
 
   function clearAnims() { animTimers.forEach(clearTimeout); animTimers = []; }
@@ -2916,21 +2978,19 @@ Then wait for my next message before generating anything.`;
 
   function setMode(mode) {
     currentMode = mode;
-    body.textContent = PROMPTS[currentOutput][mode];
-    document.querySelectorAll('.ai-split__len').forEach(function(b) {
+    body.textContent = getPrompt(currentOutput, mode, currentService);
+    document.querySelectorAll('.ai-split__chip[data-mode]').forEach(function(b) {
       b.classList.toggle('is-active', b.dataset.mode === mode);
     });
-    // update token count (mode-specific token tables from SYNC block)
-    var tokenTable = currentOutput === 'weekly' ? (typeof TOKENS_WEEKLY !== 'undefined' ? TOKENS_WEEKLY : TOKENS)
-                   : currentOutput === 'landing' ? (typeof TOKENS_LANDING !== 'undefined' ? TOKENS_LANDING : TOKENS)
-                   : TOKENS;
+    var tokenTable = TOKENS_BY_SERVICE[currentService][currentOutput];
     var t = tokenTable[mode];
     var tc = document.getElementById('ai-token-count');
     var fmt = function(n) { return n >= 1000 ? (n/1000).toFixed(1).replace(/\.0$/,'') + 'K' : n; };
     if (tc) {
-      var chars = PROMPTS[currentOutput][mode].length;
-      tc.textContent = fmt(t.gpt) + ' tokens · ' + fmt(chars) + ' chars';
+      var chars = getPrompt(currentOutput, mode, currentService).length;
+      tc.textContent = chars.toLocaleString() + ' chars · ' + fmt(t.gpt) + ' tokens';
     }
+    updateLink();
   }
 
   function typeText(el, text, speed, cb) {
@@ -3073,20 +3133,25 @@ Then wait for my next message before generating anything.`;
     }, 5000);
   }
 
+  var LLMS_BASES = { dashboard: 'llms-dashboard', weekly: 'llms-weekly-report', landing: 'llms-landing' };
+
+  function updateLink() {
+    var linkA = document.getElementById('llms-link-a');
+    if (!linkA) return;
+    var name = LLMS_BASES[currentOutput] + '-' + currentMode + '-for-' + currentService + '.md';
+    linkA.href = './' + name;
+    linkA.textContent = name;
+  }
+
   function setOutput(output) {
     currentOutput = output;
     setMode(currentMode);
+    updateLink();
 
     var line2 = document.getElementById('handshake-line2');
-    if (line2) line2.textContent = HANDSHAKES[output];
+    if (line2) line2.textContent = HANDSHAKE_LABELS[output];
 
-    var linkA = document.getElementById('llms-link-a');
-    if (linkA) {
-      linkA.href = LLMS_LINKS[output].href;
-      linkA.textContent = LLMS_LINKS[output].text;
-    }
-
-    document.querySelectorAll('.ai-split__tab').forEach(function(b) {
+    document.querySelectorAll('.ai-split__chip[data-output]').forEach(function(b) {
       b.classList.toggle('is-active', b.dataset.output === output);
     });
 
@@ -3106,16 +3171,33 @@ Then wait for my next message before generating anything.`;
     playAnimation();
   });
 
-  // Wire tabs
-  document.querySelectorAll('.ai-split__tab').forEach(function(b) {
+  function setService(service) {
+    currentService = service;
+    setMode(currentMode);
+    updateLink();
+    // update AI panel URL
+    var urlEl = document.getElementById('ai-url');
+    if (urlEl) urlEl.textContent = SERVICE_URLS[service] || 'chatgpt.com';
+    // update service buttons
+    document.querySelectorAll('.ai-split__chip[data-service]').forEach(function(b) {
+      b.classList.toggle('is-active', b.dataset.service === service);
+    });
+  }
+
+  // Wire chips
+  document.querySelectorAll('.ai-split__chip[data-output]').forEach(function(b) {
     b.addEventListener('click', function() { setOutput(b.dataset.output); });
   });
-  document.querySelectorAll('.ai-split__len').forEach(function(b) {
+  document.querySelectorAll('.ai-split__chip[data-mode]').forEach(function(b) {
     b.addEventListener('click', function() { setMode(b.dataset.mode); });
+  });
+  document.querySelectorAll('.ai-split__chip[data-service]').forEach(function(b) {
+    b.addEventListener('click', function() { setService(b.dataset.service); });
   });
 
   // Initial
   setOutput('dashboard');
+  setService('flowai');
   setMode('full');
 
   // Copy handler
@@ -3133,6 +3215,20 @@ Then wait for my next message before generating anything.`;
         if (done) done.style.display = 'none';
       }, 2000);
     });
+  });
+
+  // Download handler
+  document.getElementById('download-prompt-btn').addEventListener('click', function () {
+    var text = body.textContent;
+    var linkA = document.getElementById('llms-link-a');
+    var filename = linkA ? linkA.textContent : 'llms-prompt.md';
+    var blob = new Blob([text], { type: 'text/markdown' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   });
 })();
 </script>

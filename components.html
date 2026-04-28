@@ -55,8 +55,9 @@
   @media (max-width: 960px) { .cg-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 640px) { .cg-grid { grid-template-columns: 1fr; } }
   .cg-card--wide { grid-column: 1 / -1; }
-  .cg-card--tall .cg-card__preview { min-height: 240px; }
-  .cg-card--tall:has(.mw-cover) .cg-card__preview { min-height: auto; }
+  .cg-card__preview { height: 220px; }
+  .cg-card--tall .cg-card__preview { height: 320px; }
+  .cg-card--tall:has(.mw-cover) .cg-card__preview { height: auto; }
   @media (max-width: 640px) { .cg-card--wide { grid-column: span 1; } }
 
   .cg-card {
@@ -81,21 +82,19 @@
   .cg-card__preview {
     overflow: hidden;
     background: var(--mw-bg); border-bottom: 1px solid var(--mw-border);
-    flex: 1; min-height: 180px;
+    flex: none;
     padding: 0.75rem;
     display: flex; align-items: center; justify-content: center;
   }
-  .cg-card__preview > div { width: 100%; }
+  .cg-card__preview > div { width: 100%; height: auto; align-self: center; }
 
-  /* ── 2. min-height 리셋 (overflow 방지, 레이아웃 변경 아님) ── */
+  /* ── 2. min-height 리셋 (자연 높이 유지, 정중앙 배치) ── */
   .cg-card__preview .mw-card,
   .cg-card__preview .mw-cover,
   .cg-card__preview .mw-mapchart { min-height: 0 !important; }
 
-  /* ── 3. 차트 height 바인딩 (ECharts 렌더링 필수) ── */
-  .cg-card__preview:has(.mw-chart__body) > div { height: 100%; }
-  .cg-card__preview:has(.mw-chart__body) .mw-card { height: 100%; }
-  .cg-card__preview .mw-chart__body { flex: 1; min-height: 0; height: 0 !important; }
+  /* ── 3. 차트 body: 16:9 비율 ── */
+  .cg-card__preview .mw-chart__body { aspect-ratio: 52 / 9; height: auto !important; min-height: 160px; }
   .cg-card__preview .mw-chart__body [class*="legend"] { display: none !important; }
 
   /* ── 4. 커버: A4 가로 비율 래퍼 (컨테이너 제어만) ── */
@@ -347,7 +346,7 @@ var SAMPLES = {
 
   // ── Calendar & Progress ──
   calendarHeatmap: function(el) { var v = []; var now = Date.now(); for (var i=0;i<120;i++) { v.push([new Date(now - i*86400000).toISOString().slice(0,10), Math.floor(Math.random()*10)]); } Maging.calendarHeatmap(el, { values: v }); },
-  eventCalendar: function(el) { var d = new Date().getDate(); Maging.eventCalendar(el, { events: [{ date: d, label: '회의' },{ date: d+2, label: '배포' }] }); },
+  eventCalendar: function(el) { Maging.eventCalendar(el, { title: '4월 릴리스 · 일정', subtitle: '배포 · 점검 · 마일스톤', year: 2026, month: 4, showList: true, events: [{ date: '2026-04-03', label: 'v2.4.0 정기 배포', type: 'ok' },{ date: '2026-04-07', label: 'SRE 인프라 점검', type: 'warning' },{ date: '2026-04-10', label: 'Q1 리뷰 미팅' },{ date: '2026-04-15', label: '보안 패치', type: 'danger' },{ date: '2026-04-22', label: '빌링 API 통합 데모' },{ date: '2026-04-30', label: '빌링센터 개발 마감', type: 'accent' }] }); },
   progressStepper: function(el) { Maging.progressStepper(el, { steps: [{ label: '기획', status: 'done' },{ label: '개발', status: 'active' },{ label: '배포', status: 'pending' }] }); },
   goalGrid:      function(el) { Maging.goalGrid(el, { items: [{ label: '매출', value: 128, max: 150, unit: '억' },{ label: 'NPS', value: 68, max: 80, unit: '점' }] }); },
 
@@ -544,7 +543,7 @@ var CODE = {
   statusGrid:    "const config = {\n  columns: 4,\n  items: [\n    { label: 'API', status: 'ok' },\n    { label: 'DB', status: 'ok' },\n    { label: 'CDN', status: 'warn' }\n  ]\n};\n\nMaging.statusGrid('#el', config);",
   sparklineList: "const config = {\n  items: [\n    { label: '매출', value: '128억', delta: 8.3,\n      sparkline: [40, 55, 48, 62, 75, 88] }\n  ]\n};\n\nMaging.sparklineList('#el', config);",
   calendarHeatmap:"const config = {\n  values: [\n    ['2026-04-01', 5],\n    ['2026-04-02', 8],\n    ['2026-04-03', 3]\n  ]\n};\n\nMaging.calendarHeatmap('#el', config);",
-  eventCalendar: "const config = {\n  events: [\n    { date: 15, label: '회의' },\n    { date: 22, label: '배포' }\n  ]\n};\n\nMaging.eventCalendar('#el', config);",
+  eventCalendar: "const config = {\n  title: '4월 릴리스 · 일정',\n  subtitle: '배포 · 점검 · 마일스톤',\n  year: 2026,\n  month: 4,\n  showList: true,\n  events: [\n    { date: '2026-04-03', label: 'v2.4.0 정기 배포', type: 'ok' },\n    { date: '2026-04-07', label: 'SRE 인프라 점검', type: 'warning' },\n    { date: '2026-04-15', label: '보안 패치', type: 'danger' },\n    { date: '2026-04-22', label: '빌링 API 통합 데모' },\n    { date: '2026-04-30', label: '빌링센터 개발 마감', type: 'accent' },\n  ],\n};\n\nMaging.eventCalendar('#el', config);",
   progressStepper:"const config = {\n  steps: [\n    { label: '기획', status: 'done' },\n    { label: '개발', status: 'active' },\n    { label: '배포', status: 'pending' }\n  ]\n};\n\nMaging.progressStepper('#el', config);",
   goalGrid:      "const config = {\n  items: [\n    { label: '매출', value: 128, max: 150, unit: '억' },\n    { label: 'NPS', value: 68, max: 80, unit: '점' }\n  ]\n};\n\nMaging.goalGrid('#el', config);",
   pageHeader:    "const config = {\n  kicker: 'DASHBOARD',\n  title: '운영 현황',\n  subtitle: '실시간 모니터링'\n};\n\nMaging.pageHeader('#el', config);",
