@@ -7,12 +7,15 @@
 ## Themes (37)
 
 `<html data-theme="NAME">` — 팔레트·폰트·반경·그림자 즉시 교체.
+보고서 주제·업종에 가장 어울리는 테마를 골라 적용하세요.
 
-**Light:** `flow` `morningmate` `claude` `linear` `stripe` `notion` `airbnb` `linkedin` `instagram` `youtube` `reddit` `medium` `apple` `duolingo` `barbie` `fedex` `hermes` `mailchimp` `tiffany` `tmobile` `ups` `nasa` `deere` `heineken`
+**Light (24)**
+`flow` indigo·기본 | `morningmate` 퍼플·트렌디 | `claude` 주황·고급·따뜻 | `linear` 블루·미니멀 | `stripe` 보라·결제/핀테크 | `notion` 시안·문서/노트 | `airbnb` 코랄·서비스/여행 | `linkedin` 블루·비즈니스/HR | `instagram` 핑크·마케팅/SNS | `youtube` 빨강·미디어/영상 | `reddit` 오렌지·커뮤니티 | `medium` 그린·콘텐츠/글쓰기 | `apple` 블루·IT/세련 | `duolingo` 라임·교육/학습 | `barbie` 핫핑크·대담/패션 | `deere` 옐로+그린·농업/산업 | `fedex` 오렌지·물류/배송 | `hermes` 오렌지·럭셔리/브랜드 | `mailchimp` 옐로·이메일/마케팅 | `tiffany` 민트·럭셔리/여성 | `tmobile` 마젠타·통신/대담 | `ups` 골드+브라운·물류 | `nasa` 빨강+네이비·과학/우주 | `heineken` 레드+그린·F&B
 
-**Dark:** `vercel` `github` `x` `slack` `discord` `openai` `spotify` `twitch` `netflix` `figma` `amazon` `adobe` `bloomberg`
+**Dark (13)**
+`vercel` 화이트on블랙·미니멀 | `github` 블루·개발/오픈소스 | `x` 블루·소셜/뉴스 | `slack` 골드+퍼플·협업 | `discord` 퍼플·커뮤니티/게임 | `openai` 청록·AI/테크 | `spotify` 그린·음악/엔터 | `twitch` 퍼플·라이브/게임 | `netflix` 빨강·미디어/엔터 | `figma` 오렌지·디자인/크리에이티브 | `amazon` 오렌지·커머스/리테일 | `adobe` 빨강·크리에이티브 | `bloomberg` 주황·금융/터미널
 
-선택 힌트: minimal→`linear`/`vercel` · warm→`claude`/`notion` · corporate→`linkedin`/`stripe` · bold→`netflix`/`adobe` · luxury→`hermes`/`tiffany` · playful→`barbie`/`duolingo`. Default: `claude`.
+분위기 매칭: 금융→`stripe`/`bloomberg` · SaaS/IT→`linear`/`vercel` · AI→`openai`/`claude` · 마케팅→`instagram`/`mailchimp` · 이커머스→`amazon`/`airbnb` · 교육→`duolingo`/`notion` · 럭셔리→`hermes`/`tiffany` · 개발→`github`/`vercel`. Default: `claude`.
 
 ---
 
