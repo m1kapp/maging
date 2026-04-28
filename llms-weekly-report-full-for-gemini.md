@@ -104,7 +104,7 @@ MIT
 
 ## Mode: Weekly Report (주간보고)
 
-> pageHeader → KPI strip → sectionHead → monthlyTable/chart → alertBanner 순 정기 보고서.
+> 한 슬라이드 = A4 가로 한 장. 정보를 페이지 단위로 그룹핑하여 생성.
 
 ### Setup
 ```html
@@ -112,6 +112,23 @@ MIT
 <body class="mw-themed">
 ```
 `maging:ready` 안에서 마운트. `DOMContentLoaded` 금지.
+
+---
+
+### A4 페이지 용량 가이드
+
+한 슬라이드 = A4 가로 (297×210mm). 가용 영역 = 헤더·푸터 제외 ~694px 높이.
+
+**콘텐츠 조합 패턴 (한 페이지에 넣을 수 있는 양):**
+- **A)** KPI strip(3~4칸) + 차트 1개 + alertBanner 리뷰 → 1페이지
+- **B)** KPI strip(3칸) + 표(6행 이하) + alertBanner 리뷰 → 1페이지
+- **C)** KPI strip(4칸) + 표(12행) + 차트 → **2페이지로 분리**
+  - page-1: KPI + 표
+  - page-2: 차트 + 리뷰
+
+**페이지 분리 시:** 같은 `data-label`/`data-bu`/`data-team`을 공유. 슬라이드 헤더에 KPI명·팀명이 자동 표시됨.
+
+**판단 기준:** 표 행 수 > 6, 차트 2개 이상, 또는 insightCard 3개 이상이면 분리 검토.
 
 **KRW:** `Maging.fmt.krw(v)` (HTML), `Maging.fmt.krwPlain(v)` (차트 축). NEVER `₩` prefix.
 

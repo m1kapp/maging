@@ -2385,6 +2385,60 @@
   }
 
   // ==========================================================
+  // Widget: Slide — A4 가로 페이지 컨테이너
+  // 주간보고 등 페이지 단위 문서용. 헤더(KPI/팀) + 푸터(페이지) 자동 생성.
+  // ==========================================================
+  function slide(el, config) {
+    el = q(el);
+    if (!el) return null;
+    var data = Object.assign({
+      label: '',        // KPI명 또는 페이지 제목
+      bu: '',           // BU명
+      team: '',         // 팀명
+      page: null,       // 같은 주제의 n번째 장 (null이면 미표시)
+      totalPages: null, // 같은 주제 총 페이지 (null이면 미표시)
+    }, config || {});
+
+    function render() {
+      el.classList.add('mw-slide');
+
+      // header
+      var headerLeft = '';
+      if (data.label) headerLeft += '<span class="mw-slide__label">' + escapeHTML(data.label) + '</span>';
+      var headerRight = '';
+      if (data.bu) headerRight += '<span class="mw-slide__bu">' + escapeHTML(data.bu) + '</span>';
+      if (data.team) headerRight += '<span class="mw-slide__team">' + escapeHTML(data.team) + '</span>';
+
+      var header = (headerLeft || headerRight)
+        ? '<div class="mw-slide__header"><div>' + headerLeft + '</div><div class="mw-slide__header-right">' + headerRight + '</div></div>'
+        : '';
+
+      // footer
+      var pageInfo = '';
+      if (data.page != null && data.totalPages != null) {
+        pageInfo = '<span class="mw-slide__page">' + data.page + ' / ' + data.totalPages + '</span>';
+      }
+      var footer = '<div class="mw-slide__footer">' + pageInfo + '</div>';
+
+      // body — preserve existing children or create mount point
+      var bodyEl = el.querySelector('.mw-slide__body');
+      var existingContent = bodyEl ? bodyEl.innerHTML : '';
+
+      el.innerHTML = header + '<div class="mw-slide__body">' + existingContent + '</div>' + footer;
+    }
+    render();
+
+    var handle = {
+      el: el, type: 'slide',
+      body: function () { return el.querySelector('.mw-slide__body'); },
+      refresh: render,
+      update: function (newData) { data = Object.assign(data, newData || {}); render(); },
+      destroy: function () { el.innerHTML = ''; el.classList.remove('mw-slide'); registry.delete(handle); },
+    };
+    return register(handle);
+  }
+
+  // ==========================================================
   // Widget: Section Cover — PDF 표지/섹션 디바이더 (큰 타이틀 + accent hero band)
   // ==========================================================
   function sectionCover(el, config) {
@@ -2691,6 +2745,7 @@
     shareBar: shareBar,
     insightCard: insightCard,
     defCard: defCard,
+    slide: slide,
     sectionCover: sectionCover,
 
     // Widget metadata (title + short description) — for documentation, pickers, galleries.
@@ -2737,6 +2792,7 @@
       shareBar:        { title: 'Share Bar',         desc: '100% 비율 누적 가로바 + 범례 · NPS 분포, 만족도 분포, 예산 비중 등. status별 색.' },
       insightCard:     { title: 'Insight Card',      desc: '상태 dot + 헤드(아이콘/타이틀/메타/태그) + bullets + 🎯 highlight. 고객사·이슈·영업 인사이트 다목적.' },
       defCard:         { title: 'Def Card',          desc: '타이틀 + 부제 + key/value 행 목록. 용어 정의·프로젝트 개요·메트릭 설명.' },
+      slide:           { title: 'Slide',             desc: 'A4 가로 페이지 컨테이너. 헤더(KPI명/팀명) + 푸터(페이지번호) 자동 생성. 주간보고 페이지 단위.' },
       monthlyTable:    { title: 'Monthly Table',     desc: '12개월 표 + 합계행 + 단위(원/만원/억원) 토글 + view(table/line/bar) 토글 올인원.' },
       sectionCoverClassic:  { title: 'Cover — Classic',   desc: '보고서 커버 · kicker(좌) + brand(우) / 큰 타이틀 + subtitle / accent rule + meta. 컨설팅 보고서 스타일.' },
       sectionCoverCentered: { title: 'Cover — Centered',  desc: '보고서 커버 · 모든 요소 중앙 정렬. accent bar → kicker → 타이틀 → 구분선 → brand. 프레젠테이션 표지 스타일.' },

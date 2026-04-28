@@ -6,6 +6,9 @@
 @import url('https://cdn.jsdelivr.net/gh/toss/tossface/dist/tossface.css');
 @import url('https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap');
 
+*:focus { outline: none; }
+*:focus-visible { outline: none; }
+
 /* ========================================================
    THEME TOKENS — Brand-Inspired (35)
    ======================================================== */
@@ -2620,6 +2623,74 @@
 /* ==========================================================
    Section Cover — PDF 표지/섹션 디바이더 (큰 타이틀 + accent band)
    ========================================================== */
+/* ==========================================================
+   Slide — A4 가로 페이지 컨테이너
+   ========================================================== */
+.mw-slide {
+  aspect-ratio: 297 / 210;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--mw-border);
+  border-radius: var(--mw-radius);
+  background: var(--mw-bg);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.mw-slide__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--mw-space-3) var(--mw-space-5);
+  border-bottom: 1px solid var(--mw-border);
+  flex-shrink: 0;
+  gap: var(--mw-space-3);
+}
+.mw-slide__label {
+  font-size: var(--mw-text-sm);
+  font-weight: 600;
+  color: var(--mw-text);
+  font-family: var(--mw-font);
+}
+.mw-slide__header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--mw-space-2);
+}
+.mw-slide__bu, .mw-slide__team {
+  font-size: var(--mw-text-xs);
+  color: var(--mw-text-muted);
+  font-family: var(--mw-mono-font);
+}
+.mw-slide__bu::after {
+  content: '·';
+  margin-left: var(--mw-space-2);
+  opacity: 0.4;
+}
+.mw-slide__body {
+  flex: 1;
+  padding: var(--mw-space-4) var(--mw-space-5);
+  min-height: 0;
+}
+.mw-slide__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: var(--mw-space-2) var(--mw-space-5);
+  border-top: 1px solid var(--mw-border);
+  flex-shrink: 0;
+  height: 40px;
+  box-sizing: border-box;
+}
+.mw-slide__page {
+  font-size: var(--mw-text-xs);
+  font-family: var(--mw-mono-font);
+  color: var(--mw-text-muted);
+}
+
+/* overflow 경고: 콘텐츠가 슬라이드를 넘칠 때 시각적 표시 */
+.mw-slide__body:has(> :last-child) { position: relative; }
+
 /* ==========================================================
    Section Cover — 보고서 커버 (3종 스타일)
    style: 'classic' | 'centered' | 'split'

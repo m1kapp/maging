@@ -19,7 +19,7 @@
   const _style = document.createElement('style');
   _style.textContent = `
   .slide { display: none; }
-  .slide[data-active] { display: block; }
+  .slide[data-active] { display: flex; flex-direction: column; }
 
   .table-block { display: flex; flex-direction: column; gap: var(--mw-space-2); }
   .table-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0 var(--mw-space-1); margin-bottom: var(--mw-space-3); }
@@ -78,13 +78,18 @@
   #cv-pre { flex: 1; min-height: 0; overflow: auto; scrollbar-width: thin; background: var(--mw-surface-2); border: 1px solid var(--mw-border); border-radius: var(--mw-radius); padding: 20px 24px; font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace; font-size: 12.5px; line-height: 1.75; color: var(--mw-text); tab-size: 2; white-space: pre; word-break: normal; }
   .wrn-bar__btn.code-active { background: var(--mw-surface-2); color: var(--mw-text); }
 
+  body.presenter-mode { overflow: hidden; background: #000; }
   body.presenter-mode .mw-site-nav { display: none !important; }
   body.presenter-mode .wrs { display: none !important; }
-  body.presenter-mode main { padding: 32px 56px !important; }
+  body.presenter-mode main { padding: 0 !important; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; }
+  body.presenter-mode .mw-slide { border: none; border-radius: 0; transform-origin: center center; }
   body.presenter-mode .wrn--prev { left: 16px !important; }
 
   .wrs { width: 240px; padding: 20px 14px 24px; border-right: 1px solid var(--mw-border); background: var(--mw-bg); font-family: var(--mw-font); position: sticky; top: 0; align-self: flex-start; max-height: 100vh; overflow-y: auto; flex-shrink: 0; }
-  .wrs__head { padding: 4px 8px 14px; margin-bottom: 8px; border-bottom: 1px solid var(--mw-border); }
+  .wrs__head { padding: 8px 10px 14px; margin-bottom: 8px; border-bottom: 1px solid var(--mw-border); border-radius: 6px 6px 0 0; transition: background 120ms; }
+  .wrs__head:hover { background: var(--mw-surface-2); }
+  .wrs__head--active { background: color-mix(in srgb, var(--mw-accent) 10%, transparent); border-bottom-color: var(--mw-accent); }
+  .wrs__head--active .wrs__title { color: var(--mw-accent); }
   .wrs__title { font-size: 14px; font-weight: 700; color: var(--mw-text); letter-spacing: -0.01em; }
   .wrs__date  { font-size: 11px; color: var(--mw-text-muted); margin-top: 3px; font-variant-numeric: tabular-nums; }
   .wrs__group { margin-top: 16px; }
@@ -93,9 +98,16 @@
   .wrs__team-label { font-size: 11px; color: var(--mw-text-muted); padding: 4px 8px; font-weight: 500; }
   .wrs__link  { display: flex; align-items: center; gap: 8px; padding: 5px 8px 5px 12px; font-size: 12.5px; color: var(--mw-text); border-radius: 4px; text-decoration: none; line-height: 1.4; }
   .wrs__link:hover { background: var(--mw-surface-2); }
-  .wrs__link--active { background: var(--mw-surface-2); font-weight: 600; }
-  .wrs__dot  { width: 5px; height: 5px; border-radius: 50%; background: var(--mw-text-muted); opacity: 0.4; flex-shrink: 0; }
-  .wrs__link--active .wrs__dot { background: var(--mw-accent); opacity: 1; }
+  .wrs__link--active { background: color-mix(in srgb, var(--mw-accent) 8%, var(--mw-surface-2)); font-weight: 600; }
+  .wrs__link--active .wrs__dash { color: var(--mw-accent); opacity: 1; }
+  .wrs__link--active .wrs__lbl { color: var(--mw-accent); }
+  .wrs__row { display: flex; align-items: center; gap: 0.25rem; }
+  .wrs__dash { color: var(--mw-text-muted); opacity: 0.3; font-size: 0.6rem; flex-shrink: 0; width: 10px; text-align: center; }
+  .wrs__link--active .wrs__dash { color: var(--mw-accent); opacity: 1; }
+  .wrs__pages { display: flex; gap: 4px; margin-left: auto; flex-shrink: 0; padding-right: 0.25rem; }
+  .wrs__page-dot { width: 6px; height: 6px; border-radius: 50%; border: 1.5px solid var(--mw-text-muted); opacity: 0.35; cursor: pointer; transition: all 120ms; }
+  .wrs__page-dot:hover { opacity: 0.7; border-color: var(--mw-accent); }
+  .wrs__page-dot--active { background: var(--mw-accent); border-color: var(--mw-accent); opacity: 1; }
   .wrs__lbl  { flex: 1; }
 `;
   document.head.appendChild(_style);
@@ -107,9 +119,19 @@
       const title  = this.getAttribute('data-title') || 'SaaS 주간보고';
       const date   = this.getAttribute('data-date')  || '';
 
-      const navItems = [...document.querySelectorAll('.slide[data-label]')].map(el => ({
+      const rawItems = [...document.querySelectorAll('.slide[data-label]')].map(el => ({
         id: el.id, label: el.dataset.label, bu: el.dataset.bu || '', team: el.dataset.team || '', href: '#' + el.id,
       }));
+      // Group same-label slides into one nav item with page dots
+      const navItems = [];
+      rawItems.forEach(item => {
+        const prev = navItems[navItems.length - 1];
+        if (prev && prev.label === item.label) {
+          prev.pages.push(item.id);
+        } else {
+          navItems.push({ ...item, pages: [item.id] });
+        }
+      });
 
       const groups = [];
       navItems.forEach(item => {
@@ -122,10 +144,10 @@
 
       this.innerHTML = `
         <aside class="wrs">
-          <div class="wrs__head">
+          <a href="#cover" class="wrs__head" style="text-decoration:none;color:inherit;cursor:pointer;display:block;">
             <div class="wrs__title">${title}</div>
             ${date ? `<div class="wrs__date">${date}</div>` : ''}
-          </div>
+          </a>
           ${groups.map(g => `
             <div class="wrs__group">
               <div class="wrs__bu">${g.bu}</div>
@@ -133,10 +155,15 @@
                 <div class="wrs__team">
                   ${t.team ? `<div class="wrs__team-label">${t.team}</div>` : ''}
                   ${t.items.map(it => `
-                    <a href="${it.href}" class="wrs__link${it.id === active ? ' wrs__link--active' : ''}">
-                      <span class="wrs__dot"></span>
-                      <span class="wrs__lbl">${it.label}</span>
-                    </a>`).join('')}
+                    <div class="wrs__row${it.pages.some(p => p === active) ? ' wrs__row--active' : ''}">
+                      <a href="#${it.pages[0]}" class="wrs__link${it.pages[0] === active ? ' wrs__link--active' : ''}">
+                        <span class="wrs__dash">―</span>
+                        <span class="wrs__lbl">${it.label}</span>
+                      </a>
+                      ${it.pages.length > 1 ? '<span class="wrs__pages">' + it.pages.map((p, pi) =>
+                        '<a href="#' + p + '" class="wrs__page-dot' + (p === active ? ' wrs__page-dot--active' : '') + '" title="' + (pi+1) + '/' + it.pages.length + '"></a>'
+                      ).join('') + '</span>' : ''}
+                    </div>`).join('')}
                 </div>`).join('')}
             </div>`).join('')}
         </aside>`;
@@ -149,6 +176,26 @@
     const slides     = [...document.querySelectorAll('section.slide')];
     const SLIDE_IDS  = slides.map(s => s.id);
     const mounted    = {};
+
+    // Auto-apply A4 slide wrapper to non-cover slides
+    slides.forEach((s, i) => {
+      if (s.classList.contains('cover-slide')) return;
+      s.classList.add('mw-slide');
+      const label = s.dataset.label || '';
+      const bu    = s.dataset.bu || '';
+      const team  = s.dataset.team || '';
+      // wrap existing content in body
+      const content = s.innerHTML;
+      const headerLeft = label ? '<span class="mw-slide__label">' + label + '</span>' : '';
+      const headerRight = (bu || team) ? '<div class="mw-slide__header-right">' +
+        (bu ? '<span class="mw-slide__bu">' + bu + '</span>' : '') +
+        (team ? '<span class="mw-slide__team">' + team + '</span>' : '') + '</div>' : '';
+      const header = (headerLeft || headerRight) ?
+        '<div class="mw-slide__header"><div>' + headerLeft + '</div>' + headerRight + '</div>' : '';
+      const pageNum = '<span class="mw-slide__page">' + (i + 1) + ' / ' + slides.length + '</span>';
+      const footer = '<div class="mw-slide__footer">' + pageNum + '</div>';
+      s.innerHTML = header + '<div class="mw-slide__body">' + content + '</div>' + footer;
+    });
     const prevBtn    = document.getElementById('deck-prev');
     const nextBtn    = document.getElementById('deck-next');
     const indEl      = document.getElementById('deck-ind');
@@ -172,6 +219,12 @@
         const href = a.getAttribute('href') || '';
         if (href.startsWith('#')) a.classList.toggle('wrs__link--active', href === '#' + id);
       });
+      document.querySelectorAll('weekly-sidebar .wrs__page-dot').forEach(d => {
+        const href = d.getAttribute('href') || '';
+        if (href.startsWith('#')) d.classList.toggle('wrs__page-dot--active', href === '#' + id);
+      });
+      const head = document.querySelector('weekly-sidebar .wrs__head');
+      if (head) head.classList.toggle('wrs__head--active', id === 'cover');
       const idx = SLIDE_IDS.indexOf(id);
       if (prevBtn) { prevBtn.dataset.target = idx > 0 ? slides[idx - 1].id : ''; prevBtn.style.display = idx > 0 ? '' : 'none'; }
       if (nextBtn) { nextBtn.dataset.target = idx < slides.length - 1 ? slides[idx + 1].id : ''; nextBtn.style.display = idx < slides.length - 1 ? '' : 'none'; }
@@ -184,12 +237,36 @@
       activateById(slides[Math.max(0, Math.min(slides.length - 1, cur + offset))].id);
     }
 
+    function scaleSlide() {
+      if (!document.body.classList.contains('presenter-mode')) {
+        slides.forEach(s => { s.style.transform = ''; s.style.width = ''; s.style.height = ''; });
+        return;
+      }
+      const vw = window.innerWidth, vh = window.innerHeight;
+      const ratio = 297 / 210;
+      // A4 natural size at 100%
+      let sw, sh;
+      if (vw / vh > ratio) {
+        sh = vh; sw = vh * ratio;
+      } else {
+        sw = vw; sh = vw / ratio;
+      }
+      slides.forEach(s => {
+        s.style.width = sw + 'px';
+        s.style.height = sh + 'px';
+        s.style.aspectRatio = 'auto';
+      });
+    }
+
     function toggleFullscreen() {
       const isOn = document.body.classList.toggle('presenter-mode');
       localStorage.setItem('weeklyPresenter', isOn ? '1' : '0');
+      scaleSlide();
+      setTimeout(() => window.dispatchEvent(new Event('resize')), 50);
     }
 
-    if (localStorage.getItem('weeklyPresenter') === '1') document.body.classList.add('presenter-mode');
+    window.addEventListener('resize', scaleSlide);
+    if (localStorage.getItem('weeklyPresenter') === '1') { document.body.classList.add('presenter-mode'); scaleSlide(); }
 
     function dedent(src) {
       const lines = src.split('\n');

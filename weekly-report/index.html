@@ -46,7 +46,12 @@
           <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
             <div class="sk-sec-01"></div>
             <div class="sk-block-target mt-3"></div>
-            <div class="sk-block-actual mt-3"></div>
+          </div>
+        </section>
+
+        <section class="slide" id="sales-kpi-2" data-label="KPI 1. 신규 매출 30억" data-bu="SaaS B/U" data-team="컨설팅 &amp; CSM팀">
+          <div class="mt-3">
+            <div class="sk-block-actual"></div>
           </div>
           <div class="mt-4"><div class="sk-review"></div></div>
         </section>
@@ -87,7 +92,12 @@
           <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
             <div class="ret-sec-01"></div>
             <div class="ret-table-2026 mt-3"></div>
-            <div class="ret-table-2025 mt-3"></div>
+          </div>
+        </section>
+
+        <section class="slide" id="retention-2" data-label="KPI 1. 기고객 리텐션" data-bu="SaaS B/U" data-team="CX팀">
+          <div class="mt-3">
+            <div class="ret-table-2025"></div>
           </div>
           <div class="mt-4"><div class="ret-review"></div></div>
         </section>
@@ -126,7 +136,10 @@
               <div class="fb-nps-def"></div>
             </div>
           </div>
-          <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
+        </section>
+
+        <section class="slide" id="feedback-2" data-label="KPI 3. 고객 피드백 프로세스" data-bu="SaaS B/U" data-team="CX팀">
+          <div class="mt-3">
             <div class="fb-sec-csat"></div>
             <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-3 mt-3">
               <div class="fb-csat-table"></div>
@@ -294,14 +307,25 @@
             rows: toRows(targets),
             summaryRow: '합계', unitToggle: true, viewToggle: true, defaultUnit: '만원',
           });
-          Maging.monthlyTable(root.querySelector('.sk-block-actual'), {
+        }
+
+        function mountSalesKpi2() {
+          const root2 = document.getElementById('sales-kpi-2');
+          const months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+          const actuals = {
+            신규:           [100308000, 109067000, 71941000, null, null, null, null, null, null, null, null, null],
+            기고객:         [597009572, 576833422, 518279322, null, null, null, null, null, null, null, null, null],
+            '추가/업셀링':  [15527600, 21424500, 16852100, null, null, null, null, null, null, null, null, null],
+            'Add-On':       [6000000, 0, 8432000, null, null, null, null, null, null, null, null, null],
+          };
+          const toRows = obj => Object.entries(obj).map(([name, data]) => ({ name, data }));
+          Maging.monthlyTable(root2.querySelector('.sk-block-actual'), {
             title: '2026년 실적', sub: '4월 이후 데이터 미입력',
             categories: months,
             rows: toRows(actuals),
             summaryRow: '합계', unitToggle: true, viewToggle: true, defaultUnit: '만원',
           });
-
-          alertBanner(root.querySelector('.sk-review'), {
+          alertBanner(root2.querySelector('.sk-review'), {
             type: 'info', icon: '📋', title: '리뷰',
             message: '전체 매출은 1분기 목표 대비 92.5% 달성. 신규 매출은 1분기 목표 대비 약 1.3억원 미달 — 4월 신규 회복이 우선 과제.',
           });
@@ -345,9 +369,25 @@
           const toRows = (defs) => defs.map(d => { const r = { name: d.name, unit: d.unit, total: d.total }; d.values.forEach((v, i) => r['m' + i] = v); return r; });
 
           activityTable(root.querySelector('.ret-table-2026'), { title: '2026년 월별 현황', subtitle: '해지·신규·유료전체 추이', columns: cols(), rows: toRows(data2026), fixedLayout: true });
-          activityTable(root.querySelector('.ret-table-2025'), { title: '2025년 동월 비교', subtitle: '전년 기준', columns: cols(), rows: toRows(data2025), fixedLayout: true });
+        }
 
-          alertBanner(root.querySelector('.ret-review'), {
+        function mountRetention2() {
+          const root2 = document.getElementById('retention-2');
+          const months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+          const fmtCell = (v) => v == null ? '<span style="color:var(--mw-text-muted)">−</span>' : typeof v === 'string' ? v : v.toLocaleString();
+          const cols = () => [
+            { key: 'name', label: '구분', align: 'left', width: '120px', render: (v, row) => v + (row.unit ? ' <span class="row-unit">(' + row.unit + ')</span>' : '') },
+            ...months.map((m, i) => ({ key: 'm' + i, label: m, align: 'center', render: fmtCell })),
+            { key: 'total', label: '합계', align: 'center', render: (v) => '<strong>' + fmtCell(v) + '</strong>' },
+          ];
+          const toRows = (defs) => defs.map(d => { const r = { name: d.name, unit: d.unit, total: d.total }; d.values.forEach((v, i) => r['m' + i] = v); return r; });
+          const data2025 = [
+            { name: '해지', unit: '건', values: [185, 164, 147, 146, 121, 134, 121, 111, 133, 106, 118, 140], total: 1598 },
+            { name: '신규', unit: '건', values: [126, 173, 146, 162, 132, 149, 169, 142, 139, 96,  114, 134], total: 1682 },
+            { name: '비율', unit: '%',  values: ['144%','95%','104%','90%','91%','89%','72%','78%','76%','110%','103%','105%'], total: '95%' },
+          ];
+          activityTable(root2.querySelector('.ret-table-2025'), { title: '2025년 동월 비교', subtitle: '전년 기준', columns: cols(), rows: toRows(data2025), fixedLayout: true });
+          alertBanner(root2.querySelector('.ret-review'), {
             type: 'info', icon: '📋', title: '리뷰',
             message: '3월 해지율 2.9%로 전월 -0.1%p 개선. 그러나 신규 92 < 해지 135 — 4월 신규 회복이 우선 과제.',
           });
@@ -408,8 +448,6 @@
           ]);
 
           sectionHead(root.querySelector('.fb-sec-nps'),    { index: '01', kicker: 'NPS',        title: '순수 추천 지수 (분기)' });
-          sectionHead(root.querySelector('.fb-sec-csat'),   { index: '02', kicker: 'CSAT',       title: '응대 만족도 (상시)' });
-          sectionHead(root.querySelector('.fb-sec-issues'), { index: '03', kicker: 'TOP ISSUES', title: '최우선 해결 과제 — 전 구간 공통 반복' });
 
           // NPS 분포 — defCard(타이틀) + shareBar(바)
           defCard(root.querySelector('.fb-nps-bar'), {
@@ -436,8 +474,15 @@
             ],
           });
 
-          // CSAT 정의 defCard
-          defCard(root.querySelector('.fb-csat-def'), {
+        }
+
+        function mountFeedback2() {
+          const root2 = document.getElementById('feedback-2');
+
+          sectionHead(root2.querySelector('.fb-sec-csat'),   { index: '02', kicker: 'CSAT',       title: '응대 만족도 (상시)' });
+          sectionHead(root2.querySelector('.fb-sec-issues'), { index: '03', kicker: 'TOP ISSUES', title: '최우선 해결 과제 — 전 구간 공통 반복' });
+
+          defCard(root2.querySelector('.fb-csat-def'), {
             title: 'CSAT 정의', subtitle: 'Customer Satisfaction · 상시',
             rows: [
               { key: '정의', value: '"방금 경험한 상담에 얼마나 만족?"' },
@@ -446,21 +491,20 @@
             ],
           });
 
-          // issue-card → insightCard
-          insightCard(root.querySelector('.fb-issue-1'), {
+          insightCard(root2.querySelector('.fb-issue-1'), {
             icon: '🔍', title: '검색 기능', tag: '전 구간 공통', status: 'red',
             bullets: ['추천/중립/비추천 모든 점수 구간에서 반복 등장한 불편 이슈'],
           });
-          insightCard(root.querySelector('.fb-issue-2'), {
+          insightCard(root2.querySelector('.fb-issue-2'), {
             icon: '⚡', title: '속도 / 성능', tag: '헤비유저', status: 'yellow',
             bullets: ['사용량 많은 고객의 이탈 위험 신호. 우선 대응 필요'],
           });
-          insightCard(root.querySelector('.fb-issue-3'), {
+          insightCard(root2.querySelector('.fb-issue-3'), {
             icon: '🔔', title: '알림 불편', tag: '설정', status: 'gray',
             bullets: ['불필요 알림 과다 — 알림 설정 세분화 필요'],
           });
 
-          activityTable(root.querySelector('.fb-csat-table'), {
+          activityTable(root2.querySelector('.fb-csat-table'), {
             title: 'CSAT 담당자별 응대 만족도', subtitle: '4월 현재 · 만점 2.0 / 목표 1.8',
             columns: [
               { key: 'who',   label: '담당자', align: 'left' },
@@ -472,7 +516,7 @@
             rows: [{ who: '박진웅 팀장', score: 1.84 },{ who: '신현민 책임', score: 1.85 },{ who: '강지우 책임', score: 1.75 },{ who: '조윤경 책임', score: 1.25 }],
           });
 
-          alertBanner(root.querySelector('.fb-review'), {
+          alertBanner(root2.querySelector('.fb-review'), {
             type: 'info', icon: '📋', title: '리뷰',
             message: '1Q NPS 추천 54%로 업계 우수(70%) 미달. CSAT 4월 1.66점, 목표 대비 -0.14점. 전 구간 공통 이슈(검색·속도·알림) 우선 대응 필요.',
           });
@@ -735,9 +779,12 @@
         window.DECK_MOUNT = {
           cover:               mountCover,
           'sales-kpi':         mountSalesKpi,
+          'sales-kpi-2':       mountSalesKpi2,
           retention:           mountRetention,
+          'retention-2':       mountRetention2,
           'customer-insight':  mountCustomerInsight,
           feedback:            mountFeedback,
+          'feedback-2':        mountFeedback2,
           'dev-progress':      mountDevProgress,
           pricing:             mountPricing,
           education:           mountEducation,
