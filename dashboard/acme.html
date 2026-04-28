@@ -49,30 +49,7 @@
 
   h1, .display { font-family: var(--mw-display-font); }
 
-  .section-hd {
-    display: flex; align-items: flex-end; justify-content: space-between;
-    margin: 0 0 1rem;
-    flex-wrap: wrap; gap: 0.75rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--mw-border);
-  }
-  .section-hd__left { display: flex; flex-direction: column; gap: 0.25rem; }
-  .section-hd__kicker {
-    font-size: 0.68rem; color: var(--mw-text-muted);
-    letter-spacing: 0.14em; text-transform: uppercase;
-    font-family: var(--mw-mono-font);
-  }
-  .section-hd__title {
-    font-size: 1.25rem; font-weight: 700;
-    font-family: var(--mw-display-font);
-    color: var(--mw-text);
-  }
-  [data-theme="terminal"] .section-hd__title { text-transform: uppercase; letter-spacing: 0.05em; }
-  .section-hd__tag {
-    font-size: 0.7rem; color: var(--mw-text-muted);
-    font-family: var(--mw-mono-font);
-    display: inline-flex; align-items: center; gap: 0.375rem;
-  }
+  /* section-hd removed — now uses Maging.sectionHead() */
 
   /* Release calendar: split layout (calendar left, list right) */
   #release-calendar {
@@ -523,13 +500,7 @@
   <!-- SECTION 1: AT A GLANCE — 한눈에 보는 현재    -->
   <!-- ============================================ -->
   <section id="sec-1">
-    <div class="section-hd">
-      <div class="section-hd__left">
-        <div class="section-hd__kicker">01 · AT A GLANCE</div>
-        <div class="section-hd__title">한눈에 보는 현재</div>
-      </div>
-      <div class="section-hd__tag">Hero · Ring · KPI · Goal · Sparkline · Bullet</div>
-    </div>
+    <div id="sh-1"></div>
     <!-- hero(넓음) + ring(좁음) — 비대칭 2:1 -->
     <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-3 grid-fill" style="grid-auto-rows:360px">
       <div id="hero-tile"></div>
@@ -563,13 +534,7 @@
   <!-- SECTION 2: REAL-TIME PULSE — 지금 무슨 일    -->
   <!-- ============================================ -->
   <section id="sec-2" class="mt-12">
-    <div class="section-hd">
-      <div class="section-hd__left">
-        <div class="section-hd__kicker">02 · REAL-TIME PULSE</div>
-        <div class="section-hd__title">지금 무슨 일</div>
-      </div>
-      <div class="section-hd__tag"><span class="mw-live-dot"></span> LIVE STREAM</div>
-    </div>
+    <div id="sh-2"></div>
     <div id="transactions-table"></div>
     <!-- timeline(좁음) + inbox(좁음) + status(넓음) — 비대칭 2:2:3 -->
     <div class="grid grid-cols-1 lg:grid-cols-[2fr_2fr_3fr] gap-3 mt-3 grid-fill" style="grid-auto-rows:380px">
@@ -583,13 +548,7 @@
   <!-- SECTION 3: TRENDS & MIX — 추세와 분포        -->
   <!-- ============================================ -->
   <section id="sec-3" class="mt-12">
-    <div class="section-hd">
-      <div class="section-hd__left">
-        <div class="section-hd__kicker">03 · TRENDS & MIX</div>
-        <div class="section-hd__title">추세 · 분포</div>
-      </div>
-      <div class="section-hd__tag">Line · Bar · Funnel · Donut · Leaderboard</div>
-    </div>
+    <div id="sh-3"></div>
     <!-- revenue(넓음) + region(좁음) — 비대칭 3:1 -->
     <div class="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-3 grid-fill" style="grid-auto-rows:380px">
       <div id="revenue-chart"></div>
@@ -607,13 +566,7 @@
   <!-- SECTION 4: DEEP-DIVE — 깊은 분석             -->
   <!-- ============================================ -->
   <section id="sec-4" class="mt-12">
-    <div class="section-hd">
-      <div class="section-hd__left">
-        <div class="section-hd__kicker">04 · DEEP-DIVE</div>
-        <div class="section-hd__title">지역 · 분해 · 리텐션</div>
-      </div>
-      <div class="section-hd__tag">Map · Waterfall · Cohort Matrix</div>
-    </div>
+    <div id="sh-4"></div>
     <!-- map(좁음) + waterfall(넓음) — 비대칭 1:2 -->
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-3 grid-fill" style="grid-auto-rows:400px">
       <div id="region-map"></div>
@@ -629,13 +582,7 @@
   <!-- SECTION 5: CUSTOMER INSIGHTS — 고객 분석    -->
   <!-- ============================================ -->
   <section id="sec-5" class="mt-12">
-    <div class="section-hd">
-      <div class="section-hd__left">
-        <div class="section-hd__kicker">05 · CUSTOMER INSIGHTS</div>
-        <div class="section-hd__title">고객 · 활동 · 흐름</div>
-      </div>
-      <div class="section-hd__tag">Heatmap · Radar · Treemap · Scatter · Sankey</div>
-    </div>
+    <div id="sh-5"></div>
     <!-- heatmap(넓음) + radar(좁음) — 비대칭 5:2 -->
     <div class="grid grid-cols-1 lg:grid-cols-[5fr_2fr] gap-3 grid-fill" style="grid-auto-rows:380px">
       <div id="activity-heatmap"></div>
@@ -656,23 +603,17 @@
   <!-- SECTION 6: PROJECT & CALENDAR — 운영 일정    -->
   <!-- ============================================ -->
   <section id="sec-6" class="mt-12">
-    <div class="section-hd">
-      <div class="section-hd__left">
-        <div class="section-hd__kicker">06 · PROJECT &amp; CALENDAR</div>
-        <div class="section-hd__title">프로젝트 · 일정</div>
-      </div>
-      <div class="section-hd__tag">Progress Stepper · Calendar Heatmap · Event Calendar</div>
-    </div>
+    <div id="sh-6"></div>
     <!-- stepper 풀와이드 -->
     <div class="grid grid-cols-1 gap-3 grid-fill" style="grid-auto-rows:360px">
       <div id="progress-project"></div>
     </div>
     <!-- calendar heatmap 풀와이드 -->
-    <div class="grid grid-cols-1 gap-3 mt-3 grid-fill" style="grid-auto-rows:200px">
+    <div class="grid grid-cols-1 gap-3 mt-3">
       <div id="year-activity"></div>
     </div>
     <!-- event calendar 풀와이드 (넓은 콘텐츠) -->
-    <div class="grid grid-cols-1 gap-3 mt-3 grid-fill" style="grid-auto-rows:460px">
+    <div class="grid grid-cols-1 gap-3 mt-3">
       <div id="release-calendar"></div>
     </div>
   </section>
@@ -681,13 +622,7 @@
   <!-- SECTION 7: SYSTEM HEALTH — 인프라 상태       -->
   <!-- ============================================ -->
   <section id="sec-7" class="mt-12">
-    <div class="section-hd">
-      <div class="section-hd__left">
-        <div class="section-hd__kicker">07 · SYSTEM HEALTH</div>
-        <div class="section-hd__title">시스템 상태</div>
-      </div>
-      <div class="section-hd__tag"><span class="mw-live-dot"></span> 실시간 · 5초 주기</div>
-    </div>
+    <div id="sh-7"></div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-3 grid-fill" style="grid-auto-rows:400px">
       <div id="gauge-cpu"></div>
       <div id="gauge-memory"></div>
@@ -818,7 +753,7 @@ var INSPECTOR_MAP = [
 function findSectionName(el) {
   var sec = el.closest('section');
   if (!sec) return '';
-  var kicker = sec.querySelector('.section-hd__kicker');
+  var kicker = sec.querySelector('.mw-section-head__kicker');
   return kicker ? kicker.textContent.trim() : '';
 }
 
@@ -981,6 +916,15 @@ function renderDashboard(data) {
   if (data.alert) {
     Maging.alertBanner('#global-alert', data.alert);
   }
+
+  // ============ SECTION HEADS ============
+  Maging.sectionHead('#sh-1', { index: '01', kicker: 'AT A GLANCE', title: '한눈에 보는 현재', tag: 'Hero · Ring · KPI · Goal · Sparkline · Bullet' });
+  Maging.sectionHead('#sh-2', { index: '02', kicker: 'REAL-TIME PULSE', title: '지금 무슨 일', tag: 'LIVE STREAM' });
+  Maging.sectionHead('#sh-3', { index: '03', kicker: 'TRENDS & MIX', title: '추세 · 분포', tag: 'Line · Bar · Funnel · Donut · Leaderboard' });
+  Maging.sectionHead('#sh-4', { index: '04', kicker: 'DEEP-DIVE', title: '지역 · 분해 · 리텐션', tag: 'Map · Waterfall · Cohort Matrix' });
+  Maging.sectionHead('#sh-5', { index: '05', kicker: 'CUSTOMER INSIGHTS', title: '고객 · 활동 · 흐름', tag: 'Heatmap · Radar · Treemap · Scatter · Sankey' });
+  Maging.sectionHead('#sh-6', { index: '06', kicker: 'PROJECT & CALENDAR', title: '프로젝트 · 일정', tag: 'Progress Stepper · Calendar Heatmap · Event Calendar' });
+  Maging.sectionHead('#sh-7', { index: '07', kicker: 'SYSTEM HEALTH', title: '시스템 상태', tag: '실시간 · 5초 주기' });
 
   // ============ SECTION 1: AT A GLANCE ============
   Maging.heroTile('#hero-tile', {

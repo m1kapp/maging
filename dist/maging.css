@@ -1560,7 +1560,8 @@
 }
 .mw-table tbody tr:last-child td { border-bottom: none; }
 .mw-table tbody tr:hover { background: var(--mw-surface-2); }
-.mw-table__right { text-align: right; }
+.mw-table__right, .mw-table thead th.mw-table__right { text-align: right; }
+.mw-table__center, .mw-table thead th.mw-table__center { text-align: center; }
 .mw-nowrap { white-space: nowrap; }
 .mw-table__group-row th { background: var(--mw-surface-2); font-size: var(--mw-text-xs); font-weight: 600; color: var(--mw-text-muted); text-align: center; border-bottom: 1px solid var(--mw-border); padding: var(--mw-space-1-5) var(--mw-space-2); }
 .mw-table__group { border-right: 1px solid var(--mw-border); }
@@ -2522,6 +2523,17 @@
 
 
 /* ==========================================================
+   Def Card — title + subtitle + key/value rows
+   ========================================================== */
+.mw-defcard { padding: var(--mw-space-4) var(--mw-space-5); }
+.mw-defcard__title { font-size: var(--mw-text-md); font-weight: 700; color: var(--mw-text); }
+.mw-defcard__sub   { font-size: var(--mw-text-xs); color: var(--mw-text-muted); margin-top: 2px; margin-bottom: var(--mw-space-3); }
+.mw-defcard__row   { display: grid; grid-template-columns: 80px 1fr; gap: var(--mw-space-2); padding: var(--mw-space-2-5) 0; border-top: 1px dashed var(--mw-border); font-size: var(--mw-text-xs); }
+.mw-defcard__row:first-of-type { border-top: 0; }
+.mw-defcard__key   { color: var(--mw-text-muted); font-weight: 500; }
+.mw-defcard__val   { color: var(--mw-text); line-height: 1.7; }
+
+/* ==========================================================
    Insight Card — 좌측 컬러 보더 + 헤드 + bullets + highlight
    ========================================================== */
 .mw-insight {
@@ -2615,10 +2627,13 @@
 .mw-cover {
   display: flex;
   flex-direction: column;
-  background: linear-gradient(150deg, color-mix(in srgb, var(--mw-accent) 8%, var(--mw-bg)) 0%, var(--mw-bg) 55%);
-  min-height: calc(100vh - 200px);
-  aspect-ratio: 297 / 210;
+  background: linear-gradient(150deg, color-mix(in srgb, var(--mw-accent) 30%, var(--mw-bg)) 0%, var(--mw-bg) 70%);
+  min-height: 320px;
   font-family: var(--mw-font);
+  border: 1px solid var(--mw-border);
+  border-radius: var(--mw-radius);
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
 }
 
 /* ── Shared elements ─────────────────────────────────────── */

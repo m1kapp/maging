@@ -2,6 +2,7 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <script>!function(){var T=["flow","morningmate","claude","linear","stripe","airbnb","linkedin","apple","duolingo","github","spotify","netflix","figma","adobe","bloomberg"],k="maging-theme",s=localStorage.getItem(k);if(!s||T.indexOf(s)<0)s="flow";document.documentElement.setAttribute("data-theme",s);localStorage.setItem(k,s)}();</script>
     <title>SaaS 주간보고 — 2026년 4월 4주차</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="tw.css">
@@ -44,8 +45,8 @@
           </div>
           <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
             <div class="sk-sec-01"></div>
-            <div class="table-block sk-block-target mt-3"></div>
-            <div class="table-block sk-block-actual mt-3"></div>
+            <div class="sk-block-target mt-3"></div>
+            <div class="sk-block-actual mt-3"></div>
           </div>
           <div class="mt-4"><div class="sk-review"></div></div>
         </section>
@@ -59,7 +60,7 @@
           </div>
           <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
             <div class="pr-sec-01"></div>
-            <div class="pr-table mt-3 scroll-table" style="height:320px"></div>
+            <div class="pr-table mt-3"></div>
           </div>
           <div class="mt-4"><div class="pr-review"></div></div>
         </section>
@@ -72,7 +73,7 @@
           </div>
           <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
             <div class="ed-sec-01"></div>
-            <div class="ed-table mt-3 scroll-table" style="height:320px"></div>
+            <div class="ed-table mt-3"></div>
           </div>
           <div class="mt-4"><div class="ed-review"></div></div>
         </section>
@@ -85,24 +86,8 @@
           </div>
           <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
             <div class="ret-sec-01"></div>
-            <div class="table-block mt-3">
-              <div class="table-toolbar">
-                <div>
-                  <span class="table-toolbar__title">2026년 월별 현황</span>
-                  <span class="table-toolbar__sub">해지·신규·유료전체 추이</span>
-                </div>
-              </div>
-              <div class="ret-table-2026 scroll-table" style="height:300px"></div>
-            </div>
-            <div class="table-block mt-3">
-              <div class="table-toolbar">
-                <div>
-                  <span class="table-toolbar__title">2025년 동월 비교</span>
-                  <span class="table-toolbar__sub">전년 기준</span>
-                </div>
-              </div>
-              <div class="ret-table-2025 scroll-table" style="height:220px"></div>
-            </div>
+            <div class="ret-table-2026 mt-3"></div>
+            <div class="ret-table-2025 mt-3"></div>
           </div>
           <div class="mt-4"><div class="ret-review"></div></div>
         </section>
@@ -135,65 +120,25 @@
           <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
             <div class="fb-sec-nps"></div>
             <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-3 mt-3">
-              <div class="def-card">
-                <div class="def-card__title">2026년 1분기 NPS 분포</div>
-                <div class="def-card__sub">유료 사용자 대상 분기별 form 발송</div>
-                <div class="hbar mt-3">
-                  <div class="hbar__seg hbar__seg--good"    style="width:54%">54%</div>
-                  <div class="hbar__seg hbar__seg--neutral" style="width:24%">24%</div>
-                  <div class="hbar__seg hbar__seg--bad"     style="width:22%">22%</div>
-                </div>
-                <div class="hbar-legend">
-                  <span class="hbar-legend__item"><span class="hbar-legend__dot" style="background:var(--mw-success)"></span>추천자 (9~10점)<span class="hbar-legend__sub">업계 우수 ≥70%</span></span>
-                  <span class="hbar-legend__item"><span class="hbar-legend__dot" style="background:var(--mw-text-muted)"></span>중립자 (7~8점)</span>
-                  <span class="hbar-legend__item"><span class="hbar-legend__dot" style="background:var(--mw-danger)"></span>비추천 (0~6점)</span>
-                </div>
+              <div>
+                <div class="fb-nps-bar"></div>
               </div>
-              <div class="def-card">
-                <div class="def-card__title">NPS 정의</div>
-                <div class="def-card__sub">Net Promoter Score · 분기별</div>
-                <div class="def-card__row"><div class="def-card__key">정의</div><div class="def-card__val">"우리 서비스를 동료에게 추천하시겠습니까?" → 충성도·성장 잠재력</div></div>
-                <div class="def-card__row"><div class="def-card__key">측정</div><div class="def-card__val">1~10점 form, 분기별 발송</div></div>
-                <div class="def-card__row"><div class="def-card__key">담당</div><div class="def-card__val">박진웅 · 1차 발송 완료</div></div>
-              </div>
+              <div class="fb-nps-def"></div>
             </div>
           </div>
           <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
             <div class="fb-sec-csat"></div>
             <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-3 mt-3">
-              <div class="table-block">
-                <div class="table-toolbar">
-                  <div>
-                    <span class="table-toolbar__title">CSAT 담당자별 응대 만족도</span>
-                    <span class="table-toolbar__sub">4월 현재 · 만점 2.0 / 목표 1.8</span>
-                  </div>
-                </div>
-                <div class="fb-csat-table scroll-table" style="height:240px"></div>
-              </div>
-              <div class="def-card">
-                <div class="def-card__title">CSAT 정의</div>
-                <div class="def-card__sub">Customer Satisfaction · 상시</div>
-                <div class="def-card__row"><div class="def-card__key">정의</div><div class="def-card__val">"방금 경험한 상담에 얼마나 만족?"</div></div>
-                <div class="def-card__row"><div class="def-card__key">도구</div><div class="def-card__val">HubSpot 인박스 · 상시 표시</div></div>
-                <div class="def-card__row"><div class="def-card__key">담당</div><div class="def-card__val">CX 전체</div></div>
-              </div>
+              <div class="fb-csat-table"></div>
+              <div class="fb-csat-def"></div>
             </div>
           </div>
           <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
             <div class="fb-sec-issues"></div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
-              <div class="issue-card issue-card--danger">
-                <div class="issue-card__head"><span class="issue-card__icon">🔍</span><span class="issue-card__label">검색 기능</span><span class="issue-card__tag">전 구간 공통</span></div>
-                <div class="issue-card__sub">추천/중립/비추천 모든 점수 구간에서 반복 등장한 불편 이슈</div>
-              </div>
-              <div class="issue-card issue-card--warning">
-                <div class="issue-card__head"><span class="issue-card__icon">⚡</span><span class="issue-card__label">속도 / 성능</span><span class="issue-card__tag">헤비유저</span></div>
-                <div class="issue-card__sub">사용량 많은 고객의 이탈 위험 신호. 우선 대응 필요</div>
-              </div>
-              <div class="issue-card issue-card--info">
-                <div class="issue-card__head"><span class="issue-card__icon">🔔</span><span class="issue-card__label">알림 불편</span><span class="issue-card__tag">설정</span></div>
-                <div class="issue-card__sub">불필요 알림 과다 — 알림 설정 세분화 필요</div>
-              </div>
+              <div class="fb-issue-1"></div>
+              <div class="fb-issue-2"></div>
+              <div class="fb-issue-3"></div>
             </div>
           </div>
           <div class="mt-4"><div class="fb-review"></div></div>
@@ -208,7 +153,7 @@
           <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
             <div class="dp-sec-01"></div>
             <div class="rag-row dp-rag-row"></div>
-            <div class="dp-table mt-3 scroll-table" style="height:320px"></div>
+            <div class="dp-table mt-3"></div>
           </div>
           <div class="mt-4"><div class="dp-review"></div></div>
         </section>
@@ -222,7 +167,7 @@
           <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
             <div class="ai-sec-01"></div>
             <div class="rag-row ai-rag-row"></div>
-            <div class="ai-table mt-3 scroll-table" style="height:280px"></div>
+            <div class="ai-table mt-3 "></div>
           </div>
           <div class="mt-4"><div class="ai-review"></div></div>
         </section>
@@ -236,7 +181,7 @@
           </div>
           <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
             <div class="ent-sec-01"></div>
-            <div class="ent-table mt-3 scroll-table" style="height:320px"></div>
+            <div class="ent-table mt-3"></div>
           </div>
           <div class="mt-4"><div class="ent-review"></div></div>
         </section>
@@ -279,7 +224,7 @@
 
     <script>
       window.addEventListener('maging:ready', () => {
-        const { kpiCard, sectionCover, pageHeader, sectionHead, activityTable, barChart, lineChart, alertBanner, insightCard, ragChip, shareBar } = Maging;
+        const { kpiCard, sectionCover, pageHeader, sectionHead, activityTable, barChart, lineChart, alertBanner, insightCard, defCard, ragChip, shareBar } = Maging;
 
         // [단위] → <span class="mw-unit">단위</span>
         const u = s => String(s).replace(/\[(.+?)\]/g, '<span class="mw-unit">$1</span>');
@@ -393,14 +338,14 @@
 
           const fmtCell = (v) => v == null ? '<span style="color:var(--mw-text-muted)">−</span>' : typeof v === 'string' ? v : v.toLocaleString();
           const cols = () => [
-            { key: 'name', label: '구분', align: 'left', render: (v, row) => v + (row.unit ? ' <span class="row-unit">(' + row.unit + ')</span>' : '') },
-            ...months.map((m, i) => ({ key: 'm' + i, label: m, align: 'right', render: fmtCell })),
-            { key: 'total', label: '합계', align: 'right', render: (v) => '<strong>' + fmtCell(v) + '</strong>' },
+            { key: 'name', label: '구분', align: 'left', width: '120px', render: (v, row) => v + (row.unit ? ' <span class="row-unit">(' + row.unit + ')</span>' : '') },
+            ...months.map((m, i) => ({ key: 'm' + i, label: m, align: 'center', render: fmtCell })),
+            { key: 'total', label: '합계', align: 'center', render: (v) => '<strong>' + fmtCell(v) + '</strong>' },
           ];
           const toRows = (defs) => defs.map(d => { const r = { name: d.name, unit: d.unit, total: d.total }; d.values.forEach((v, i) => r['m' + i] = v); return r; });
 
-          activityTable(root.querySelector('.ret-table-2026'), { columns: cols(), rows: toRows(data2026) });
-          activityTable(root.querySelector('.ret-table-2025'), { columns: cols(), rows: toRows(data2025) });
+          activityTable(root.querySelector('.ret-table-2026'), { title: '2026년 월별 현황', subtitle: '해지·신규·유료전체 추이', columns: cols(), rows: toRows(data2026), fixedLayout: true });
+          activityTable(root.querySelector('.ret-table-2025'), { title: '2025년 동월 비교', subtitle: '전년 기준', columns: cols(), rows: toRows(data2025), fixedLayout: true });
 
           alertBanner(root.querySelector('.ret-review'), {
             type: 'info', icon: '📋', title: '리뷰',
@@ -466,7 +411,57 @@
           sectionHead(root.querySelector('.fb-sec-csat'),   { index: '02', kicker: 'CSAT',       title: '응대 만족도 (상시)' });
           sectionHead(root.querySelector('.fb-sec-issues'), { index: '03', kicker: 'TOP ISSUES', title: '최우선 해결 과제 — 전 구간 공통 반복' });
 
+          // NPS 분포 — defCard(타이틀) + shareBar(바)
+          defCard(root.querySelector('.fb-nps-bar'), {
+            title: '2026년 1분기 NPS 분포', subtitle: '유료 사용자 대상 분기별 form 발송', rows: [],
+          });
+          const npsBarHost = document.createElement('div');
+          npsBarHost.style.marginTop = 'var(--mw-space-3)';
+          root.querySelector('.fb-nps-bar').appendChild(npsBarHost);
+          shareBar(npsBarHost, {
+            segments: [
+              { label: '추천자 (9~10점)', value: 54, status: 'green', sub: '업계 우수 ≥70%' },
+              { label: '중립자 (7~8점)',  value: 24, status: 'gray' },
+              { label: '비추천 (0~6점)',  value: 22, status: 'red' },
+            ],
+          });
+
+          // NPS 정의 defCard
+          defCard(root.querySelector('.fb-nps-def'), {
+            title: 'NPS 정의', subtitle: 'Net Promoter Score · 분기별',
+            rows: [
+              { key: '정의', value: '"우리 서비스를 동료에게 추천하시겠습니까?" → 충성도·성장 잠재력' },
+              { key: '측정', value: '1~10점 form, 분기별 발송' },
+              { key: '담당', value: '박진웅 · 1차 발송 완료' },
+            ],
+          });
+
+          // CSAT 정의 defCard
+          defCard(root.querySelector('.fb-csat-def'), {
+            title: 'CSAT 정의', subtitle: 'Customer Satisfaction · 상시',
+            rows: [
+              { key: '정의', value: '"방금 경험한 상담에 얼마나 만족?"' },
+              { key: '도구', value: 'HubSpot 인박스 · 상시 표시' },
+              { key: '담당', value: 'CX 전체' },
+            ],
+          });
+
+          // issue-card → insightCard
+          insightCard(root.querySelector('.fb-issue-1'), {
+            icon: '🔍', title: '검색 기능', tag: '전 구간 공통', status: 'red',
+            bullets: ['추천/중립/비추천 모든 점수 구간에서 반복 등장한 불편 이슈'],
+          });
+          insightCard(root.querySelector('.fb-issue-2'), {
+            icon: '⚡', title: '속도 / 성능', tag: '헤비유저', status: 'yellow',
+            bullets: ['사용량 많은 고객의 이탈 위험 신호. 우선 대응 필요'],
+          });
+          insightCard(root.querySelector('.fb-issue-3'), {
+            icon: '🔔', title: '알림 불편', tag: '설정', status: 'gray',
+            bullets: ['불필요 알림 과다 — 알림 설정 세분화 필요'],
+          });
+
           activityTable(root.querySelector('.fb-csat-table'), {
+            title: 'CSAT 담당자별 응대 만족도', subtitle: '4월 현재 · 만점 2.0 / 목표 1.8',
             columns: [
               { key: 'who',   label: '담당자', align: 'left' },
               { key: 'score', label: '점수 (만점 2.0)', align: 'right',
@@ -589,8 +584,8 @@
               { key: 'date',      label: '일자',    align: 'left'  },
               { key: 'topic',     label: '과정명',  align: 'left'  },
               { key: 'type',      label: '유형',    align: 'left'  },
-              { key: 'attendees', label: '참여 (명)', align: 'right' },
-              { key: 'score',     label: '만족도',  align: 'right', render: (v) => '<span style="color:' + (v >= 4.0 ? 'var(--mw-success)' : 'var(--mw-warning)') + ';font-weight:500">' + v.toFixed(1) + '</span>' },
+              { key: 'attendees', label: '참여 (명)', align: 'center' },
+              { key: 'score',     label: '만족도',  align: 'center', render: (v) => '<span style="color:' + (v >= 4.0 ? 'var(--mw-success)' : 'var(--mw-warning)') + ';font-weight:500">' + v.toFixed(1) + '</span>' },
               { key: 'owner',     label: '담당',    align: 'left'  },
               { key: 'note',      label: '비고',    align: 'left'  },
             ],

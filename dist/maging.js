@@ -548,22 +548,33 @@
     if (!el) return null;
     var data = Object.assign({
       title: '', subtitle: '', live: false,
-      columns: [], rows: [], headerGroups: null,
+      columns: [], rows: [], headerGroups: null, fixedLayout: false,
     }, config || {});
+
+    function alignCls(align) {
+      if (align === 'right')  return ' class="mw-table__right"';
+      if (align === 'center') return ' class="mw-table__center"';
+      return '';
+    }
 
     function render() {
       el.classList.add('mw-card');
       var rightEl = data.live
         ? '<span class="mw-badge mw-badge--muted"><span class="mw-live-dot" style="margin:0 0.25rem 0 0"></span>LIVE</span>'
         : '';
+      var colgroup = '';
+      if (data.columns.some(function (c) { return c.width; })) {
+        colgroup = '<colgroup>' + data.columns.map(function (col) {
+          return '<col' + (col.width ? ' style="width:' + col.width + '"' : '') + '>';
+        }).join('') + '</colgroup>';
+      }
       var ths = data.columns.map(function (col) {
-        var cls = col.align === 'right' ? ' class="mw-table__right"' : '';
-        return '<th' + cls + '>' + escapeHTML(col.label) + '</th>';
+        return '<th' + alignCls(col.align) + '>' + escapeHTML(col.label) + '</th>';
       }).join('');
       var theadHtml;
       if (data.headerGroups && data.headerGroups.length) {
         var groupRow = data.headerGroups.map(function (g) {
-          var cls = (g.align === 'right' ? 'mw-table__right ' : '') + 'mw-table__group';
+          var cls = (g.align === 'right' ? 'mw-table__right ' : g.align === 'center' ? 'mw-table__center ' : '') + 'mw-table__group';
           return '<th class="' + cls + '" colspan="' + (g.span || 1) + '">' + escapeHTML(g.label) + '</th>';
         }).join('');
         theadHtml = '<thead><tr class="mw-table__group-row">' + groupRow + '</tr><tr>' + ths + '</tr></thead>';
@@ -573,17 +584,17 @@
       var trs = (data.rows || []).slice(0, 100).map(function (row) {
         var tds = data.columns.map(function (col) {
           var v = row[col.key];
-          var cls = col.align === 'right' ? ' class="mw-table__right"' : '';
           var content;
           if (typeof col.render === 'function') content = col.render(v, row);
           else content = v == null ? '' : escapeHTML(v);
-          return '<td' + cls + '>' + content + '</td>';
+          return '<td' + alignCls(col.align) + '>' + content + '</td>';
         }).join('');
         return '<tr>' + tds + '</tr>';
       }).join('');
+      var tableStyle = data.fixedLayout ? ' style="table-layout:fixed"' : '';
       el.innerHTML = headerHTML(data.title, data.subtitle, rightEl) +
-        '<div class="mw-table__wrap"><table class="mw-table">' +
-        theadHtml + '<tbody>' + trs + '</tbody></table></div>';
+        '<div class="mw-table__wrap"><table class="mw-table"' + tableStyle + '>' +
+        colgroup + theadHtml + '<tbody>' + trs + '</tbody></table></div>';
     }
     render();
     var handle = {
@@ -679,7 +690,11 @@
       var w = (size && size.width)  || 320;
       var minDim = Math.min(w, h * 2);
       var compact = h < 200;
-      var valueFontSize = Math.round(Math.max(14, Math.min(36, minDim * 0.12)));
+      var valueText = String(data.value) + (data.unit || '');
+      var textLen = valueText.length;
+      var sizeByContainer = minDim * 0.12;
+      var sizeByText = textLen > 3 ? sizeByContainer * (3.2 / textLen) : sizeByContainer;
+      var valueFontSize = Math.round(Math.max(14, Math.min(36, Math.min(sizeByContainer, sizeByText * 1.3))));
       var titleFontSize = Math.round(Math.max(9, Math.min(14, minDim * 0.045)));
       var ringWidth = Math.max(6, Math.round(minDim * 0.035));
       var radius = compact ? '80%' : '92%';
@@ -2506,6 +2521,43 @@
   }
 
   // ==========================================================
+  // Widget: Def Card — title + subtitle + key/value rows
+  // 용어 정의, 프로젝트 개요, 메트릭 설명 등
+  // ==========================================================
+  function defCard(el, config) {
+    el = q(el);
+    if (!el) return null;
+    var data = Object.assign({
+      title: '',
+      subtitle: '',
+      rows: [],       // [{key, value}]
+    }, config || {});
+
+    function render() {
+      el.classList.add('mw-card', 'mw-defcard');
+      var rows = (data.rows || []).map(function (r) {
+        return '<div class="mw-defcard__row">' +
+          '<div class="mw-defcard__key">' + escapeHTML(r.key) + '</div>' +
+          '<div class="mw-defcard__val">' + escapeHTML(r.value) + '</div>' +
+        '</div>';
+      }).join('');
+      el.innerHTML =
+        (data.title ? '<div class="mw-defcard__title">' + escapeHTML(data.title) + '</div>' : '') +
+        (data.subtitle ? '<div class="mw-defcard__sub">' + escapeHTML(data.subtitle) + '</div>' : '') +
+        rows;
+    }
+    render();
+
+    var handle = {
+      el: el, type: 'def-card',
+      refresh: render,
+      update: function (newData) { data = Object.assign(data, newData || {}); render(); },
+      destroy: function () { el.innerHTML = ''; el.classList.remove('mw-defcard'); registry.delete(handle); },
+    };
+    return register(handle);
+  }
+
+  // ==========================================================
   // Widget: Share Bar — 100% stacked horizontal bar + optional legend
   // ==========================================================
   function shareBar(el, config) {
@@ -2638,6 +2690,7 @@
     ragChip: ragChip,
     shareBar: shareBar,
     insightCard: insightCard,
+    defCard: defCard,
     sectionCover: sectionCover,
 
     // Widget metadata (title + short description) — for documentation, pickers, galleries.
@@ -2683,6 +2736,7 @@
       ragChip:         { title: 'RAG Chip',          desc: '신호등 상태 칩 · green/yellow/red/gray + 라벨. 위클리 보고서·고객 인사이트에 자주.' },
       shareBar:        { title: 'Share Bar',         desc: '100% 비율 누적 가로바 + 범례 · NPS 분포, 만족도 분포, 예산 비중 등. status별 색.' },
       insightCard:     { title: 'Insight Card',      desc: '상태 dot + 헤드(아이콘/타이틀/메타/태그) + bullets + 🎯 highlight. 고객사·이슈·영업 인사이트 다목적.' },
+      defCard:         { title: 'Def Card',          desc: '타이틀 + 부제 + key/value 행 목록. 용어 정의·프로젝트 개요·메트릭 설명.' },
       monthlyTable:    { title: 'Monthly Table',     desc: '12개월 표 + 합계행 + 단위(원/만원/억원) 토글 + view(table/line/bar) 토글 올인원.' },
       sectionCoverClassic:  { title: 'Cover — Classic',   desc: '보고서 커버 · kicker(좌) + brand(우) / 큰 타이틀 + subtitle / accent rule + meta. 컨설팅 보고서 스타일.' },
       sectionCoverCentered: { title: 'Cover — Centered',  desc: '보고서 커버 · 모든 요소 중앙 정렬. accent bar → kicker → 타이틀 → 구분선 → brand. 프레젠테이션 표지 스타일.' },
@@ -2712,6 +2766,179 @@
     mountOne: mountOne,
     fmt: fmt,
     seeded: seeded,
+
+    // ================================================================
+    // Maging.page(config) — One-shot declarative dashboard generator
+    // ================================================================
+    page: function (cfg) {
+      if (!cfg) return;
+
+      // ── Type shorthand → full function name ──
+      var TYPE_MAP = {
+        kpi: 'kpiCard', hero: 'heroTile', metric: 'metricChart',
+        stack: 'metricStack', compare: 'compareCard', countdown: 'countdownTile',
+        ring: 'ringProgress', bullet: 'bulletChart', sparklist: 'sparklineList',
+        goal: 'goalGrid', line: 'lineChart', bar: 'barChart',
+        donut: 'donutChart', funnel: 'funnelChart', gauge: 'gaugeChart',
+        radar: 'radarChart', heatmap: 'heatmapChart', treemap: 'treemapChart',
+        scatter: 'scatterChart', sankey: 'sankeyChart', waterfall: 'waterfallChart',
+        map: 'mapChart', cohort: 'cohortMatrix', leaderboard: 'leaderboard',
+        table: 'activityTable', timeline: 'timeline', inbox: 'inboxPreview',
+        status: 'statusGrid', calendar: 'eventCalendar', calheatmap: 'calendarHeatmap',
+        stepper: 'progressStepper', alert: 'alertBanner', share: 'shareBar',
+        insight: 'insightCard',
+        def: 'defCard',
+      };
+
+      // ── Height tokens → px ──
+      var HEIGHT_MAP = {
+        mini: 96, tile: 140, gauge: 280, card: 380, detail: 480, tall: 560,
+      };
+
+      // ── Layout tokens → Tailwind grid class ──
+      function layoutClass(layout) {
+        if (!layout) return 'grid grid-cols-1 gap-3';
+        var l = String(layout).toLowerCase();
+        if (l === '1col') return 'grid grid-cols-1 gap-3';
+        if (l === '2col') return 'grid grid-cols-1 lg:grid-cols-2 gap-3';
+        if (l === '3col') return 'grid grid-cols-1 lg:grid-cols-3 gap-3';
+        if (l === '4col') return 'grid grid-cols-2 md:grid-cols-4 gap-3';
+        if (l === '6col') return 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3';
+        // ratio patterns: '3:1', '2:2:3', '1:2', '5:2', etc.
+        var parts = l.split(':');
+        if (parts.length >= 2 && parts.every(function (p) { return /^\d+$/.test(p); })) {
+          var fracs = parts.map(function (p) { return p + 'fr'; }).join('_');
+          return 'grid grid-cols-1 lg:grid-cols-[' + fracs.replace(/_/g, '_') + '] gap-3';
+        }
+        return 'grid grid-cols-1 gap-3';
+      }
+
+      // ── yFormat shorthand → formatter function ──
+      function resolveFormatter(f) {
+        if (!f) return undefined;
+        if (typeof f === 'function') return f;
+        if (f === 'krw') return fmt.krwPlain;
+        if (f === 'krwHtml') return fmt.krw;
+        if (f === 'num') return function (v) { return Number(v).toLocaleString(); };
+        if (f === 'pct') return fmt.pct;
+        return undefined;
+      }
+
+      // ── Resolve widget config shorthands ──
+      function resolveWidgetConfig(w) {
+        var c = {};
+        for (var k in w) {
+          if (k === 'type') continue;
+          if (k === 'yFormat') { c.yFormatter = resolveFormatter(w[k]); continue; }
+          if (k === 'valFormat') { c.valueFormatter = resolveFormatter(w[k]); continue; }
+          c[k] = w[k];
+        }
+        return c;
+      }
+
+      // ── Inject grid-fill styles (once) ──
+      var GRID_FILL_ID = 'mw-page-grid-fill';
+      if (!document.getElementById(GRID_FILL_ID)) {
+        var style = document.createElement('style');
+        style.id = GRID_FILL_ID;
+        style.textContent =
+          '.mw-pgrid > *,.mw-pgrid > .mw-card{height:100% !important;min-width:0;min-height:0 !important;}' +
+          '.mw-pgrid .mw-card{display:flex;flex-direction:column;box-sizing:border-box;height:100% !important;min-height:0 !important;}' +
+          '.mw-pgrid .mw-chart__body{height:auto !important;flex:1 1 auto;min-height:0 !important;}' +
+          '.mw-pgrid .mw-lb__list,.mw-pgrid .mw-timeline,.mw-pgrid .mw-inbox,.mw-pgrid .mw-table__wrap{flex:1 1 auto;min-height:0;overflow-y:auto;}' +
+          '.mw-pgrid .mw-kpi__spark,.mw-pgrid .mw-hero__spark{flex:1 1 auto;min-height:32px;}' +
+          '.mw-pgrid .mw-countdown.mw-card,.mw-pgrid .mw-stat.mw-card,.mw-pgrid .mw-compare.mw-card,.mw-pgrid .mw-mstack.mw-card,.mw-pgrid .mw-kpi.mw-card,.mw-pgrid .mw-hero.mw-card{container-type:size;}' +
+          '.mw-pgrid .mw-countdown__num{font-size:clamp(1.75rem,18cqh,3.25rem);}' +
+          '.mw-pgrid .mw-mstack__main-val{font-size:clamp(1.5rem,16cqh,2.75rem);}' +
+          '.mw-pgrid .mw-compare__val{font-size:clamp(1.15rem,12cqh,2.25rem);}' +
+          '.mw-pgrid .mw-stat__value{font-size:clamp(1.35rem,18cqh,2.5rem);}' +
+          '.mw-pgrid .mw-kpi__value{font-size:clamp(1.5rem,18cqh,2.5rem);}' +
+          '.mw-pgrid .mw-hero__value{font-size:clamp(1.75rem,20cqh,3rem);}';
+        document.head.appendChild(style);
+      }
+
+      // ── Build the page ──
+      var container = document.createElement('main');
+      container.className = 'max-w-[1100px] mx-auto px-6 py-4';
+      container.style.wordBreak = 'keep-all';
+
+      // Page header
+      var hdr = cfg.header || {};
+      if (!hdr.title && cfg.title) hdr = { kicker: cfg.kicker, title: cfg.title, subtitle: cfg.subtitle, meta: cfg.meta };
+      if (hdr.title) {
+        var hdrEl = document.createElement('div');
+        hdrEl.className = 'pt-4 pb-2';
+        container.appendChild(hdrEl);
+        pageHeader(hdrEl, hdr);
+      }
+
+      // Sections
+      var sections = cfg.sections || [];
+      sections.forEach(function (sec, si) {
+        var secWrap = document.createElement('div');
+        secWrap.className = si > 0 ? 'mt-5 pt-4' : 'mt-3';
+        if (si > 0) secWrap.style.borderTop = '1px solid var(--mw-border)';
+        container.appendChild(secWrap);
+
+        // Section head
+        if (sec.title) {
+          var shEl = document.createElement('div');
+          secWrap.appendChild(shEl);
+          sectionHead(shEl, { index: si + 1, kicker: sec.kicker, title: sec.title, tag: sec.tag });
+        }
+
+        // Rows
+        var rows = sec.rows || [];
+        rows.forEach(function (row) {
+          var layout = row.layout || '1col';
+          var height = row.height;
+          var widgets = row.widgets || [];
+
+          var rowEl = document.createElement('div');
+          rowEl.className = layoutClass(layout) + ' mw-pgrid mt-3';
+          if (height) {
+            var px = HEIGHT_MAP[height] || parseInt(height, 10) || 380;
+            rowEl.style.gridAutoRows = px + 'px';
+          }
+          secWrap.appendChild(rowEl);
+
+          // Mount widgets
+          widgets.forEach(function (w) {
+            var el = document.createElement('div');
+            rowEl.appendChild(el);
+
+            var typeName = w.type || 'kpi';
+            var fnName = TYPE_MAP[typeName] || typeName;
+            var fn = api[fnName];
+            if (!fn) {
+              console.warn('[maging.page] Unknown widget type: ' + typeName);
+              return;
+            }
+
+            var wCfg = resolveWidgetConfig(w);
+            fn(el, wCfg);
+
+            // Clear inline minHeight set by _chartBase — grid-auto-rows controls height
+            if (height) {
+              var card = el.querySelector('.mw-card') || el;
+              if (card.classList.contains('mw-card')) card.style.minHeight = '';
+              if (el.style.minHeight) el.style.minHeight = '';
+            }
+          });
+        });
+      });
+
+      // Mount to DOM
+      var body = document.body;
+      var existing = body.querySelector('main');
+      if (existing) {
+        existing.parentNode.replaceChild(container, existing);
+      } else {
+        body.appendChild(container);
+      }
+
+      return container;
+    },
   };
 
   // Theme metadata for the FAB picker (ordered mainstream → distinctive)

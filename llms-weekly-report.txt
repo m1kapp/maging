@@ -49,7 +49,9 @@
 
 ### LISTS & STATUS
 **`leaderboard`** `{ title?, items:[{name,initial?,percent,meta?}] }`
-**`activityTable`** `{ title?, columns:[{key,label,align?,render?}], rows:[...], live?, headerGroups?:[{label,span,align?}] }`
+**`activityTable`** `{ title?, columns:[{key,label,align?,render?,width?}], rows:[...], live?, fixedLayout?, headerGroups?:[{label,span,align?}] }`
+  `align`: `'left'`(default) · `'center'` · `'right'`. 숫자 컬럼은 `'center'`, 금액·합계는 `'right'`.
+  `fixedLayout`: 월별 테이블 등 컬럼 균등 너비. `width`로 특정 컬럼만 고정 가능.
   `headerGroups` — colspan 그룹 헤더. 예) `[{label:'26년',span:3},{label:'25년',span:2}]`
 **`timeline`** `{ title?, items:[{time,text,type?}] }`
 **`inboxPreview`** `{ title?, items:[{icon?,text,time,type?}] }`
@@ -64,6 +66,7 @@
 **`pageHeader`** `{ kicker?, title, subtitle?, meta? }`
 **`sectionHead`** `{ index?, kicker?, title, tag? }`
 **`alertBanner`** `{ type, title, message?, icon?, action?:{label,href?}, dismissable? }`
+**`defCard`** `{ title?, subtitle?, rows:[{key,value}] }`
 
 ---
 
