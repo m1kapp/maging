@@ -8,10 +8,7 @@
   "style": "dist/maging.css",
   "files": [
     "dist/**",
-    "llms.txt",
-    "llms-dashboard.txt",
-    "llms-landing.txt",
-    "llms-weekly-report.txt",
+    "llms*.md",
     "README.md",
     "LICENSE"
   ],
