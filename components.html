@@ -5,7 +5,7 @@
 <script>!function(){var T=["flow","morningmate","claude","linear","stripe","airbnb","linkedin","apple","duolingo","github","spotify","netflix","figma","adobe","bloomberg"],k="maging-theme",s=localStorage.getItem(k);if(!s||T.indexOf(s)<0)s="flow";document.documentElement.setAttribute("data-theme",s);localStorage.setItem(k,s)}();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Components — maging</title>
-<meta name="description" content="maging 위젯 갤러리. Core, Dashboard, Landing Page 모드별 컴포넌트를 확인하세요.">
+<meta name="description" content="maging 위젯 갤러리. Core, Dashboard, Landing Page, Card News 모드별 컴포넌트를 확인하세요.">
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js"></script>
@@ -13,6 +13,7 @@
 <script src="./dist/maging.js"></script>
 <script src="./dist/maging-weekly.js"></script>
 <script src="./dist/maging-landing.js"></script>
+<script src="./dist/maging-news.js"></script>
 <script type="module" src="./components/site.js"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,141 +50,58 @@
   .cg-section__badge--core { background: color-mix(in srgb, var(--mw-accent) 12%, transparent); color: var(--mw-accent); }
   .cg-section__badge--dashboard { background: color-mix(in srgb, var(--mw-success) 12%, transparent); color: var(--mw-success); }
   .cg-section__badge--landing { background: color-mix(in srgb, var(--mw-warning) 12%, transparent); color: var(--mw-warning); }
+  .cg-section__badge--cardnews { background: color-mix(in srgb, #e91e63 12%, transparent); color: #e91e63; }
 
-  /* widget card grid */
-  .cg-grid { display: grid; gap: 1rem; grid-template-columns: repeat(3, 1fr); }
-  @media (max-width: 960px) { .cg-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 640px) { .cg-grid { grid-template-columns: 1fr; } }
-  .cg-card--wide { grid-column: 1 / -1; }
-  .cg-card__preview { height: 220px; }
-  .cg-card--tall .cg-card__preview { height: 320px; }
-  .cg-card--tall:has(.mw-cover) .cg-card__preview { height: auto; }
-  @media (max-width: 640px) { .cg-card--wide { grid-column: span 1; } }
+  /* ── showcase: 1 row per component ── */
+  .sc-item {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem;
+    padding: 2rem 0; border-bottom: 1px solid var(--mw-border);
+    align-items: start;
+  }
+  .sc-item:last-child { border-bottom: none; }
+  @media (max-width: 768px) { .sc-item { grid-template-columns: 1fr; } }
 
-  .cg-card {
-    background: var(--mw-surface); border: 1px solid var(--mw-border);
+  .sc-preview {
+    background: var(--mw-bg); border: 1px solid var(--mw-border);
     border-radius: var(--mw-radius); overflow: hidden;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    display: flex; flex-direction: column;
-  }
-  .cg-card:hover {
-    border-color: var(--mw-accent);
-    box-shadow: 0 4px 16px -4px color-mix(in srgb, var(--mw-accent) 12%, transparent);
-  }
-  /*
-   * ═══ PREVIEW CSS 원칙 ═══
-   * 1. 컨테이너만 제어: 배경, 크기, overflow, 정렬
-   * 2. 위젯 내부 스타일(padding, gap, border, font-size) 절대 오버라이드 금지
-   * 3. 유일한 예외: min-height:0 (overflow 방지), 차트 height 바인딩 (ECharts 필수)
-   * 4. 위젯은 프로덕션과 100% 동일하게 렌더. 안 맞으면 위젯 자체를 고칠 것.
-   */
-
-  /* ── 1. 프리뷰 컨테이너 ── */
-  .cg-card__preview {
-    overflow: hidden;
-    background: var(--mw-bg); border-bottom: 1px solid var(--mw-border);
-    flex: none;
     padding: 0.75rem;
-    display: flex; align-items: center; justify-content: center;
   }
-  .cg-card__preview > div { width: 100%; height: auto; align-self: center; }
-
-  /* ── 2. min-height 리셋 (자연 높이 유지, 정중앙 배치) ── */
-  .cg-card__preview .mw-card,
-  .cg-card__preview .mw-cover,
-  .cg-card__preview .mw-mapchart { min-height: 0 !important; }
-
-  /* ── 3. 차트 body: 16:9 비율 ── */
-  .cg-card__preview .mw-chart__body { aspect-ratio: 52 / 9; height: auto !important; min-height: 160px; }
-  .cg-card__preview .mw-chart__body [class*="legend"] { display: none !important; }
-
-  /* ── 4. 커버: A4 가로 비율 래퍼 (컨테이너 제어만) ── */
-  .cg-card__preview:has(.mw-cover) { padding: 0.75rem !important; background: none !important; align-items: stretch; justify-content: stretch; }
-  .cg-card__preview:has(.mw-cover) > div { width: 100%; }
-  .cg-card__preview:has(.mw-cover) > div { width: 100%; aspect-ratio: 297 / 210; }
-  .cg-card__preview .mw-cover { height: 100%; }
-
-  /* ── 5. mw-card 없는 위젯: 래퍼 div에 카드 외형 부여 (위젯 내부 아닌 래퍼) ── */
-  .cg-card__preview > div:not(:has(.mw-card)):not(.mw-cover):not(:has(.mw-cover)):not(:has(.mw-chart__body)):not(.mw-codeblock):not(:has(.mw-codeblock)):not(:has(.table-toolbar)) {
-    background: var(--mw-surface);
-    border: 1px solid var(--mw-border);
-    border-radius: var(--mw-radius);
-    padding: 0.75rem;
-    box-sizing: border-box;
-  }
-  .cg-card { cursor: pointer; }
-  .cg-card__info { padding: 0.875rem 1rem; min-height: 72px; flex-shrink: 0; box-sizing: border-box; }
-
-  /* ── dialog ── */
-  .cg-dlg { position: fixed; inset: 0; z-index: 500; display: none; align-items: center; justify-content: center; }
-  .cg-dlg.is-open { display: flex; }
-  .cg-dlg__scrim { position: absolute; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
-  .cg-dlg__panel {
-    position: relative; width: 90%; max-width: 720px; max-height: 85vh;
+  .sc-preview > div { width: 100%; }
+  .sc-preview .mw-card, .sc-preview .mw-cover, .sc-preview .mw-mapchart { min-height: 0 !important; }
+  .sc-preview .mw-chart__body { aspect-ratio: 52/9; height: auto !important; min-height: 160px; }
+  .sc-preview .mw-chart__body [class*="legend"] { display: none !important; }
+  .sc-preview:has(.mw-cover) { padding: 0 !important; background: none !important; }
+  .sc-preview:has(.mw-cover) > div { width: 100%; aspect-ratio: 297/210; }
+  .sc-preview .mw-cover { height: 100%; }
+  .sc-preview .mw-news-frame { max-width: 100%; }
+  .sc-preview > div:not(:has(.mw-card)):not(.mw-cover):not(:has(.mw-cover)):not(:has(.mw-chart__body)):not(.mw-codeblock):not(:has(.mw-codeblock)):not(:has(.table-toolbar)):not(:has(.mw-news-frame)) {
     background: var(--mw-surface); border: 1px solid var(--mw-border);
-    border-radius: var(--mw-radius); box-shadow: 0 24px 48px -12px rgba(0,0,0,0.25);
-    display: flex; flex-direction: column; overflow: hidden;
+    border-radius: var(--mw-radius); padding: 0.75rem; box-sizing: border-box;
   }
-  .cg-dlg__head {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1rem 1.25rem; border-bottom: 1px solid var(--mw-border); flex-shrink: 0;
+
+  .sc-info { display: flex; flex-direction: column; gap: 0.75rem; }
+  .sc-name {
+    font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em;
+    display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap;
   }
-  .cg-dlg__title { font-size: var(--mw-text-md); font-weight: 700; }
-  .cg-dlg__desc { font-size: var(--mw-text-xs); color: var(--mw-text-muted); margin-top: 0.15rem; }
-  .cg-dlg__close {
-    width: 28px; height: 28px; border-radius: calc(var(--mw-radius) * 0.5);
-    border: 1px solid var(--mw-border); background: var(--mw-surface-2);
-    color: var(--mw-text-muted); cursor: pointer; font-size: 0.8rem;
-    display: flex; align-items: center; justify-content: center;
-    transition: color 120ms, border-color 120ms;
+  .sc-api {
+    font-size: var(--mw-text-xs); font-family: var(--mw-mono-font);
+    color: var(--mw-accent); background: color-mix(in srgb, var(--mw-accent) 8%, transparent);
+    padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 500;
   }
-  .cg-dlg__close:hover { color: var(--mw-text); border-color: var(--mw-accent); }
-  .cg-dlg__tabs {
-    display: flex; gap: 0; border-bottom: 1px solid var(--mw-border); flex-shrink: 0;
+  .sc-desc { font-size: var(--mw-text-sm); color: var(--mw-text-muted); line-height: 1.7; }
+  .sc-code {
+    background: #1e1e2e; border-radius: var(--mw-radius); overflow: hidden;
   }
-  .cg-dlg__tab {
-    padding: 0.6rem 1.25rem; font-size: var(--mw-text-xs); font-weight: 600;
-    color: var(--mw-text-muted); cursor: pointer; border: none; background: none;
-    font-family: var(--mw-font); transition: color 120ms;
-    border-bottom: 2px solid transparent; margin-bottom: -1px;
-  }
-  .cg-dlg__tab:hover { color: var(--mw-text); }
-  .cg-dlg__tab.is-active { color: var(--mw-accent); border-bottom-color: var(--mw-accent); }
-  .cg-dlg__body { flex: 1; overflow: auto; }
-  .cg-dlg__preview { padding: 1.5rem; min-height: 300px; }
-  .cg-dlg__preview:has(.mw-cover) { padding: 0; }
-  .cg-dlg__preview .mw-card { min-height: 280px; }
-  .cg-dlg__code {
-    display: none; padding: 0; margin: 0;
-    background: #1e1e2e; position: relative;
-  }
-  .cg-dlg__code pre {
-    margin: 0; padding: 1.5rem; font-size: 0.8rem; line-height: 1.7;
+  .sc-code pre {
+    margin: 0; padding: 1rem 1.25rem; font-size: 0.72rem; line-height: 1.7;
     color: #cdd6f4; font-family: var(--mw-mono-font);
-    white-space: pre; overflow-x: auto;
-    tab-size: 2;
+    white-space: pre; overflow-x: auto; tab-size: 2;
   }
-  .cg-dlg__copy {
-    position: absolute; top: 0.75rem; right: 0.75rem;
-    font-size: 0.65rem; padding: 0.25rem 0.6rem;
-    border: 1px solid #45475a; border-radius: 4px;
-    background: #313244; color: #a6adc8;
-    cursor: pointer; font-family: var(--mw-font);
-    transition: color 150ms, border-color 150ms;
-  }
-  .cg-dlg__copy:hover { color: #cdd6f4; border-color: #89b4fa; }
-  /* syntax colors */
-  .cg-dlg__code .hl-kw { color: #cba6f7; }
-  .cg-dlg__code .hl-str { color: #a6e3a1; }
-  .cg-dlg__code .hl-num { color: #fab387; }
-  .cg-dlg__code .hl-cmt { color: #6c7086; font-style: italic; }
-  .cg-dlg__code .hl-tag { color: #89b4fa; }
-  .cg-dlg__code .hl-attr { color: #f9e2af; }
-  .cg-dlg__code .hl-fn { color: #89dceb; }
-  .cg-dlg__code .hl-bool { color: #fab387; }
-  .cg-dlg__code .hl-prop { color: #b4befe; }
-  .cg-card__name { font-size: var(--mw-text-sm); font-weight: 600; margin-bottom: 0.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .cg-card__desc { font-size: var(--mw-text-xs); color: var(--mw-text-muted); line-height: 1.7; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .sc-code .hl-kw { color: #cba6f7; } .sc-code .hl-str { color: #a6e3a1; }
+  .sc-code .hl-num { color: #fab387; } .sc-code .hl-fn { color: #89dceb; }
+  .sc-code .hl-prop { color: #b4befe; } .sc-code .hl-cmt { color: #6c7086; font-style: italic; }
+  .sc-code .hl-tag { color: #89b4fa; }
 
   /* mode tabs */
   .cg-tabs {
@@ -214,28 +132,6 @@
   </div>
   <div class="cg-tabs" id="cg-tabs"></div>
   <div id="cg-content"></div>
-</div>
-
-<!-- Dialog -->
-<div class="cg-dlg" id="cg-dlg">
-  <div class="cg-dlg__scrim"></div>
-  <div class="cg-dlg__panel">
-    <div class="cg-dlg__head">
-      <div>
-        <div class="cg-dlg__title" id="dlg-title"></div>
-        <div class="cg-dlg__desc" id="dlg-desc"></div>
-      </div>
-      <button class="cg-dlg__close" id="dlg-close">&times;</button>
-    </div>
-    <div class="cg-dlg__tabs">
-      <button class="cg-dlg__tab is-active" data-tab="preview">Preview</button>
-      <button class="cg-dlg__tab" data-tab="code">Code</button>
-    </div>
-    <div class="cg-dlg__body">
-      <div class="cg-dlg__preview" id="dlg-preview"></div>
-      <div class="cg-dlg__code" id="dlg-code"><button class="cg-dlg__copy" id="dlg-copy">Copy</button><pre></pre></div>
-    </div>
-  </div>
 </div>
 
 <maging-footer></maging-footer>
@@ -309,6 +205,13 @@ var WIDGETS = {
   faqAccordion:    { mode: 'landing', cat: 'Landing Page', tall: true },
   codeBlock:       { mode: 'landing', cat: 'Landing Page', wide: true },
   logoBar:         { mode: 'landing', cat: 'Landing Page' },
+
+  // ── Card News specific ──
+  coverCard:       { mode: 'cardnews', cat: 'Card News', tall: true },
+  bodyCard:        { mode: 'cardnews', cat: 'Card News', tall: true },
+  dataCard:        { mode: 'cardnews', cat: 'Card News', tall: true },
+  numberedCard:    { mode: 'cardnews', cat: 'Card News', tall: true },
+  ctaCard:         { mode: 'cardnews', cat: 'Card News', tall: true },
 };
 
 /* ── Sample data for live previews ── */
@@ -390,6 +293,13 @@ var SAMPLES = {
   logoBar:         function(el) { Maging.logoBar(el, { items: [{ name: 'Kakao' },{ name: 'Toss' },{ name: 'LINE' }] }); },
   ctaSection:      function(el) { Maging.ctaSection(el, { title: '시작하세요', desc: '무료 체험', ctas: [{ label: '시작', primary: true }], padding: '2rem 1rem' }); },
   faqAccordion:    function(el) { Maging.faqAccordion(el, { items: [{ q: 'CDN으로 바로 쓸 수 있나요?', a: '네, script 태그 한 줄이면 됩니다.' }, { q: '테마 변경은 어떻게 하나요?', a: 'Maging.setTheme() 호출로 즉시 전환됩니다.' }, { q: 'React에서도 사용 가능한가요?', a: '네, useEffect 안에서 마운트하면 됩니다.' }] }); },
+
+  // ── Card News ──
+  coverCard:     function(el) { Maging.coverCard(el, { icon: '🚀', tag: 'AI 트렌드', title: 'AI가 바꿀\n마케팅의 미래', subtitle: '마케터가 알아야 할 5가지', brand: '@maging.page', style: 'gradient' }); },
+  bodyCard:      function(el) { Maging.bodyCard(el, { num: '01', icon: '🎯', heading: '초개인화 콘텐츠 자동 생성', text: 'AI가 고객 세그먼트별로 맞춤 콘텐츠를 실시간으로 만들어줍니다.', brand: '@maging.page' }); },
+  dataCard:      function(el) { Maging.dataCard(el, { label: 'GLOBAL TREND', title: 'AI 마케팅 도입률 추이', widget: 'barChart', widgetConfig: { items: [{label:'2022',value:18},{label:'2023',value:31},{label:'2024',value:47},{label:'2025',value:63},{label:'2026',value:78}], yFormatter: function(v){return v+'%';} }, brand: '@maging.page' }); },
+  numberedCard:  function(el) { Maging.numberedCard(el, { heading: 'AI 마케팅 도구 TOP 3', items: [{ rank: '1', title: 'ChatGPT / Claude', desc: '콘텐츠 초안, 카피라이팅', icon: '🤖' },{ rank: '2', title: 'Midjourney / DALL-E', desc: '비주얼 생성', icon: '🖼️' },{ rank: '3', title: 'HubSpot AI', desc: '리드 스코어링', icon: '📈' }], brand: '@maging.page' }); },
+  ctaCard:       function(el) { Maging.ctaCard(el, { heading: '더 많은 AI 마케팅 팁이\n궁금하다면?', subtext: '팔로우하고 매주 새로운 트렌드를 받아보세요', ctas: [{ label: '팔로우하기', primary: true }], handles: [{ platform: 'Instagram', handle: '@maging.page' }], brand: '@maging.page' }); },
 };
 
 /* ============================================================
@@ -403,6 +313,7 @@ var MODES = [
   { key: 'core',    label: '대시보드',  desc: '대시보드·운영 모니터링에 공통으로 쓰이는 기본 위젯입니다. Metrics, Charts, Lists 등 모든 모드의 기반.' },
   { key: 'weekly',  label: '주간보고',  desc: '주간보고·정기보고서 전용 위젯입니다. Section Cover, Insight Card 등 보고서 특화 컴포넌트.' },
   { key: 'landing', label: '랜딩페이지', desc: '마케팅 랜딩페이지 전용 위젯입니다. Hero, Pricing, Testimonial 등 전환 최적화 컴포넌트.' },
+  { key: 'cardnews', label: '카드뉴스', desc: '인스타그램·링크드인 캐러셀 카드뉴스 전용 위젯입니다. Cover, Body, Data, Numbered, CTA 5종.' },
 ];
 
 // Build mode tabs
@@ -455,6 +366,11 @@ var LANDING_META = {
   logoBar: { title: 'Logo Bar', desc: '고객사/파트너 로고 나열 (social proof).' },
   ctaSection: { title: 'CTA Section', desc: '전환 유도 CTA 섹션.' },
   faqAccordion: { title: 'FAQ Accordion', desc: '아코디언 FAQ.' },
+  coverCard: { title: 'Cover Card', desc: '카드뉴스 표지. 후킹 타이틀 + 태그 + 그라데이션 배경.' },
+  bodyCard: { title: 'Body Card', desc: '본문 카드. 1카드 1메시지 원칙. 넘버링 + 아이콘.' },
+  dataCard: { title: 'Data Card', desc: '데이터 시각화 카드. 기존 maging 차트 위젯 내장.' },
+  numberedCard: { title: 'Numbered Card', desc: '순위/리스트 카드. TOP 3~5 아이템 나열.' },
+  ctaCard: { title: 'CTA Card', desc: '행동 유도 마지막 장. 팔로우 · 링크 · DM.' },
 };
 
 // Category display order
@@ -462,56 +378,12 @@ var CAT_ORDER_BY_MODE = {
   core:    ['Metrics', 'Charts', 'Lists', 'Calendar & Progress', 'Layout', 'Specialized'],
   weekly:  ['Weekly Report'],
   landing: ['Landing Page'],
+  cardnews: ['Card News'],
 };
 
 var catOrder = CAT_ORDER_BY_MODE[currentMode] || CAT_ORDER_BY_MODE.core;
 var content = document.getElementById('cg-content');
 var html = '';
-
-catOrder.forEach(function(cat) {
-  var items = groups[cat];
-  if (!items || !items.length) return;
-
-  var badgeClass = 'cg-section__badge--core';
-  if (cat === 'Landing Page') badgeClass = 'cg-section__badge--landing';
-  if (cat === 'Weekly Report') badgeClass = 'cg-section__badge--dashboard';
-
-  html += '<div class="cg-section">';
-  html += '<div class="cg-section__head">';
-  html += '<h2 class="cg-section__title">' + cat + '</h2>';
-  html += '<span class="cg-section__badge ' + badgeClass + '">' + items.length + '</span>';
-  html += '</div>';
-  html += '<div class="cg-grid">';
-
-  items.forEach(function(key) {
-    var meta = (Maging.meta && Maging.meta[key]) || LANDING_META[key] || {};
-    var title = meta.title || key;
-    var desc = meta.desc || '';
-    var wideClass = WIDGETS[key].wide ? ' cg-card--wide' : '';
-    var tallClass = WIDGETS[key].tall ? ' cg-card--tall' : '';
-    html += '<div class="cg-card' + wideClass + tallClass + '">';
-    html += '<div class="cg-card__preview"><div id="preview-' + key + '"></div></div>';
-    html += '<div class="cg-card__info">';
-    html += '<div class="cg-card__name">' + title + '</div>';
-    html += '<div class="cg-card__desc">' + desc + '</div>';
-    html += '</div></div>';
-  });
-
-  html += '</div></div>';
-});
-
-
-content.innerHTML = html;
-
-// Mount live previews
-Object.keys(filtered).forEach(function(key) {
-  var el = document.getElementById('preview-' + key);
-  if (el && SAMPLES[key]) {
-    try { SAMPLES[key](el); } catch(e) { el.innerHTML = '<span style="color:var(--mw-text-muted);font-size:0.7rem;">Preview unavailable</span>'; }
-  } else if (el) {
-    el.innerHTML = '<span style="color:var(--mw-text-muted);font-size:0.7rem;">Preview unavailable</span>';
-  }
-});
 
 /* ============================================================
  * Code samples for dialog
@@ -567,134 +439,88 @@ var CODE = {
   logoBar:       "const config = {\n  items: [\n    { name: 'Kakao' },\n    { name: 'Toss' },\n    { name: 'LINE' }\n  ]\n};\n\nMaging.logoBar('#el', config);",
   ctaSection:    "const config = {\n  title: '시작하세요',\n  desc: '무료 체험',\n  ctas: [\n    { label: '시작', primary: true }\n  ]\n};\n\nMaging.ctaSection('#el', config);",
   faqAccordion:  "const config = {\n  items: [\n    { q: '질문입니다', a: '답변입니다.' }\n  ]\n};\n\nMaging.faqAccordion('#el', config);",
+  coverCard:     "const config = {\n  icon: '🚀',\n  tag: 'AI 트렌드',\n  title: 'AI가 바꿀\\n마케팅의 미래',\n  subtitle: '마케터가 알아야 할 5가지',\n  brand: '@mybrand',\n  style: 'gradient',\n};\n\nMaging.coverCard('#card-cover', config);",
+  bodyCard:      "const config = {\n  num: '01',\n  icon: '🎯',\n  heading: '초개인화 콘텐츠 자동 생성',\n  text: 'AI가 고객 세그먼트별로 맞춤 콘텐츠를\\n실시간으로 만들어줍니다.',\n  brand: '@mybrand',\n};\n\nMaging.bodyCard('#card-01', config);",
+  dataCard:      "const config = {\n  label: 'GLOBAL TREND',\n  title: 'AI 마케팅 도입률 추이',\n  widget: 'barChart',\n  widgetConfig: {\n    items: [\n      { label: '2022', value: 18 },\n      { label: '2023', value: 31 },\n      { label: '2024', value: 47 },\n      { label: '2025', value: 63 },\n      { label: '2026', value: 78 },\n    ],\n    yFormatter: v => v + '%',\n  },\n  brand: '@mybrand',\n};\n\nMaging.dataCard('#card-data', config);",
+  numberedCard:  "const config = {\n  heading: 'AI 마케팅 도구 TOP 3',\n  items: [\n    { rank: '1', title: 'ChatGPT / Claude',\n      desc: '콘텐츠 초안, 카피라이팅', icon: '🤖' },\n    { rank: '2', title: 'Midjourney / DALL-E',\n      desc: '비주얼 생성', icon: '🖼️' },\n    { rank: '3', title: 'HubSpot AI',\n      desc: '리드 스코어링', icon: '📈' },\n  ],\n  brand: '@mybrand',\n};\n\nMaging.numberedCard('#card-top', config);",
+  ctaCard:       "const config = {\n  heading: '더 많은 AI 마케팅 팁이\\n궁금하다면?',\n  subtext: '팔로우하고 매주 새로운 트렌드를 받아보세요',\n  ctas: [\n    { label: '팔로우하기', primary: true },\n  ],\n  handles: [\n    { platform: 'Instagram', handle: '@mybrand' },\n    { platform: 'LinkedIn', handle: 'mybrand' },\n  ],\n  brand: '@mybrand',\n};\n\nMaging.ctaCard('#card-cta', config);",
 };
 
 /* ============================================================
- * Dialog logic
+ * Syntax highlighter
  * ============================================================ */
-var dlg = document.getElementById('cg-dlg');
-var dlgTitle = document.getElementById('dlg-title');
-var dlgDesc = document.getElementById('dlg-desc');
-var dlgPreview = document.getElementById('dlg-preview');
-var dlgCode = document.getElementById('dlg-code');
-var dlgTabs = dlg.querySelectorAll('.cg-dlg__tab');
-
-// syntax highlighter — tokenize then reassemble to avoid nested span issues
 function highlightSyntax(code) {
-  // Split into HTML parts and JS parts
   var parts = code.split(/(<[^>]+>)/g);
   return parts.map(function(part) {
-    // HTML tags — color the whole tag
     if (/^</.test(part)) {
       var esc = part.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
       return '<span class="hl-tag">' + esc + '</span>';
     }
-    // Non-tag text — highlight JS syntax
     var s = part.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    // comments
     s = s.replace(/(\/\/.*)$/gm, '<span class="hl-cmt">$1</span>');
-    // strings (single-quoted)
     s = s.replace(/('(?:[^'\\]|\\.)*')/g, '<span class="hl-str">$1</span>');
-    // strings (double-quoted, but not inside spans)
     s = s.replace(/("(?:[^"\\]|\\.)*")/g, function(m) {
       if (m.indexOf('class=') >= 0 || m.indexOf('hl-') >= 0) return m;
       return '<span class="hl-str">' + m + '</span>';
     });
-    // Maging.xxx
     s = s.replace(/\b(Maging)\.([\w]+)/g, '<span class="hl-fn">$1.$2</span>');
-    // keywords
     s = s.replace(/\b(const|let|var|function|return|new|if|else|true|false|null)\b/g, '<span class="hl-kw">$1</span>');
-    // numbers (not inside spans)
     s = s.replace(/\b(\d+\.?\d*)\b/g, '<span class="hl-num">$1</span>');
-    // object keys — word before colon (but not inside spans)
     s = s.replace(/^(\s*)([\w]+)(\s*:)/gm, '$1<span class="hl-prop">$2</span>$3');
     return s;
   }).join('');
 }
 
-// copy button
-document.getElementById('dlg-copy').addEventListener('click', function() {
-  var text = dlgCode.dataset.plain || dlgCode.querySelector('pre').textContent;
-  navigator.clipboard.writeText(text).then(function() {
-    var btn = document.getElementById('dlg-copy');
-    btn.textContent = 'Copied!';
-    setTimeout(function() { btn.textContent = 'Copy'; }, 1500);
+
+
+// ── Showcase: 1 row per component, all modes ──
+catOrder.forEach(function(cat) {
+  var items = groups[cat];
+  if (!items || !items.length) return;
+
+  var badgeClass = 'cg-section__badge--core';
+  if (cat === 'Landing Page') badgeClass = 'cg-section__badge--landing';
+  if (cat === 'Weekly Report') badgeClass = 'cg-section__badge--dashboard';
+  if (cat === 'Card News') badgeClass = 'cg-section__badge--cardnews';
+
+  html += '<div class="cg-section">';
+  html += '<div class="cg-section__head">';
+  html += '<h2 class="cg-section__title">' + cat + '</h2>';
+  html += '<span class="cg-section__badge ' + badgeClass + '">' + items.length + '</span>';
+  html += '</div>';
+
+  items.forEach(function(key) {
+    var meta = (Maging.meta && Maging.meta[key]) || LANDING_META[key] || {};
+    var title = meta.title || key;
+    var desc = meta.desc || '';
+    var code = CODE[key] || '';
+
+    html += '<div class="sc-item">';
+    html += '<div class="sc-preview"><div id="preview-' + key + '"></div></div>';
+    html += '<div class="sc-info">';
+    html += '<div class="sc-name">' + title + ' <span class="sc-api">Maging.' + key + '(sel, config)</span></div>';
+    html += '<div class="sc-desc">' + desc + '</div>';
+    if (code) html += '<div class="sc-code"><pre>' + highlightSyntax(code) + '</pre></div>';
+    html += '</div>';
+    html += '</div>';
   });
+
+  html += '</div>';
 });
 
-// close
-document.getElementById('dlg-close').addEventListener('click', closeDlg);
-dlg.querySelector('.cg-dlg__scrim').addEventListener('click', closeDlg);
-document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeDlg(); });
 
-function closeDlg() {
-  dlg.classList.remove('is-open');
-  dlgPreview.innerHTML = '';
-  document.body.style.overflow = '';
-}
+content.innerHTML = html;
 
-// tabs
-dlgTabs.forEach(function(tab) {
-  tab.addEventListener('click', function() {
-    dlgTabs.forEach(function(t) { t.classList.remove('is-active'); });
-    tab.classList.add('is-active');
-    var mode = tab.dataset.tab;
-    dlgPreview.style.display = mode === 'preview' ? 'block' : 'none';
-    dlgCode.style.display = mode === 'code' ? 'block' : 'none';
-  });
-});
-
-function openDlg(key) {
-  var meta = (Maging.meta && Maging.meta[key]) || LANDING_META[key] || {};
-  dlgTitle.textContent = meta.title || key;
-  dlgDesc.textContent = meta.desc || '';
-
-  // reset tabs
-  dlgTabs[0].classList.add('is-active');
-  dlgTabs[1].classList.remove('is-active');
-  dlgPreview.style.display = 'block';
-  dlgCode.style.display = 'none';
-
-  // render preview
-  dlgPreview.innerHTML = '<div id="dlg-widget"></div>';
-  if (SAMPLES[key]) {
-    try { SAMPLES[key](document.getElementById('dlg-widget')); } catch(e) {}
+// Mount live previews
+Object.keys(filtered).forEach(function(key) {
+  var el = document.getElementById('preview-' + key);
+  if (el && SAMPLES[key]) {
+    try { SAMPLES[key](el); } catch(e) { el.innerHTML = '<span style="color:var(--mw-text-muted);font-size:0.7rem;">Preview unavailable</span>'; }
+  } else if (el) {
+    el.innerHTML = '<span style="color:var(--mw-text-muted);font-size:0.7rem;">Preview unavailable</span>';
   }
-
-  // render code — full working snippet with syntax highlighting
-  var isLanding = WIDGETS[key] && WIDGETS[key].mode === 'landing';
-  var isWeekly  = WIDGETS[key] && WIDGETS[key].mode === 'weekly';
-  var cdnHead = '<!-- CDN -->\n<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@m1kapp/maging/dist/maging.css">\n<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging/dist/maging.js"><\/script>';
-  if (isWeekly)  cdnHead += '\n<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging/dist/maging-weekly.js"><\/script>';
-  if (isLanding) cdnHead += '\n<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging/dist/maging-landing.js"><\/script>';
-  var codeBody = CODE[key] || '// code not available';
-  var fullCode = cdnHead + '\n\n<!-- HTML -->\n<div id="el"></div>\n\n<script>\n' + codeBody + '\n<\/script>';
-
-  // store plain text for copy
-  dlgCode.dataset.plain = fullCode;
-  dlgCode.querySelector('pre').innerHTML = highlightSyntax(fullCode);
-
-  dlg.classList.add('is-open');
-  document.body.style.overflow = 'hidden';
-
-  // resize charts in dialog
-  setTimeout(function() {
-    dlgPreview.querySelectorAll('.mw-chart__body').forEach(function(body) {
-      var instance = echarts.getInstanceByDom(body);
-      if (instance) instance.resize();
-    });
-  }, 100);
-}
-
-// card click → open dialog
-document.querySelectorAll('.cg-card').forEach(function(card) {
-  card.addEventListener('click', function() {
-    var previewDiv = card.querySelector('.cg-card__preview > div');
-    if (!previewDiv) return;
-    var key = (previewDiv.id || '').replace('preview-', '');
-    if (key && WIDGETS[key]) openDlg(key);
-  });
 });
+
 
 // Resize + fix compact charts
 function resizeCharts() {

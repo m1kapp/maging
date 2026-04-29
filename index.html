@@ -5,9 +5,9 @@
 <script>!function(){var T=['flow','morningmate','claude','linear','stripe','airbnb','linkedin','apple','duolingo','github','spotify','netflix','figma','adobe','bloomberg'],k='maging-theme',s=localStorage.getItem(k);if(!s||T.indexOf(s)<0)s='flow';document.documentElement.setAttribute('data-theme',s);localStorage.setItem(k,s)}();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>maging — AI 답변을, 쓸 수 있는 결과물로.</title>
-<meta name="description" content="코딩 없이, 디자인 없이 — 대시보드·주간보고를 HTML로 바로 생성합니다. ChatGPT·Claude·Gemini가 쓰는 엔터프라이즈 리포트 UI 라이브러리. 31개 위젯 · 35개 브랜드 테마 · 빌드 없음.">
+<meta name="description" content="코딩 없이, 디자인 없이 — 대시보드·주간보고·카드뉴스를 HTML로 바로 생성합니다. ChatGPT·Claude·Gemini가 쓰는 엔터프라이즈 리포트 UI 라이브러리. 31개 위젯 · 35개 브랜드 테마 · 빌드 없음.">
 <meta property="og:title" content="maging — AI 답변을, 쓸 수 있는 결과물로.">
-<meta property="og:description" content="코딩 없이, 디자인 없이. 대시보드·주간보고를 HTML로 바로 생성합니다. 엔터프라이즈 리포트 빌더.">
+<meta property="og:description" content="코딩 없이, 디자인 없이. 대시보드·주간보고·카드뉴스를 HTML로 바로 생성합니다. 엔터프라이즈 리포트 빌더.">
 <meta property="og:type" content="website">
 
 <!-- Page layout utility -->
@@ -832,7 +832,7 @@
   .word-roller__inner {
     display: flex;
     flex-direction: column;
-    animation: wordRoll 10s cubic-bezier(0.76, 0, 0.24, 1) infinite;
+    animation: wordRoll 12s cubic-bezier(0.76, 0, 0.24, 1) infinite;
   }
   .word-roller__item {
     display: block;
@@ -841,13 +841,12 @@
     white-space: nowrap;
   }
   @keyframes wordRoll {
-    /*  5 items stacked, 4 cycle visible; the 5th (= duplicate of 1st) lets the
-        animation loop seamlessly from -400% back to 0 with no visible jump. */
-    0%,  17%  { transform: translateY(0); }
-    22%, 42%  { transform: translateY(-1.08em); }
-    47%, 67%  { transform: translateY(-2.16em); }
-    72%, 92%  { transform: translateY(-3.24em); }
-    97%,100%  { transform: translateY(-4.32em); }
+    /*  5 items: 4 unique + 1 duplicate for seamless loop */
+    0%,  15%  { transform: translateY(0); }
+    20%, 35%  { transform: translateY(-1.08em); }
+    40%, 55%  { transform: translateY(-2.16em); }
+    60%, 75%  { transform: translateY(-3.24em); }
+    80%, 95%  { transform: translateY(-4.32em); }
   }
   @media (prefers-reduced-motion: reduce) {
     .word-roller__inner { animation: none; }
@@ -1165,11 +1164,12 @@
     <h1 class="hero-title">
       AI 답변을,<br>
       쓸 수 있는
-      <span class="word-roller" aria-label="결과물 / 대시보드 / 주간보고">
+      <span class="word-roller" aria-label="결과물 / 대시보드 / 주간보고 / 카드뉴스">
         <span class="word-roller__inner">
           <span class="word-roller__item">결과물</span>
           <span class="word-roller__item">대시보드</span>
           <span class="word-roller__item">주간보고</span>
+          <span class="word-roller__item">카드뉴스</span>
           <span class="word-roller__item">결과물</span>
         </span>
       </span>로.
@@ -1187,7 +1187,7 @@
     <div class="hero-meta">
       <span>ChatGPT · Claude · Gemini</span>
       <span class="hero-meta__sep">·</span>
-      <span>40+ widgets · 35 themes</span>
+      <span id="hero-stats"></span>
       <span class="hero-meta__sep">·</span>
       <span>Pretendard 내장</span>
     </div>
@@ -1208,7 +1208,7 @@
     </p>
     <p class="text-base md:text-lg mt-4" style="line-height: 1.65; max-width: 620px; margin-left: auto; margin-right: auto; color: var(--mw-text);">
       하지만 그걸<br>
-      <strong>대시보드·주간보고로 정리하는 건 여전히 수작업</strong>입니다.
+      <strong>대시보드·주간보고·카드뉴스로 정리하는 건 여전히 수작업</strong>입니다.
     </p>
   </div>
 </section>
@@ -1229,6 +1229,7 @@
     <div class="mt-10 flex gap-4 flex-wrap justify-center" style="max-width: 720px; margin-left: auto; margin-right: auto;">
       <div class="solution-pill">📊 대시보드</div>
       <div class="solution-pill">📋 주간보고</div>
+      <div class="solution-pill">📱 카드뉴스</div>
     </div>
     <p class="mw-muted text-sm mt-6" style="font-family: var(--mw-mono-font);">
       모두 HTML 한 파일로 생성됩니다. <span style="opacity:0.55">· 랜딩페이지·프로토타입도 지원</span>
@@ -1275,6 +1276,7 @@
               <button class="ai-split__chip is-active" data-output="dashboard">대시보드</button>
               <button class="ai-split__chip" data-output="weekly">주간보고</button>
               <button class="ai-split__chip" data-output="landing">랜딩페이지</button>
+              <button class="ai-split__chip" data-output="cardnews">카드뉴스</button>
             </div>
           </div>
           <div class="ai-split__filter">
@@ -1354,7 +1356,7 @@
               <div class="ai-chat-msg__typing" id="step-typing-2"><span></span><span></span><span></span></div>
               <div class="ai-chat-msg__preview" id="step-preview" style="display:none;">
                 <div class="ai-chat-preview__bar">
-                  <span style="font-size:0.6rem;color:var(--mw-text-muted);font-family:var(--mw-mono-font);">dashboard.html</span>
+                  <span id="step-preview-filename" style="font-size:0.6rem;color:var(--mw-text-muted);font-family:var(--mw-mono-font);">dashboard.html</span>
                   <span style="font-size:0.55rem;color:var(--mw-success);">Generated</span>
                 </div>
                 <div class="ai-chat-preview__body" id="step-preview-body"></div>
@@ -1478,6 +1480,11 @@
         <div class="example-card__kicker">LANDING PAGE</div>
         <div class="example-card__title">스타트업 랜딩 스타터</div>
         <div class="example-card__desc">Hero · Pricing · Testimonial · CTA — 랜딩 전용 컴포넌트 모음.</div>
+      </a>
+      <a href="card-news/index.html" class="example-card">
+        <div class="example-card__kicker">CARD NEWS</div>
+        <div class="example-card__title">AI 마케팅 카드뉴스</div>
+        <div class="example-card__desc">인스타·링크드인 캐러셀. 커버 + 본문 + 차트 + TOP 3 + CTA 8장 구성.</div>
       </a>
     </div>
   </div>
@@ -1868,6 +1875,7 @@ Maging.setTheme('bloomberg');
       <a href="#use-with-ai" class="pill pill--primary" style="padding: 0.9rem 1.75rem; font-size: 1rem;">Try maging →</a>
       <a href="dashboard/acme.html" class="pill" style="padding: 0.9rem 1.75rem; font-size: 1rem;">대시보드 데모</a>
       <a href="weekly-report/index.html" class="pill" style="padding: 0.9rem 1.75rem; font-size: 1rem;">주간보고 데모</a>
+      <a href="card-news/index.html" class="pill" style="padding: 0.9rem 1.75rem; font-size: 1rem;">카드뉴스 데모</a>
     </div>
   </div>
 </section>
@@ -2838,6 +2846,394 @@ Landing pages use **section-based vertical scroll**, not dashboard grids.
 10. **No ₩ prefix.** Use Korean units: 4.9만, 128억.
 11. Output one fenced code block: \` \`\`\`html … \`\`\` \`.
 `;
+  var SHORT_PROMPT_CARDNEWS = `You are a maging card-news generator.
+
+Fetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging/llms-card-news-full.md
+It has the complete setup, all widget APIs, themes, and generation rules for card news.`;
+  var FULL_PROMPT_CARDNEWS = `# maging — AI Output Formatter
+
+> LLM이 위젯·테마로 단일 HTML 결과물을 즉시 생성. 코딩·디자인 불필요.
+
+---
+
+## Themes (37)
+
+\`<html data-theme="NAME">\` — 팔레트·폰트·반경·그림자 즉시 교체.
+보고서 주제·업종에 가장 어울리는 테마를 골라 적용하세요.
+
+**Light (24)**
+\`flow\` indigo·기본 | \`morningmate\` 퍼플·트렌디 | \`claude\` 주황·고급·따뜻 | \`linear\` 블루·미니멀 | \`stripe\` 보라·결제/핀테크 | \`notion\` 시안·문서/노트 | \`airbnb\` 코랄·서비스/여행 | \`linkedin\` 블루·비즈니스/HR | \`instagram\` 핑크·마케팅/SNS | \`youtube\` 빨강·미디어/영상 | \`reddit\` 오렌지·커뮤니티 | \`medium\` 그린·콘텐츠/글쓰기 | \`apple\` 블루·IT/세련 | \`duolingo\` 라임·교육/학습 | \`barbie\` 핫핑크·대담/패션 | \`deere\` 옐로+그린·농업/산업 | \`fedex\` 오렌지·물류/배송 | \`hermes\` 오렌지·럭셔리/브랜드 | \`mailchimp\` 옐로·이메일/마케팅 | \`tiffany\` 민트·럭셔리/여성 | \`tmobile\` 마젠타·통신/대담 | \`ups\` 골드+브라운·물류 | \`nasa\` 빨강+네이비·과학/우주 | \`heineken\` 레드+그린·F&B
+
+**Dark (13)**
+\`vercel\` 화이트on블랙·미니멀 | \`github\` 블루·개발/오픈소스 | \`x\` 블루·소셜/뉴스 | \`slack\` 골드+퍼플·협업 | \`discord\` 퍼플·커뮤니티/게임 | \`openai\` 청록·AI/테크 | \`spotify\` 그린·음악/엔터 | \`twitch\` 퍼플·라이브/게임 | \`netflix\` 빨강·미디어/엔터 | \`figma\` 오렌지·디자인/크리에이티브 | \`amazon\` 오렌지·커머스/리테일 | \`adobe\` 빨강·크리에이티브 | \`bloomberg\` 주황·금융/터미널
+
+분위기 매칭: 금융→\`stripe\`/\`bloomberg\` · SaaS/IT→\`linear\`/\`vercel\` · AI→\`openai\`/\`claude\` · 마케팅→\`instagram\`/\`mailchimp\` · 이커머스→\`amazon\`/\`airbnb\` · 교육→\`duolingo\`/\`notion\` · 럭셔리→\`hermes\`/\`tiffany\` · 개발→\`github\`/\`vercel\`. Default: \`claude\`.
+
+---
+
+## Widgets
+
+\`Maging.<name>(sel, config)\` — 테마 변경 시 전체 자동 새로고침.
+
+### METRIC
+**\`kpiCard\`** \`{ label, value, delta?, deltaGoodWhen?, sparkline?, icon?, compact? }\`
+**\`heroTile\`** \`{ kicker?, value, tagline?, stats?:[{label,value}] }\`
+**\`metricChart\`** \`{ label, value, delta?, icon?, context?, categories, series:[{name,data}], target?, yFormatter? }\`
+**\`metricStack\`** \`{ title, main:{label,value,delta?}, items:[{label,value}] }\`
+**\`compareCard\`** \`{ title, left:{label,value}, right:{label,value}, delta?, deltaLabel? }\`
+**\`countdownTile\`** \`{ title, target, label?, context? }\`
+**\`ringProgress\`** \`{ value, max, unit, label, context?, thresholds? }\`
+**\`bulletChart\`** \`{ value, target?, benchmark?, max, min?, ranges?, valueFormatter?, unit? }\`
+**\`sparklineList\`** \`{ title, items:[{label,value,delta,sparkline,deltaGoodWhen?}] }\`
+**\`goalGrid\`** \`{ title, items:[{label,value,max,unit?,sublabel?}], thresholds? }\`
+
+### CHARTS
+**\`lineChart\`** \`{ title?, categories, series:[{name,data}], stack?, area?, yFormatter? }\`
+**\`barChart\`** \`{ title?, items:[{label,value}], horizontal?, yFormatter?, showLabels? }\`
+**\`donutChart\`** \`{ title?, slices:[{label,value,color?}], centerLabel?, centerValue? }\`
+**\`funnelChart\`** \`{ title?, stages:[{label,value}], valueSuffix? }\`
+**\`gaugeChart\`** \`{ title?, label, value, max, unit, thresholds? }\`
+**\`radarChart\`** \`{ title?, indicators:[{name,max}], series:[{name,data}] }\`
+**\`heatmapChart\`** \`{ title?, xAxis, yAxis, matrix, tooltipFormatter? }\`
+**\`treemapChart\`** \`{ title?, items:[{name,value}], valueFormatter? }\`
+**\`scatterChart\`** \`{ title?, points:[{label,x,y,size?}], xLabel?, yLabel? }\`
+**\`sankeyChart\`** \`{ title?, nodes:[{name}], links:[{source,target,value}], valueFormatter? }\`
+**\`waterfallChart\`** \`{ title?, items:[{label,value,type?}], valueFormatter? }\`
+**\`mapChart\`** \`{ title?, items:[{region,value}], valueFormatter? }\`
+**\`cohortMatrix\`** \`{ title?, cohorts, periods, data, sizes?, valueFormatter? }\`
+
+### LISTS & STATUS
+**\`leaderboard\`** \`{ title?, items:[{name,initial?,percent,meta?}] }\`
+**\`activityTable\`** \`{ title?, columns:[{key,label,align?,render?}], rows:[...], live?, headerGroups?:[{label,span,align?}] }\`
+  \`headerGroups\` — colspan 그룹 헤더. 예) \`[{label:'26년',span:3},{label:'25년',span:2}]\`
+**\`timeline\`** \`{ title?, items:[{time,text,type?}] }\`
+**\`inboxPreview\`** \`{ title?, items:[{icon?,text,time,type?}] }\`
+**\`statusGrid\`** \`{ title?, columns?, items:[{label,status,value?}] }\`
+
+### CALENDAR & PROJECT
+**\`calendarHeatmap\`** \`{ title?, year?, values:[[date,value]], max?, cellSize? }\`
+**\`eventCalendar\`** \`{ title?, year?, month?, events:[{date,label,type?}] }\`
+**\`progressStepper\`** \`{ title?, steps:[{label,status,date?,badge?}] }\`
+
+### STRUCTURAL
+**\`pageHeader\`** \`{ kicker?, title, subtitle?, meta? }\`
+**\`sectionHead\`** \`{ index?, kicker?, title, tag? }\`
+**\`alertBanner\`** \`{ type, title, message?, icon?, action?:{label,href?}, dismissable? }\`
+
+---
+
+## Utility
+
+\`\`\`js
+Maging.fmt.krw(v)       // 43.8억원 (HTML — unit styled small)
+Maging.fmt.krwPlain(v)  // 43.8억원 (plain — chart axis/tooltip)
+Maging.fmt.num(v)       // 48,291
+Maging.fmt.pct(v)       // 85.3%
+Maging.setTheme(name)
+\`\`\`
+
+---
+
+## NEVER
+
+- \`₩\` prefix 금지 — suffix \`원\`. \`Maging.fmt.krw\` 사용.
+- \`DOMContentLoaded\` 금지 — \`maging:ready\` 또는 maging.js 뒤 \`<script>\`.
+- \`:root\` CSS 변수 금지 — 모든 \`--mw-*\` 토큰은 maging.css 정의.
+- 임의 클래스명 금지 — Grid + Maging API만.
+- 코드 주석 금지 — 토큰 낭비.
+- 수동 숫자 포맷터 금지 — \`Maging.fmt.*\` 사용.
+
+---
+
+## Output Rules
+
+- **항상 완전한 코드를 출력하라.** \`<!DOCTYPE html>\`부터 \`</html>\`까지 단일 HTML 파일.
+- **생략 절대 금지.** "이전과 동일", \`…\`, \`// 나머지 코드\`, \`<!-- 위와 같음 -->\` 등 모든 형태의 생략·축약·placeholder 금지.
+- **수정 요청 시에도 전체 파일을 처음부터 끝까지 다시 출력하라.** 부분 diff·patch 금지.
+- **매 턴마다 즉시 실행 가능한 코드를 출력하라.** 사용자가 복사·붙여넣기만으로 브라우저에서 실행할 수 있어야 한다.
+
+MIT
+
+
+---
+
+## Mode: Card News (카드뉴스)
+
+> 인스타그램/링크드인 캐러셀 카드뉴스. 커버 → 본문(1카드 1메시지) → CTA 구조.
+
+### Setup
+\`\`\`html
+<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.17/dist/maging-all.js"><\/script>
+<script defer src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.17/dist/maging-news.js"><\/script>
+<body class="mw-themed">
+\`\`\`
+\`maging:ready\` 안에서 마운트. \`DOMContentLoaded\` 금지.
+
+---
+
+### 카드 크기 & 구조
+
+| 항목 | 값 |
+|------|-----|
+| 크기 | 1080×1350px (4:5 비율) |
+| 총 카드 수 | 5~12장 (권장 7~9장) |
+| 구조 | **커버(1)** + **본문(N)** + **CTA(1)** |
+| 원칙 | **1카드 1메시지** — 한 장에 핵심 포인트 1개만 |
+
+---
+
+### 카드 위젯 (5)
+
+#### \`coverCard\` — 표지 (첫 장, 후킹)
+\`\`\`js
+Maging.coverCard('#card-cover', {
+  icon: '🚀',
+  tag: 'AI 트렌드',
+  title: 'AI가 바꿀\\n마케팅의 미래',
+  subtitle: '마케터가 알아야 할 5가지',
+  brand: '@mybrand',
+  style: 'gradient',   // 'gradient' | 'accent-block' | 'minimal'
+});
+\`\`\`
+- \`title\`은 \`\\n\`으로 줄바꿈. 최대 2~3줄, 15자 내외/줄.
+- \`style: 'gradient'\` — 배경에 accent 그라데이션. 가장 권장.
+
+#### \`bodyCard\` — 본문 (핵심 메시지 1개)
+\`\`\`js
+Maging.bodyCard('#card-01', {
+  num: '01',
+  icon: '🎯',
+  heading: '초개인화 콘텐츠 자동 생성',
+  text: 'AI가 고객 세그먼트별로 맞춤 콘텐츠를 실시간으로 만들어줍니다.',
+  brand: '@mybrand',
+});
+\`\`\`
+- \`num\`은 넘버링 시리즈일 때만. "01"~"05" 형태 권장.
+- \`heading\` 1줄, \`text\` 2~3문장 이내.
+
+#### \`dataCard\` — 데이터 시각화 (기존 maging 차트 내장)
+\`\`\`js
+Maging.dataCard('#card-data', {
+  label: 'GLOBAL TREND',
+  title: 'AI 마케팅 도입률 추이',
+  widget: 'barChart',
+  widgetConfig: {
+    categories: ['2022','2023','2024','2025','2026(E)'],
+    series: [{ name: '도입률', data: [18,31,47,63,78] }],
+    yFormatter: v => v + '%',
+  },
+  brand: '@mybrand',
+});
+\`\`\`
+- \`widget\`: \`'barChart'\` | \`'lineChart'\` | \`'donutChart'\` | \`'kpiCard'\` | \`'ringProgress'\` | \`'funnelChart'\` 등 모든 코어 위젯 사용 가능.
+- 통계/데이터가 있으면 bodyCard 대신 dataCard 사용.
+
+#### \`numberedCard\` — 순위/리스트
+\`\`\`js
+Maging.numberedCard('#card-top', {
+  heading: 'TOP 3 AI 마케팅 도구',
+  items: [
+    { rank: '1', title: 'ChatGPT', desc: '콘텐츠 초안 작성', icon: '🤖' },
+    { rank: '2', title: 'Midjourney', desc: '비주얼 생성', icon: '🖼️' },
+    { rank: '3', title: 'Jasper', desc: '광고 카피 최적화', icon: '📈' },
+  ],
+  brand: '@mybrand',
+});
+\`\`\`
+- 3~5개 아이템 권장. 그 이상이면 카드 분할.
+
+#### \`ctaCard\` — 마지막 장 (행동 유도)
+\`\`\`js
+Maging.ctaCard('#card-cta', {
+  heading: '더 많은 AI 마케팅 팁이\\n궁금하다면?',
+  subtext: '팔로우하고 매주 새로운 인사이트를 받아보세요',
+  ctas: [{ label: '팔로우하기', primary: true }],
+  handles: [
+    { platform: 'Instagram', handle: '@mybrand' },
+    { platform: 'LinkedIn', handle: 'mybrand' },
+  ],
+  brand: '@mybrand',
+});
+\`\`\`
+
+---
+
+### HTML 구조 & Deck
+
+\`\`\`html
+<div id="cards-wrap">
+  <section class="news-card" id="card-cover" data-active></section>
+  <section class="news-card" id="card-01"></section>
+  <section class="news-card" id="card-02"></section>
+  <section class="news-card" id="card-03"></section>
+  <section class="news-card" id="card-04"></section>
+  <section class="news-card" id="card-data"></section>
+  <section class="news-card" id="card-top3"></section>
+  <section class="news-card" id="card-cta"></section>
+</div>
+<news-nav></news-nav>
+\`\`\`
+
+\`\`\`js
+window.addEventListener('maging:ready', () => {
+  const BRAND = '@mybrand';
+
+  window.NEWS_MOUNT = {
+    'card-cover': () => Maging.coverCard('#card-cover', { ... }),
+    'card-01':    () => Maging.bodyCard('#card-01', { ... }),
+    'card-02':    () => Maging.bodyCard('#card-02', { ... }),
+    'card-data':  () => Maging.dataCard('#card-data', { ... }),
+    'card-top3':  () => Maging.numberedCard('#card-top3', { ... }),
+    'card-cta':   () => Maging.ctaCard('#card-cta', { ... }),
+  };
+});
+\`\`\`
+
+키보드: ←/→ 이동, F 전체화면, Esc 종료. 터치 스와이프 지원.
+
+---
+
+### 테마 선택 가이드
+
+| 주제 | 추천 테마 |
+|------|-----------|
+| 비즈니스/B2B | \`linkedin\`, \`linear\`, \`stripe\` |
+| AI/테크 | \`openai\`, \`claude\`, \`github\` |
+| 크리에이티브 | \`instagram\`, \`figma\`, \`spotify\` |
+| 뉴스/미디어 | \`bloomberg\`, \`medium\`, \`reddit\` |
+| 교육 | \`duolingo\`, \`notion\` |
+| 럭셔리/프리미엄 | \`apple\`, \`vercel\`, \`netflix\` |
+
+---
+
+### PNG 내보내기 (Playwright)
+
+maging은 HTML 렌더링만 담당. 이미지 캡처는 Playwright CLI로 수행:
+
+\`\`\`bash
+# 개별 카드 캡처
+npx playwright screenshot --viewport-size=1080,1350 \\
+  "file:///path/to/card-news.html#card-cover" output/card-cover.png
+
+# 전체 카드 일괄 캡처 (스크립트)
+for id in card-cover card-01 card-02 card-03 card-04 card-data card-top3 card-cta; do
+  npx playwright screenshot --viewport-size=1080,1350 \\
+    "file:///path/to/card-news.html#\$\{id}" "output/\$\{id}.png"
+done
+\`\`\`
+
+---
+
+### 생성 규칙
+
+1. **1카드 1메시지**: 정보를 분할하라. 한 장에 2개 이상의 핵심 포인트 금지.
+2. **타이포그래피 위계**: 제목은 크고 굵게, 부연은 작고 muted. 텍스트 양 최소화.
+3. **brand 일관성**: 모든 카드에 동일한 \`brand\` 값 전달.
+4. **커버 후킹**: 첫 장 제목은 호기심 유발 — 질문형, 숫자, 반전 활용.
+5. **CTA 명확**: 마지막 장에 구체적 행동 유도 (팔로우, 링크, DM).
+6. **dataCard 활용**: 통계/수치 데이터가 있으면 반드시 dataCard로 시각화.
+7. **카드 수**: 5장 미만 금지, 12장 초과 금지. 권장 7~9장.
+8. **넘버링**: 시리즈형 본문은 bodyCard의 \`num\` 사용. "01"~"05" 형태.
+9. **아이콘**: 각 bodyCard에 관련 이모지 icon 1개씩 배치.
+10. **테마**: 주제에 맞는 테마 선택. 위 가이드 참조.
+
+---
+
+### Reference — 완성 예시
+
+\`\`\`html
+<!DOCTYPE html>
+<html lang="ko" data-theme="claude">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI 마케팅 트렌드 카드뉴스</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.17/dist/maging.css">
+  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.17/dist/maging-all.js"><\/script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.17/dist/maging-news.js"><\/script>
+</head>
+<body class="mw-themed" style="display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem;">
+  <div id="cards-wrap" style="max-width:540px;width:100%;">
+    <section class="news-card" id="card-cover" data-active></section>
+    <section class="news-card" id="card-01"></section>
+    <section class="news-card" id="card-02"></section>
+    <section class="news-card" id="card-03"></section>
+    <section class="news-card" id="card-04"></section>
+    <section class="news-card" id="card-data"></section>
+    <section class="news-card" id="card-top3"></section>
+    <section class="news-card" id="card-cta"></section>
+  </div>
+  <news-nav></news-nav>
+  <script>
+  window.addEventListener('maging:ready', () => {
+    const BRAND = '@mybrand';
+    window.NEWS_MOUNT = {
+      'card-cover': () => Maging.coverCard('#card-cover', {
+        icon: '🚀', tag: 'AI 트렌드',
+        title: 'AI가 바꿀\\n마케팅의 미래',
+        subtitle: '마케터가 알아야 할 5가지',
+        brand: BRAND, style: 'gradient',
+      }),
+      'card-01': () => Maging.bodyCard('#card-01', {
+        num: '01', icon: '🎯',
+        heading: '초개인화 콘텐츠 자동 생성',
+        text: 'AI가 고객 세그먼트별로 맞춤 콘텐츠를 실시간으로 만들어줍니다.',
+        brand: BRAND,
+      }),
+      'card-02': () => Maging.bodyCard('#card-02', {
+        num: '02', icon: '📊',
+        heading: '예측 분석으로 선제 대응',
+        text: '고객 이탈 예측, 구매 확률 스코어링까지 데이터 기반 의사결정이 자동화됩니다.',
+        brand: BRAND,
+      }),
+      'card-03': () => Maging.bodyCard('#card-03', {
+        num: '03', icon: '💬',
+        heading: 'AI 챗봇이 영업을 대신한다',
+        text: '24시간 고객 응대, 리드 퀄리파잉, 미팅 예약까지 자동화.',
+        brand: BRAND,
+      }),
+      'card-04': () => Maging.bodyCard('#card-04', {
+        num: '04', icon: '🎨',
+        heading: '크리에이티브 제작 비용 90% 절감',
+        text: '배너, 카드뉴스, 썸네일까지 AI 초안 → 사람 감수. 시간 단위 제작.',
+        brand: BRAND,
+      }),
+      'card-data': () => Maging.dataCard('#card-data', {
+        label: 'GLOBAL TREND', title: 'AI 마케팅 도입률 추이',
+        widget: 'barChart',
+        widgetConfig: {
+          categories: ['2022','2023','2024','2025','2026(E)'],
+          series: [{ name: '도입률', data: [18,31,47,63,78] }],
+          yFormatter: v => v + '%',
+        },
+        brand: BRAND,
+      }),
+      'card-top3': () => Maging.numberedCard('#card-top3', {
+        heading: 'AI 마케팅 필수 도구 TOP 3',
+        items: [
+          { rank: '1', title: 'ChatGPT / Claude', desc: '콘텐츠 초안, 카피라이팅', icon: '🤖' },
+          { rank: '2', title: 'Midjourney / DALL-E', desc: '비주얼 생성', icon: '🖼️' },
+          { rank: '3', title: 'HubSpot AI', desc: '리드 스코어링, 이메일 최적화', icon: '📈' },
+        ],
+        brand: BRAND,
+      }),
+      'card-cta': () => Maging.ctaCard('#card-cta', {
+        heading: '더 많은 AI 마케팅 팁이\\n궁금하다면?',
+        subtext: '팔로우하고 매주 새로운 트렌드를 받아보세요',
+        ctas: [{ label: '팔로우하기', primary: true }],
+        handles: [
+          { platform: 'Instagram', handle: '@mybrand' },
+          { platform: 'LinkedIn', handle: 'mybrand' },
+        ],
+        brand: BRAND,
+      }),
+    };
+  });
+  <\/script>
+</body>
+</html>
+\`\`\`
+`;
   var SERVICE_RULES = {
     flowai: ``,
     claude: `
@@ -2896,27 +3292,42 @@ When you have fully understood the above, reply with EXACTLY this text (nothing 
 바로 시작할게요! 🎨
 
 Then wait for my next message before generating anything.`,
+    cardnews: `
+
+=== HANDSHAKE ===
+When you have fully understood the above, reply with EXACTLY this text (nothing else, no code fences, no preamble):
+
+**안녕하세요! 결과물 서포터 매징(maging)입니다** ✦
+
+어떤 주제의 카드뉴스를 만들까요? 주제, 타겟 플랫폼(인스타/링크드인), 카드 수를 알려주세요.
+바로 시작할게요! 🎨
+
+Then wait for my next message before generating anything.`,
   };
   var TOKENS_BY_SERVICE = {
     flowai: {
       dashboard: { short: { gpt: 140, claude: 203, gemini: 148 }, full: { gpt: 2716, claude: 3214, gemini: 2879 } },
       weekly: { short: { gpt: 152, claude: 209, gemini: 161 }, full: { gpt: 4463, claude: 5437, gemini: 4731 } },
       landing: { short: { gpt: 146, claude: 213, gemini: 155 }, full: { gpt: 2907, claude: 3492, gemini: 3081 } },
+      cardnews: { short: { gpt: 127, claude: 185, gemini: 135 }, full: { gpt: 3410, claude: 3897, gemini: 3612 } },
     },
     claude: {
       dashboard: { short: { gpt: 230, claude: 342, gemini: 244 }, full: { gpt: 2806, claude: 3354, gemini: 2974 } },
       weekly: { short: { gpt: 242, claude: 348, gemini: 257 }, full: { gpt: 4553, claude: 5577, gemini: 4826 } },
       landing: { short: { gpt: 236, claude: 352, gemini: 250 }, full: { gpt: 2997, claude: 3632, gemini: 3177 } },
+      cardnews: { short: { gpt: 217, claude: 324, gemini: 231 }, full: { gpt: 3500, claude: 4037, gemini: 3708 } },
     },
     chatgpt: {
       dashboard: { short: { gpt: 224, claude: 343, gemini: 237 }, full: { gpt: 2800, claude: 3355, gemini: 2968 } },
       weekly: { short: { gpt: 236, claude: 349, gemini: 250 }, full: { gpt: 4547, claude: 5578, gemini: 4820 } },
       landing: { short: { gpt: 230, claude: 353, gemini: 244 }, full: { gpt: 2991, claude: 3633, gemini: 3170 } },
+      cardnews: { short: { gpt: 211, claude: 325, gemini: 224 }, full: { gpt: 3494, claude: 4038, gemini: 3701 } },
     },
     gemini: {
       dashboard: { short: { gpt: 212, claude: 315, gemini: 225 }, full: { gpt: 2788, claude: 3327, gemini: 2955 } },
       weekly: { short: { gpt: 224, claude: 321, gemini: 237 }, full: { gpt: 4535, claude: 5550, gemini: 4807 } },
       landing: { short: { gpt: 218, claude: 325, gemini: 231 }, full: { gpt: 2979, claude: 3605, gemini: 3158 } },
+      cardnews: { short: { gpt: 199, claude: 297, gemini: 212 }, full: { gpt: 3482, claude: 4010, gemini: 3689 } },
     },
   };
   var TOKENS = TOKENS_BY_SERVICE.flowai.dashboard;
@@ -2928,6 +3339,7 @@ Then wait for my next message before generating anything.`,
     dashboard: { short: SHORT_PROMPT, full: FULL_PROMPT },
     weekly:    { short: SHORT_PROMPT_WEEKLY, full: FULL_PROMPT_WEEKLY },
     landing:   { short: SHORT_PROMPT_LANDING, full: FULL_PROMPT_LANDING },
+    cardnews:  { short: SHORT_PROMPT_CARDNEWS, full: FULL_PROMPT_CARDNEWS },
   };
 
   function getPrompt(output, mode, service) {
@@ -2938,12 +3350,14 @@ Then wait for my next message before generating anything.`,
     dashboard: '데이터 파일을 첨부하거나, 만들고 싶은 대시보드를 자유롭게 설명해주세요.',
     weekly:    '어떤 팀·사업부의 주간보고를 만들까요? 기간, 핵심 지표, 주요 이슈를 알려주세요.',
     landing:   '어떤 서비스의 랜딩페이지를 만들까요? 제품명, 핵심 기능, 타겟 고객을 알려주세요.',
+    cardnews:  '어떤 주제의 카드뉴스를 만들까요? 주제, 타겟 플랫폼(인스타/링크드인), 카드 수를 알려주세요.',
   };
 
   var LLMS_LINKS = {
     dashboard: { href: './llms-dashboard.md', text: 'llms-dashboard.md' },
     weekly:    { href: './llms-weekly-report.md', text: 'llms-weekly-report.md' },
     landing:   { href: './llms-landing.md', text: 'llms-landing.md' },
+    cardnews:  { href: './llms-card-news.md', text: 'llms-card-news.md' },
   };
 
   var SERVICE_URLS = {
@@ -2957,6 +3371,7 @@ Then wait for my next message before generating anything.`,
     dashboard: '3월 매출 CSV 기반으로 경영진 리뷰용 대시보드 만들어줘',
     weekly:    'SaaS팀 4월 4주차 주간보고 만들어줘. MRR, 신규 가입, 이탈 지표 포함',
     landing:   'AI 코드 리뷰 SaaS 랜딩페이지 만들어줘. Hero, 기능, 요금제까지',
+    cardnews:  'AI 마케팅 트렌드 카드뉴스 만들어줘. 인스타그램용, 8장',
   };
 
   var currentMode = 'full';
@@ -3109,13 +3524,24 @@ Then wait for my next message before generating anything.`,
           delay(function() {
             if (t2) t2.style.display = 'none';
             showEl('step-preview');
+            var fnameEl = document.getElementById('step-preview-filename');
+            var FNAMES = { dashboard: 'dashboard.html', weekly: 'weekly-report.html', landing: 'landing.html', cardnews: 'card-news.html' };
+            if (fnameEl) fnameEl.textContent = FNAMES[currentOutput] || 'output.html';
             if (previewBody && typeof Maging !== 'undefined') {
-              previewBody.innerHTML = '<div id="mini-kpi-1"></div><div id="mini-kpi-2"></div><div id="mini-chart" style="grid-column:span 2;height:100px;"></div>';
-              try {
-                Maging.kpiCard('#mini-kpi-1', { label: '매출', value: '128억', delta: 8.3, compact: true });
-                Maging.kpiCard('#mini-kpi-2', { label: 'DAU', value: '48,291', delta: 12.4, compact: true });
-                Maging.lineChart('#mini-chart', { categories: ['1월','2월','3월','4월','5월','6월'], series: [{ name: '매출', data: [72,78,81,88,91,128] }] });
-              } catch(e) {}
+              if (currentOutput === 'cardnews') {
+                previewBody.innerHTML = '<div id="mini-kpi-1"></div><div id="mini-bar" style="grid-column:span 2;height:100px;"></div>';
+                try {
+                  Maging.kpiCard('#mini-kpi-1', { label: 'AI 도입률', value: '78%', delta: 15.2, compact: true });
+                  Maging.barChart('#mini-bar', { items: [{label:'2023',value:31},{label:'2024',value:47},{label:'2025',value:63},{label:'2026',value:78}], yFormatter: function(v){return v+'%';} });
+                } catch(e) {}
+              } else {
+                previewBody.innerHTML = '<div id="mini-kpi-1"></div><div id="mini-kpi-2"></div><div id="mini-chart" style="grid-column:span 2;height:100px;"></div>';
+                try {
+                  Maging.kpiCard('#mini-kpi-1', { label: '매출', value: '128억', delta: 8.3, compact: true });
+                  Maging.kpiCard('#mini-kpi-2', { label: 'DAU', value: '48,291', delta: 12.4, compact: true });
+                  Maging.lineChart('#mini-chart', { categories: ['1월','2월','3월','4월','5월','6월'], series: [{ name: '매출', data: [72,78,81,88,91,128] }] });
+                } catch(e) {}
+              }
             }
             scrollChat();
             // show replay button after animation ends
@@ -3133,7 +3559,7 @@ Then wait for my next message before generating anything.`,
     }, 5000);
   }
 
-  var LLMS_BASES = { dashboard: 'llms-dashboard', weekly: 'llms-weekly-report', landing: 'llms-landing' };
+  var LLMS_BASES = { dashboard: 'llms-dashboard', weekly: 'llms-weekly-report', landing: 'llms-landing', cardnews: 'llms-card-news' };
 
   function updateLink() {
     var linkA = document.getElementById('llms-link-a');

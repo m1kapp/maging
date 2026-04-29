@@ -206,7 +206,7 @@ window.addEventListener('maging:ready', function () {
   Maging.alertBanner('#global-alert', {
     type: 'success',
     title: 'v0.1.10 stable',
-    message: '35 brand themes · 31 widgets · 6 fonts · zero build step · CDN one-tag',
+    message: `${Maging.themes.length} brand themes · ${Object.keys(Maging.meta).length} widgets · 6 fonts · zero build step · CDN one-tag`,
     dismissable: true,
   });
 
