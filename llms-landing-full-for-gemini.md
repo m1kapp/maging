@@ -17,6 +17,24 @@
 
 분위기 매칭: 금융→`stripe`/`bloomberg` · SaaS/IT→`linear`/`vercel` · AI→`openai`/`claude` · 마케팅→`instagram`/`mailchimp` · 이커머스→`amazon`/`airbnb` · 교육→`duolingo`/`notion` · 럭셔리→`hermes`/`tiffany` · 개발→`github`/`vercel`. Default: `claude`.
 
+**Theme Profiles** — 테마 선택 시 참고. `canvas · accent · voice` 순.
+- `flow`: 라벤더 크림 #f7f6ff · 인디고 #5f49dc · 모던 SaaS 기본
+- `claude`: 따뜻한 크림 #faf9f5 · 코퍼 #da7756 · 세리프 에디토리얼 — 가장 고급스러운 톤
+- `linear`: 쿨 화이트 #fcfcfd · 슬레이트 블루 #5e6ad2 · 미니멀 프로덕트
+- `stripe`: 쿨 블루화이트 #f6f9fc · 인디고 #635bff · 핀테크 정밀
+- `notion`: 퓨어 화이트 #fff · 시안 #2eaadc · 문서/노트 내추럴
+- `apple`: 퍼치먼트 #f5f5f7 · 시스템 블루 #007aff · 사진 중심 미니멀
+- `airbnb`: 화이트 #fff · 코랄 #ff5a5f · 서비스 따뜻함
+- `hermes`: 아이보리 #fdf6ec · 오렌지 #ff6900 · 세리프 럭셔리 — radius 0px
+- `tiffany`: 민트크림 #f2f9f8 · 티파니블루 #0abab5 · 세리프 럭셔리 여성
+- `vercel`: 퓨어 블랙 #000 · 화이트 #fff · 극한 미니멀 다크
+- `github`: 다크 네이비 #0d1117 · 블루 #58a6ff · 개발자 터미널
+- `bloomberg`: 터미널 블랙 #0a0a0a · 앰버 #ffa028 · 모노스페이스 금융 데이터
+- `netflix`: 퓨어 블랙 #000 · 레드 #e50914 · 시네마틱 임팩트
+- `spotify`: 다크 #121212 · 그린 #1db954 · 음악/엔터 — on-accent 검정
+- `slack`: 어버진 #3f0e40 · 골드 #ecb22e · 협업 — on-accent 어버진
+- `nasa`: 네이비 #0b3d91 · 레드 #fc3d21 · 과학/공공기관
+
 ---
 
 ## Widgets
@@ -70,6 +88,36 @@
 
 ---
 
+## Widget Visual Reference
+
+위젯별 시각적 구조. 커스텀 스타일링 시 이 토큰 관계를 유지하라.
+
+| Widget | Container | Title/Label | Value | Sub-elements |
+|--------|-----------|-------------|-------|-------------|
+| `kpiCard` | mw-card (surface, border, radius) | text-muted, text-sm | text, text-xl, display-font | delta: success/danger, text-sm |
+| `heroTile` | mw-card + accent gradient | accent, 0.7rem uppercase | text→accent gradient, 3–6.5rem | stats: muted label + display-font value |
+| `metricChart` | mw-card + accent gradient | text-muted, text-sm | text, text-2xl, display-font | ECharts area below |
+| `lineChart` | mw-card | header: text-base/600 | — | axis: border 1px dash[4,4] |
+| `barChart` | mw-card | header: text-base/600 | — | bars: accent→accent-2 |
+| `donutChart` | mw-card | header: text-base/600 | center: text-lg | slices: accent, accent-2, muted |
+| `leaderboard` | mw-card | header: text-base/600 | — | avatar, name text-base/500, progress |
+| `activityTable` | mw-card | header: text-base/600 | — | rows: border-bottom 1px, text-sm |
+| `statusGrid` | mw-card | header: text-base/600 | — | badges: success/warning/danger |
+| `goalGrid` | mw-card | header: text-base/600 | — | bars: accent→threshold 색 |
+| `alertBanner` | type별 색상 카드 | title: text-base/600 | — | icon + message |
+
+**ECharts 스타일링:**
+- 축선: --mw-border, 1px, dash `[4,4]` · 라벨: 10–11px, mono-font (y축)
+- 범례: circle 6×6, 간격 14px · 툴팁: surface bg, 약한 shadow
+- 시리즈: accent 기본, accent-2 보조 · 영역: accent 8% 투명도
+
+**Depth 전략 (테마 카테고리별):**
+- Hairline-only (linear, stripe, vercel, apple): 그림자 거의 없음. border가 깊이의 주 수단.
+- Color-block (claude, hermes, bloomberg, github): surface 계층(bg→surface→surface-2)으로 깊이. 그림자 보조.
+- Tinted shadow (flow, airbnb, instagram, spotify): accent 색 그림자로 브랜드 터치.
+
+---
+
 ## Utility
 
 ```js
@@ -90,6 +138,37 @@ Maging.setTheme(name)
 - 임의 클래스명 금지 — Grid + Maging API만.
 - 코드 주석 금지 — 토큰 낭비.
 - 수동 숫자 포맷터 금지 — `Maging.fmt.*` 사용.
+
+---
+
+## Theme Design Guide
+
+테마를 선택한 후 **그 테마의 디자인 철학에 맞는 레이아웃**을 생성하라.
+
+### Warm Editorial (claude, hermes, tiffany, medium)
+- **Do:** display-font(세리프)로 섹션 타이틀 강조. accent는 CTA·progress fill에만 절제 사용. 카드 그림자는 미세하게.
+- **Don't:** accent를 배경색으로 쓰지 마라. bold 700을 display에 쓰지 마라 — 600 최대. --mw-bg의 따뜻한 톤을 #fff로 바꾸지 마라.
+- **Depth:** 색상 대비(surface vs bg)로 깊이 표현. 그림자는 보조.
+
+### Clean Corporate (linear, stripe, notion, linkedin, apple)
+- **Do:** 균일한 sans-serif. 1px border가 깊이의 주 수단. accent는 인터랙티브 요소에만.
+- **Don't:** 장식적 그라데이션/글로우 금지. 그림자 과용 금지(hairline-only). accent 남발 금지.
+- **Depth:** hairline border > shadow. 색상 변화 최소화.
+
+### Bold Dark (vercel, github, x, discord, openai, figma, adobe, bloomberg)
+- **Do:** 다크 표면 위 밝은 텍스트. accent는 포인트로만. 카드 border 미세 1px.
+- **Don't:** 밝은 배경색 혼용 금지. 그림자 대신 border로 구분. accent를 넓은 면적에 칠하지 마라.
+- **Depth:** surface 계층(bg→surface→surface-2)으로 깊이. 그림자 미미하거나 없음.
+
+### Vibrant Brand (spotify, twitch, netflix, instagram, youtube, airbnb, barbie, tmobile)
+- **Do:** accent가 브랜드 시그니처 — KPI delta, progress fill, 아이콘에 활용. 나머지는 중립.
+- **Don't:** accent를 카드 배경 전체에 깔지 마라. accent-2를 accent만큼 쓰지 마라.
+- **Depth:** accent 색 shadow 활용. 카드 border는 테마 기본값 유지.
+
+### Industrial Specialty (nasa, deere, heineken, ups, fedex, amazon, slack)
+- **Do:** 업종 컬러 쌍(accent + accent-2) 적극 활용. 데이터 밀도 높여도 OK.
+- **Don't:** 업종 컬러를 희석하지 마라. radius를 임의로 키우지 마라(작은 radius 의도적).
+- **Depth:** 테마 기본 shadow 유지. 과한 elevation 금지.
 
 ---
 

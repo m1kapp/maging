@@ -163,6 +163,12 @@ window.addEventListener('maging:ready', () => {
 5. **delta:** 목표 대비 또는 전월/전년 대비 %.
 6. **마지막은 alertBanner** — `icon='📋' type='info'` 1-2문장 요약.
 7. **Anti-AI:** hover glow 금지 · 균일 3등분 grid 금지 · shadow tint 금지.
+8. **슬라이드 밀도:** 각 슬라이드는 A4 가로(297×210mm) 안에 모든 내용이 들어가야 한다. 절대 넘치면 안 된다.
+   - **테이블은 반드시** `<div class="scroll-table" style="height:280px">` 로 감싸라. 행이 많아도 슬라이드 안에서 스크롤로 처리된다.
+   - KPI 카드: 한 줄에 최대 **4개**.
+   - 차트 + 테이블 동시 배치 금지. 하나만 선택.
+   - alertBanner/insightCard는 `<div class="mt-4">` 한 줄 이내. 넣을 공간 없으면 생략.
+   - 슬라이드 구성 공식: `pageHeader + KPI row(최대 4개) + sectionHead + scroll-table(280px) 또는 chart(280px)`.
 
 ---
 
