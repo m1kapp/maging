@@ -17,6 +17,7 @@ const core = readFileSync(join(__dir, '../llms/core.txt'), 'utf-8');
 const dashboardTxt = core + '\n' + readFileSync(join(__dir, '../llms/dashboard.txt'), 'utf-8');
 const landingTxt = core + '\n' + readFileSync(join(__dir, '../llms/landing.txt'), 'utf-8');
 const weeklyTxt = core + '\n' + readFileSync(join(__dir, '../llms/weekly-report.txt'), 'utf-8');
+const cardNewsTxt = core + '\n' + readFileSync(join(__dir, '../llms/card-news.txt'), 'utf-8');
 
 /* ── logo ── */
 const LOGO_URL = 'https://cdn.jsdelivr.net/npm/@m1kapp/maging/dist/logo.png';
@@ -85,34 +86,51 @@ When you have fully understood the above, reply with EXACTLY this text (nothing 
 
 Then wait for my next message before generating anything.`;
 
+const HANDSHAKE_CARDNEWS = `
+
+=== HANDSHAKE ===
+When you have fully understood the above, reply with EXACTLY this text (nothing else, no code fences, no preamble):
+
+**안녕하세요! 결과물 서포터 매징(maging)입니다** ✦
+
+어떤 주제의 카드뉴스를 만들까요? 주제, 타겟 플랫폼(인스타/링크드인), 카드 수를 알려주세요.
+바로 시작할게요! 🎨
+
+Then wait for my next message before generating anything.`;
+
 const HANDSHAKES = {
   dashboard: HANDSHAKE_DASHBOARD,
   landing: HANDSHAKE_LANDING,
   weekly: HANDSHAKE_WEEKLY,
+  cardnews: HANDSHAKE_CARDNEWS,
 };
 
 const MODE_TEXTS = {
   dashboard: dashboardTxt,
   landing: landingTxt,
   weekly: weeklyTxt,
+  cardnews: cardNewsTxt,
 };
 
 const CDN_FILES = {
   dashboard: 'llms-dashboard-full.md',
   landing: 'llms-landing-full.md',
   weekly: 'llms-weekly-report-full.md',
+  cardnews: 'llms-card-news-full.md',
 };
 
 const SHORT_BASES = {
   dashboard: `You are a maging dashboard generator.\n\nFetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging/${CDN_FILES.dashboard}\nIt has the complete setup, all widget APIs, themes, and generation rules.`,
   landing:   `You are a maging landing page generator.\n\nFetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging/${CDN_FILES.landing}\nIt has the complete setup, all widget APIs, themes, and generation rules.`,
   weekly:    `You are a maging weekly report generator.\n\nFetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging/${CDN_FILES.weekly}\nIt has the complete setup, all widget APIs, themes, and generation rules for weekly reports.`,
+  cardnews:  `You are a maging card-news generator.\n\nFetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging/${CDN_FILES.cardnews}\nIt has the complete setup, all widget APIs, themes, and generation rules for card news.`,
 };
 
 const MODE_LABELS = {
   dashboard: 'dashboard',
   landing: 'landing page',
   weekly: 'weekly report',
+  cardnews: 'card news',
 };
 
 /* ── builders ── */
@@ -130,25 +148,31 @@ function buildShort(service, mode) {
 export const FULL_PROMPT_DASHBOARD_CLAUDE  = buildFull('claude', 'dashboard');
 export const FULL_PROMPT_LANDING_CLAUDE    = buildFull('claude', 'landing');
 export const FULL_PROMPT_WEEKLY_CLAUDE     = buildFull('claude', 'weekly');
+export const FULL_PROMPT_CARDNEWS_CLAUDE   = buildFull('claude', 'cardnews');
 export const SHORT_PROMPT_DASHBOARD_CLAUDE = buildShort('claude', 'dashboard');
 export const SHORT_PROMPT_LANDING_CLAUDE   = buildShort('claude', 'landing');
 export const SHORT_PROMPT_WEEKLY_CLAUDE    = buildShort('claude', 'weekly');
+export const SHORT_PROMPT_CARDNEWS_CLAUDE  = buildShort('claude', 'cardnews');
 
 // ChatGPT
 export const FULL_PROMPT_DASHBOARD_CHATGPT  = buildFull('chatgpt', 'dashboard');
 export const FULL_PROMPT_LANDING_CHATGPT    = buildFull('chatgpt', 'landing');
 export const FULL_PROMPT_WEEKLY_CHATGPT     = buildFull('chatgpt', 'weekly');
+export const FULL_PROMPT_CARDNEWS_CHATGPT   = buildFull('chatgpt', 'cardnews');
 export const SHORT_PROMPT_DASHBOARD_CHATGPT = buildShort('chatgpt', 'dashboard');
 export const SHORT_PROMPT_LANDING_CHATGPT   = buildShort('chatgpt', 'landing');
 export const SHORT_PROMPT_WEEKLY_CHATGPT    = buildShort('chatgpt', 'weekly');
+export const SHORT_PROMPT_CARDNEWS_CHATGPT  = buildShort('chatgpt', 'cardnews');
 
 // Gemini
 export const FULL_PROMPT_DASHBOARD_GEMINI  = buildFull('gemini', 'dashboard');
 export const FULL_PROMPT_LANDING_GEMINI    = buildFull('gemini', 'landing');
 export const FULL_PROMPT_WEEKLY_GEMINI     = buildFull('gemini', 'weekly');
+export const FULL_PROMPT_CARDNEWS_GEMINI   = buildFull('gemini', 'cardnews');
 export const SHORT_PROMPT_DASHBOARD_GEMINI = buildShort('gemini', 'dashboard');
 export const SHORT_PROMPT_LANDING_GEMINI   = buildShort('gemini', 'landing');
 export const SHORT_PROMPT_WEEKLY_GEMINI    = buildShort('gemini', 'weekly');
+export const SHORT_PROMPT_CARDNEWS_GEMINI  = buildShort('gemini', 'cardnews');
 
 /* ── backward compat (service-agnostic = Claude default) ── */
 export const FULL_PROMPT_DASHBOARD  = FULL_PROMPT_DASHBOARD_CLAUDE;
@@ -157,13 +181,15 @@ export const FULL_PROMPT_WEEKLY     = FULL_PROMPT_WEEKLY_CLAUDE;
 export const SHORT_PROMPT_DASHBOARD = SHORT_PROMPT_DASHBOARD_CLAUDE;
 export const SHORT_PROMPT_LANDING   = SHORT_PROMPT_LANDING_CLAUDE;
 export const SHORT_PROMPT_WEEKLY    = SHORT_PROMPT_WEEKLY_CLAUDE;
+export const FULL_PROMPT_CARDNEWS  = FULL_PROMPT_CARDNEWS_CLAUDE;
+export const SHORT_PROMPT_CARDNEWS = SHORT_PROMPT_CARDNEWS_CLAUDE;
 export const FULL_PROMPT  = FULL_PROMPT_DASHBOARD;
 export const SHORT_PROMPT = SHORT_PROMPT_DASHBOARD;
 export const HANDSHAKE    = HANDSHAKE_DASHBOARD;
 
 /* ── programmatic access ── */
 export const SERVICES = ['claude', 'chatgpt', 'gemini'];
-export const MODES = ['dashboard', 'landing', 'weekly'];
+export const MODES = ['dashboard', 'landing', 'weekly', 'cardnews'];
 
 export function getPrompt(service, mode, variant = 'full') {
   return variant === 'short' ? buildShort(service, mode) : buildFull(service, mode);
@@ -173,8 +199,10 @@ export function getPrompt(service, mode, variant = 'full') {
 export const BASE_FULL_DASHBOARD  = MODE_TEXTS.dashboard;
 export const BASE_FULL_LANDING    = MODE_TEXTS.landing;
 export const BASE_FULL_WEEKLY     = MODE_TEXTS.weekly;
+export const BASE_FULL_CARDNEWS   = MODE_TEXTS.cardnews;
 export const BASE_SHORT_DASHBOARD = SHORT_BASES.dashboard;
 export const BASE_SHORT_LANDING   = SHORT_BASES.landing;
 export const BASE_SHORT_WEEKLY    = SHORT_BASES.weekly;
+export const BASE_SHORT_CARDNEWS  = SHORT_BASES.cardnews;
 
 export { LOGO_URL, SERVICE_RULES, HANDSHAKES };

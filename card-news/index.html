@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <script>!function(){var T=["flow","morningmate","claude","linear","stripe","airbnb","linkedin","apple","duolingo","github","spotify","netflix","figma","adobe","bloomberg","instagram","openai","vercel"],k="maging-theme",s=localStorage.getItem(k);if(!s||T.indexOf(s)<0)s="claude";document.documentElement.setAttribute("data-theme",s);localStorage.setItem(k,s)}();</script>
+    <title>카드뉴스 데모 — AI 마케팅 트렌드 2026</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="tw.css">
+    <link rel="stylesheet" href="../dist/maging.css">
+    <script defer src="../dist/maging-all.js" data-base="../dist/" data-no-tailwind></script>
+    <script type="module" src="../components/site.js"></script>
+    <script defer src="../dist/maging-news.js"></script>
+  </head>
+  <body class="mw-themed">
+    <maging-nav active="demo"></maging-nav>
+
+    <main style="display:flex; align-items:center; justify-content:center; min-height:calc(100vh - 60px); padding:2rem 1rem;">
+      <div id="cards-wrap" style="max-width:540px; width:100%;">
+
+        <!-- ═══ Card 1: Cover ═══ -->
+        <section class="news-card" id="card-cover" data-active></section>
+
+        <!-- ═══ Card 2: Body 01 ═══ -->
+        <section class="news-card" id="card-01"></section>
+
+        <!-- ═══ Card 3: Body 02 ═══ -->
+        <section class="news-card" id="card-02"></section>
+
+        <!-- ═══ Card 4: Body 03 ═══ -->
+        <section class="news-card" id="card-03"></section>
+
+        <!-- ═══ Card 5: Body 04 ═══ -->
+        <section class="news-card" id="card-04"></section>
+
+        <!-- ═══ Card 6: Data (Chart) ═══ -->
+        <section class="news-card" id="card-data"></section>
+
+        <!-- ═══ Card 7: Numbered ═══ -->
+        <section class="news-card" id="card-top3"></section>
+
+        <!-- ═══ Card 8: CTA ═══ -->
+        <section class="news-card" id="card-cta"></section>
+
+      </div>
+    </main>
+
+    <news-nav></news-nav>
+
+    <script>
+    window.addEventListener('maging:ready', () => {
+      const BRAND = '@maging.page';
+
+      window.NEWS_MOUNT = {
+
+        'card-cover': () => Maging.coverCard('#card-cover', {
+          icon: '🚀',
+          tag: 'AI 마케팅 트렌드',
+          title: 'AI가 바꿀\n마케팅의 미래',
+          subtitle: '마케터라면 반드시 알아야 할 5가지 변화',
+          brand: BRAND,
+          style: 'gradient',
+        }),
+
+        'card-01': () => Maging.bodyCard('#card-01', {
+          num: '01',
+          icon: '🎯',
+          heading: '초개인화 콘텐츠 자동 생성',
+          text: 'AI가 고객 세그먼트별 맞춤 콘텐츠를 실시간으로 만들어줍니다. 수천 개의 변형을 한 번에 테스트할 수 있어요.',
+          brand: BRAND,
+        }),
+
+        'card-02': () => Maging.bodyCard('#card-02', {
+          num: '02',
+          icon: '📊',
+          heading: '예측 분석으로 선제 대응',
+          text: '고객 이탈 예측, 구매 확률 스코어링, 최적 타이밍 추천까지. 데이터 기반 의사결정이 자동화됩니다.',
+          brand: BRAND,
+        }),
+
+        'card-03': () => Maging.bodyCard('#card-03', {
+          num: '03',
+          icon: '💬',
+          heading: 'AI 챗봇이 영업을 대신한다',
+          text: '24시간 고객 응대는 물론, 리드 퀄리파잉부터 미팅 예약까지. 영업팀의 시간을 고가치 활동에 집중시킵니다.',
+          brand: BRAND,
+        }),
+
+        'card-04': () => Maging.bodyCard('#card-04', {
+          num: '04',
+          icon: '🎨',
+          heading: '크리에이티브 제작 비용 90% 절감',
+          text: '배너, 카드뉴스, 영상 썸네일까지 AI가 초안을 만들고, 사람은 감수만. 제작 사이클이 주 단위에서 시간 단위로.',
+          brand: BRAND,
+        }),
+
+        'card-data': () => Maging.dataCard('#card-data', {
+          label: 'GLOBAL TREND',
+          title: 'AI 마케팅 도입률 추이',
+          widget: 'barChart',
+          widgetConfig: {
+            categories: ['2022', '2023', '2024', '2025', '2026(E)'],
+            series: [{ name: '도입률 %', data: [18, 31, 47, 63, 78] }],
+            yFormatter: v => v + '%',
+          },
+          brand: BRAND,
+        }),
+
+        'card-top3': () => Maging.numberedCard('#card-top3', {
+          heading: 'AI 마케팅 필수 도구 TOP 3',
+          items: [
+            { rank: '1', title: 'ChatGPT / Claude', desc: '콘텐츠 초안, 카피라이팅, 번역', icon: '🤖' },
+            { rank: '2', title: 'Midjourney / DALL-E', desc: '광고 비주얼, 썸네일, 배너 생성', icon: '🖼️' },
+            { rank: '3', title: 'HubSpot AI', desc: '리드 스코어링, 이메일 최적화, 예측 분석', icon: '📈' },
+          ],
+          brand: BRAND,
+        }),
+
+        'card-cta': () => Maging.ctaCard('#card-cta', {
+          heading: '더 많은 AI 마케팅 인사이트가\n궁금하다면?',
+          subtext: '팔로우하고 매주 새로운 트렌드를 받아보세요',
+          ctas: [
+            { label: '팔로우하기', primary: true },
+          ],
+          handles: [
+            { platform: 'Instagram', handle: '@maging.page' },
+            { platform: 'LinkedIn', handle: 'maging' },
+          ],
+          brand: BRAND,
+        }),
+
+      };
+    });
+    </script>
+  </body>
+</html>

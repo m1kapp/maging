@@ -14,6 +14,7 @@ function copyStatic() {
         ['llms-dashboard.txt', '_site/llms-dashboard.txt'],
         ['llms-landing.txt', '_site/llms-landing.txt'],
         ['llms-weekly-report.txt', '_site/llms-weekly-report.txt'],
+        ['llms-card-news.txt', '_site/llms-card-news.txt'],
       ];
       for (const [src, dest] of pairs) {
         if (existsSync(src)) {
@@ -36,6 +37,8 @@ export default defineConfig({
         acme:       resolve(__dirname, 'dashboard/acme.html'),
         sales:      resolve(__dirname, 'dashboard/sales.html'),
         startup:    resolve(__dirname, 'landing/startup.html'),
+        weekly:     resolve(__dirname, 'weekly-report/index.html'),
+        cardnews:   resolve(__dirname, 'card-news/index.html'),
       },
     },
   },

@@ -1,0 +1,279 @@
+
+---
+
+## Mode: Card News (카드뉴스)
+
+> 인스타그램/링크드인 캐러셀 카드뉴스. 커버 → 본문(1카드 1메시지) → CTA 구조.
+
+### Setup
+```html
+<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.17/dist/maging-all.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.17/dist/maging-news.js"></script>
+<body class="mw-themed">
+```
+`maging:ready` 안에서 마운트. `DOMContentLoaded` 금지.
+
+---
+
+### 카드 크기 & 구조
+
+| 항목 | 값 |
+|------|-----|
+| 크기 | 1080×1350px (4:5 비율) |
+| 총 카드 수 | 5~12장 (권장 7~9장) |
+| 구조 | **커버(1)** + **본문(N)** + **CTA(1)** |
+| 원칙 | **1카드 1메시지** — 한 장에 핵심 포인트 1개만 |
+
+---
+
+### 카드 위젯 (5)
+
+#### `coverCard` — 표지 (첫 장, 후킹)
+```js
+Maging.coverCard('#card-cover', {
+  icon: '🚀',
+  tag: 'AI 트렌드',
+  title: 'AI가 바꿀\n마케팅의 미래',
+  subtitle: '마케터가 알아야 할 5가지',
+  brand: '@mybrand',
+  style: 'gradient',   // 'gradient' | 'accent-block' | 'minimal'
+});
+```
+- `title`은 `\n`으로 줄바꿈. 최대 2~3줄, 15자 내외/줄.
+- `style: 'gradient'` — 배경에 accent 그라데이션. 가장 권장.
+
+#### `bodyCard` — 본문 (핵심 메시지 1개)
+```js
+Maging.bodyCard('#card-01', {
+  num: '01',
+  icon: '🎯',
+  heading: '초개인화 콘텐츠 자동 생성',
+  text: 'AI가 고객 세그먼트별로 맞춤 콘텐츠를 실시간으로 만들어줍니다.',
+  brand: '@mybrand',
+});
+```
+- `num`은 넘버링 시리즈일 때만. "01"~"05" 형태 권장.
+- `heading` 1줄, `text` 2~3문장 이내.
+
+#### `dataCard` — 데이터 시각화 (기존 maging 차트 내장)
+```js
+Maging.dataCard('#card-data', {
+  label: 'GLOBAL TREND',
+  title: 'AI 마케팅 도입률 추이',
+  widget: 'barChart',
+  widgetConfig: {
+    categories: ['2022','2023','2024','2025','2026(E)'],
+    series: [{ name: '도입률', data: [18,31,47,63,78] }],
+    yFormatter: v => v + '%',
+  },
+  brand: '@mybrand',
+});
+```
+- `widget`: `'barChart'` | `'lineChart'` | `'donutChart'` | `'kpiCard'` | `'ringProgress'` | `'funnelChart'` 등 모든 코어 위젯 사용 가능.
+- 통계/데이터가 있으면 bodyCard 대신 dataCard 사용.
+
+#### `numberedCard` — 순위/리스트
+```js
+Maging.numberedCard('#card-top', {
+  heading: 'TOP 3 AI 마케팅 도구',
+  items: [
+    { rank: '1', title: 'ChatGPT', desc: '콘텐츠 초안 작성', icon: '🤖' },
+    { rank: '2', title: 'Midjourney', desc: '비주얼 생성', icon: '🖼️' },
+    { rank: '3', title: 'Jasper', desc: '광고 카피 최적화', icon: '📈' },
+  ],
+  brand: '@mybrand',
+});
+```
+- 3~5개 아이템 권장. 그 이상이면 카드 분할.
+
+#### `ctaCard` — 마지막 장 (행동 유도)
+```js
+Maging.ctaCard('#card-cta', {
+  heading: '더 많은 AI 마케팅 팁이\n궁금하다면?',
+  subtext: '팔로우하고 매주 새로운 인사이트를 받아보세요',
+  ctas: [{ label: '팔로우하기', primary: true }],
+  handles: [
+    { platform: 'Instagram', handle: '@mybrand' },
+    { platform: 'LinkedIn', handle: 'mybrand' },
+  ],
+  brand: '@mybrand',
+});
+```
+
+---
+
+### HTML 구조 & Deck
+
+```html
+<div id="cards-wrap">
+  <section class="news-card" id="card-cover" data-active></section>
+  <section class="news-card" id="card-01"></section>
+  <section class="news-card" id="card-02"></section>
+  <section class="news-card" id="card-03"></section>
+  <section class="news-card" id="card-04"></section>
+  <section class="news-card" id="card-data"></section>
+  <section class="news-card" id="card-top3"></section>
+  <section class="news-card" id="card-cta"></section>
+</div>
+<news-nav></news-nav>
+```
+
+```js
+window.addEventListener('maging:ready', () => {
+  const BRAND = '@mybrand';
+
+  window.NEWS_MOUNT = {
+    'card-cover': () => Maging.coverCard('#card-cover', { ... }),
+    'card-01':    () => Maging.bodyCard('#card-01', { ... }),
+    'card-02':    () => Maging.bodyCard('#card-02', { ... }),
+    'card-data':  () => Maging.dataCard('#card-data', { ... }),
+    'card-top3':  () => Maging.numberedCard('#card-top3', { ... }),
+    'card-cta':   () => Maging.ctaCard('#card-cta', { ... }),
+  };
+});
+```
+
+키보드: ←/→ 이동, F 전체화면, Esc 종료. 터치 스와이프 지원.
+
+---
+
+### 테마 선택 가이드
+
+| 주제 | 추천 테마 |
+|------|-----------|
+| 비즈니스/B2B | `linkedin`, `linear`, `stripe` |
+| AI/테크 | `openai`, `claude`, `github` |
+| 크리에이티브 | `instagram`, `figma`, `spotify` |
+| 뉴스/미디어 | `bloomberg`, `medium`, `reddit` |
+| 교육 | `duolingo`, `notion` |
+| 럭셔리/프리미엄 | `apple`, `vercel`, `netflix` |
+
+---
+
+### PNG 내보내기 (Playwright)
+
+maging은 HTML 렌더링만 담당. 이미지 캡처는 Playwright CLI로 수행:
+
+```bash
+# 개별 카드 캡처
+npx playwright screenshot --viewport-size=1080,1350 \
+  "file:///path/to/card-news.html#card-cover" output/card-cover.png
+
+# 전체 카드 일괄 캡처 (스크립트)
+for id in card-cover card-01 card-02 card-03 card-04 card-data card-top3 card-cta; do
+  npx playwright screenshot --viewport-size=1080,1350 \
+    "file:///path/to/card-news.html#${id}" "output/${id}.png"
+done
+```
+
+---
+
+### 생성 규칙
+
+1. **1카드 1메시지**: 정보를 분할하라. 한 장에 2개 이상의 핵심 포인트 금지.
+2. **타이포그래피 위계**: 제목은 크고 굵게, 부연은 작고 muted. 텍스트 양 최소화.
+3. **brand 일관성**: 모든 카드에 동일한 `brand` 값 전달.
+4. **커버 후킹**: 첫 장 제목은 호기심 유발 — 질문형, 숫자, 반전 활용.
+5. **CTA 명확**: 마지막 장에 구체적 행동 유도 (팔로우, 링크, DM).
+6. **dataCard 활용**: 통계/수치 데이터가 있으면 반드시 dataCard로 시각화.
+7. **카드 수**: 5장 미만 금지, 12장 초과 금지. 권장 7~9장.
+8. **넘버링**: 시리즈형 본문은 bodyCard의 `num` 사용. "01"~"05" 형태.
+9. **아이콘**: 각 bodyCard에 관련 이모지 icon 1개씩 배치.
+10. **테마**: 주제에 맞는 테마 선택. 위 가이드 참조.
+
+---
+
+### Reference — 완성 예시
+
+```html
+<!DOCTYPE html>
+<html lang="ko" data-theme="claude">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI 마케팅 트렌드 카드뉴스</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.17/dist/maging.css">
+  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.17/dist/maging-all.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.17/dist/maging-news.js"></script>
+</head>
+<body class="mw-themed" style="display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem;">
+  <div id="cards-wrap" style="max-width:540px;width:100%;">
+    <section class="news-card" id="card-cover" data-active></section>
+    <section class="news-card" id="card-01"></section>
+    <section class="news-card" id="card-02"></section>
+    <section class="news-card" id="card-03"></section>
+    <section class="news-card" id="card-04"></section>
+    <section class="news-card" id="card-data"></section>
+    <section class="news-card" id="card-top3"></section>
+    <section class="news-card" id="card-cta"></section>
+  </div>
+  <news-nav></news-nav>
+  <script>
+  window.addEventListener('maging:ready', () => {
+    const BRAND = '@mybrand';
+    window.NEWS_MOUNT = {
+      'card-cover': () => Maging.coverCard('#card-cover', {
+        icon: '🚀', tag: 'AI 트렌드',
+        title: 'AI가 바꿀\n마케팅의 미래',
+        subtitle: '마케터가 알아야 할 5가지',
+        brand: BRAND, style: 'gradient',
+      }),
+      'card-01': () => Maging.bodyCard('#card-01', {
+        num: '01', icon: '🎯',
+        heading: '초개인화 콘텐츠 자동 생성',
+        text: 'AI가 고객 세그먼트별로 맞춤 콘텐츠를 실시간으로 만들어줍니다.',
+        brand: BRAND,
+      }),
+      'card-02': () => Maging.bodyCard('#card-02', {
+        num: '02', icon: '📊',
+        heading: '예측 분석으로 선제 대응',
+        text: '고객 이탈 예측, 구매 확률 스코어링까지 데이터 기반 의사결정이 자동화됩니다.',
+        brand: BRAND,
+      }),
+      'card-03': () => Maging.bodyCard('#card-03', {
+        num: '03', icon: '💬',
+        heading: 'AI 챗봇이 영업을 대신한다',
+        text: '24시간 고객 응대, 리드 퀄리파잉, 미팅 예약까지 자동화.',
+        brand: BRAND,
+      }),
+      'card-04': () => Maging.bodyCard('#card-04', {
+        num: '04', icon: '🎨',
+        heading: '크리에이티브 제작 비용 90% 절감',
+        text: '배너, 카드뉴스, 썸네일까지 AI 초안 → 사람 감수. 시간 단위 제작.',
+        brand: BRAND,
+      }),
+      'card-data': () => Maging.dataCard('#card-data', {
+        label: 'GLOBAL TREND', title: 'AI 마케팅 도입률 추이',
+        widget: 'barChart',
+        widgetConfig: {
+          categories: ['2022','2023','2024','2025','2026(E)'],
+          series: [{ name: '도입률', data: [18,31,47,63,78] }],
+          yFormatter: v => v + '%',
+        },
+        brand: BRAND,
+      }),
+      'card-top3': () => Maging.numberedCard('#card-top3', {
+        heading: 'AI 마케팅 필수 도구 TOP 3',
+        items: [
+          { rank: '1', title: 'ChatGPT / Claude', desc: '콘텐츠 초안, 카피라이팅', icon: '🤖' },
+          { rank: '2', title: 'Midjourney / DALL-E', desc: '비주얼 생성', icon: '🖼️' },
+          { rank: '3', title: 'HubSpot AI', desc: '리드 스코어링, 이메일 최적화', icon: '📈' },
+        ],
+        brand: BRAND,
+      }),
+      'card-cta': () => Maging.ctaCard('#card-cta', {
+        heading: '더 많은 AI 마케팅 팁이\n궁금하다면?',
+        subtext: '팔로우하고 매주 새로운 트렌드를 받아보세요',
+        ctas: [{ label: '팔로우하기', primary: true }],
+        handles: [
+          { platform: 'Instagram', handle: '@mybrand' },
+          { platform: 'LinkedIn', handle: 'mybrand' },
+        ],
+        brand: BRAND,
+      }),
+    };
+  });
+  </script>
+</body>
+</html>
+```

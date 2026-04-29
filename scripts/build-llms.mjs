@@ -28,11 +28,13 @@ const core = readFileSync(join(root, 'llms/core.txt'), 'utf-8');
 const dashboard = readFileSync(join(root, 'llms/dashboard.txt'), 'utf-8');
 const landing = readFileSync(join(root, 'llms/landing.txt'), 'utf-8');
 const weeklyReport = readFileSync(join(root, 'llms/weekly-report.txt'), 'utf-8');
+const cardNews = readFileSync(join(root, 'llms/card-news.txt'), 'utf-8');
 
 const fullBases = {
   dashboard: core + '\n' + dashboard,
   landing: core + '\n' + landing,
   'weekly-report': core + '\n' + weeklyReport,
+  'card-news': core + '\n' + cardNews,
 };
 
 const CDN_BASE = 'https://cdn.jsdelivr.net/npm/@m1kapp/maging';
@@ -41,12 +43,14 @@ const shortBases = {
   dashboard: `You are a maging dashboard generator.\n\nFetch and read: ${CDN_BASE}/llms-dashboard-full.md\nIt has the complete setup, all widget APIs, themes, and generation rules.`,
   landing: `You are a maging landing page generator.\n\nFetch and read: ${CDN_BASE}/llms-landing-full.md\nIt has the complete setup, all widget APIs, themes, and generation rules.`,
   'weekly-report': `You are a maging weekly report generator.\n\nFetch and read: ${CDN_BASE}/llms-weekly-report-full.md\nIt has the complete setup, all widget APIs, themes, and generation rules for weekly reports.`,
+  'card-news': `You are a maging card-news generator.\n\nFetch and read: ${CDN_BASE}/llms-card-news-full.md\nIt has the complete setup, all widget APIs, themes, and generation rules for card news.`,
 };
 
 const modeToHandshake = {
   dashboard: 'dashboard',
   landing: 'landing',
   'weekly-report': 'weekly',
+  'card-news': 'cardnews',
 };
 
 const services = ['flowai', 'claude', 'chatgpt', 'gemini'];

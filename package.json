@@ -29,10 +29,12 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "build:tw": "tailwindcss -i weekly-report/tw-input.css -o weekly-report/tw.css --content weekly-report/index.html --minify && tailwindcss -i weekly-report/tw-input.css -o landing/tw.css --content landing/startup.html --minify",
+    "build:tw": "tailwindcss -i weekly-report/tw-input.css -o weekly-report/tw.css --content weekly-report/index.html --minify && tailwindcss -i weekly-report/tw-input.css -o landing/tw.css --content landing/startup.html --minify && tailwindcss -i card-news/tw-input.css -o card-news/tw.css --content card-news/index.html --minify",
     "build:llms": "node scripts/build-llms.mjs",
     "sync": "node scripts/sync-index.mjs",
     "count-tokens": "node scripts/count-prompt-tokens.mjs",
+    "import-theme": "node scripts/import-designmd.mjs",
+    "import-all": "node scripts/batch-import-designmd.mjs",
     "vercel-build": "vite build"
   },
   "devDependencies": {
