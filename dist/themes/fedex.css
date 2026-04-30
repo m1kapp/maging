@@ -1,0 +1,27 @@
+/*! magicwiget theme: fedex */
+[data-theme="fedex"] {
+  --mw-bg: #ffffff;
+  --mw-surface: #ffffff;
+  --mw-surface-2: #f5f3fa;
+  --mw-surface-3: #faf9fd;
+  --mw-border: #e5e5e5;
+  --mw-border-soft: #ededed;
+  --mw-border-strong: #b7b7b7;
+  --mw-text: #1a1a1a;
+  --mw-text-strong: #161616;
+  --mw-text-muted: #5a5a5a;
+  --mw-text-soft: #8c8c8c;
+  --mw-accent: #ff6600;
+  --mw-accent-2: #4d148c;
+  --mw-on-accent: #ffffff;
+  --mw-success: #2e7d32;
+  --mw-danger: #c62828;
+  --mw-warning: #ff6600;
+  --mw-radius: 2px;
+  --mw-border-w: 1px;
+  --mw-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 1px 3px rgb(77 20 140 / 0.08);
+  --mw-shadow-hover: 0 4px 16px -4px rgb(255 102 0 / 0.18);
+}

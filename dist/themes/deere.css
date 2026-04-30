@@ -1,0 +1,27 @@
+/*! magicwiget theme: deere */
+[data-theme="deere"] {
+  --mw-bg: #2a6221;
+  --mw-surface: #316e28;
+  --mw-surface-2: #3a7f30;
+  --mw-surface-3: #327129;
+  --mw-border: #468d3b;
+  --mw-border-soft: #356a2c;
+  --mw-border-strong: #74aa6c;
+  --mw-text: #ffffff;
+  --mw-text-strong: #ffffff;
+  --mw-text-muted: #9fc49a;
+  --mw-text-soft: #779374;
+  --mw-accent: #ffde00;
+  --mw-accent-2: #ffffff;
+  --mw-on-accent: #2a6221;
+  --mw-success: #a8d49a;
+  --mw-danger: #d9534f;
+  --mw-warning: #ffde00;
+  --mw-radius: 4px;
+  --mw-border-w: 1px;
+  --mw-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 2px 4px rgb(0 0 0 / 0.2);
+  --mw-shadow-hover: 0 4px 16px -4px rgb(0 0 0 / 0.3);
+}

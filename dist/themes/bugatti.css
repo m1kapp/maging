@@ -1,0 +1,27 @@
+/*! magicwiget theme: bugatti — auto-imported from DESIGN.md | MIT */
+[data-theme="bugatti"] {
+  --mw-bg: #000000;
+  --mw-surface: #141414;
+  --mw-surface-2: #0d0d0d;
+  --mw-surface-3: #070707;
+  --mw-border: #262626;
+  --mw-border-soft: #1d1d1d;
+  --mw-border-strong: #5c5c5c;
+  --mw-text: #ffffff;
+  --mw-text-strong: #ffffff;
+  --mw-text-muted: #999999;
+  --mw-text-soft: #737373;
+  --mw-accent: #ffffff;
+  --mw-accent-2: #ffffff;
+  --mw-on-accent: #000000;
+  --mw-success: #5fa657;
+  --mw-danger: #ff3b30;
+  --mw-warning: #d4a017;
+  --mw-radius: 8px;
+  --mw-border-w: 1px;
+  --mw-font: 'Bugatti Text Regular', 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-display-font: 'Bugatti Display', 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 2px 8px -2px rgb(0 0 0 / 0.3);
+  --mw-shadow-hover: 0 4px 16px -4px rgb(0 0 0 / 0.4);
+}

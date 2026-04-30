@@ -1,0 +1,27 @@
+/*! magicwiget theme: nasa */
+[data-theme="nasa"] {
+  --mw-bg: #0b3d91;
+  --mw-surface: #133f8f;
+  --mw-surface-2: #1b4f9d;
+  --mw-surface-3: #134697;
+  --mw-border: #2f6bc4;
+  --mw-border-soft: #235093;
+  --mw-border-strong: #6390d3;
+  --mw-text: #ffffff;
+  --mw-text-strong: #ffffff;
+  --mw-text-muted: #8ba6d9;
+  --mw-text-soft: #687da3;
+  --mw-accent: #fc3d21;
+  --mw-accent-2: #ffffff;
+  --mw-on-accent: #ffffff;
+  --mw-success: #4caf50;
+  --mw-danger: #fc3d21;
+  --mw-warning: #ffc107;
+  --mw-radius: 2px;
+  --mw-border-w: 1px;
+  --mw-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Helvetica Neue', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
+  --mw-shadow: 0 2px 6px rgb(0 0 0 / 0.35);
+  --mw-shadow-hover: 0 4px 16px -4px rgb(0 0 0 / 0.3);
+}

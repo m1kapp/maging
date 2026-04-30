@@ -1,0 +1,27 @@
+/*! magicwiget theme: instagram */
+[data-theme="instagram"] {
+  --mw-bg: #fafafa;
+  --mw-surface: #ffffff;
+  --mw-surface-2: #f5f5f5;
+  --mw-surface-3: #f8f8f8;
+  --mw-border: #dbdbdb;
+  --mw-border-soft: #e6e6e6;
+  --mw-border-strong: #afafaf;
+  --mw-text: #262626;
+  --mw-text-strong: #202020;
+  --mw-text-muted: #8e8e8e;
+  --mw-text-soft: #b0b0b0;
+  --mw-accent: #e1306c;
+  --mw-accent-2: #f77737;
+  --mw-on-accent: #ffffff;
+  --mw-success: #833ab4;
+  --mw-danger: #fd1d1d;
+  --mw-warning: #fcaf45;
+  --mw-radius: 12px;
+  --mw-border-w: 1px;
+  --mw-font: 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 4px 14px -4px rgb(225 48 108 / 0.18);
+  --mw-shadow-hover: 0 4px 16px -4px rgb(225 48 108 / 0.18);
+}

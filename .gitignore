@@ -8,7 +8,6 @@ _site
 .vercel
 .claude
 !.claude/skills/
-dist/
 .designmd-cache/
 _compare-themes.html
 npm-debug.log*

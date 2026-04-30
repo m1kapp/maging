@@ -1,0 +1,27 @@
+/*! magicwiget theme: figma */
+[data-theme="figma"] {
+  --mw-bg: #1e1e1e;
+  --mw-surface: #2c2c2c;
+  --mw-surface-2: #383838;
+  --mw-surface-3: #2b2b2b;
+  --mw-border: #444444;
+  --mw-border-soft: #333333;
+  --mw-border-strong: #737373;
+  --mw-text: #ffffff;
+  --mw-text-strong: #ffffff;
+  --mw-text-muted: #b3b3b3;
+  --mw-text-soft: #868686;
+  --mw-accent: #ff3737;
+  --mw-accent-2: #874fff;
+  --mw-on-accent: #ffffff;
+  --mw-success: #24cb71;
+  --mw-danger: #ff3737;
+  --mw-warning: #ff7237;
+  --mw-radius: 2px;
+  --mw-border-w: 1px;
+  --mw-font: 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 0 0 1px rgb(255 255 255 / 0.05);
+  --mw-shadow-hover: 0 4px 16px -4px rgb(0 0 0 / 0.3);
+}

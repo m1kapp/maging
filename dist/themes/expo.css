@@ -1,0 +1,27 @@
+/*! magicwiget theme: expo — auto-imported from DESIGN.md | MIT */
+[data-theme="expo"] {
+  --mw-bg: #ffffff;
+  --mw-surface: #ffffff;
+  --mw-surface-2: #fafafa;
+  --mw-surface-3: #fdfdfd;
+  --mw-border: #f0f0f3;
+  --mw-border-soft: #f5f5f7;
+  --mw-border-strong: #c0c0c2;
+  --mw-text: #171717;
+  --mw-text-strong: #141414;
+  --mw-text-muted: #999999;
+  --mw-text-soft: #b8b8b8;
+  --mw-accent: #000000;
+  --mw-accent-2: #000000;
+  --mw-on-accent: #ffffff;
+  --mw-success: #16a34a;
+  --mw-danger: #eb8e90;
+  --mw-warning: #ab6400;
+  --mw-radius: 12px;
+  --mw-border-w: 1px;
+  --mw-font: 'Inter', 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 2px 8px -2px rgb(0 0 0 / 0.12);
+  --mw-shadow-hover: 0 4px 16px -4px rgb(0 0 0 / 0.18);
+}

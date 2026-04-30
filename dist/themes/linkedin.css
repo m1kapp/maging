@@ -1,0 +1,27 @@
+/*! magicwiget theme: linkedin */
+[data-theme="linkedin"] {
+  --mw-bg: #f3f2ef;
+  --mw-surface: #ffffff;
+  --mw-surface-2: #eef3f8;
+  --mw-surface-3: #f1f3f4;
+  --mw-border: #e0e0e0;
+  --mw-border-soft: #e9e9e9;
+  --mw-border-strong: #b3b3b3;
+  --mw-text: #000000;
+  --mw-text-strong: #000000;
+  --mw-text-muted: #666666;
+  --mw-text-soft: #949494;
+  --mw-accent: #0a66c2;
+  --mw-accent-2: #378fe9;
+  --mw-on-accent: #ffffff;
+  --mw-success: #057642;
+  --mw-danger: #cc1016;
+  --mw-warning: #e7a33e;
+  --mw-radius: 8px;
+  --mw-border-w: 1px;
+  --mw-font: 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 0 0 1px rgb(0 0 0 / 0.04);
+  --mw-shadow-hover: 0 4px 16px -4px rgb(10 102 194 / 0.18);
+}

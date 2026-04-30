@@ -1,0 +1,27 @@
+/*! magicwiget theme: morningmate */
+[data-theme="morningmate"] {
+  --mw-bg: #fef8ff;
+  --mw-surface: #ffffff;
+  --mw-surface-2: #f5edf6;
+  --mw-surface-3: #faf3fb;
+  --mw-border: #e0cce8;
+  --mw-border-soft: #e9dbef;
+  --mw-border-strong: #b3a3ba;
+  --mw-text: #520060;
+  --mw-text-strong: #460052;
+  --mw-text-muted: #876e8a;
+  --mw-text-soft: #ab9aad;
+  --mw-accent: #9f00ba;
+  --mw-accent-2: #ff7a00;
+  --mw-on-accent: #ffffff;
+  --mw-success: #57ae00;
+  --mw-danger: #ff3d00;
+  --mw-warning: #ffc700;
+  --mw-radius: 6px;
+  --mw-border-w: 1px;
+  --mw-font: 'Poppins', 'Noto Sans KR', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-display-font: 'Poppins', 'Noto Sans KR', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 2px 8px -2px rgb(159 0 186 / 0.1);
+  --mw-shadow-hover: 0 4px 16px -4px rgb(159 0 186 / 0.18);
+}

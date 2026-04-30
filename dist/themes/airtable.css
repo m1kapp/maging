@@ -1,0 +1,27 @@
+/*! magicwiget theme: airtable — auto-imported from DESIGN.md | MIT */
+[data-theme="airtable"] {
+  --mw-bg: #ffffff;
+  --mw-surface: #ffffff;
+  --mw-surface-2: #f8fafc;
+  --mw-surface-3: #fcfdfe;
+  --mw-border: #dddddd;
+  --mw-border-soft: #e7e7e7;
+  --mw-border-strong: #b1b1b1;
+  --mw-text: #181d26;
+  --mw-text-strong: #141920;
+  --mw-text-muted: #41454d;
+  --mw-text-soft: #7a7d82;
+  --mw-accent: #181d26;
+  --mw-accent-2: #11141b;
+  --mw-on-accent: #ffffff;
+  --mw-success: #006400;
+  --mw-danger: #ff3b30;
+  --mw-warning: #f5a520;
+  --mw-radius: 12px;
+  --mw-border-w: 1px;
+  --mw-font: 'not', 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-display-font: 'Inter Display', 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 2px 8px -2px rgb(24 29 38 / 0.12);
+  --mw-shadow-hover: 0 4px 16px -4px rgb(24 29 38 / 0.18);
+}

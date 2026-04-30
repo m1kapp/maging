@@ -1,0 +1,27 @@
+/*! magicwiget theme: airbnb */
+[data-theme="airbnb"] {
+  --mw-bg: #ffffff;
+  --mw-surface: #ffffff;
+  --mw-surface-2: #f7f7f7;
+  --mw-surface-3: #fbfbfb;
+  --mw-border: #dddddd;
+  --mw-border-soft: #e7e7e7;
+  --mw-border-strong: #b1b1b1;
+  --mw-text: #222222;
+  --mw-text-strong: #1d1d1d;
+  --mw-text-muted: #717171;
+  --mw-text-soft: #9c9c9c;
+  --mw-accent: #ff5a5f;
+  --mw-accent-2: #00a699;
+  --mw-on-accent: #ffffff;
+  --mw-success: #008489;
+  --mw-danger: #c13515;
+  --mw-warning: #fc642d;
+  --mw-radius: 12px;
+  --mw-border-w: 1px;
+  --mw-font: 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 6px 20px -6px rgb(255 90 95 / 0.14);
+  --mw-shadow-hover: 0 4px 16px -4px rgb(255 90 95 / 0.18);
+}

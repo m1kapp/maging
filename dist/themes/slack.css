@@ -1,0 +1,27 @@
+/*! magicwiget theme: slack */
+[data-theme="slack"] {
+  --mw-bg: #3f0e40;
+  --mw-surface: #4a154b;
+  --mw-surface-2: #350d36;
+  --mw-surface-3: #3a0e3b;
+  --mw-border: #5c2d5d;
+  --mw-border-soft: #452246;
+  --mw-border-strong: #856286;
+  --mw-text: #f8f8f8;
+  --mw-text-strong: #f9f9f9;
+  --mw-text-muted: #bcabbc;
+  --mw-text-soft: #8d808d;
+  --mw-accent: #ecb22e;
+  --mw-accent-2: #36c5f0;
+  --mw-on-accent: #3f0e40;
+  --mw-success: #2eb67d;
+  --mw-danger: #e01e5a;
+  --mw-warning: #ecb22e;
+  --mw-radius: 6px;
+  --mw-border-w: 1px;
+  --mw-font: 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 4px 14px -4px rgb(63 14 64 / 0.3);
+  --mw-shadow-hover: 0 4px 16px -4px rgb(0 0 0 / 0.3);
+}

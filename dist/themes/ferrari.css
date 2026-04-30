@@ -1,0 +1,27 @@
+/*! magicwiget theme: ferrari — auto-imported from DESIGN.md | MIT */
+[data-theme="ferrari"] {
+  --mw-bg: #181818;
+  --mw-surface: #303030;
+  --mw-surface-2: #2a2a2a;
+  --mw-surface-3: #212121;
+  --mw-border: #303030;
+  --mw-border-soft: #242424;
+  --mw-border-strong: #646464;
+  --mw-text: #ffffff;
+  --mw-text-strong: #ffffff;
+  --mw-text-muted: #666666;
+  --mw-text-soft: #4d4d4d;
+  --mw-accent: #da291c;
+  --mw-accent-2: #e56960;
+  --mw-on-accent: #ffffff;
+  --mw-success: #03904a;
+  --mw-danger: #ff3b30;
+  --mw-warning: #f13a2c;
+  --mw-radius: 8px;
+  --mw-border-w: 1px;
+  --mw-font: 'FerrariSans', 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-display-font: 'FerrariSans', 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 2px 8px -2px rgb(0 0 0 / 0.3);
+  --mw-shadow-hover: 0 4px 16px -4px rgb(0 0 0 / 0.4);
+}

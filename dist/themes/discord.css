@@ -1,0 +1,27 @@
+/*! magicwiget theme: discord */
+[data-theme="discord"] {
+  --mw-bg: #313338;
+  --mw-surface: #2b2d31;
+  --mw-surface-2: #1e1f22;
+  --mw-surface-3: #28292d;
+  --mw-border: #3f4147;
+  --mw-border-soft: #2f3135;
+  --mw-border-strong: #6f7175;
+  --mw-text: #f2f3f5;
+  --mw-text-strong: #f3f4f6;
+  --mw-text-muted: #b5bac1;
+  --mw-text-soft: #888c91;
+  --mw-accent: #5865f2;
+  --mw-accent-2: #eb459e;
+  --mw-on-accent: #ffffff;
+  --mw-success: #23a55a;
+  --mw-danger: #f23f42;
+  --mw-warning: #f0b232;
+  --mw-radius: 4px;
+  --mw-border-w: 1px;
+  --mw-font: 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 4px 12px -4px rgb(88 101 242 / 0.18);
+  --mw-shadow-hover: 0 4px 16px -4px rgb(0 0 0 / 0.3);
+}

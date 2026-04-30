@@ -1,0 +1,27 @@
+/*! magicwiget theme: spotify */
+[data-theme="spotify"] {
+  --mw-bg: #121212;
+  --mw-surface: #181818;
+  --mw-surface-2: #282828;
+  --mw-surface-3: #1d1d1d;
+  --mw-border: #3e3e3e;
+  --mw-border-soft: #2f2f2f;
+  --mw-border-strong: #6e6e6e;
+  --mw-text: #ffffff;
+  --mw-text-strong: #ffffff;
+  --mw-text-muted: #b3b3b3;
+  --mw-text-soft: #868686;
+  --mw-accent: #1db954;
+  --mw-accent-2: #1ed760;
+  --mw-on-accent: #000000;
+  --mw-success: #1db954;
+  --mw-danger: #e22134;
+  --mw-warning: #ffc83d;
+  --mw-radius: 8px;
+  --mw-border-w: 1px;
+  --mw-font: 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-display-font: 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 4px 12px -4px rgb(29 185 84 / 0.15);
+  --mw-shadow-hover: 0 4px 16px -4px rgb(0 0 0 / 0.3);
+}

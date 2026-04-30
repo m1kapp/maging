@@ -1,0 +1,27 @@
+/*! magicwiget theme: composio — auto-imported from DESIGN.md | MIT */
+[data-theme="composio"] {
+  --mw-bg: #0f0f0f;
+  --mw-surface: #181818;
+  --mw-surface-2: #222222;
+  --mw-surface-3: #191919;
+  --mw-border: #222222;
+  --mw-border-soft: #1a1a1a;
+  --mw-border-strong: #595959;
+  --mw-text: #ffffff;
+  --mw-text-strong: #ffffff;
+  --mw-text-muted: #888888;
+  --mw-text-soft: #666666;
+  --mw-accent: #0007cd;
+  --mw-accent-2: #4d51dc;
+  --mw-on-accent: #ffffff;
+  --mw-success: #33d17a;
+  --mw-danger: #ff4d4d;
+  --mw-warning: #f5a520;
+  --mw-radius: 12px;
+  --mw-border-w: 1px;
+  --mw-font: 'abcDiatype', 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-display-font: 'abcDiatype', 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 2px 8px -2px rgb(0 0 0 / 0.3);
+  --mw-shadow-hover: 0 4px 16px -4px rgb(0 0 0 / 0.4);
+}

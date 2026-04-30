@@ -1,0 +1,27 @@
+/*! magicwiget theme: bmw — auto-imported from DESIGN.md | MIT */
+[data-theme="bmw"] {
+  --mw-bg: #ffffff;
+  --mw-surface: #fafafa;
+  --mw-surface-2: #f7f7f7;
+  --mw-surface-3: #fbfbfb;
+  --mw-border: #e6e6e6;
+  --mw-border-soft: #eeeeee;
+  --mw-border-strong: #b8b8b8;
+  --mw-text: #262626;
+  --mw-text-strong: #202020;
+  --mw-text-muted: #6b6b6b;
+  --mw-text-soft: #979797;
+  --mw-accent: #1c69d4;
+  --mw-accent-2: #144a94;
+  --mw-on-accent: #ffffff;
+  --mw-success: #22c55e;
+  --mw-danger: #dc2626;
+  --mw-warning: #f59e0b;
+  --mw-radius: 12px;
+  --mw-border-w: 1px;
+  --mw-font: 'BMW Type Next Latin', 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-display-font: 'BMW Type Next Latin', 'Inter', 'Pretendard Variable', 'Tossface', system-ui, sans-serif;
+  --mw-mono-font: 'JetBrains Mono', ui-monospace, monospace;
+  --mw-shadow: 0 2px 8px -2px rgb(28 105 212 / 0.12);
+  --mw-shadow-hover: 0 4px 16px -4px rgb(28 105 212 / 0.18);
+}
