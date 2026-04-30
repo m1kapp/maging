@@ -340,6 +340,8 @@ window.addEventListener('maging:ready', () => {
 ### Generation Rules
 
 1. **1페이지 = 1 KPI 1주제.**
+   - 슬라이드 헤더(`data-label` + `data-bu` + `data-team`)에 이미 KPI명·팀이 표시됨.
+   - `pageHeader`에는 **제목(title) + 날짜(meta)만**. kicker·subtitle로 헤더 내용을 중복하지 마라.
 2. `<html data-theme="…">` + `<body class="mw-themed">` + theme 선택.
 3. **단위 필수** — 명/건/개/원/% 모두. 금액은 `Maging.fmt.krw`.
 4. **KPI label에 목표 포함** — `'3월 신규 · 목표 1.42억원'`.
