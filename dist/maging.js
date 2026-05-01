@@ -94,6 +94,15 @@
     return isNaN(n) ? null : n;
   }
 
+  /** Auto-detect HTML in value strings — prevents escapeHTML from mangling fmt.krw() output */
+  function _autoValueHTML(data) {
+    if (!data.valueHTML && typeof data.value === 'string' && data.value.indexOf('<') >= 0) {
+      data.valueHTML = true;
+    }
+  }
+  /** Render value: pass through HTML, escape plain text */
+  function _valOrEsc(v) { return (typeof v === 'string' && v.indexOf('<') >= 0) ? v : escapeHTML(v || ''); }
+
   /**
    * Auto-derive value/delta from sparkline or series data.
    * - If value is empty and sparkline exists → value = last element
@@ -239,6 +248,7 @@
     var _vfmt = typeof data.valueFormatter === 'function' ? data.valueFormatter
               : data.unit === '원' ? fmt.krw : null;
     _autoDerive(data, { arr: data.sparkline, valueFmt: _vfmt });
+    _autoValueHTML(data);
     var chart = null;
     var ro = null;
 
@@ -261,7 +271,7 @@
       el.innerHTML =
         '<div class="mw-kpi__label">' + iconHTML + '<span>' + escapeHTML(data.label) + '</span></div>' +
         '<div class="mw-kpi__row">' +
-          '<div class="mw-kpi__value">' + (data.valueHTML ? data.value : escapeHTML(data.value)) + '</div>' +
+          '<div class="mw-kpi__value">' + (data.valueHTML || (typeof data.value === 'string' && data.value.indexOf('<') >= 0) ? data.value : escapeHTML(data.value)) + '</div>' +
           deltaHTML +
         '</div>' +
         (showSpark ? '<div class="mw-kpi__spark"></div>' : '');
@@ -1005,6 +1015,7 @@
     var data = Object.assign({
       kicker: '', value: '', tagline: '', stats: [],
     }, config || {});
+    _autoValueHTML(data);
 
     function render() {
       el.classList.add('mw-card', 'mw-hero');
@@ -1016,14 +1027,14 @@
           statsHTML +=
             '<div class="mw-hero__stat">' +
               '<div class="mw-hero__stat-label">' + escapeHTML(s.label) + '</div>' +
-              '<div class="mw-hero__stat-value">' + escapeHTML(s.value) + '</div>' +
+              '<div class="mw-hero__stat-value">' + _valOrEsc(s.value) + '</div>' +
             '</div>';
         });
         statsHTML += '</div>';
       }
       el.innerHTML =
         '<div class="mw-hero__kicker">' + escapeHTML(data.kicker) + '</div>' +
-        '<div class="mw-hero__value">' + escapeHTML(data.value) + '</div>' +
+        '<div class="mw-hero__value">' + (data.valueHTML ? data.value : escapeHTML(data.value)) + '</div>' +
         (data.tagline ? '<div class="mw-hero__tagline">' + escapeHTML(data.tagline) + '</div>' : '') +
         statsHTML;
     }
@@ -1055,6 +1066,7 @@
       arr: seriesData,
       valueFmt: typeof data.yFormatter === 'function' ? data.yFormatter : null,
     });
+    _autoValueHTML(data);
     var chart = null;
     var ro = null;
 
@@ -1090,7 +1102,7 @@
             '</div>' +
             legendHTML +
           '</div>' +
-          '<div class="mw-mchrt__value">' + (data.valueHTML ? data.value : escapeHTML(data.value)) + '</div>' +
+          '<div class="mw-mchrt__value">' + (data.valueHTML || (typeof data.value === 'string' && data.value.indexOf('<') >= 0) ? data.value : escapeHTML(data.value)) + '</div>' +
           '<div class="mw-mchrt__meta">' +
             (deltaHTML || '') +
             (data.context ? '<span class="mw-mchrt__context">' + escapeHTML(data.context) + '</span>' : '') +
@@ -1403,14 +1415,14 @@
       }
       var subItems = data.items.map(function (it) {
         return '<div class="mw-mstack__sub">' +
-          '<div class="mw-mstack__sub-val">' + escapeHTML(it.value) + '</div>' +
+          '<div class="mw-mstack__sub-val">' + _valOrEsc(it.value) + '</div>' +
           '<div class="mw-mstack__sub-lbl">' + escapeHTML(it.label) + '</div>' +
         '</div>';
       }).join('');
       el.innerHTML =
         (data.title ? '<div class="mw-mstack__title">' + escapeHTML(data.title) + '</div>' : '') +
         '<div class="mw-mstack__main-row">' +
-          '<div class="mw-mstack__main-val">' + escapeHTML(main.value || '') + '</div>' +
+          '<div class="mw-mstack__main-val">' + _valOrEsc(main.value) + '</div>' +
           mainDelta +
         '</div>' +
         '<div class="mw-mstack__main-lbl">' + escapeHTML(main.label || '') + '</div>' +
@@ -1500,12 +1512,12 @@
         '<div class="mw-compare__row">' +
           '<div class="mw-compare__side">' +
             '<div class="mw-compare__lbl">' + escapeHTML(data.left.label || '') + '</div>' +
-            '<div class="mw-compare__val">' + escapeHTML(data.left.value || '') + '</div>' +
+            '<div class="mw-compare__val">' + _valOrEsc(data.left.value) + '</div>' +
           '</div>' +
           '<div class="mw-compare__sep">→</div>' +
           '<div class="mw-compare__side mw-compare__side--current">' +
             '<div class="mw-compare__lbl">' + escapeHTML(data.right.label || '') + '</div>' +
-            '<div class="mw-compare__val">' + escapeHTML(data.right.value || '') + '</div>' +
+            '<div class="mw-compare__val">' + _valOrEsc(data.right.value) + '</div>' +
           '</div>' +
         '</div>' +
         deltaHTML;
@@ -2079,7 +2091,7 @@
           '<div class="mw-sparklist__info">' +
             '<div class="mw-sparklist__label">' + escapeHTML(it.label || '') + '</div>' +
             '<div class="mw-sparklist__meta">' +
-              '<span class="mw-sparklist__value">' + escapeHTML(it.value || '') + '</span>' +
+              '<span class="mw-sparklist__value">' + _valOrEsc(it.value) + '</span>' +
               deltaHTML +
             '</div>' +
           '</div>' +
@@ -2267,7 +2279,8 @@
       el.classList.add('mw-alert');
       el.classList.add('mw-alert--' + data.type);
       var icon = data.icon != null ? data.icon : (icons[data.type] || 'ⓘ');
-      var msgHTML = data.message ? '<span class="mw-alert__msg">' + escapeHTML(data.message) + '</span>' : '';
+      var msgRaw = data.message || '';
+      var msgHTML = msgRaw ? '<span class="mw-alert__msg">' + (typeof msgRaw === 'string' && msgRaw.indexOf('<') >= 0 ? msgRaw : escapeHTML(msgRaw)) + '</span>' : '';
       var actionHTML = '';
       if (data.action) {
         var href = data.action.href ? ' href="' + escapeHTML(data.action.href) + '"' : ' href="#"';

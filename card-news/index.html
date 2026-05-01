@@ -16,31 +16,17 @@
 
     <main style="display:flex; align-items:center; justify-content:center; min-height:calc(100vh - 60px); padding:2rem 1rem;">
       <div id="cards-wrap" style="max-width:540px; width:100%;">
-
-        <!-- ═══ Card 1: Cover ═══ -->
         <section class="news-card" id="card-cover" data-active></section>
-
-        <!-- ═══ Card 2: Body 01 ═══ -->
+        <section class="news-card" id="card-stat"></section>
         <section class="news-card" id="card-01"></section>
-
-        <!-- ═══ Card 3: Body 02 ═══ -->
         <section class="news-card" id="card-02"></section>
-
-        <!-- ═══ Card 4: Body 03 ═══ -->
-        <section class="news-card" id="card-03"></section>
-
-        <!-- ═══ Card 5: Body 04 ═══ -->
-        <section class="news-card" id="card-04"></section>
-
-        <!-- ═══ Card 6: Data (Chart) ═══ -->
+        <section class="news-card" id="card-quote"></section>
+        <section class="news-card" id="card-compare"></section>
         <section class="news-card" id="card-data"></section>
-
-        <!-- ═══ Card 7: Numbered ═══ -->
-        <section class="news-card" id="card-top3"></section>
-
-        <!-- ═══ Card 8: CTA ═══ -->
+        <section class="news-card" id="card-step"></section>
+        <section class="news-card" id="card-checklist"></section>
+        <section class="news-card" id="card-review"></section>
         <section class="news-card" id="card-cta"></section>
-
       </div>
     </main>
 
@@ -52,75 +38,122 @@
 
       window.NEWS_MOUNT = {
 
+        // 1. 커버 — number-hero 스타일 (리스티클)
         'card-cover': () => Maging.coverCard('#card-cover', {
-          icon: '🚀',
-          tag: 'AI 마케팅 트렌드',
-          title: 'AI가 바꿀\n마케팅의 미래',
-          subtitle: '마케터라면 반드시 알아야 할 5가지 변화',
+          tag: 'AI 마케팅 가이드',
+          title: 'AI 마케팅\n실전 도입법',
+          subtitle: '지금 바로 적용할 수 있는 실무 가이드',
           brand: BRAND,
-          style: 'gradient',
+          style: 'number-hero',
+          number: 5,
         }),
 
-        'card-01': () => Maging.bodyCard('#card-01', {
-          num: '01',
-          icon: '🎯',
-          heading: '초개인화 콘텐츠 자동 생성',
-          text: 'AI가 고객 세그먼트별 맞춤 콘텐츠를 실시간으로 만들어줍니다. 수천 개의 변형을 한 번에 테스트할 수 있어요.',
-          brand: BRAND,
-        }),
-
-        'card-02': () => Maging.bodyCard('#card-02', {
-          num: '02',
-          icon: '📊',
-          heading: '예측 분석으로 선제 대응',
-          text: '고객 이탈 예측, 구매 확률 스코어링, 최적 타이밍 추천까지. 데이터 기반 의사결정이 자동화됩니다.',
+        // 2. 임팩트 수치 — statCard로 후킹
+        'card-stat': () => Maging.statCard('#card-stat', {
+          label: 'GLOBAL ADOPTION',
+          value: '73<span class="mw-unit">%</span>',
+          context: '글로벌 기업의 73%가 이미 AI 마케팅을 도입했습니다',
           brand: BRAND,
         }),
 
-        'card-03': () => Maging.bodyCard('#card-03', {
-          num: '03',
-          icon: '💬',
-          heading: 'AI 챗봇이 영업을 대신한다',
-          text: '24시간 고객 응대는 물론, 리드 퀄리파잉부터 미팅 예약까지. 영업팀의 시간을 고가치 활동에 집중시킵니다.',
+        // 3. 본문 — 스텝 시작
+        'card-01': () => Maging.stepCard('#card-01', {
+          step: '01',
+          heading: '고객 세그먼트 분석',
+          text: '기존 고객 데이터에서 행동 패턴을 추출하고 클러스터링합니다. AI가 수천 개의 변수를 분석해 최적 세그먼트를 찾아줍니다.',
+          tip: '최소 3개월 이상의 데이터로 시작하세요',
           brand: BRAND,
         }),
 
-        'card-04': () => Maging.bodyCard('#card-04', {
-          num: '04',
-          icon: '🎨',
-          heading: '크리에이티브 제작 비용 90% 절감',
-          text: '배너, 카드뉴스, 영상 썸네일까지 AI가 초안을 만들고, 사람은 감수만. 제작 사이클이 주 단위에서 시간 단위로.',
+        // 4. 스텝 계속
+        'card-02': () => Maging.stepCard('#card-02', {
+          step: '02',
+          heading: '개인화 콘텐츠 자동 생성',
+          text: '세그먼트별 맞춤 메시지를 AI가 실시간으로 생성합니다. 이메일, 푸시, 광고 카피까지 한 번에.',
+          tip: 'A/B 테스트도 AI가 자동으로 최적화합니다',
           brand: BRAND,
         }),
 
+        // 5. 리듬 변화 — 인용문으로 브레이크
+        'card-quote': () => Maging.quoteCard('#card-quote', {
+          quote: '마케팅의 미래는 AI가 만들고\n사람이 방향을 잡는 것이다.',
+          name: '필립 코틀러',
+          role: '마케팅의 아버지',
+          brand: BRAND,
+        }),
+
+        // 6. 비교 카드 — Do/Don't
+        'card-compare': () => Maging.comparisonCard('#card-compare', {
+          heading: 'AI 마케팅 Do & Don\'t',
+          leftLabel: 'Don\'t',
+          rightLabel: 'Do',
+          left: [
+            '감에 의존한 타겟팅',
+            '일괄 메시지 발송',
+            '수동 A/B 테스트',
+          ],
+          right: [
+            '데이터 기반 세그먼트',
+            '개인화 콘텐츠',
+            'AI 자동 최적화',
+          ],
+          brand: BRAND,
+        }),
+
+        // 7. 데이터 시각화
         'card-data': () => Maging.dataCard('#card-data', {
-          label: 'GLOBAL TREND',
-          title: 'AI 마케팅 도입률 추이',
+          label: 'ROI IMPACT',
+          title: 'AI 마케팅 도입 효과',
           widget: 'barChart',
           widgetConfig: {
-            categories: ['2022', '2023', '2024', '2025', '2026(E)'],
-            series: [{ name: '도입률 %', data: [18, 31, 47, 63, 78] }],
-            yFormatter: v => v + '%',
+            items: [
+              { label: '콘텐츠 생산성', value: 340 },
+              { label: 'CAC 절감', value: 42 },
+              { label: '전환율 상승', value: 28 },
+              { label: 'LTV 증가', value: 35 },
+            ],
+            yFormatter: v => '+' + v + '%',
+            showLabels: true,
           },
           brand: BRAND,
         }),
 
-        'card-top3': () => Maging.numberedCard('#card-top3', {
-          heading: 'AI 마케팅 필수 도구 TOP 3',
+        // 8. 스텝 마무리
+        'card-step': () => Maging.stepCard('#card-step', {
+          step: '03',
+          heading: '성과 측정 & 최적화',
+          text: 'AI가 실시간으로 캠페인 성과를 분석하고, 예산 배분부터 메시지 튜닝까지 자동으로 최적화합니다.',
+          tip: '주간 리뷰로 AI 추천 vs 실제 성과를 비교하세요',
+          brand: BRAND,
+        }),
+
+        // 9. 체크리스트 — 저장 유도
+        'card-checklist': () => Maging.checklistCard('#card-checklist', {
+          heading: '도입 전 체크리스트 ✓',
           items: [
-            { rank: '1', title: 'ChatGPT / Claude', desc: '콘텐츠 초안, 카피라이팅, 번역', icon: '🤖' },
-            { rank: '2', title: 'Midjourney / DALL-E', desc: '광고 비주얼, 썸네일, 배너 생성', icon: '🖼️' },
-            { rank: '3', title: 'HubSpot AI', desc: '리드 스코어링, 이메일 최적화, 예측 분석', icon: '📈' },
+            { text: '고객 데이터 3개월 이상 확보', done: true },
+            { text: '핵심 KPI 3개 이내로 설정', done: true },
+            { text: 'AI 도구 비교·선정 완료', done: false },
+            { text: '파일럿 캠페인 1개 설계', done: false },
+            { text: '성과 측정 대시보드 구축', done: false },
           ],
           brand: BRAND,
         }),
 
+        // 10. 고객 후기 — 소셜 프루프
+        'card-review': () => Maging.testimonialCard('#card-review', {
+          quote: '도입 3개월 만에 마케팅 비용 40% 절감, 전환율은 2배 상승했습니다.',
+          name: '이수진',
+          role: '마케팅 팀장, ABC Corp',
+          stars: 5,
+          brand: BRAND,
+        }),
+
+        // 11. CTA
         'card-cta': () => Maging.ctaCard('#card-cta', {
-          heading: '더 많은 AI 마케팅 인사이트가\n궁금하다면?',
-          subtext: '팔로우하고 매주 새로운 트렌드를 받아보세요',
-          ctas: [
-            { label: '팔로우하기', primary: true },
-          ],
+          heading: '우리 팀도\nAI 마케팅 시작하기',
+          subtext: '팔로우하고 매주 실전 가이드를 받아보세요',
+          ctas: [{ label: '팔로우하기', primary: true }],
           handles: [
             { platform: 'Instagram', handle: '@maging.page' },
             { platform: 'LinkedIn', handle: 'maging' },

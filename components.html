@@ -211,6 +211,12 @@ var WIDGETS = {
   bodyCard:        { mode: 'cardnews', cat: 'Card News', tall: true },
   dataCard:        { mode: 'cardnews', cat: 'Card News', tall: true },
   numberedCard:    { mode: 'cardnews', cat: 'Card News', tall: true },
+  quoteCard:       { mode: 'cardnews', cat: 'Card News', tall: true },
+  statCard:        { mode: 'cardnews', cat: 'Card News', tall: true },
+  comparisonCard:  { mode: 'cardnews', cat: 'Card News', tall: true },
+  checklistCard:   { mode: 'cardnews', cat: 'Card News', tall: true },
+  stepCard:        { mode: 'cardnews', cat: 'Card News', tall: true },
+  testimonialCard: { mode: 'cardnews', cat: 'Card News', tall: true },
   ctaCard:         { mode: 'cardnews', cat: 'Card News', tall: true },
 };
 
@@ -299,6 +305,12 @@ var SAMPLES = {
   bodyCard:      function(el) { Maging.bodyCard(el, { num: '01', icon: '🎯', heading: '초개인화 콘텐츠 자동 생성', text: 'AI가 고객 세그먼트별로 맞춤 콘텐츠를 실시간으로 만들어줍니다.', brand: '@maging.page' }); },
   dataCard:      function(el) { Maging.dataCard(el, { label: 'GLOBAL TREND', title: 'AI 마케팅 도입률 추이', widget: 'barChart', widgetConfig: { items: [{label:'2022',value:18},{label:'2023',value:31},{label:'2024',value:47},{label:'2025',value:63},{label:'2026',value:78}], yFormatter: function(v){return v+'%';} }, brand: '@maging.page' }); },
   numberedCard:  function(el) { Maging.numberedCard(el, { heading: 'AI 마케팅 도구 TOP 3', items: [{ rank: '1', title: 'ChatGPT / Claude', desc: '콘텐츠 초안, 카피라이팅', icon: '🤖' },{ rank: '2', title: 'Midjourney / DALL-E', desc: '비주얼 생성', icon: '🖼️' },{ rank: '3', title: 'HubSpot AI', desc: '리드 스코어링', icon: '📈' }], brand: '@maging.page' }); },
+  quoteCard:     function(el) { Maging.quoteCard(el, { quote: '콘텐츠의 미래는 AI가 만들고 사람이 다듬는 것이다.', name: '김민수', role: 'CMO, TechCorp', brand: '@maging.page' }); },
+  statCard:      function(el) { Maging.statCard(el, { label: 'GLOBAL ADOPTION', value: '73<span class="mw-unit">%</span>', context: '글로벌 기업의 73%가 AI 마케팅을 도입했습니다', brand: '@maging.page' }); },
+  comparisonCard: function(el) { Maging.comparisonCard(el, { heading: 'AI 마케팅 Do & Don\'t', leftLabel: 'Don\'t', rightLabel: 'Do', left: ['감에 의존한 타겟팅', '일괄 메시지 발송', '수동 A/B 테스트'], right: ['데이터 기반 세그먼트', '개인화 콘텐츠', '자동 최적화'], brand: '@maging.page' }); },
+  checklistCard: function(el) { Maging.checklistCard(el, { heading: 'AI 마케팅 시작 전 체크리스트', items: [{ text: '고객 데이터 정리 완료', done: true },{ text: '핵심 KPI 설정', done: true },{ text: 'AI 도구 선정', done: false },{ text: '파일럿 캠페인 설계', done: false }], brand: '@maging.page' }); },
+  stepCard:      function(el) { Maging.stepCard(el, { step: '01', heading: '고객 세그먼트 분석', text: '기존 고객 데이터에서 행동 패턴을 추출하고 클러스터링합니다.', tip: '최소 3개월 이상의 데이터를 사용하세요', brand: '@maging.page' }); },
+  testimonialCard: function(el) { Maging.testimonialCard(el, { quote: '도입 3개월 만에 마케팅 비용이 40% 절감됐습니다.', name: '이수진', role: '마케팅 팀장, ABC Corp', stars: 5, brand: '@maging.page' }); },
   ctaCard:       function(el) { Maging.ctaCard(el, { heading: '더 많은 AI 마케팅 팁이\n궁금하다면?', subtext: '팔로우하고 매주 새로운 트렌드를 받아보세요', ctas: [{ label: '팔로우하기', primary: true }], handles: [{ platform: 'Instagram', handle: '@maging.page' }], brand: '@maging.page' }); },
 };
 
@@ -313,7 +325,7 @@ var MODES = [
   { key: 'core',    label: '대시보드',  desc: '대시보드·운영 모니터링에 공통으로 쓰이는 기본 위젯입니다. Metrics, Charts, Lists 등 모든 모드의 기반.' },
   { key: 'weekly',  label: '주간보고',  desc: '주간보고·정기보고서 전용 위젯입니다. Section Cover, Insight Card 등 보고서 특화 컴포넌트.' },
   { key: 'landing', label: '랜딩페이지', desc: '마케팅 랜딩페이지 전용 위젯입니다. Hero, Pricing, Testimonial 등 전환 최적화 컴포넌트.' },
-  { key: 'cardnews', label: '카드뉴스', desc: '인스타그램·링크드인 캐러셀 카드뉴스 전용 위젯입니다. Cover, Body, Data, Numbered, CTA 5종.' },
+  { key: 'cardnews', label: '카드뉴스', desc: '인스타그램·링크드인 캐러셀 카드뉴스 전용 위젯 11종. Cover(6스타일), Body, Data, Quote, Stat, Comparison, Checklist, Step, Testimonial, CTA.' },
 ];
 
 // Build mode tabs
@@ -370,6 +382,12 @@ var LANDING_META = {
   bodyCard: { title: 'Body Card', desc: '본문 카드. 1카드 1메시지 원칙. 넘버링 + 아이콘.' },
   dataCard: { title: 'Data Card', desc: '데이터 시각화 카드. 기존 maging 차트 위젯 내장.' },
   numberedCard: { title: 'Numbered Card', desc: '순위/리스트 카드. TOP 3~5 아이템 나열.' },
+  quoteCard: { title: 'Quote Card', desc: '인용문 + 출처. 전문가 코멘트, 임팩트 문장, 고객 후기.' },
+  statCard: { title: 'Stat Card', desc: '대형 수치 임팩트. 숫자 자체가 메시지일 때.' },
+  comparisonCard: { title: 'Comparison Card', desc: '좌우 비교. Do/Don\'t, Before/After, Myth/Fact.' },
+  checklistCard: { title: 'Checklist Card', desc: '체크리스트. 저장 유도에 효과적.' },
+  stepCard: { title: 'Step Card', desc: '순서 스텝. How-to 튜토리얼, 프로세스 설명.' },
+  testimonialCard: { title: 'Testimonial Card', desc: '고객 후기 + 별점 + 아바타. 소셜 프루프.' },
   ctaCard: { title: 'CTA Card', desc: '행동 유도 마지막 장. 팔로우 · 링크 · DM.' },
 };
 

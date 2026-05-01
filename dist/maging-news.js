@@ -351,6 +351,301 @@
   body.news-presenter .mw-news-frame {
     max-width: none; border: none; border-radius: 0;
   }
+
+  /* ── Cover: bold-type ── */
+  .mw-news-cover--bold-type {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .mw-news-cover--bold-type .mw-news-cover__title {
+    font-size: clamp(2.8rem, 8cqi, 4.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+  .mw-news-cover--bold-type .mw-news-cover__subtitle {
+    font-size: clamp(0.85rem, 2cqi, 1rem);
+    max-width: 80%;
+    margin: 0 auto;
+  }
+
+  /* ── Cover: number-hero ── */
+  .mw-news-cover--number-hero {
+    position: relative;
+    justify-content: flex-end;
+  }
+  .mw-news-cover__bignumber {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -55%);
+    font-family: var(--mw-display-font, var(--mw-font));
+    font-size: clamp(10rem, 30cqi, 18rem);
+    font-weight: 700;
+    color: color-mix(in srgb, var(--mw-accent) 10%, transparent);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+  .mw-news-cover--number-hero .mw-news-cover__title {
+    position: relative; z-index: 1;
+  }
+  .mw-news-cover--number-hero .mw-news-cover__subtitle,
+  .mw-news-cover--number-hero .mw-news-cover__tag {
+    position: relative; z-index: 1;
+  }
+
+  /* ── Cover: framed ── */
+  .mw-news-cover--framed .mw-news-frame__inner {
+    border: 2px solid var(--mw-border);
+    border-radius: calc(var(--mw-radius) * 0.6);
+    margin: clamp(1rem, 4%, 2rem);
+    padding: clamp(1.5rem, 5%, 3rem);
+  }
+
+  /* ── Quote Card ── */
+  .mw-news-quote {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.25rem;
+    text-align: center;
+    align-items: center;
+  }
+  .mw-news-quote__mark {
+    font-size: clamp(3rem, 8cqi, 5rem);
+    line-height: 1;
+    color: var(--mw-accent);
+    opacity: 0.3;
+    font-family: Georgia, serif;
+  }
+  .mw-news-quote__text {
+    font-family: var(--mw-display-font, var(--mw-font));
+    font-size: clamp(1.2rem, 3.5cqi, 1.8rem);
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--mw-text);
+    max-width: 90%;
+  }
+  .mw-news-quote__source {
+    font-size: clamp(0.75rem, 2cqi, 0.9rem);
+    color: var(--mw-text-muted);
+  }
+  .mw-news-quote__source strong {
+    color: var(--mw-text);
+    font-weight: 600;
+  }
+
+  /* ── Stat Card ── */
+  .mw-news-stat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 0.75rem;
+  }
+  .mw-news-stat__label {
+    font-size: clamp(0.75rem, 1.8cqi, 0.9rem);
+    font-weight: 600;
+    color: var(--mw-text-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .mw-news-stat__value {
+    font-family: var(--mw-display-font, var(--mw-font));
+    font-size: clamp(4rem, 12cqi, 7rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--mw-text);
+  }
+  .mw-news-stat__value .mw-unit {
+    font-size: 0.4em; font-weight: 400; color: var(--mw-text-muted);
+  }
+  .mw-news-stat__context {
+    font-size: clamp(0.85rem, 2.2cqi, 1.05rem);
+    color: var(--mw-text-muted);
+    line-height: 1.6;
+    max-width: 80%;
+  }
+
+  /* ── Comparison Card ── */
+  .mw-news-compare {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .mw-news-compare__heading {
+    font-size: clamp(1rem, 2.5cqi, 1.3rem);
+    font-weight: 700;
+    color: var(--mw-text);
+    text-align: center;
+    letter-spacing: -0.01em;
+  }
+  .mw-news-compare__row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0.75rem;
+    align-items: stretch;
+  }
+  .mw-news-compare__side {
+    padding: 1.25rem;
+    border-radius: var(--mw-radius);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .mw-news-compare__side--left {
+    background: color-mix(in srgb, var(--mw-danger) 8%, var(--mw-surface-2));
+  }
+  .mw-news-compare__side--right {
+    background: color-mix(in srgb, var(--mw-success) 8%, var(--mw-surface-2));
+  }
+  .mw-news-compare__side-label {
+    font-size: clamp(0.7rem, 1.5cqi, 0.82rem);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .mw-news-compare__side--left .mw-news-compare__side-label { color: var(--mw-danger); }
+  .mw-news-compare__side--right .mw-news-compare__side-label { color: var(--mw-success); }
+  .mw-news-compare__item {
+    font-size: clamp(0.8rem, 2cqi, 0.95rem);
+    color: var(--mw-text);
+    line-height: 1.5;
+    padding: 0.25rem 0;
+  }
+  .mw-news-compare__vs {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 700; color: var(--mw-text-muted);
+  }
+
+  /* ── Checklist Card ── */
+  .mw-news-checklist {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .mw-news-checklist__heading {
+    font-size: clamp(1.1rem, 3cqi, 1.4rem);
+    font-weight: 700;
+    color: var(--mw-text);
+    letter-spacing: -0.01em;
+    margin-bottom: 0.25rem;
+  }
+  .mw-news-checklist__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--mw-border) 50%, transparent);
+  }
+  .mw-news-checklist__item:last-child { border-bottom: none; }
+  .mw-news-checklist__check {
+    flex-shrink: 0;
+    width: 1.25rem; height: 1.25rem;
+    border-radius: 4px;
+    border: 1.5px solid var(--mw-accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; color: #fff;
+    margin-top: 0.1rem;
+  }
+  .mw-news-checklist__check--done {
+    background: var(--mw-accent);
+  }
+  .mw-news-checklist__text {
+    font-size: clamp(0.85rem, 2.2cqi, 1.05rem);
+    color: var(--mw-text);
+    line-height: 1.5;
+  }
+
+  /* ── Step Card ── */
+  .mw-news-step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .mw-news-step__badge {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    width: 2.5rem; height: 2.5rem;
+    border-radius: 50%;
+    background: var(--mw-accent);
+    color: #fff;
+    font-family: var(--mw-display-font, var(--mw-font));
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .mw-news-step__heading {
+    font-size: clamp(1.4rem, 4cqi, 2rem);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    color: var(--mw-text);
+  }
+  .mw-news-step__text {
+    font-size: clamp(0.85rem, 2.2cqi, 1.05rem);
+    color: var(--mw-text-muted);
+    line-height: 1.7;
+  }
+  .mw-news-step__tip {
+    font-size: clamp(0.75rem, 1.8cqi, 0.88rem);
+    color: var(--mw-accent);
+    font-weight: 600;
+    padding: 0.5rem 0.75rem;
+    background: color-mix(in srgb, var(--mw-accent) 8%, transparent);
+    border-radius: var(--mw-radius);
+  }
+
+  /* ── Testimonial Card ── */
+  .mw-news-testimonial {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.25rem;
+  }
+  .mw-news-testimonial__stars {
+    display: flex; gap: 0.2rem;
+    color: var(--mw-accent);
+    font-size: 1rem;
+  }
+  .mw-news-testimonial__quote {
+    font-family: var(--mw-display-font, var(--mw-font));
+    font-size: clamp(1.1rem, 3cqi, 1.5rem);
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--mw-text);
+    font-style: italic;
+  }
+  .mw-news-testimonial__author {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .mw-news-testimonial__avatar {
+    width: 2.5rem; height: 2.5rem;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--mw-accent) 15%, var(--mw-surface-2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; font-weight: 700; color: var(--mw-accent);
+  }
+  .mw-news-testimonial__name {
+    font-size: clamp(0.85rem, 2cqi, 1rem);
+    font-weight: 600;
+    color: var(--mw-text);
+  }
+  .mw-news-testimonial__role {
+    font-size: clamp(0.72rem, 1.5cqi, 0.82rem);
+    color: var(--mw-text-muted);
+  }
 `;
   document.head.appendChild(_style);
 
@@ -388,17 +683,31 @@
    * coverCard — 표지 카드
    */
   function coverCard(sel, cfg) {
-    const { icon, title = '', subtitle, tag, brand, style = 'gradient' } = cfg;
+    const { icon, title = '', subtitle, tag, brand, style = 'gradient', number } = cfg;
     const gradientBg = style === 'gradient';
     const accentBlock = style === 'accent-block';
+    const isBoldType = style === 'bold-type';
+    const isNumberHero = style === 'number-hero';
+    const isFramed = style === 'framed';
     const iconClass = accentBlock ? 'mw-news-cover__icon mw-news-cover--accent-block' : 'mw-news-cover__icon';
+
+    const styleClass = isBoldType ? ' mw-news-cover--bold-type'
+                     : isNumberHero ? ' mw-news-cover--number-hero'
+                     : '';
+    const frameClass = isFramed ? ' mw-news-cover--framed' : '';
+
     const inner = [
+      isNumberHero && number ? `<div class="mw-news-cover__bignumber">${esc(String(number))}</div>` : '',
       tag ? `<div class="mw-news-cover__tag">${esc(tag)}</div>` : '',
-      icon ? `<div class="${iconClass}">${icon}</div>` : '',
+      (!isBoldType && !isNumberHero && icon) ? `<div class="${iconClass}">${icon}</div>` : '',
       `<div class="mw-news-cover__title">${esc(title)}</div>`,
       subtitle ? `<div class="mw-news-cover__subtitle">${esc(subtitle)}</div>` : '',
     ].filter(Boolean).join('\n');
-    return _frame(q(sel), { brand, innerClass: 'mw-news-cover', innerContent: inner, gradientBg });
+
+    const el = q(sel);
+    if (!el) return null;
+    if (isFramed) el.classList.add('mw-news-cover--framed');
+    return _frame(el, { brand, innerClass: 'mw-news-cover' + styleClass, innerContent: inner, gradientBg: gradientBg && !isFramed });
   }
 
   /**
@@ -477,6 +786,115 @@
       handlesHtml,
     ].filter(Boolean).join('\n');
     return _frame(q(sel), { brand, innerClass: 'mw-news-cta', innerContent: inner, gradientBg: false });
+  }
+
+  /**
+   * quoteCard — 인용문 카드
+   */
+  function quoteCard(sel, cfg) {
+    const { quote = '', source, name, role, brand } = cfg;
+    const sourceHtml = (name || source)
+      ? `<div class="mw-news-quote__source">${name ? '<strong>' + esc(name) + '</strong>' : ''}${role ? ' · ' + esc(role) : ''}${source && !name ? esc(source) : ''}</div>`
+      : '';
+    const inner = [
+      `<div class="mw-news-quote__mark">\u201C</div>`,
+      `<div class="mw-news-quote__text">${esc(quote)}</div>`,
+      sourceHtml,
+    ].filter(Boolean).join('\n');
+    return _frame(q(sel), { brand, innerClass: 'mw-news-quote', innerContent: inner, gradientBg: false });
+  }
+
+  /**
+   * statCard — 대형 수치 카드
+   */
+  function statCard(sel, cfg) {
+    const { label, value = '', context, brand } = cfg;
+    const inner = [
+      label ? `<div class="mw-news-stat__label">${esc(label)}</div>` : '',
+      `<div class="mw-news-stat__value">${value}</div>`,
+      context ? `<div class="mw-news-stat__context">${esc(context)}</div>` : '',
+    ].filter(Boolean).join('\n');
+    return _frame(q(sel), { brand, innerClass: 'mw-news-stat', innerContent: inner, gradientBg: false });
+  }
+
+  /**
+   * comparisonCard — 좌우 비교 카드
+   */
+  function comparisonCard(sel, cfg) {
+    const { heading, leftLabel = 'Before', rightLabel = 'After', left = [], right = [], brand } = cfg;
+    const leftItems = left.map(t => `<div class="mw-news-compare__item">${esc(t)}</div>`).join('');
+    const rightItems = right.map(t => `<div class="mw-news-compare__item">${esc(t)}</div>`).join('');
+    const inner = [
+      heading ? `<div class="mw-news-compare__heading">${esc(heading)}</div>` : '',
+      `<div class="mw-news-compare__row">`,
+      `  <div class="mw-news-compare__side mw-news-compare__side--left">`,
+      `    <div class="mw-news-compare__side-label">${esc(leftLabel)}</div>`,
+      `    ${leftItems}`,
+      `  </div>`,
+      `  <div class="mw-news-compare__vs">VS</div>`,
+      `  <div class="mw-news-compare__side mw-news-compare__side--right">`,
+      `    <div class="mw-news-compare__side-label">${esc(rightLabel)}</div>`,
+      `    ${rightItems}`,
+      `  </div>`,
+      `</div>`,
+    ].join('\n');
+    return _frame(q(sel), { brand, innerClass: 'mw-news-compare', innerContent: inner, gradientBg: false });
+  }
+
+  /**
+   * checklistCard — 체크리스트 카드
+   */
+  function checklistCard(sel, cfg) {
+    const { heading, items = [], brand } = cfg;
+    const itemsHtml = items.map(it => {
+      const done = it.done !== false;
+      return `<div class="mw-news-checklist__item">
+        <div class="mw-news-checklist__check${done ? ' mw-news-checklist__check--done' : ''}">
+          ${done ? '✓' : ''}
+        </div>
+        <div class="mw-news-checklist__text">${esc(typeof it === 'string' ? it : it.text)}</div>
+      </div>`;
+    }).join('');
+    const inner = [
+      heading ? `<div class="mw-news-checklist__heading">${esc(heading)}</div>` : '',
+      itemsHtml,
+    ].filter(Boolean).join('\n');
+    return _frame(q(sel), { brand, innerClass: 'mw-news-checklist', innerContent: inner, gradientBg: false });
+  }
+
+  /**
+   * stepCard — 스텝 카드
+   */
+  function stepCard(sel, cfg) {
+    const { step = '1', heading = '', text, tip, brand } = cfg;
+    const inner = [
+      `<div class="mw-news-step__badge">${esc(String(step))}</div>`,
+      `<div class="mw-news-step__heading">${esc(heading)}</div>`,
+      text ? `<div class="mw-news-step__text">${esc(text)}</div>` : '',
+      tip ? `<div class="mw-news-step__tip">💡 ${esc(tip)}</div>` : '',
+    ].filter(Boolean).join('\n');
+    return _frame(q(sel), { brand, innerClass: 'mw-news-step', innerContent: inner, gradientBg: false });
+  }
+
+  /**
+   * testimonialCard — 고객 후기 카드
+   */
+  function testimonialCard(sel, cfg) {
+    const { quote = '', name = '', role = '', initial, stars = 5, brand } = cfg;
+    const starsHtml = stars ? `<div class="mw-news-testimonial__stars">${'★'.repeat(Math.min(stars, 5))}</div>` : '';
+    const avatarChar = initial || (name ? name.charAt(0) : '?');
+    const inner = [
+      starsHtml,
+      `<div class="mw-news-testimonial__quote">"${esc(quote)}"</div>`,
+      `<div class="mw-news-testimonial__author">`,
+      `  <div class="mw-news-testimonial__avatar">${esc(avatarChar)}</div>`,
+      `  <div>`,
+      `    <div class="mw-news-testimonial__name">${esc(name)}</div>`,
+      role ? `    <div class="mw-news-testimonial__role">${esc(role)}</div>` : '',
+      `  </div>`,
+      `</div>`,
+    ].filter(Boolean).join('\n');
+    return _frame(q(sel), { brand, innerClass: 'mw-news-testimonial', innerContent: inner, gradientBg: false });
   }
 
   // ── 4. Maging.newsDeck(MOUNT) ─────────────────────────────────────────────
@@ -613,6 +1031,12 @@
     M.dataCard = dataCard;
     M.numberedCard = numberedCard;
     M.ctaCard = ctaCard;
+    M.quoteCard = quoteCard;
+    M.statCard = statCard;
+    M.comparisonCard = comparisonCard;
+    M.checklistCard = checklistCard;
+    M.stepCard = stepCard;
+    M.testimonialCard = testimonialCard;
     M.newsDeck = initNewsDeck;
   }
 
