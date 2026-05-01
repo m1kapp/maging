@@ -103,7 +103,7 @@
   .mw-news-cover__title {
     font-family: var(--mw-display-font, var(--mw-font));
     font-size: clamp(2rem, 5.5cqi, 3rem);
-    font-weight: 800;
+    font-weight: 700;
     line-height: 1.15;
     letter-spacing: -0.02em;
     color: var(--mw-text);
@@ -126,7 +126,7 @@
   .mw-news-body__num {
     font-family: var(--mw-display-font, var(--mw-font));
     font-size: clamp(2.5rem, 7cqi, 4rem);
-    font-weight: 800;
+    font-weight: 700;
     color: var(--mw-accent);
     line-height: 1;
     letter-spacing: -0.03em;
@@ -207,7 +207,7 @@
   .mw-news-numbered__rank {
     font-family: var(--mw-display-font, var(--mw-font));
     font-size: 1.6rem;
-    font-weight: 800;
+    font-weight: 700;
     color: var(--mw-accent);
     line-height: 1;
     flex-shrink: 0;

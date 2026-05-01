@@ -327,7 +327,7 @@
             summaryRow: '합계', unitToggle: true, viewToggle: true, defaultUnit: '만원',
           });
           alertBanner(root2.querySelector('.sk-review'), {
-            type: 'info', icon: '📋', title: '리뷰',
+            type: 'info', icon: '—', title: '리뷰',
             message: '전체 매출은 1분기 목표 대비 92.5% 달성. 신규 매출은 1분기 목표 대비 약 1.3억원 미달 — 4월 신규 회복이 우선 과제.',
           });
         }
@@ -388,7 +388,7 @@
           ];
           activityTable(root2.querySelector('.ret-table-2025'), { title: '2025년 동월 비교', subtitle: '전년 기준', columns: cols(), rows: toRows(data2025), fixedLayout: true });
           alertBanner(root2.querySelector('.ret-review'), {
-            type: 'info', icon: '📋', title: '리뷰',
+            type: 'info', icon: '—', title: '리뷰',
             message: '3월 해지율 2.9%로 전월 -0.1%p 개선. 그러나 신규 92 < 해지 135 — 4월 신규 회복이 우선 과제.',
           });
         }
@@ -407,28 +407,28 @@
           sectionHead(root.querySelector('.ci-sec-01'), { index: '01', kicker: 'KEY INSIGHTS', title: '핵심 고객 인사이트' });
 
           insightCard(root.querySelector('.ci-card-1'), {
-            icon: '🏆', status: 'accent', title: '상위 5개사 ARR 집중도', meta: '총 매출 23%',
+            icon: '★', status: 'accent', title: '상위 5개사 ARR 집중도', meta: '총 매출 23%',
             bullets: ['(주)다온티앤씨 · 38만원/월 · 3년 갱신 예정','에이블씨엔씨 · 31만원/월 · 증설 요청 접수','서울반도체 · 28만원/월 · QBR 5월 예정'],
             highlight: '상위 5개사 이탈 시 월 155만원 손실 — 전담 CSM 배정 필요',
           });
           insightCard(root.querySelector('.ci-card-2'), {
-            icon: '⚠️', status: 'red', title: '이탈위험 고객 7개사', meta: '4월 EBR 미완료', tag: '긴급',
+            icon: '▲', status: 'red', title: '이탈위험 고객 7개사', meta: '4월 EBR 미완료', tag: '긴급',
             bullets: ['로그인 30일 이상 없음 3개사 — 즉시 컨택 필요','갱신 60일 내 도래 4개사 — 리뷰 미진행'],
             highlight: '4월 말까지 7개사 EBR 완료 필수 — 담당: 조윤경 책임',
           });
           insightCard(root.querySelector('.ci-card-3'), {
-            icon: '📈', status: 'green', title: '업셀링 파이프라인', meta: '진행 중 12개사',
+            icon: '↑', status: 'green', title: '업셀링 파이프라인', meta: '진행 중 12개사',
             bullets: ['사용자 수 50% 이상 증가 6개사 → 요금제 업그레이드 제안','Add-On 미구독 고객 중 고사용률 4개사 → 번들 제안 준비'],
             highlight: '전환 예상 월 추가 매출 약 42만원',
           });
           insightCard(root.querySelector('.ci-card-4'), {
-            icon: '✅', status: 'green', title: '고객 성공 사례 — D사', meta: '업무시간 -31%', tag: '성과 확인',
+            icon: '✓', status: 'green', title: '고객 성공 사례 — D사', meta: '업무시간 -31%', tag: '성과 확인',
             bullets: ['Flow 도입 3개월 — 결재 프로세스 디지털화 완료','사용자 148명 → 210명 증설 완료'],
             highlight: '도입 ROI 리포트 완성 → 영업팀 레퍼런스 공유 예정',
           });
 
           alertBanner(root.querySelector('.ci-review'), {
-            type: 'info', icon: '📋', title: '리뷰',
+            type: 'info', icon: '—', title: '리뷰',
             message: '이탈위험 7개사 EBR 4월 말 완료 목표. 업셀링 파이프라인 12개사 전환 시 월 +42만원 매출 효과.',
           });
         }
@@ -490,15 +490,15 @@
           });
 
           insightCard(root2.querySelector('.fb-issue-1'), {
-            icon: '🔍', title: '검색 기능', tag: '전 구간 공통', status: 'red',
+            icon: '◎', title: '검색 기능', tag: '전 구간 공통', status: 'red',
             bullets: ['추천/중립/비추천 모든 점수 구간에서 반복 등장한 불편 이슈'],
           });
           insightCard(root2.querySelector('.fb-issue-2'), {
-            icon: '⚡', title: '속도 / 성능', tag: '헤비유저', status: 'yellow',
+            icon: '↯', title: '속도 / 성능', tag: '헤비유저', status: 'yellow',
             bullets: ['사용량 많은 고객의 이탈 위험 신호. 우선 대응 필요'],
           });
           insightCard(root2.querySelector('.fb-issue-3'), {
-            icon: '🔔', title: '알림 불편', tag: '설정', status: 'gray',
+            icon: '◇', title: '알림 불편', tag: '설정', status: 'gray',
             bullets: ['불필요 알림 과다 — 알림 설정 세분화 필요'],
           });
 
@@ -515,7 +515,7 @@
           });
 
           alertBanner(root2.querySelector('.fb-review'), {
-            type: 'info', icon: '📋', title: '리뷰',
+            type: 'info', icon: '—', title: '리뷰',
             message: '1Q NPS 추천 54%로 업계 우수(70%) 미달. CSAT 4월 1.66점, 목표 대비 -0.14점. 전 구간 공통 이슈(검색·속도·알림) 우선 대응 필요.',
           });
         }
@@ -564,7 +564,7 @@
           });
 
           alertBanner(root.querySelector('.dp-review'), {
-            type: 'warning', icon: '📋', title: '리뷰',
+            type: 'warning', icon: '—', title: '리뷰',
             message: '엔터프라이즈 SSO 1주 지연, 5/16 재완료 목표. API 게이트웨이 개선으로 응답속도 -18% 달성 — 플랫폼 매출 연계 효과 모니터링 필요.',
           });
         }
@@ -602,7 +602,7 @@
             ],
           });
           alertBanner(root.querySelector('.pr-review'), {
-            type: 'warning', icon: '📋', title: '리뷰',
+            type: 'warning', icon: '—', title: '리뷰',
             message: 'Q1 신규상품 매출 1.23억원으로 목표(1.6억) 대비 23.1% 부진. API 엔터프라이즈 5월 계약 체결 시 회복 가능. 4월 파이프라인 0.48억원 집중 클로징 필요.',
           });
         }
@@ -638,7 +638,7 @@
             ],
           });
           alertBanner(root.querySelector('.ed-review'), {
-            type: 'warning', icon: '📋', title: '리뷰',
+            type: 'warning', icon: '—', title: '리뷰',
             message: '4월 세션 9회 진행으로 목표(12회) 대비 25% 부진. 온라인 웨비나 추가 편성 검토 필요. 만족도 4.3점으로 목표 달성 중.',
           });
         }
@@ -684,7 +684,7 @@
             ],
           });
           alertBanner(root.querySelector('.ai-review'), {
-            type: 'info', icon: '📋', title: '리뷰',
+            type: 'info', icon: '—', title: '리뷰',
             message: '운영 중 AI 기능 3개에서 월 약 1,240시간 절감 효과. 이탈 탐지·응대 초안 5월 전사 배포 목표. 활성 사용률 31% → 2Q 목표 45%.',
           });
         }
@@ -701,7 +701,7 @@
             ['ent-kpi-4','평균 계약 기간',            '18[개월]',     0,   'positive'],
           ]);
           alertBanner(root.querySelector('.ent-review'), {
-            type: 'warning', icon: '📋', title: '리뷰',
+            type: 'warning', icon: '—', title: '리뷰',
             message: 'Q1 수주 6.2억으로 목표(8억) 대비 22.5% 부진. 현대모비스·CJ대한통운 4~5월 클로징 집중 필요.',
           });
         }
@@ -771,7 +771,7 @@
           });
 
           alertBanner(root.querySelector('.rs-review'), {
-            type: 'warning', icon: '📊', title: '리뷰',
+            type: 'warning', icon: '—', title: '리뷰',
             message: 'Q1 총매출 20.4억원. 신규 2.8억원으로 목표(4.2억원) 대비 -32.4% 부진. 기고객 16.9억원 안정적 유지. 2Q 신규 파이프라인 강화 필요.',
           });
         }

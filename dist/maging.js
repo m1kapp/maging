@@ -438,7 +438,9 @@
       var palette = [c.accent, c.accent2, c.warning, c.success, c.danger];
       return {
         textStyle: { fontFamily: c.font },
-        tooltip: Object.assign({}, baseTooltip(c), { formatter: '{b}: {c}' + (data.valueSuffix || '') }),
+        tooltip: Object.assign({}, baseTooltip(c), {
+          formatter: function (p) { return escapeHTML(p.name) + ': ' + safeNum(p.value) + (data.valueSuffix || ''); }
+        }),
         series: [{
           type: 'funnel',
           left: '6%', right: '6%', top: 6, bottom: 6,
@@ -585,8 +587,9 @@
         var tds = data.columns.map(function (col) {
           var v = row[col.key];
           var content;
-          if (typeof col.render === 'function') content = col.render(v, row);
-          else content = v == null ? '' : escapeHTML(v);
+          if (typeof col.render === 'function') {
+            try { content = col.render(v, row); } catch (e) { content = v == null ? '' : escapeHTML(v); }
+          } else content = v == null ? '' : escapeHTML(v);
           return '<td' + alignCls(col.align) + '>' + content + '</td>';
         }).join('');
         return '<tr>' + tds + '</tr>';
@@ -634,8 +637,9 @@
         tooltip: Object.assign({
           position: 'top',
           formatter: data.tooltipFormatter || function (p) {
+            var vf = data.valueFormatter || safeNum;
             return (data.yAxis[p.value[1]] || '') + ' · ' + (data.xAxis[p.value[0]] || '') +
-              ' = <b>' + p.value[2] + '</b>';
+              ' = <b>' + vf(p.value[2]) + (data.valueSuffix || '') + '</b>';
           }
         }, baseTooltip(c)),
         xAxis: {
@@ -690,7 +694,10 @@
       var w = (size && size.width)  || 320;
       var minDim = Math.min(w, h * 2);
       var compact = h < 200;
-      var valueText = String(data.value) + (data.unit || '');
+      var fmtVal = typeof data.valueFormatter === 'function' ? data.valueFormatter(data.value)
+        : (data.unit || '') === '원' ? fmt.krwPlain(data.value)
+        : safeNum(data.value) + (data.unit || '');
+      var valueText = fmtVal;
       var textLen = valueText.length;
       var sizeByContainer = minDim * 0.12;
       var sizeByText = textLen > 3 ? sizeByContainer * (3.2 / textLen) : sizeByContainer;
@@ -724,7 +731,7 @@
             valueAnimation: true,
             offsetCenter: [0, compact ? '10%' : '-2%'],
             color: c.text, fontSize: valueFontSize, fontWeight: 'bold', fontFamily: c.font,
-            formatter: '{value}' + (data.unit || ''),
+            formatter: function () { return fmtVal; },
           },
           data: [{ value: data.value, name: data.label }]
         }]
@@ -856,9 +863,9 @@
         tooltip: Object.assign({
           trigger: 'item',
           formatter: function (p) {
-            var label = p.data[2] ? '<b>' + p.data[2] + '</b><br>' : '';
-            return label + (data.xLabel || 'X') + ': ' + p.data[0] + '<br>' +
-                   (data.yLabel || 'Y') + ': ' + p.data[1];
+            var label = p.data[2] ? '<b>' + escapeHTML(p.data[2]) + '</b><br>' : '';
+            return label + (data.xLabel || 'X') + ': ' + safeNum(p.data[0]) + '<br>' +
+                   (data.yLabel || 'Y') + ': ' + safeNum(p.data[1]);
           },
         }, baseTooltip(c)),
         legend: data.series && data.series.length > 1 ? {
@@ -1041,8 +1048,8 @@
         });
       }
 
-      var cur = data.series[0];
-      var lastIdx = cur.data.length - 1;
+      var cur = data.series[0] || { data: [], name: '' };
+      var lastIdx = (cur.data || []).length - 1;
       series.push({
         type: 'line', smooth: 0.4, symbol: 'none', z: 2,
         name: cur.name || '이번달',
@@ -1129,6 +1136,9 @@
       label: '', context: '',
       thresholds: null,
     }, 'ring-progress', function (data, c) {
+      var fmtVal = typeof data.valueFormatter === 'function' ? data.valueFormatter(data.value)
+        : (data.unit || '') === '원' ? fmt.krwPlain(data.value)
+        : safeNum(data.value) + (data.unit || '');
       var ratio = data.max > 0 ? Math.min(1, Math.max(0, data.value / data.max)) : 0;
       var ringColor = c.accent;
       if (data.thresholds) {
@@ -1166,7 +1176,7 @@
             valueAnimation: true,
             offsetCenter: [0, '-4%'],
             color: c.text, fontSize: 30, fontWeight: 700, fontFamily: c.font,
-            formatter: '{value}' + (data.unit || ''),
+            formatter: function () { return fmtVal; },
           },
           data: [{ value: data.value, name: data.label }],
         }],
@@ -1459,7 +1469,8 @@
         textStyle: { fontFamily: c.font, color: c.text },
         tooltip: Object.assign({
           formatter: data.tooltipFormatter || function (p) {
-            return p.value[0] + ' · <b>' + (p.value[1] || 0) + (data.valueSuffix || '') + '</b>';
+            var vf = data.valueFormatter || safeNum;
+            return p.value[0] + ' · <b>' + vf(p.value[1] || 0) + (data.valueSuffix || '') + '</b>';
           }
         }, baseTooltip(c)),
         visualMap: {
@@ -1742,8 +1753,8 @@
       el.classList.add('mw-card', 'mw-mapchart');
       var c = getColors();
       var byName = {};
-      data.items.forEach(function (it) { byName[it.region] = it.value; });
-      var values = data.items.map(function (it) { return it.value || 0; });
+      (data.items || []).forEach(function (it) { byName[it.region] = it.value; });
+      var values = (data.items || []).map(function (it) { return it.value || 0; });
       var max = values.length ? Math.max.apply(null, values) : 1;
       var min = values.length ? Math.min.apply(null, values) : 0;
       var range = (max - min) || 1;
@@ -1851,6 +1862,7 @@
           formatter: function (params) {
             var idx = params[0].dataIndex;
             var it = items[idx];
+            if (!it) return '';
             var sign = it.value > 0 ? '+' : '';
             return '<div style="font-weight:600;margin-bottom:4px">' + escapeHTML(it.label) + '</div>' +
               '<div>' + sign + fmt(it.value) + '</div>';

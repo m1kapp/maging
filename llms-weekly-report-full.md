@@ -70,7 +70,8 @@
 
 ### LISTS & STATUS
 **`leaderboard`** `{ title?, items:[{name,initial?,percent,meta?}] }`
-**`activityTable`** `{ title?, columns:[{key,label,align?,render?}], rows:[...], live?, headerGroups?:[{label,span,align?}] }`
+**`activityTable`** `{ title?, columns:[{key,label,align?,width?,render?(v,row)}], rows:[...], live?, fixedLayout?, headerGroups?:[{label,span,align?}] }`
+  `render(v, row)` — 셀 값 `v`가 첫 인자, 전체 행 `row`가 둘째.
   `headerGroups` — colspan 그룹 헤더. 예) `[{label:'26년',span:3},{label:'25년',span:2}]`
 **`timeline`** `{ title?, items:[{time,text,type?}] }`
 **`inboxPreview`** `{ title?, items:[{icon?,text,time,type?}] }`

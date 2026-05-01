@@ -193,7 +193,7 @@
           title: `${latestMonthLabel} 매출 현황`,
           message: `${latestMonthLabel} 전체 매출은 ${krw(latestActual)} 수준으로 전년 동월 대비 ${yoy.toFixed(1)}% 변화했습니다.` +
                    (planRate ? ` 계획 대비 달성률은 ${planRate.toFixed(1)}%입니다.` : ''),
-          icon: '📊'
+          icon: '◆'
         });
 
         Maging.kpiCard('#kpi-1', {
@@ -201,7 +201,7 @@
           value: krw(latestActual),
           delta: yoy,
           deltaGoodWhen: 'positive',
-          icon: '💰',
+          icon: '₩',
           sparkline: overallActual2026.map(v => v || 0)
         });
 
@@ -210,7 +210,7 @@
           value: krw(ytdActual2026),
           delta: ytdRate ? ytdRate - 100 : 0,
           deltaGoodWhen: 'positive',
-          icon: '📈',
+          icon: '▲',
           sparkline: overallActual2026.slice(0, latestMonthIndex + 1).map(v => v || 0)
         });
 
@@ -219,7 +219,7 @@
           value: planRate ? planRate.toFixed(1) + '%':'계획 없음',
           delta: planRate ? planRate - 100 : 0,
           deltaGoodWhen: 'positive',
-          icon: '🎯',
+          icon: '◎',
           sparkline: overallPlan2026.map((p, i) => {
             const a = overallActual2026[i];
             return p && a ? (a / p) * 100 : 0;
@@ -233,7 +233,7 @@
           value: exportPlanShare ? exportPlanShare.toFixed(1) + '%' : '-',
           delta: exportPlanShare ? exportShare - exportPlanShare : 0,
           deltaGoodWhen: 'positive',
-          icon: '🌏',
+          icon: '⊕',
           sparkline: exportPlan2026.map((v, i) => {
             const p = overallPlan2026[i];
             return p ? (v / p) * 100 : 0;
@@ -252,7 +252,7 @@
           value: krw(latestActual),
           delta: yoy,
           deltaGoodWhen: 'positive',
-          icon: '📉',
+          icon: '▼',
           context: '2025 실적 vs 2026 실적·계획',
           categories: months,
           series: [
@@ -379,7 +379,7 @@
           label: '수출 매출(계획 기준)' ,
           value: krw(latestExportPlan),
           delta: 0,
-          icon: '🚢',
+          icon: '▷',
           context: '2025 실적 vs 2026 계획',
           categories: months,
           series: [

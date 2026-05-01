@@ -40,6 +40,7 @@
 ## Widgets
 
 `Maging.<name>(sel, config)` — 테마 변경 시 전체 자동 새로고침.
+  공통 옵션: `title?`, `subtitle?` — 대부분의 카드 위젯에서 지원.
 
 ### METRIC
 **`kpiCard`** `{ label, value, delta?, deltaGoodWhen?, sparkline?, icon?, compact? }`
@@ -48,21 +49,23 @@
 **`metricStack`** `{ title, main:{label,value,delta?}, items:[{label,value}] }`
 **`compareCard`** `{ title, left:{label,value}, right:{label,value}, delta?, deltaLabel? }`
 **`countdownTile`** `{ title, target, label?, context? }`
-**`ringProgress`** `{ value, max, unit, label, context?, thresholds? }`
+**`ringProgress`** `{ value, max, unit, label, context?, thresholds?, valueFormatter? }`
+  `unit:'원'`이면 자동으로 억원/만원 포맷. `valueFormatter: (v) => ...`로 커스텀 가능.
 **`bulletChart`** `{ value, target?, benchmark?, max, min?, ranges?, valueFormatter?, unit? }`
 **`sparklineList`** `{ title, items:[{label,value,delta,sparkline,deltaGoodWhen?}] }`
 **`goalGrid`** `{ title, items:[{label,value,max,unit?,sublabel?}], thresholds? }`
 
 ### CHARTS
-**`lineChart`** `{ title?, categories, series:[{name,data}], stack?, area?, yFormatter? }`
+**`lineChart`** `{ title?, categories, series:[{name,data}], stack?, area?, yFormatter?, yMin?, yMax? }`
 **`barChart`** `{ title?, items:[{label,value}], horizontal?, yFormatter?, showLabels? }`
 **`donutChart`** `{ title?, slices:[{label,value,color?}], centerLabel?, centerValue? }`
 **`funnelChart`** `{ title?, stages:[{label,value}], valueSuffix? }`
-**`gaugeChart`** `{ title?, label, value, max, unit, thresholds? }`
+**`gaugeChart`** `{ title?, label, value, max, unit, thresholds?, valueFormatter? }`
+  `unit:'원'`이면 자동으로 억원/만원 포맷. `valueFormatter: (v) => ...`로 커스텀 가능.
 **`radarChart`** `{ title?, indicators:[{name,max}], series:[{name,data}] }`
-**`heatmapChart`** `{ title?, xAxis, yAxis, matrix, tooltipFormatter? }`
+**`heatmapChart`** `{ title?, xAxis, yAxis, matrix, max?, valueSuffix?, valueFormatter?, tooltipFormatter? }`
 **`treemapChart`** `{ title?, items:[{name,value}], valueFormatter? }`
-**`scatterChart`** `{ title?, points:[{label,x,y,size?}], xLabel?, yLabel? }`
+**`scatterChart`** `{ title?, points:[{label,x,y,size?}], series?:[{name,points}], xLabel?, yLabel?, showLabels? }`
 **`sankeyChart`** `{ title?, nodes:[{name}], links:[{source,target,value}], valueFormatter? }`
 **`waterfallChart`** `{ title?, items:[{label,value,type?}], valueFormatter? }`
 **`mapChart`** `{ title?, items:[{region,value}], valueFormatter? }`
@@ -70,15 +73,16 @@
 
 ### LISTS & STATUS
 **`leaderboard`** `{ title?, items:[{name,initial?,percent,meta?}] }`
-**`activityTable`** `{ title?, columns:[{key,label,align?,render?}], rows:[...], live?, headerGroups?:[{label,span,align?}] }`
+**`activityTable`** `{ title?, columns:[{key,label,align?,width?,render?(v,row)}], rows:[...], live?, fixedLayout?, headerGroups?:[{label,span,align?}] }`
+  `render(v, row)` — 셀 값 `v`가 첫 인자, 전체 행 `row`가 둘째. 예) `render: (v, row) => row.plan ? fmt(v) : '-'`
   `headerGroups` — colspan 그룹 헤더. 예) `[{label:'26년',span:3},{label:'25년',span:2}]`
 **`timeline`** `{ title?, items:[{time,text,type?}] }`
 **`inboxPreview`** `{ title?, items:[{icon?,text,time,type?}] }`
 **`statusGrid`** `{ title?, columns?, items:[{label,status,value?}] }`
 
 ### CALENDAR & PROJECT
-**`calendarHeatmap`** `{ title?, year?, values:[[date,value]], max?, cellSize? }`
-**`eventCalendar`** `{ title?, year?, month?, events:[{date,label,type?}] }`
+**`calendarHeatmap`** `{ title?, year?, range?, values:[[date,value]], max?, cellSize?, valueSuffix?, valueFormatter? }`
+**`eventCalendar`** `{ title?, year?, month?, events:[{date,label,type?,count?}], startOfWeek? }`
 **`progressStepper`** `{ title?, steps:[{label,status,date?,badge?}] }`
 
 ### STRUCTURAL

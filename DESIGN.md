@@ -138,15 +138,217 @@ yFormatter: Maging.fmt.krw               // HTML이 차트에 렌더 안 됨
 
 ## 8. Anti-patterns (금지 목록)
 
+AI가 생성하는 대시보드·리포트에서 반복적으로 나타나는 시각적 클리셰를 열거한다. 이 패턴이 보이면 **즉시 AI 산출물로 인식**되므로 철저히 배제한다.
+
+### 8-A. 레이아웃 & 구조
+
+| 패턴 | 이유 |
+|------|------|
+| 균일 3등분 grid 반복 (`grid-cols-3` × 3행) | 기계적 레이아웃. 섹션마다 비율을 달리하라 |
+| 모든 카드가 동일한 높이·너비 | 정보 위계 없음. height token을 섞어라 |
+| 모든 곳에 동일한 `border-radius` | 위계 없음. 큰 카드 12px, 뱃지 6px, 버튼 8px 등 차등 |
+| 둥근 카드 + 왼쪽 accent border 콤보 | AI가 "카드 디자인"을 만들 때 가장 먼저 뽑는 패턴 |
+| 카드마다 아이콘+제목+설명+버튼 동일 구조 반복 | "feature grid" 클리셰. 카드별 내용 밀도를 다르게 |
+| 불필요한 wrapper div 중첩 | depth만 늘리고 의미 없음 |
+
+### 8-B. 색상 & 효과
+
 | 패턴 | 이유 |
 |------|------|
 | hover 시 accent 색 border | AI 대시보드의 전형 |
-| glow ring (`box-shadow: 0 0 0 Npx`) | AI 대시보드의 전형 |
+| glow ring (`box-shadow: 0 0 0 Npx accent`) | AI 대시보드의 전형 |
 | `transform: translateY(-1px)` hover | 카드가 뜨는 효과 |
-| 균일 3등분 grid 반복 | 기계적 레이아웃 |
-| accent 색 아이콘 | 장식적 색상 남용 |
+| accent 색 아이콘 | 장식적 색상 남용. 아이콘은 `--mw-text-muted` |
 | `glassmorphism` / `backdrop-filter` 카드 | 의미 없는 장식 |
 | shadow에 accent 색 tint | 과시적 시각 효과 |
-| 모든 곳에 동일한 border-radius | 위계 없음 |
-| raw 숫자 (4377800000) 직접 표시 | 가독성 파괴 |
+| 보라+청록 그라데이션 배경 | AI 생성물의 가장 흔한 배경색 조합 |
+| 무지개 그라데이션 텍스트 / 배경 | 브랜드 의도 없는 장식 |
+| 네온 글로우 (`text-shadow: 0 0 Npx color`) | 사이버펑크 클리셰 |
+| accent 색을 카드 배경 전체에 깔기 | 넓은 면적의 accent는 시선을 피로하게 함 |
+
+### 8-C. 타이포그래피 & 텍스트
+
+| 패턴 | 이유 |
+|------|------|
+| Inter를 display font로 사용 | 훈련 데이터 평균 = 어떤 브랜드도 아닌 폰트. 본문 OK, 제목은 테마의 `--mw-display-font` 사용 |
+| 이모지를 아이콘 대용으로 사용 | 플랫폼마다 렌더링 다름 + 비전문적. SVG 아이콘 또는 텍스트로 대체 |
+| 제목에 "🚀 Introducing…" 패턴 | AI 블로그 포스트의 상징 |
+| 무의미한 부제목 ("Powerful. Flexible. Simple.") | 정보 전달 없는 마케팅 어구 |
+| 모든 섹션 제목에 이모지 prefix | 시각적 노이즈 |
+| `font-weight: 800-900` 남발 | 위계 없는 강조. 최대 600-700 |
+
+### 8-D. 데이터 & 수치
+
+| 패턴 | 이유 |
+|------|------|
+| raw 숫자 (4377800000) 직접 표시 | 가독성 파괴. `Maging.fmt.*` 사용 |
 | 수동 포맷터 대신 커스텀 함수 | 이중 변환 버그 위험 |
+| 더미 데이터가 너무 깔끔함 (10, 20, 30, 40, 50) | 현실감 없음. 불규칙한 실제 수치 사용 |
+| 모든 KPI의 delta가 양수 | 비현실적. 일부는 음수/0이어야 함 |
+| 차트 데이터가 단조 증가/감소 | 현실 데이터는 등락이 있음 |
+
+### 8-E. SVG & 이미지
+
+| 패턴 | 이유 |
+|------|------|
+| SVG로 그린 사람 얼굴/캐릭터 | AI 일러스트의 전형. 실제 사진이나 이니셜 아바타 사용 |
+| CSS로 만든 제품 실루엣 | 실제 제품 사진을 대체할 수 없음 |
+| 장식용 SVG blob/wave 배경 | 2020년대 초 SaaS 랜딩 클리셰 |
+| 동일한 placeholder 이미지 반복 | 콘텐츠 없음을 드러냄 |
+
+---
+
+## 9. Design Philosophy Tags
+
+105개 테마를 6개 디자인 철학으로 분류한다. 테마 선택 시 브랜드명이 아닌 **원하는 분위기**로 검색할 수 있다. 하나의 테마에 복수 태그 가능.
+
+### 태그 정의
+
+| Tag | 한국어 | 특징 | 대표 키워드 |
+|-----|--------|------|-------------|
+| `minimal` | 극한 절제 | 흑백 위주, 장식 제로, hairline border, 정보 밀도 높음 | 깔끔한, 미니멀, 심플 |
+| `editorial` | 에디토리얼 럭셔리 | 세리프 display font, 따뜻한 톤, 출판/패션지 무드 | 고급스러운, 세련된, 따뜻한 |
+| `corporate` | 기업 정석 | 신뢰감 있는 sans-serif, 블루/퍼플 계열, SaaS/핀테크 | 비즈니스, 정돈된, 전문적 |
+| `dark` | 다크 모드 | 어두운 배경, 밝은 텍스트, 데이터 터미널 느낌 | 다크, 터미널, 몰입감 |
+| `bold` | 강렬한 브랜드 | 시그니처 accent 색이 지배, 높은 채도, 임팩트 | 강렬한, 대담한, 눈에 띄는 |
+| `organic` | 자연/크래프트 | 따뜻한 earth tone, 둥근 radius, 수공예/자연 무드 | 자연스러운, 부드러운, 따뜻한 |
+
+### 전체 테마 태그 맵
+
+#### Light 테마
+
+| 테마 | 태그 | 무드 한 줄 요약 |
+|------|------|----------------|
+| `flow` | minimal, corporate | 인디고 SaaS 기본형 |
+| `morningmate` | editorial, bold | 퍼플 + 트렌디 라이프스타일 |
+| `claude` | editorial, organic | 코퍼 세리프, 따뜻한 크림 |
+| `linear` | minimal, corporate | 슬레이트블루, 이슈트래커 정밀 |
+| `stripe` | minimal, corporate | 인디고, 핀테크 정석 |
+| `notion` | minimal, corporate | 시안, 문서/노트 내추럴 |
+| `apple` | minimal, corporate | 시스템 블루, IT 세련 |
+| `airbnb` | minimal, bold | 코랄, 서비스 따뜻함 |
+| `airtable` | minimal, corporate | 블랙 accent, 프로덕트 정돈 |
+| `barbie` | bold, editorial | 핫핑크, 패션/대담 |
+| `binance` | corporate, bold | 골드, 크립토 금융 |
+| `bmw` | minimal, corporate | BMW 블루, 자동차 럭셔리 |
+| `cal` | minimal, corporate | 올블랙, 개발자 도구 |
+| `clay` | minimal, organic | 크림, 둥근 클레이 무드 |
+| `clickhouse` | minimal, corporate | 옐로 accent, 데이터 엔지니어링 |
+| `cohere` | minimal, corporate | 라운드, AI 프론티어 |
+| `coinbase` | minimal, corporate | 일렉트릭 블루, 크립토 전문 |
+| `crimson` | editorial, organic | 크림+크림슨, 세리프 클래식 |
+| `cursor` | editorial, corporate | 오렌지, 개발자 따뜻함 |
+| `deere` | bold, organic | 옐로+그린, 농업/산업 |
+| `duolingo` | minimal, bold | 라임, 교육/학습 쾌활 |
+| `elevenlabs` | minimal, corporate | 다크브라운, 보이스 AI |
+| `expo` | minimal, corporate | 올블랙, 개발자 순수 |
+| `fedex` | minimal, bold | 오렌지, 물류 직선적 |
+| `framer` | minimal, corporate | 올블랙, 디자인 툴 |
+| `hashicorp` | minimal, corporate | 퍼플, 인프라 ops |
+| `hermes` | editorial, bold | 오렌지+세리프, radius 0, 럭셔리 |
+| `ibm` | minimal, corporate | IBM 블루, 엔터프라이즈 |
+| `instagram` | minimal, bold | 핑크/마젠타, SNS |
+| `intercom` | minimal, corporate | 올블랙, 커뮤니케이션 |
+| `kraken` | minimal, corporate | 퍼플, 크립토 |
+| `lamborghini` | editorial, bold | 골드/브론즈, 슈퍼카 럭셔리 |
+| `linkedin` | minimal, corporate | 블루, 비즈니스/HR |
+| `lovable` | minimal, corporate | 토프, 디자인 심플 |
+| `mailchimp` | minimal, bold | 옐로, 이메일 마케팅 |
+| `mastercard` | minimal, bold | 레드, 금융 카드 |
+| `medium` | editorial, corporate | 세리프 전체, 출판 플랫폼 |
+| `meta` | minimal, corporate | 메타 블루, 소셜 |
+| `minimax` | minimal, corporate | 다크 accent, AI/LLM |
+| `mint` | editorial, organic | 샌디베이지+틸, 크래프트 |
+| `mintlify` | minimal, corporate | 블랙, 문서 도구 |
+| `miro` | minimal, corporate | 다크, 협업 화이트보드 |
+| `mistral` | minimal, bold | 오렌지, AI 스타트업 |
+| `mongodb` | minimal, corporate | 틸, DB 브랜드 |
+| `nike` | minimal, bold | 올블랙, 스포츠 미니멀 |
+| `notion` | minimal, corporate | 시안, 올인원 프로덕트 |
+| `nvidia` | minimal, bold | 그린, GPU/AI 컴퓨팅 |
+| `ollama` | minimal, corporate | 블랙, LLM 추론 |
+| `opencode` | minimal, corporate | 다크, 코드 협업 |
+| `pinterest` | minimal, bold | 레드, 비주얼 소셜 |
+| `playstation` | minimal, bold | PS 블루, 게이밍 |
+| `posthog` | minimal, corporate | 다크그레이, 애널리틱스 |
+| `raycast` | minimal, corporate | 블랙, 커맨드 런처 |
+| `reddit` | minimal, bold | 오렌지, 커뮤니티 |
+| `renault` | editorial, bold | 골드, 자동차 헤리티지 |
+| `replicate` | minimal, corporate | 다크, AI/ML |
+| `resend` | minimal, corporate | 블랙, 이메일 API |
+| `revolut` | minimal, corporate | 다크, 핀테크 |
+| `runwayml` | minimal, corporate | 블랙, AI 크리에이션 |
+| `sage` | editorial, organic | 세이지그린+크림, 젠 무드 |
+| `sanity` | minimal, corporate | 블랙, CMS |
+| `sentry` | minimal, corporate | 퍼플, 에러 트래킹 |
+| `shopify` | minimal, corporate | 그레이, 이커머스 |
+| `spacex` | minimal, bold | 블랙, 우주 혁신 |
+| `starbucks` | minimal, organic | 다크그린, 커피 |
+| `supabase` | minimal, corporate | 퍼플, 백엔드 |
+| `superhuman` | minimal, corporate | 퍼플, 이메일 프로덕트 |
+| `tesla` | minimal, corporate | 블루, EV 테크 |
+| `theverge` | minimal, bold | 틸, 테크 저널리즘 |
+| `tiffany` | editorial, bold | 티파니블루+세리프, 럭셔리 여성 |
+| `tmobile` | minimal, bold | 마젠타, 통신 |
+| `together` | minimal, bold | 핑크, AI 컴퓨트 |
+| `uber` | minimal, corporate | 블랙, 모빌리티 |
+| `vodafone` | minimal, bold | 레드, 통신 |
+| `voltagent` | minimal, corporate | 틸, 에이전트 |
+| `warp` | minimal, corporate | 토프, 터미널 |
+| `webflow` | minimal, corporate | 블랙, 노코드 |
+| `wired` | minimal, corporate | 블랙, 테크 미디어 |
+| `wise` | minimal, corporate | 다크, 핀테크 송금 |
+| `youtube` | minimal, bold | 레드, 영상 플랫폼 |
+| `zapier` | minimal, corporate | 다크, 워크플로 자동화 |
+| `heineken` | bold, organic | 레드+그린, F&B 헤리티지 |
+| `mailchimp` | minimal, bold | 옐로, 마케팅 쾌활 |
+| `nasa` | bold, dark | 레드+네이비, 과학/우주 |
+| `ups` | bold, organic | 골드+브라운, 물류 헤리티지 |
+
+#### Dark 테마
+
+| 테마 | 태그 | 무드 한 줄 요약 |
+|------|------|----------------|
+| `vercel` | minimal, dark | 퓨어블랙, 극한 미니멀 |
+| `github` | dark, corporate | 네이비, 개발자 터미널 |
+| `x` | dark, bold | 블랙+블루, 소셜 |
+| `slack` | dark, bold | 어버진+골드, 협업 |
+| `discord` | dark, bold | 퍼플, 게이밍/커뮤니티 |
+| `openai` | dark, corporate | 차콜+틸, AI 리더십 |
+| `spotify` | dark, bold | 시그니처 그린, 음악 |
+| `twitch` | dark, bold | 퍼플, 라이브 스트리밍 |
+| `netflix` | dark, bold | 블랙+레드, 시네마틱 |
+| `figma` | dark, bold | 핫레드, 디자인 툴 |
+| `adobe` | dark, bold | 레드, 크리에이티브 |
+| `bloomberg` | dark, corporate | 앰버+모노스페이스, 금융 터미널 |
+| `amazon` | dark, bold | 오렌지, 커머스 |
+| `bmwm` | dark, bold | 블랙+화이트, 모터스포츠 |
+| `bugatti` | dark, editorial | 럭셔리 블랙, 극한 절제 |
+| `clickhouse` | dark, corporate | 네온옐로, 데이터 |
+| `composio` | dark, corporate | 딥블루, 자동화 |
+| `ferrari` | dark, bold | 레드, 자동차 열정 |
+| `forest` | dark, organic | 딥그린+라임, 숲 |
+| `imperial` | dark, organic | 포레스트블랙+레드, 무디 |
+| `kiwi` | dark, bold | 네온라임, 해커 터미널 |
+| `nasa` | dark, bold | 딥블루+레드, 우주 기관 |
+| `sunset` | dark, organic | 블루그레이+오렌지, 지평선 |
+| `tannery` | dark, organic | 다크그레이+테라코타, 가죽/크래프트 |
+
+### 분위기별 빠른 검색
+
+사용자의 추상적 요청에 대응하는 테마 추천 가이드.
+
+| 요청 | 추천 테마 (최대 5) |
+|------|-------------------|
+| "깔끔하게 / 미니멀하게" | `vercel`, `linear`, `framer`, `apple`, `expo` |
+| "고급스럽게 / 세련되게" | `claude`, `hermes`, `tiffany`, `bugatti`, `crimson` |
+| "따뜻한 느낌으로" | `claude`, `sage`, `mint`, `clay`, `crimson` |
+| "다크 모드로" | `vercel`, `github`, `bloomberg`, `openai`, `x` |
+| "강렬하게 / 임팩트 있게" | `netflix`, `ferrari`, `barbie`, `spotify`, `kiwi` |
+| "비즈니스 보고서" | `stripe`, `linear`, `notion`, `linkedin`, `ibm` |
+| "자연스럽게 / 부드럽게" | `sage`, `forest`, `mint`, `clay`, `sunset` |
+| "금융/핀테크" | `stripe`, `bloomberg`, `revolut`, `wise`, `binance` |
+| "AI/테크" | `openai`, `claude`, `cursor`, `vercel`, `github` |
+| "럭셔리 브랜드" | `hermes`, `tiffany`, `bugatti`, `lamborghini`, `bmw` |
+| "크리에이티브/디자인" | `figma`, `adobe`, `framer`, `instagram`, `runwayml` |
+| "개발자 도구" | `github`, `vercel`, `cursor`, `warp`, `raycast` |
