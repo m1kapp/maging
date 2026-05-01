@@ -174,10 +174,10 @@
     const SLIDE_IDS  = slides.map(s => s.id);
     const mounted    = {};
 
-    // Auto-apply A4 slide wrapper to non-cover slides
+    // Auto-apply A4 slide wrapper
     slides.forEach((s, i) => {
-      if (s.classList.contains('cover-slide')) return;
       s.classList.add('mw-slide');
+      if (s.classList.contains('cover-slide')) return; // cover: aspect-ratio만, header/footer 없음
       const label = s.dataset.label || '';
       const bu    = s.dataset.bu || '';
       const team  = s.dataset.team || '';
