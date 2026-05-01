@@ -698,9 +698,9 @@ var INSPECTOR_MAP = [
   { selector: '#hero-tile', type: 'heroTile',
     code: "const heroTile = {\n  label: '이번 달 매출',\n  value: '128억', icon: '◆',\n  delta: 8.3,\n  sparkline: [420, 445, 430, 468, 475, 490, 510, 530, 548, 562, 580],\n  context: 'vs 지난달 118억 · 목표 150억의 85%'\n};\n\nMaging.heroTile('#hero-tile', heroTile);" },
   { selector: '#metric-chart-revenue', type: 'metricChart',
-    code: "Maging.metricChart('#metric-chart-revenue', {\n  label: '월간 매출 추이', value: '128억', icon: '◆',\n  delta: 8.3, context: '목표 150억의 85%',\n  categories: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],\n  series: [\n    { name: '올해', data: [72,78,81,88,91,95,99,103,108,113,120,128] },\n    { name: '작년', data: [58,63,67,71,75,79,83,88,93,98,107,118] },\n  ],\n  target: 150,\n  yFormatter: v => '₩' + v + '억',\n});" },
+    code: "// value·delta 생략 — series 마지막 값에서 자동 계산\nMaging.metricChart('#metric-chart-revenue', {\n  label: '월간 매출 추이', icon: '◆',\n  context: '목표 150억원',\n  categories: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],\n  series: [\n    { name: '올해', data: [72억,78억,...,128억] },\n    { name: '작년', data: [58억,63억,...,118억] },\n  ],\n  target: 150억,\n  yFormatter: Maging.fmt.krwPlain,\n});" },
   { selector: '#metric-chart-users', type: 'metricChart',
-    code: "Maging.metricChart('#metric-chart-users', {\n  label: '월간 활성 사용자', value: '48,291', icon: '⊕',\n  delta: 12.4, context: '신규 유입 +3,200',\n  categories: ['7월','8월','9월','10월','11월','12월','1월','2월','3월','4월','5월','6월'],\n  series: [\n    { name: '이번해', data: [31200,33400,35800,37200,39500,41100,43200,44800,46100,47300,47900,48291] },\n    { name: '작년',   data: [24100,25800,27200,28900,30100,31500,33000,34800,36200,38100,39900,41200] },\n  ],\n  yFormatter: v => (v/1000).toFixed(0) + 'K',\n});" },
+    code: "// value·delta 생략 — series 마지막 값에서 자동 계산\nMaging.metricChart('#metric-chart-users', {\n  label: '월간 활성 사용자', icon: '⊕',\n  context: '신규 유입 추이',\n  categories: ['7월','8월',...,'6월'],\n  series: [\n    { name: '이번해', data: [31200,...,48291] },\n    { name: '작년',   data: [24100,...,41200] },\n  ],\n  yFormatter: v => (v/1000).toFixed(0) + 'K',\n});" },
   { selector: '#ring-progress', type: 'ringProgress',
     code: "const ringProgress = {\n  title: '분기 목표', subtitle: 'Q2 2026',\n  value: 82, max: 100, unit: '%',\n  label: '달성률',\n  context: '128억 / 목표 150억',\n  thresholds: [\n    [0.5, 'danger'],\n    [0.8, 'warning'],\n    [1.0, 'good']\n  ]\n};\n\nMaging.ringProgress('#ring-progress', ringProgress);" },
   { selector: '#compare-card', type: 'compareCard',
@@ -936,9 +936,10 @@ function renderDashboard(data) {
     ],
   });
   Maging.ringProgress('#ring-progress', data.ringProgress);
+  // value·delta 생략 — series[0].data 마지막 값에서 자동 계산
   Maging.metricChart('#metric-chart-revenue', {
-    label: '월간 매출 추이', value: Maging.fmt.krw(12800000000), valueHTML: true, icon: '◆',
-    delta: 8.3, context: '목표 150억원의 85%',
+    label: '월간 매출 추이', icon: '◆',
+    context: '목표 150억원',
     categories: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
     series: [
       { name: '올해', data: [7200000000,7800000000,8100000000,8800000000,9100000000,9500000000,9900000000,10300000000,10800000000,11300000000,12000000000,12800000000] },
@@ -948,8 +949,8 @@ function renderDashboard(data) {
     yFormatter: Maging.fmt.krwPlain,
   });
   Maging.metricChart('#metric-chart-users', {
-    label: '월간 활성 사용자', value: Maging.fmt.num(48291), icon: '⊕',
-    delta: 12.4, context: '신규 유입 +3,200',
+    label: '월간 활성 사용자', icon: '⊕',
+    context: '신규 유입 추이',
     categories: ['7월','8월','9월','10월','11월','12월','1월','2월','3월','4월','5월','6월'],
     series: [
       { name: '이번해', data: [31200,33400,35800,37200,39500,41100,43200,44800,46100,47300,47900,48291] },

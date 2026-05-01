@@ -79,6 +79,56 @@
   }
 
   // ==========================================================
+  // Auto-derive helpers — LLM 산수 오류 방지
+  // ==========================================================
+  function _arrLast(arr) { return arr && arr.length ? arr[arr.length - 1] : null; }
+  function _arrPrev(arr) { return arr && arr.length > 1 ? arr[arr.length - 2] : null; }
+  function _growthRate(curr, prev) {
+    if (prev == null || prev === 0 || curr == null) return null;
+    return ((curr - prev) / Math.abs(prev)) * 100;
+  }
+  function _parseNumVal(s) {
+    if (typeof s === 'number') return s;
+    if (typeof s !== 'string') return null;
+    var n = parseFloat(s.replace(/[^0-9.\-]/g, ''));
+    return isNaN(n) ? null : n;
+  }
+
+  /**
+   * Auto-derive value/delta from sparkline or series data.
+   * - If value is empty and sparkline exists → value = last element
+   * - If delta is null and sparkline has 2+ items → delta = growth rate
+   * - cfg.unit appended to derived value (e.g. '건', '%')
+   * - cfg.valueFormatter applied to derived value
+   */
+  function _autoDerive(data, opts) {
+    opts = opts || {};
+    var arr = opts.arr; // sparkline or series data array
+    if (!arr || !arr.length) return;
+
+    // Auto-derive value
+    if (!data.value && data.value !== 0) {
+      var last = _arrLast(arr);
+      if (last != null) {
+        if (opts.valueFmt) {
+          data.value = opts.valueFmt(last);
+          data.valueHTML = true;
+        } else {
+          data.value = String(last) + (data.unit || '');
+        }
+      }
+    }
+
+    // Auto-derive delta
+    if (data.delta == null) {
+      var curr = _arrLast(arr);
+      var prev = _arrPrev(arr);
+      var rate = _growthRate(curr, prev);
+      if (rate != null) data.delta = Math.round(rate * 10) / 10;
+    }
+  }
+
+  // ==========================================================
   // Formatters
   // ==========================================================
   var U = '<span class="mw-unit">';
@@ -181,9 +231,14 @@
     if (!el) return null;
     var data = Object.assign({
       label: '', value: '', valueHTML: false, delta: null, sparkline: [],
-      icon: '', compact: false,
+      icon: '', compact: false, unit: '', valueFormatter: null,
       deltaGoodWhen: 'positive',
     }, config || {});
+    // Auto-derive: sparkline → value, delta
+    // unit:'원' → 자동으로 fmt.krw 적용
+    var _vfmt = typeof data.valueFormatter === 'function' ? data.valueFormatter
+              : data.unit === '원' ? fmt.krw : null;
+    _autoDerive(data, { arr: data.sparkline, valueFmt: _vfmt });
     var chart = null;
     var ro = null;
 
@@ -468,6 +523,12 @@
       centerLabel: '합계', centerValue: null,
     }, 'donut-chart', function (data, c, palette) {
       var total = data.slices.reduce(function (s, x) { return s + (x.value || 0); }, 0);
+      // Auto-normalize: if slices look like percentages but don't sum to 100, fix them
+      if (total > 0 && total !== 100 && data.slices.every(function(s) { return s.value <= 100; }) && total > 80 && total < 120) {
+        var factor = 100 / total;
+        data.slices.forEach(function(s) { s.value = Math.round(s.value * factor * 10) / 10; });
+        total = 100;
+      }
       var centerVal = data.centerValue != null ? data.centerValue : safeNum(total);
       return {
         textStyle: { fontFamily: c.font },
@@ -984,10 +1045,16 @@
     el = q(el);
     if (!el) return null;
     var data = Object.assign({
-      label: '', value: '', icon: '', context: '',
+      label: '', value: '', icon: '', context: '', unit: '',
       delta: null, deltaGoodWhen: 'positive',
       categories: [], series: [], target: null, yFormatter: null,
     }, config || {});
+    // Auto-derive: series[0].data → value, delta
+    var seriesData = data.series && data.series[0] && data.series[0].data;
+    _autoDerive(data, {
+      arr: seriesData,
+      valueFmt: typeof data.yFormatter === 'function' ? data.yFormatter : null,
+    });
     var chart = null;
     var ro = null;
 
@@ -1407,6 +1474,13 @@
       right: { label: '', value: '' },
       delta: null, deltaLabel: '', deltaGoodWhen: 'positive',
     }, config || {});
+    // Auto-derive: delta from left/right values
+    if (data.delta == null) {
+      var lv = _parseNumVal(data.left.value);
+      var rv = _parseNumVal(data.right.value);
+      var rate = _growthRate(rv, lv);
+      if (rate != null) data.delta = Math.round(rate * 10) / 10;
+    }
 
     function render() {
       el.classList.add('mw-card', 'mw-compare');
@@ -1973,6 +2047,12 @@
       title: '', subtitle: '',
       items: [],
     }, config || {});
+    // Auto-derive: each item's sparkline → value, delta
+    data.items.forEach(function (it) {
+      var _vf = typeof it.valueFormatter === 'function' ? it.valueFormatter
+              : it.unit === '원' ? fmt.krw : null;
+      _autoDerive(it, { arr: it.sparkline, valueFmt: _vf });
+    });
     var charts = [];
     var ros = [];
 

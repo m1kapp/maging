@@ -61,11 +61,11 @@ Maging.lineChart('#el', config);
 ### 🔢 KPI / 타일 (7)
 | type | 주요 필드 |
 |---|---|
-| `kpi-card` | `label, value, delta, sparkline[], deltaGoodWhen` |
+| `kpi-card` | `label, sparkline[], unit?, deltaGoodWhen` — value·delta는 sparkline에서 자동 계산 |
 | `stat-card` | `label, value, delta, icon, deltaGoodWhen` |
 | `hero-tile` | `label, value, icon, context, delta, sparkline[]` |
 | `metric-stack` | `title, main:{label,value,delta}, items:[{label,value}]` |
-| `compare-card` | `left:{label,value}, right:{label,value}, delta, deltaLabel` |
+| `compare-card` | `left:{label,value}, right:{label,value}, deltaLabel` — delta는 자동 계산 |
 | `countdown-tile` | `label, target(Date\|ms\|ISO), context` · 매분 자동 갱신 |
 | `ring-progress` | `value, max, unit, label, context, thresholds` |
 
@@ -74,7 +74,7 @@ Maging.lineChart('#el', config);
 |---|---|
 | `line-chart` | `categories[], series:[{name,data[]}], stack, area, yFormatter, yMin, yMax` |
 | `bar-chart` | `items:[{label,value}], horizontal, showLabels, yFormatter` |
-| `donut-chart` | `slices:[{label,value,color}], centerLabel, centerValue` |
+| `donut-chart` | `slices:[{label,value,color}], centerLabel` — centerValue는 slices 합계에서 자동 계산 |
 | `funnel-chart` | `stages:[{label,value}], valueSuffix` |
 | `gauge-chart` | `value, max, unit, thresholds:[[ratio,'good'\|'warning'\|'danger']]` |
 | `radar-chart` | `indicators:[{name,max}], series:[{name,data[]}]` |

@@ -40,29 +40,37 @@
 ## Widgets
 
 `Maging.<name>(sel, config)` — 테마 변경 시 전체 자동 새로고침.
+  공통 옵션: `title?`, `subtitle?` — 대부분의 카드 위젯에서 지원.
 
 ### METRIC
-**`kpiCard`** `{ label, value, delta?, deltaGoodWhen?, sparkline?, icon?, compact? }`
+**`kpiCard`** `{ label, sparkline, unit?, deltaGoodWhen?, icon?, compact? }`
+  value·delta는 sparkline에서 자동 계산 — 직접 넣지 마라. `unit:'원'`이면 자동으로 억원/만원 포맷.
 **`heroTile`** `{ kicker?, value, tagline?, stats?:[{label,value}] }`
-**`metricChart`** `{ label, value, delta?, icon?, context?, categories, series:[{name,data}], target?, yFormatter? }`
+**`metricChart`** `{ label, icon?, context?, categories, series:[{name,data}], target?, yFormatter? }`
+  value·delta는 series[0].data에서 자동 계산 — 직접 넣지 마라.
 **`metricStack`** `{ title, main:{label,value,delta?}, items:[{label,value}] }`
-**`compareCard`** `{ title, left:{label,value}, right:{label,value}, delta?, deltaLabel? }`
+**`compareCard`** `{ title, left:{label,value}, right:{label,value}, deltaLabel? }`
+  delta는 left·right 값에서 자동 계산 — 직접 넣지 마라.
 **`countdownTile`** `{ title, target, label?, context? }`
-**`ringProgress`** `{ value, max, unit, label, context?, thresholds? }`
+**`ringProgress`** `{ value, max, unit, label, context?, thresholds?, valueFormatter? }`
+  `unit:'원'`이면 자동으로 억원/만원 포맷. `valueFormatter: (v) => ...`로 커스텀 가능.
 **`bulletChart`** `{ value, target?, benchmark?, max, min?, ranges?, valueFormatter?, unit? }`
-**`sparklineList`** `{ title, items:[{label,value,delta,sparkline,deltaGoodWhen?}] }`
+**`sparklineList`** `{ title, items:[{label,sparkline,unit?,deltaGoodWhen?}] }`
+  각 item의 value·delta는 sparkline에서 자동 계산. `unit:'원'`이면 자동으로 억원/만원 포맷.
 **`goalGrid`** `{ title, items:[{label,value,max,unit?,sublabel?}], thresholds? }`
 
 ### CHARTS
-**`lineChart`** `{ title?, categories, series:[{name,data}], stack?, area?, yFormatter? }`
+**`lineChart`** `{ title?, categories, series:[{name,data}], stack?, area?, yFormatter?, yMin?, yMax? }`
 **`barChart`** `{ title?, items:[{label,value}], horizontal?, yFormatter?, showLabels? }`
-**`donutChart`** `{ title?, slices:[{label,value,color?}], centerLabel?, centerValue? }`
+**`donutChart`** `{ title?, slices:[{label,value,color?}], centerLabel? }`
+  centerValue는 slices 합계에서 자동 계산. slices 합이 100 근처면 자동 정규화.
 **`funnelChart`** `{ title?, stages:[{label,value}], valueSuffix? }`
-**`gaugeChart`** `{ title?, label, value, max, unit, thresholds? }`
+**`gaugeChart`** `{ title?, label, value, max, unit, thresholds?, valueFormatter? }`
+  `unit:'원'`이면 자동으로 억원/만원 포맷. `valueFormatter: (v) => ...`로 커스텀 가능.
 **`radarChart`** `{ title?, indicators:[{name,max}], series:[{name,data}] }`
-**`heatmapChart`** `{ title?, xAxis, yAxis, matrix, tooltipFormatter? }`
+**`heatmapChart`** `{ title?, xAxis, yAxis, matrix, max?, valueSuffix?, valueFormatter?, tooltipFormatter? }`
 **`treemapChart`** `{ title?, items:[{name,value}], valueFormatter? }`
-**`scatterChart`** `{ title?, points:[{label,x,y,size?}], xLabel?, yLabel? }`
+**`scatterChart`** `{ title?, points:[{label,x,y,size?}], series?:[{name,points}], xLabel?, yLabel?, showLabels? }`
 **`sankeyChart`** `{ title?, nodes:[{name}], links:[{source,target,value}], valueFormatter? }`
 **`waterfallChart`** `{ title?, items:[{label,value,type?}], valueFormatter? }`
 **`mapChart`** `{ title?, items:[{region,value}], valueFormatter? }`
@@ -71,15 +79,15 @@
 ### LISTS & STATUS
 **`leaderboard`** `{ title?, items:[{name,initial?,percent,meta?}] }`
 **`activityTable`** `{ title?, columns:[{key,label,align?,width?,render?(v,row)}], rows:[...], live?, fixedLayout?, headerGroups?:[{label,span,align?}] }`
-  `render(v, row)` — 셀 값 `v`가 첫 인자, 전체 행 `row`가 둘째.
+  `render(v, row)` — 셀 값 `v`가 첫 인자, 전체 행 `row`가 둘째. 예) `render: (v, row) => row.plan ? fmt(v) : '-'`
   `headerGroups` — colspan 그룹 헤더. 예) `[{label:'26년',span:3},{label:'25년',span:2}]`
 **`timeline`** `{ title?, items:[{time,text,type?}] }`
 **`inboxPreview`** `{ title?, items:[{icon?,text,time,type?}] }`
 **`statusGrid`** `{ title?, columns?, items:[{label,status,value?}] }`
 
 ### CALENDAR & PROJECT
-**`calendarHeatmap`** `{ title?, year?, values:[[date,value]], max?, cellSize? }`
-**`eventCalendar`** `{ title?, year?, month?, events:[{date,label,type?}] }`
+**`calendarHeatmap`** `{ title?, year?, range?, values:[[date,value]], max?, cellSize?, valueSuffix?, valueFormatter? }`
+**`eventCalendar`** `{ title?, year?, month?, events:[{date,label,type?,count?}], startOfWeek? }`
 **`progressStepper`** `{ title?, steps:[{label,status,date?,badge?}] }`
 
 ### STRUCTURAL
@@ -131,8 +139,37 @@ Maging.setTheme(name)
 
 ---
 
+## Data Consistency (산수 금지)
+
+위젯이 자동 계산하는 필드에 값을 넣지 마라. 데이터만 넣으면 위젯이 후처리한다.
+
+| 위젯 | 넣지 마라 | 위젯이 자동 계산 |
+|------|-----------|-----------------|
+| `kpiCard` | ~~value~~, ~~delta~~ | sparkline 마지막 값 → value+unit. 마지막 2개 → delta% |
+| `metricChart` | ~~value~~, ~~delta~~ | series[0].data 마지막 값 → value. 마지막 2개 → delta% |
+| `donutChart` | ~~centerValue~~ | slices 합계 → centerValue. 합이 100 근처면 자동 정규화 |
+| `compareCard` | ~~delta~~ | left·right 값 차이 → delta% |
+| `sparklineList` | 각 item의 ~~value~~, ~~delta~~ | 각 item의 sparkline에서 자동 계산 |
+
+```js
+// 이렇게만 넣어라. value/delta를 직접 계산하지 마라.
+Maging.kpiCard('#kpi', {
+  label: '신규 계약', unit: '건',
+  sparkline: [82,91,88,95,103,108,115,119,122,127],
+});
+// → value "127건", delta "4.1%" 자동 표시
+```
+
+**추가 규칙:**
+- 도넛 slices는 합이 100이 되는 쉬운 조합: 60+25+15, 45+30+25, 70+20+10.
+- 같은 숫자가 2곳 이상이면 `const`로 선언하고 참조하라.
+- 큰 숫자는 반올림: 72억 (O), 7,234,567,890 (X).
+
+---
+
 ## NEVER
 
+**코드 규칙:**
 - `₩` prefix 금지 — suffix `원`. `Maging.fmt.krw` 사용.
 - `DOMContentLoaded` 금지 — `maging:ready` 또는 maging.js 뒤 `<script>`.
 - `:root` CSS 변수 금지 — 모든 `--mw-*` 토큰은 maging.css 정의.
@@ -140,34 +177,72 @@ Maging.setTheme(name)
 - 코드 주석 금지 — 토큰 낭비.
 - 수동 숫자 포맷터 금지 — `Maging.fmt.*` 사용.
 
+**Anti-AI slop (시각적 클리셰 금지):**
+- 보라+청록 그라데이션 배경 금지 — AI 생성물의 가장 흔한 배경색.
+- 이모지를 아이콘 대용으로 쓰지 마라 — 플랫폼별 렌더링 불일치 + 비전문적. (카드뉴스 모드는 예외)
+- 둥근카드 + 왼쪽 accent border 콤보 금지 — AI "카드 디자인"의 전형.
+- SVG로 그린 사람 얼굴/캐릭터 금지 — 이니셜 아바타 또는 실제 이미지 사용.
+- Inter를 display font로 쓰지 마라 — 테마의 `--mw-display-font` 사용.
+- 모든 KPI delta를 양수로 만들지 마라 — 비현실적. 일부는 음수/0.
+- 더미 데이터를 등차수열(10,20,30,40,50)로 넣지 마라 — 불규칙한 실제 수치.
+- 장식용 SVG blob/wave 배경 금지 — 2020년대 SaaS 랜딩 클리셰.
+- 카드마다 아이콘+제목+설명+버튼 동일 구조 반복 금지 — 밀도를 달리하라.
+- `font-weight: 800-900` 남발 금지 — 최대 600-700.
+
 ---
 
 ## Theme Design Guide
 
 테마를 선택한 후 **그 테마의 디자인 철학에 맞는 레이아웃**을 생성하라.
 
-### Warm Editorial (claude, hermes, tiffany, medium)
+### Design Philosophy Tags
+
+모든 테마는 6개 철학 태그로 분류된다. 사용자의 추상적 요청에 맞는 테마를 추천하라.
+
+| Tag | 특징 | 대표 테마 |
+|-----|------|-----------|
+| `minimal` | 흑백 위주, 장식 제로, hairline border | vercel, linear, framer, apple, expo |
+| `editorial` | 세리프 display font, 따뜻한 톤, 출판/럭셔리 | claude, hermes, tiffany, crimson, sage |
+| `corporate` | 신뢰감 sans-serif, 블루/퍼플, SaaS/핀테크 | stripe, notion, linkedin, ibm, github |
+| `dark` | 어두운 배경, 밝은 텍스트, 터미널 느낌 | vercel, github, bloomberg, openai, x |
+| `bold` | 시그니처 accent 지배, 높은 채도, 임팩트 | netflix, ferrari, barbie, spotify, kiwi |
+| `organic` | earth tone, 둥근 radius, 자연/크래프트 | sage, forest, mint, clay, sunset |
+
+**분위기 매칭 단축:**
+- "깔끔/미니멀" → `vercel`, `linear`, `framer`, `apple`
+- "고급/세련" → `claude`, `hermes`, `tiffany`, `bugatti`
+- "따뜻한 느낌" → `claude`, `sage`, `mint`, `clay`, `crimson`
+- "다크 모드" → `vercel`, `github`, `bloomberg`, `openai`
+- "강렬/임팩트" → `netflix`, `ferrari`, `barbie`, `spotify`
+- "비즈니스 보고서" → `stripe`, `linear`, `notion`, `linkedin`
+- "자연/부드러운" → `sage`, `forest`, `mint`, `sunset`
+- "럭셔리" → `hermes`, `tiffany`, `bugatti`, `lamborghini`
+- "개발자 도구" → `github`, `vercel`, `cursor`, `warp`
+
+### 철학별 레이아웃 규칙
+
+#### editorial (claude, hermes, tiffany, medium, crimson, sage, mint)
 - **Do:** display-font(세리프)로 섹션 타이틀 강조. accent는 CTA·progress fill에만 절제 사용. 카드 그림자는 미세하게.
 - **Don't:** accent를 배경색으로 쓰지 마라. bold 700을 display에 쓰지 마라 — 600 최대. --mw-bg의 따뜻한 톤을 #fff로 바꾸지 마라.
 - **Depth:** 색상 대비(surface vs bg)로 깊이 표현. 그림자는 보조.
 
-### Clean Corporate (linear, stripe, notion, linkedin, apple)
+#### minimal + corporate (linear, stripe, notion, linkedin, apple, ibm, framer)
 - **Do:** 균일한 sans-serif. 1px border가 깊이의 주 수단. accent는 인터랙티브 요소에만.
 - **Don't:** 장식적 그라데이션/글로우 금지. 그림자 과용 금지(hairline-only). accent 남발 금지.
 - **Depth:** hairline border > shadow. 색상 변화 최소화.
 
-### Bold Dark (vercel, github, x, discord, openai, figma, adobe, bloomberg)
+#### dark (vercel, github, x, discord, openai, figma, adobe, bloomberg)
 - **Do:** 다크 표면 위 밝은 텍스트. accent는 포인트로만. 카드 border 미세 1px.
 - **Don't:** 밝은 배경색 혼용 금지. 그림자 대신 border로 구분. accent를 넓은 면적에 칠하지 마라.
 - **Depth:** surface 계층(bg→surface→surface-2)으로 깊이. 그림자 미미하거나 없음.
 
-### Vibrant Brand (spotify, twitch, netflix, instagram, youtube, airbnb, barbie, tmobile)
+#### bold (spotify, twitch, netflix, instagram, youtube, airbnb, barbie, tmobile, ferrari)
 - **Do:** accent가 브랜드 시그니처 — KPI delta, progress fill, 아이콘에 활용. 나머지는 중립.
 - **Don't:** accent를 카드 배경 전체에 깔지 마라. accent-2를 accent만큼 쓰지 마라.
 - **Depth:** accent 색 shadow 활용. 카드 border는 테마 기본값 유지.
 
-### Industrial Specialty (nasa, deere, heineken, ups, fedex, amazon, slack)
-- **Do:** 업종 컬러 쌍(accent + accent-2) 적극 활용. 데이터 밀도 높여도 OK.
+#### organic (deere, heineken, ups, forest, sunset, tannery, clay, starbucks)
+- **Do:** 업종/자연 컬러 쌍(accent + accent-2) 적극 활용. 따뜻한 톤 유지.
 - **Don't:** 업종 컬러를 희석하지 마라. radius를 임의로 키우지 마라(작은 radius 의도적).
 - **Depth:** 테마 기본 shadow 유지. 과한 elevation 금지.
 
