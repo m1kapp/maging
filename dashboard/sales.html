@@ -34,21 +34,17 @@
       <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
         <div id="section-02"></div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 mt-3" style="grid-auto-rows:380px">
-          <div id="line-pg1-2"></div>
-          <div id="line-pg3-4"></div>
+          <div id="line-pg1"></div>
+          <div id="line-pg2"></div>
         </div>
-      </div>
-
-      <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
-        <div id="section-03"></div>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 mt-3" style="grid-auto-rows:380px">
-          <div id="line-premium"></div>
+        <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-3 mt-3" style="grid-auto-rows:320px">
+          <div id="bar-pg-ytd"></div>
           <div id="line-export"></div>
         </div>
       </div>
 
       <div class="mt-5 pt-4 mb-6" style="border-top:1px solid var(--mw-border)">
-        <div id="section-04"></div>
+        <div id="section-03"></div>
         <div class="grid grid-cols-1 gap-3 mt-3" style="grid-auto-rows:auto">
           <div id="status-grid"></div>
         </div>
@@ -286,93 +282,50 @@
         Maging.sectionHead('#section-02', {
           index: '02',
           kicker: 'SEGMENT',
-          title: '제품군별 월별 매출 추이',
-          tag: '라인차트'
+          title: '제품군별 매출 분석',
+          tag: '추이 · YTD 비교'
         });
 
-        Maging.lineChart('#line-pg1-2', {
-          title: '제품군1/2 월별 매출 추이',
-          subtitle: '2025 실적 vs 2026 실적',
+        // 제품군1: 2025 vs 2026 (1차트 1인사이트)
+        Maging.lineChart('#line-pg1', {
+          title: '제품군1 월별 매출',
+          subtitle: '2025 vs 2026',
           categories: months,
           series: [
-            {
-              name: '제품군1 2025',
-              data: pg1_2025
-            },
-            {
-              name: '제품군1 2026',
-              data: pg1_2026
-            },
-            {
-              name: '제품군2 2025',
-              data: pg2_2025
-            },
-            {
-              name: '제품군2 2026',
-              data: pg2_2026
-            }
+            { name: '2025', data: pg1_2025 },
+            { name: '2026', data: pg1_2026 },
           ],
           area: false,
           yFormatter: krwPlain
         });
 
-        Maging.lineChart('#line-pg3-4', {
-          title: '제품군3/4 월별 매출 추이',
-          subtitle: '2025 실적 vs 2026 실적',
+        // 제품군2: 2025 vs 2026
+        Maging.lineChart('#line-pg2', {
+          title: '제품군2 월별 매출',
+          subtitle: '2025 vs 2026',
           categories: months,
           series: [
-            {
-              name: '제품군3 2025',
-              data: pg3_2025
-            },
-            {
-              name: '제품군3 2026',
-              data: pg3_2026
-            },
-            {
-              name: '제품군4 2025',
-              data: pg4_2025
-            },
-            {
-              name: '제품군4 2026',
-              data: pg4_2026
-            }
+            { name: '2025', data: pg2_2025 },
+            { name: '2026', data: pg2_2026 },
           ],
           area: false,
           yFormatter: krwPlain
         });
 
-        Maging.sectionHead('#section-03', {
-          index: '03',
-          kicker: 'PREMIUM & EXPORT',
-          title: '프리미엄 라인 및 수출 매출',
-          tag: '세부 추이'
-        });
-
-        Maging.lineChart('#line-premium', {
-          title: '프리미엄 라인 매출 추이',
-          subtitle: '제품군2Oak, 제품군3GOLD (월별)' ,
-          categories: months,
-          series: [
-            {
-              name: '제품군2Oak 2025',
-              data: pg2Oak_2025
-            },
-            {
-              name: '제품군2Oak 2026',
-              data: pg2Oak_2026
-            },
-            {
-              name: '제품군3GOLD 2025',
-              data: pg3Gold_2025
-            },
-            {
-              name: '제품군3GOLD 2026',
-              data: pg3Gold_2026
-            }
+        // 전 제품군 YTD 비교 (bar chart — 한눈에 비교)
+        const ytdSum = (arr) => arr.slice(0, latestMonthIndex + 1).reduce((s, v) => s + (v || 0), 0);
+        Maging.barChart('#bar-pg-ytd', {
+          title: `제품군별 YTD 매출 (1~${latestMonthLabel})`,
+          subtitle: '2026 누적',
+          items: [
+            { label: '제품군1', value: ytdSum(pg1_2026) },
+            { label: '제품군2', value: ytdSum(pg2_2026) },
+            { label: '제품군3', value: ytdSum(pg3_2026) },
+            { label: '제품군4', value: ytdSum(pg4_2026) },
           ],
-          area: false,
-          yFormatter: krwPlain
+          horizontal: false,
+          yFormatter: krwPlain,
+          showLabels: true,
         });
 
         Maging.metricChart('#line-export', {
@@ -395,8 +348,8 @@
           yFormatter: krwPlain
         });
 
-        Maging.sectionHead('#section-04', {
-          index: '04',
+        Maging.sectionHead('#section-03', {
+          index: '03',
           kicker: 'HEALTH CHECK',
           title: '매출 계획 달성 상태',
           tag: 'Status'
