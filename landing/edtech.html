@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<script>!function(){var T=["flow","morningmate","claude","linear","stripe","airbnb","linkedin","apple","duolingo","github","spotify","netflix","figma","adobe","bloomberg","instagram","openai","vercel","notion"],k="maging-theme",s=localStorage.getItem(k);if(!s||T.indexOf(s)<0)s="duolingo";document.documentElement.setAttribute("data-theme",s);localStorage.setItem(k,s)}();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>런핏 — 기업 교육을 즐겁게 · landing demo</title>
+<meta name="description" content="maging 랜딩 모드 데모. 가상의 기업교육 플랫폼 런핏을 소개합니다.">
+
+<link rel="stylesheet" href="tw.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js"></script>
+<link rel="stylesheet" href="../dist/maging.css">
+<script src="../dist/maging.js"></script>
+<script src="../dist/maging-landing.js"></script>
+<script type="module" src="../components/site.js"></script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  h1, h2, h3 { font-family: var(--mw-display-font); }
+
+  .grid-fill > *, .grid-fill > [id], .grid-fill > .mw-card { height: 100%; min-width: 0; min-height: 0; }
+  .grid-fill .mw-card { display: flex; flex-direction: column; box-sizing: border-box; height: 100%; min-height: 0; }
+  .grid-fill .mw-chart__body { height: auto !important; flex: 1 1 auto; min-height: 0; }
+  .grid-fill .mw-kpi__spark, .grid-fill .mw-hero__spark { flex: 1 1 auto; min-height: 32px; }
+
+  .lp-section {
+    max-width: 1100px; margin: 0 auto;
+    padding: 5rem 1.5rem; scroll-margin-top: 60px;
+  }
+  .lp-section--center { text-align: center; }
+  .lp-section__kicker {
+    font-size: var(--mw-text-xs); color: var(--mw-accent); text-transform: uppercase;
+    letter-spacing: 0.12em; font-family: var(--mw-font); margin-bottom: 0.75rem; font-weight: 600;
+  }
+  .lp-section__title {
+    font-size: clamp(1.5rem, 3vw, 2.125rem); font-weight: 700;
+    letter-spacing: -0.02em; margin-bottom: 0.75rem; font-family: var(--mw-display-font);
+  }
+  .lp-section__desc {
+    font-size: var(--mw-text-sm); color: var(--mw-text-muted);
+    max-width: 520px; line-height: 1.7; margin-bottom: 2.5rem;
+  }
+  .lp-section--center .lp-section__desc { margin-left: auto; margin-right: auto; }
+  .lp-divider {
+    max-width: 1100px; margin: 0 auto; padding: 0 1.5rem;
+    border: none; border-top: 1px solid var(--mw-border); opacity: 0.5;
+  }
+</style>
+</head>
+
+<body class="mw-themed">
+
+<maging-nav active="demo"></maging-nav>
+
+<!-- HERO -->
+<div id="hero"></div>
+
+<!-- STATS -->
+<section class="lp-section lp-section--center" style="padding-top:0;padding-bottom:3rem;">
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+    <div id="stat-1"></div>
+    <div id="stat-2"></div>
+    <div id="stat-3"></div>
+    <div id="stat-4"></div>
+  </div>
+</section>
+
+<hr class="lp-divider">
+
+<!-- HOW IT WORKS -->
+<section id="how" class="lp-section">
+  <div class="lp-section__kicker">How it works</div>
+  <div class="lp-section__title">도입까지 3단계</div>
+  <div id="steps"></div>
+</section>
+
+<hr class="lp-divider">
+
+<!-- FEATURES -->
+<section id="features" class="lp-section lp-section--center">
+  <div class="lp-section__kicker">Features</div>
+  <div class="lp-section__title">왜 런핏인가요</div>
+  <div class="lp-section__desc"></div>
+  <div id="feature-grid"></div>
+</section>
+
+<hr class="lp-divider">
+
+<!-- COMPARISON -->
+<section id="compare" class="lp-section lp-section--center">
+  <div class="lp-section__kicker">Comparison</div>
+  <div class="lp-section__title">기존 교육 도구와 비교</div>
+  <div class="lp-section__desc"></div>
+  <div id="comparison"></div>
+</section>
+
+<hr class="lp-divider">
+
+<!-- LIVE METRICS -->
+<section id="demo" class="lp-section">
+  <div class="lp-section__kicker">Dashboard Preview</div>
+  <div class="lp-section__title">관리자 대시보드 미리보기</div>
+  <div class="lp-section__desc">도입 후 실시간으로 확인하는 교육 성과 지표.</div>
+  <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-3 grid-fill" style="grid-auto-rows:minmax(300px,auto)">
+    <div id="demo-chart"></div>
+    <div id="demo-donut"></div>
+  </div>
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-3">
+    <div id="demo-kpi-1"></div>
+    <div id="demo-kpi-2"></div>
+    <div id="demo-kpi-3"></div>
+    <div id="demo-kpi-4"></div>
+  </div>
+</section>
+
+<hr class="lp-divider">
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" class="lp-section lp-section--center">
+  <div class="lp-section__kicker">고객 후기</div>
+  <div class="lp-section__title">도입 기업의 생생한 후기</div>
+  <div class="lp-section__desc"></div>
+  <div id="testimonials-grid"></div>
+</section>
+
+<hr class="lp-divider">
+
+<!-- FAQ -->
+<section id="faq" class="lp-section" style="max-width:720px;">
+  <div class="lp-section__kicker">FAQ</div>
+  <div class="lp-section__title">자주 묻는 질문</div>
+  <div id="faq-list" style="margin-top:1.5rem;"></div>
+</section>
+
+<!-- CTA -->
+<div id="cta"></div>
+
+<maging-footer></maging-footer>
+
+<script>
+/* ── Hero ── */
+Maging.heroSection('#hero', {
+  kicker: '런핏 LearnFit',
+  title: '기업 교육,\n게임처럼 즐겁게',
+  subtitle: '마이크로 러닝 + AI 맞춤 커리큘럼 + 실시간 분석.\n직원이 스스로 찾아서 듣는 교육 플랫폼.',
+  ctas: [
+    { label: '무료 체험 시작', href: '#how', primary: true },
+    { label: '데모 예약', href: '#demo' },
+  ]
+});
+
+/* ── Stats ── */
+var sc = { compact: true };
+Maging.kpiCard('#stat-1', Object.assign({}, sc, { label: '도입 기업', value: '1,280개' }));
+Maging.kpiCard('#stat-2', Object.assign({}, sc, { label: '월 학습자', value: '48만명' }));
+Maging.kpiCard('#stat-3', Object.assign({}, sc, { label: '이수율', value: '94%' }));
+Maging.kpiCard('#stat-4', Object.assign({}, sc, { label: '만족도', value: '4.8/5' }));
+
+/* ── Step Guide ── */
+Maging.stepGuide('#steps', {
+  steps: [
+    {
+      title: '교육 콘텐츠 업로드',
+      desc: '기존 PDF, PPT, 영상을 드래그&드롭. AI가 자동으로 마이크로 러닝 모듈로 분할합니다.',
+    },
+    {
+      title: 'AI가 맞춤 커리큘럼 생성',
+      desc: '직무, 레벨, 학습 이력을 분석해 직원별 최적 학습 경로를 자동으로 구성합니다.',
+    },
+    {
+      title: '대시보드로 성과 확인',
+      desc: '이수율, 테스트 점수, 참여도를 실시간 트래킹. 관리자 보고서가 자동 생성됩니다.',
+    }
+  ]
+});
+
+/* ── Features ── */
+Maging.featureGrid('#feature-grid', {
+  cols: 3,
+  items: [
+    { icon: '⚡', title: '5분 마이크로 러닝', desc: '긴 강의 대신 5분 단위 모듈. 출퇴근길에도 학습 가능.' },
+    { icon: '🎯', title: 'AI 맞춤 추천', desc: '직무·레벨·과거 성취에 맞춰 AI가 다음 학습을 추천.' },
+    { icon: '🏆', title: '게이미피케이션', desc: '배지, 랭킹, 스트릭으로 자발적 학습 동기를 자극.' },
+    { icon: '📊', title: '실시간 대시보드', desc: '팀별 이수율, 스킬갭 분석, ROI 지표를 한눈에.' },
+    { icon: '🔗', title: 'SSO & LMS 연동', desc: 'SAML/OIDC SSO, SCORM, xAPI 지원. 기존 시스템과 바로 연결.' },
+    { icon: '🛡️', title: 'ISO 27001 인증', desc: '데이터 암호화, 접근 제어, 감사 로그 완비.' },
+  ]
+});
+
+/* ── Comparison Table ── */
+Maging.comparisonTable('#comparison', {
+  columns: ['런핏', 'A사 LMS', 'B사 이러닝', 'C사 HR솔루션'],
+  highlight: 0,
+  rows: [
+    { label: 'AI 맞춤 커리큘럼', values: [true, false, false, false] },
+    { label: '마이크로 러닝', values: [true, false, true, false] },
+    { label: '게이미피케이션', values: [true, false, false, false] },
+    { label: '모바일 앱', values: [true, true, true, false] },
+    { label: '실시간 분석', values: [true, false, false, true] },
+    { label: 'SSO 연동', values: [true, true, false, true] },
+    { label: '무료 체험', values: ['30일', '14일', false, false] },
+    { label: '도입 기간', values: ['1주', '4~8주', '2주', '8~12주'] },
+  ]
+});
+
+/* ── Live Demo widgets ── */
+Maging.lineChart('#demo-chart', {
+  title: '월별 학습 이수율 추이',
+  categories: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+  series: [
+    { name: '런핏 도입 후', data: [68,72,76,81,84,88,90,91,93,94,95,94] },
+    { name: '도입 전 (구 LMS)', data: [42,44,41,45,43,38,35,32,40,41,43,42] }
+  ],
+  yFormatter: v => v + '%',
+});
+Maging.donutChart('#demo-donut', {
+  title: '직무별 학습 분포',
+  slices: [
+    { label: '개발', value: 34 },
+    { label: '마케팅', value: 22 },
+    { label: '영업', value: 18 },
+    { label: '경영지원', value: 14 },
+    { label: '디자인', value: 12 },
+  ],
+  centerLabel: '전체',
+});
+Maging.kpiCard('#demo-kpi-1', { label: '이수율', value: '94%', delta: 12.4, compact: true, sparkline: [68,72,76,81,88,94] });
+Maging.kpiCard('#demo-kpi-2', { label: '평균 학습 시간', value: '23분/일', delta: 8.1, compact: true, sparkline: [12,14,16,18,21,23] });
+Maging.kpiCard('#demo-kpi-3', { label: '교육 만족도', value: '4.8', delta: 0.6, compact: true, sparkline: [4.0,4.1,4.3,4.5,4.7,4.8] });
+Maging.kpiCard('#demo-kpi-4', { label: '스킬갭 감소', value: '-34%', delta: -34, deltaGoodWhen: 'negative', compact: true, sparkline: [100,88,78,72,68,66] });
+
+/* ── Testimonials ── */
+Maging.testimonialGrid('#testimonials-grid', {
+  cols: 3,
+  items: [
+    {
+      quote: '기존 LMS 이수율 42%에서 런핏 도입 후 94%로. 직원들이 알아서 학습합니다.',
+      name: '최영은', role: 'HR 본부장, 대기업 A사', initial: 'C'
+    },
+    {
+      quote: '5분짜리 모듈이라 거부감이 없어요. 점심시간에 한 개씩 들으니 한 달이면 과정 완료.',
+      name: '박서준', role: '주니어 개발자, 스타트업', initial: 'P'
+    },
+    {
+      quote: '교육 예산 ROI를 처음으로 수치로 보여줄 수 있게 됐습니다. 경영진 설득이 쉬워졌어요.',
+      name: '김하나', role: 'L&D 매니저, 중견기업', initial: 'K'
+    },
+  ]
+});
+
+/* ── FAQ ── */
+Maging.faqAccordion('#faq-list', {
+  items: [
+    { q: '기존 교육 자료를 그대로 쓸 수 있나요?', a: 'PDF, PPT, MP4, SCORM 패키지 모두 지원합니다. 업로드하면 AI가 자동으로 마이크로 러닝 모듈로 분할해줍니다.' },
+    { q: '몇 명부터 도입할 수 있나요?', a: '10인 이상이면 시작 가능합니다. Starter 플랜은 월 3,900원/인, Enterprise는 별도 상담입니다.' },
+    { q: '자체 서버에 설치 가능한가요?', a: 'Enterprise 플랜에서 On-premise 또는 Private Cloud 배포를 지원합니다. AWS, Azure, GCP 모두 가능합니다.' },
+    { q: '모바일에서도 학습할 수 있나요?', a: 'iOS, Android 앱이 있고 오프라인 다운로드도 됩니다. 웹에서도 모바일 최적화 화면으로 접속 가능합니다.' },
+    { q: '데이터 보안은 어떻게 되나요?', a: 'ISO 27001 인증, AES-256 암호화, SOC 2 Type II 준수. 모든 데이터는 국내 리전에 저장됩니다.' },
+  ]
+});
+
+/* ── CTA ── */
+Maging.ctaSection('#cta', {
+  kicker: '',
+  title: '30일 무료로\n직접 경험해보세요',
+  desc: '카드 등록 없이 바로 시작. 전체 기능을 30일간 무제한.',
+  ctas: [
+    { label: '무료 체험 시작', href: '#', primary: true },
+    { label: '데모 예약', href: '#' },
+  ]
+});
+</script>
+
+</body>
+</html>
