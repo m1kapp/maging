@@ -163,6 +163,14 @@
     pct: function (n) { return (n == null || isNaN(n) || !isFinite(n)) ? '-' : Number(n).toFixed(1) + '%'; },
   };
 
+  /** Strip HTML tags — safe to use for ECharts labels that receive fmt.krw() output */
+  function stripHTML(v) { return v == null ? '' : String(v).replace(/<[^>]*>/g, ''); }
+  /** Wrap a formatter function so its output is HTML-free (for ECharts canvas labels) */
+  function plainFmt(fn) {
+    if (!fn) return fn;
+    return function (v) { return stripHTML(fn(v)); };
+  }
+
   // ==========================================================
   // Registry (for theme refresh)
   // ==========================================================
@@ -338,7 +346,7 @@
           symbol: 'circle',
           symbolSize: 3,
           showSymbol: false,
-          emphasis: { focus: 'series', itemStyle: { borderWidth: 2 } },
+          emphasis: { disabled: true },
           data: s.data,
           lineStyle: { color: col, width: 1.5 },
           itemStyle: { color: col, borderColor: c.surface, borderWidth: 1 },
@@ -361,8 +369,8 @@
           icon: 'circle', itemWidth: 6, itemHeight: 6, itemGap: 14,
           data: data.series.map(function (s) { return s.name; }),
         } : { show: false },
-        tooltip: Object.assign({ trigger: 'axis' }, baseTooltip(c),
-          data.yFormatter ? { valueFormatter: data.yFormatter } : {}),
+        tooltip: Object.assign({ trigger: 'axis', axisPointer: { type: 'line', lineStyle: { color: c.border, type: 'dashed' } } }, baseTooltip(c),
+          data.yFormatter ? { valueFormatter: function(v) { return v == null ? '-' : data.yFormatter(v); } } : { valueFormatter: function(v) { return v == null ? '-' : v; } }),
         xAxis: {
           type: 'category',
           data: data.categories,
@@ -377,7 +385,7 @@
           axisLine: { show: false },
           axisTick: { show: false },
           axisLabel: Object.assign({ color: c.muted, fontSize: 10, fontFamily: c.mono, margin: 8 },
-            data.yFormatter ? { formatter: data.yFormatter } : {}),
+            data.yFormatter ? { formatter: plainFmt(data.yFormatter) } : {}),
           splitLine: { lineStyle: { color: c.border, type: [4, 4], opacity: 0.6 } },
         },
         series: series,
@@ -408,7 +416,7 @@
               color: col,
               borderRadius: data.stack ? 0 : [3, 3, 0, 0],
             },
-            emphasis: { focus: 'series' },
+            emphasis: { disabled: true },
           };
         });
         return {
@@ -432,7 +440,7 @@
             axisLine: { show: false }, axisTick: { show: false },
             axisLabel: Object.assign(
               { color: c.muted, fontSize: 10, fontFamily: c.mono, margin: 8 },
-              data.yFormatter ? { formatter: data.yFormatter } : {}
+              data.yFormatter ? { formatter: plainFmt(data.yFormatter) } : {}
             ),
             splitLine: { lineStyle: { color: c.border, type: [4, 4], opacity: 0.6 } },
           },
@@ -464,7 +472,7 @@
             label: data.showLabels ? {
               show: true, position: 'right',
               color: c.muted, fontFamily: c.font, fontSize: 11,
-              formatter: function (p) { return tipFmt ? tipFmt(p.value) : safeNum(p.value); },
+              formatter: function (p) { return tipFmt ? stripHTML(tipFmt(p.value)) : safeNum(p.value); },
             } : { show: false },
           }],
         };
@@ -482,7 +490,7 @@
         yAxis: {
           type: 'value',
           axisLine: { show: false }, axisTick: { show: false },
-          axisLabel: Object.assign({ color: c.muted, fontSize: 10, fontFamily: c.mono, margin: 8 }, tipFmt ? { formatter: tipFmt } : {}),
+          axisLabel: Object.assign({ color: c.muted, fontSize: 10, fontFamily: c.mono, margin: 8 }, tipFmt ? { formatter: plainFmt(tipFmt) } : {}),
           splitLine: { lineStyle: { color: c.border, type: [4, 4], opacity: 0.6 } },
         },
         series: [{
@@ -539,7 +547,7 @@
         data.slices.forEach(function(s) { s.value = Math.round(s.value * factor * 10) / 10; });
         total = 100;
       }
-      var centerVal = data.centerValue != null ? data.centerValue : safeNum(total);
+      var centerVal = data.centerValue != null ? String(data.centerValue).replace(/<[^>]*>/g, '') : safeNum(total);
       return {
         textStyle: { fontFamily: c.font },
         tooltip: baseTooltip(c),
@@ -765,7 +773,7 @@
       var w = (size && size.width)  || 320;
       var minDim = Math.min(w, h * 2);
       var compact = h < 200;
-      var fmtVal = typeof data.valueFormatter === 'function' ? data.valueFormatter(data.value)
+      var fmtVal = typeof data.valueFormatter === 'function' ? stripHTML(data.valueFormatter(data.value))
         : (data.unit || '') === '원' ? fmt.krwPlain(data.value)
         : safeNum(data.value) + (data.unit || '');
       var valueText = fmtVal;
@@ -1962,7 +1970,7 @@
         yAxis: {
           type: 'value',
           axisLine: { show: false }, axisTick: { show: false },
-          axisLabel: { color: c.muted, fontSize: 11, formatter: fmt },
+          axisLabel: { color: c.muted, fontSize: 11, formatter: plainFmt(fmt) },
           splitLine: { lineStyle: { color: c.border, type: 'dashed' } },
         },
         series: [
@@ -1971,15 +1979,15 @@
           { name: '증가', type: 'bar', stack: 'total',
             itemStyle: { color: gainCol, borderRadius: [3, 3, 0, 0] }, data: gain,
             label: { show: true, position: 'top', color: gainCol, fontSize: 10,
-                     formatter: function (p) { return p.value ? '+' + fmt(p.value) : ''; } } },
+                     formatter: function (p) { return p.value ? '+' + stripHTML(fmt(p.value)) : ''; } } },
           { name: '감소', type: 'bar', stack: 'total',
             itemStyle: { color: lossCol, borderRadius: [3, 3, 0, 0] }, data: loss,
             label: { show: true, position: 'top', color: lossCol, fontSize: 10,
-                     formatter: function (p) { return p.value ? '−' + fmt(p.value) : ''; } } },
+                     formatter: function (p) { return p.value ? '−' + stripHTML(fmt(p.value)) : ''; } } },
           { name: '합계', type: 'bar', stack: 'total',
             itemStyle: { color: totCol, borderRadius: [3, 3, 0, 0] }, data: total,
             label: { show: true, position: 'top', color: c.text, fontWeight: 600, fontSize: 11,
-                     formatter: function (p) { return p.value ? fmt(p.value) : ''; } } },
+                     formatter: function (p) { return p.value ? stripHTML(fmt(p.value)) : ''; } } },
         ],
       };
     });
