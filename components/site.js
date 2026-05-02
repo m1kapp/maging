@@ -121,8 +121,8 @@ class MagingNav extends HTMLElement {
                 <span class="mw-site-nav__menu-desc">운영 · 매출 분석</span>
               </span>
             </div>
-            <a href="${base}dashboard/acme.html" class="mw-site-nav__menu-item">ACME 운영 대시보드</a>
-            <a href="${base}dashboard/sales.html" class="mw-site-nav__menu-item">매출 인사이트</a>
+            <a href="${base}dashboard/acme.html" class="mw-site-nav__menu-item">B2B SaaS 운영 대시보드</a>
+            <a href="${base}dashboard/sales.html" class="mw-site-nav__menu-item">매출 인사이트 · 데이터 연동</a>
           </div>
           <div class="mw-site-nav__mega-col">
             <div class="mw-site-nav__mega-head">
@@ -132,8 +132,8 @@ class MagingNav extends HTMLElement {
                 <span class="mw-site-nav__menu-desc">A4 슬라이드 리포트</span>
               </span>
             </div>
-            <a href="${base}weekly-report/index.html" class="mw-site-nav__menu-item">SaaS 주간보고 · 15슬라이드</a>
-            <a href="${base}weekly-report/ecommerce.html" class="mw-site-nav__menu-item">이커머스 주간보고 · 5슬라이드</a>
+            <a href="${base}weekly-report/index.html" class="mw-site-nav__menu-item">SaaS 주간보고 · 15 슬라이드</a>
+            <a href="${base}weekly-report/ecommerce.html" class="mw-site-nav__menu-item">이커머스 마케팅 · 5 슬라이드</a>
           </div>
           <div class="mw-site-nav__mega-col">
             <div class="mw-site-nav__mega-head">
@@ -143,8 +143,8 @@ class MagingNav extends HTMLElement {
                 <span class="mw-site-nav__menu-desc">마케팅 전환 페이지</span>
               </span>
             </div>
-            <a href="${base}landing/startup.html" class="mw-site-nav__menu-item">maging 소개</a>
-            <a href="${base}landing/edtech.html" class="mw-site-nav__menu-item">런핏 EdTech</a>
+            <a href="${base}landing/startup.html" class="mw-site-nav__menu-item">개발자 도구 랜딩</a>
+            <a href="${base}landing/edtech.html" class="mw-site-nav__menu-item">교육 플랫폼 랜딩</a>
           </div>
           <div class="mw-site-nav__mega-col">
             <div class="mw-site-nav__mega-head">
@@ -155,7 +155,7 @@ class MagingNav extends HTMLElement {
               </span>
             </div>
             <a href="${base}card-news/index.html" class="mw-site-nav__menu-item">AI 마케팅 가이드 · 11장</a>
-            <a href="${base}card-news/finance.html" class="mw-site-nav__menu-item">재테크 가이드</a>
+            <a href="${base}card-news/finance.html" class="mw-site-nav__menu-item">재테크 가이드 · 11장</a>
           </div>
         </div>
       </div>
