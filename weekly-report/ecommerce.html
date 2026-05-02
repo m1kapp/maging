@@ -121,18 +121,19 @@
         const u = s => String(s).replace(/\[(.+?)\]/g, '<span class="mw-unit">$1</span>');
         const fmtW = v => Maging.fmt.krwPlain(v);
 
-        // ═══ Cover ═══
-        sectionCover(document.querySelector('#cover .cover-host'), {
-          style: 'classic',
-          kicker: 'WEEKLY REPORT · 2026년 4월 4주차',
-          title: '이커머스 마케팅\n주간보고',
-          subtitle: '마케팅본부 · 퍼포먼스 마케팅팀 · 브랜드 마케팅팀 · CRM팀',
-          brand: 'ACME STORE',
-          meta: '기준일 2026.04.27(월)',
-        });
+        function mountCover() {
+          sectionCover(document.querySelector('#cover .cover-host'), {
+            style: 'classic',
+            kicker: 'WEEKLY REPORT · 2026년 4월 4주차',
+            title: '이커머스 마케팅\n주간보고',
+            subtitle: '마케팅본부 · 퍼포먼스 마케팅팀 · 브랜드 마케팅팀 · CRM팀',
+            brand: 'ACME STORE',
+            meta: '기준일 2026.04.27(월)',
+          });
+        }
 
         // ═══ Slide 2: 매출 KPI ═══
-        (function() {
+        function mountRevenueKpi() {
           const root = document.getElementById('revenue-kpi');
           pageHeader(root.querySelector('.rv-hero'), {
             kicker: '01 · REVENUE', title: 'GMV & 매출 현황',
@@ -163,10 +164,10 @@
               '다음 주 5월 가정의 달 캠페인 본격 집행 예정',
             ],
           });
-        })();
+        }
 
         // ═══ Slide 3: 채널별 성과 ═══
-        (function() {
+        function mountChannel() {
           const root = document.getElementById('channel');
           pageHeader(root.querySelector('.ch-hero'), {
             kicker: '02 · CHANNEL', title: '채널별 매출 분석',
@@ -198,10 +199,10 @@
               { channel: 'SSG / 11번가', gmv: 50000000, orders: 160, aov: 31300, roas: 150, delta: -8.1 },
             ],
           });
-        })();
+        }
 
         // ═══ Slide 4: 캠페인 성과 ═══
-        (function() {
+        function mountCampaign() {
           const root = document.getElementById('campaign');
           pageHeader(root.querySelector('.cp-hero'), {
             kicker: '03 · CAMPAIGN', title: '캠페인 성과',
@@ -240,10 +241,10 @@
               '5월 캠페인: 가정의 달 기획전 + 인플루언서 콜라보 준비 중',
             ],
           });
-        })();
+        }
 
         // ═══ Slide 5: 고객 분석 ═══
-        (function() {
+        function mountCustomer() {
           const root = document.getElementById('customer');
           pageHeader(root.querySelector('.cu-hero'), {
             kicker: '04 · CUSTOMER', title: '고객 & 재구매 분석',
@@ -281,8 +282,15 @@
               '장바구니→결제 전환율 50% — 간편결제 도입 후 개선세',
             ],
           });
-        })();
+        }
 
+        window.DECK_MOUNT = {
+          cover:        mountCover,
+          'revenue-kpi': mountRevenueKpi,
+          channel:      mountChannel,
+          campaign:     mountCampaign,
+          customer:     mountCustomer,
+        };
       });
     </script>
   </body>
