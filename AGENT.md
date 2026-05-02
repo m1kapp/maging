@@ -103,6 +103,21 @@ Maging.lineChart('#el', config);
 |---|---|
 | `progress-stepper` | `title, kicker, status:{label,type}, meta:[{label,value}], steps:[{label, date, status:'done'\|'active'\|'pending', badge?}]` |
 
+### 🃏 카드뉴스 (11 · maging-news.js 필요)
+| type | 주요 필드 |
+|---|---|
+| `cover-card` | `tag, title, subtitle, brand, style, number?` — style: gradient/bold-type/number-hero/framed/accent-block/minimal |
+| `body-card` | `num?, icon?, heading, text, brand` |
+| `data-card` | `label, title, widget, widgetConfig, brand` — 코어 차트 위젯 내장 |
+| `numbered-card` | `heading, items:[{rank,title,desc,icon?}], brand` |
+| `quote-card` | `quote, name?, role?, brand` — 인용문 + 출처 |
+| `stat-card` (news) | `label, value, context, brand` — 대형 수치 임팩트 |
+| `comparison-card` | `heading, leftLabel, rightLabel, left:[], right:[], brand` — Do/Don't 비교 |
+| `checklist-card` | `heading, items:[{text,done}], brand` — 체크리스트 |
+| `step-card` | `step, heading, text, tip?, brand` — How-to 스텝 |
+| `testimonial-card` | `quote, name, role?, stars?, brand` — 고객 후기 + 별점 |
+| `cta-card` | `heading, subtext, ctas:[{label,primary?}], handles:[{platform,handle}], brand` |
+
 **리스트 위젯은 자동 100개 cap + 스크롤.** JSON에 얼마를 넣어도 100개까지만 표시.
 **공통:** 대부분 `title` / `subtitle` 지원.
 
