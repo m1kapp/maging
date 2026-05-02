@@ -266,7 +266,7 @@ MIT
 
 ### Setup
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.16/dist/maging-all.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.19/dist/maging-all.js"></script>
 <body class="mw-themed">
 ```
 `maging:ready` 안에서 마운트. `DOMContentLoaded` 금지.
@@ -455,7 +455,7 @@ window.addEventListener('maging:ready', () => {
 <html lang="ko" data-theme="claude">
 <head>
   <meta charset="UTF-8"><title>주간보고</title>
-  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.16/dist/maging-all.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.19/dist/maging-all.js"></script>
 </head>
 <body class="mw-themed">
   <main class="max-w-[1240px] mx-auto px-6 py-4" style="word-break:keep-all">

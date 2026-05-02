@@ -267,7 +267,7 @@ MIT
 ### Setup
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.16/dist/maging-all.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.19/dist/maging-all.js"></script>
 <body class="mw-themed">
 ```
 
