@@ -12,6 +12,21 @@
 ```
 `maging:ready` 안에서 마운트. `DOMContentLoaded` 금지.
 
+**DECK_MOUNT 필수** — 위젯을 즉시 실행하지 마라. 각 슬라이드별 마운트 함수를 선언하고 `window.DECK_MOUNT`에 등록하라. `maging-weekly.js`가 이를 감지하여 네비게이션 · 스케일링을 초기화한다.
+```js
+window.addEventListener('maging:ready', () => {
+  function mountCover() { Maging.sectionCover(...); }
+  function mountSlide1() { Maging.pageHeader(...); Maging.kpiCard(...); }
+  // ...
+  window.DECK_MOUNT = {
+    cover: mountCover,
+    'slide-1': mountSlide1,
+    // 모든 슬라이드 ID → 마운트 함수
+  };
+});
+```
+**DECK_MOUNT 없이 즉시 마운트하면 네비게이션이 동작하지 않는다.**
+
 **KRW:** `Maging.fmt.krw(v)` (HTML), `Maging.fmt.krwPlain(v)` (차트 축). NEVER `₩` prefix.
 
 ---
@@ -163,7 +178,7 @@ window.addEventListener('maging:ready', () => {
 3. **단위 필수** — 명/건/개/원/% 모두. 금액은 `Maging.fmt.krw`.
 4. **KPI label에 목표 포함** — `'3월 신규 · 목표 1.42억원'`.
 5. **delta:** 목표 대비 또는 전월/전년 대비 %.
-6. **마지막은 alertBanner** — `icon='📋' type='info'` 1-2문장 요약.
+6. **마지막은 alertBanner** — `type='info'` 1-2문장 요약.
 7. **Anti-AI:** hover glow 금지 · 균일 3등분 grid 금지 · shadow tint 금지.
 8. **슬라이드 밀도:** 각 슬라이드는 A4 가로(297×210mm) 안에 모든 내용이 들어가야 한다. 절대 넘치면 안 된다.
    - **테이블은 반드시** `<div class="scroll-table" style="height:280px">` 로 감싸라. 행이 많아도 슬라이드 안에서 스크롤로 처리된다.
