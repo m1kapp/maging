@@ -98,4 +98,5 @@ Outer wrapper: `<main class="max-w-[1100px] mx-auto px-6 py-4">`. Stack sections
 10. Section order: at-a-glance → real-time → trends → deep-dive → operations.
 11. **Density:** `gap-3` everywhere. `mt-5 pt-4` for sections. No large spacings.
 12. **Asymmetric grids:** Vary column ratios. Never repeat same pattern consecutively.
-13. Output one fenced code block: ` ```html … ``` `.
+13. **1차트 1인사이트:** 라인차트 시리즈 최대 2개. 데이터 3개 미만 시리즈는 라인차트 금지. 비교는 동일 카테고리끼리만.
+14. Output one fenced code block: ` ```html … ``` `.

@@ -165,6 +165,12 @@ Maging.kpiCard('#kpi', {
 - 같은 숫자가 2곳 이상이면 `const`로 선언하고 참조하라.
 - 큰 숫자는 반올림: 72억 (O), 7,234,567,890 (X).
 
+**차트 가독성 규칙 (1차트 1인사이트):**
+- 라인차트 시리즈는 최대 2개. 3개 이상이면 차트를 분리하라.
+- 데이터 포인트가 3개 미만인 시리즈는 라인차트에 넣지 마라 — 선이 아니라 점이 된다.
+- 비교하려면 동일 카테고리끼리만: "제품군1 2025 vs 2026" (O), "제품군1+2+3+4 전부" (X).
+- 해석이 바로 되지 않는 차트는 그리지 마라. 차트 하나가 하나의 메시지를 전달해야 한다.
+
 ---
 
 ## NEVER
@@ -357,7 +363,8 @@ Outer wrapper: `<main class="max-w-[1100px] mx-auto px-6 py-4">`. Stack sections
 10. Section order: at-a-glance → real-time → trends → deep-dive → operations.
 11. **Density:** `gap-3` everywhere. `mt-5 pt-4` for sections. No large spacings.
 12. **Asymmetric grids:** Vary column ratios. Never repeat same pattern consecutively.
-13. Output one fenced code block: ` ```html … ``` `.
+13. **1차트 1인사이트:** 라인차트 시리즈 최대 2개. 데이터 3개 미만 시리즈는 라인차트 금지. 비교는 동일 카테고리끼리만.
+14. Output one fenced code block: ` ```html … ``` `.
 
 
 ## Service: Gemini (Canvas)
