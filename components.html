@@ -103,6 +103,17 @@
   .sc-code .hl-prop { color: #b4befe; } .sc-code .hl-cmt { color: #6c7086; font-style: italic; }
   .sc-code .hl-tag { color: #89b4fa; }
 
+  /* style variant pills */
+  .sc-variants { display: flex; gap: 0.375rem; flex-wrap: wrap; margin: 0.5rem 0; }
+  .sc-variant-pill {
+    padding: 0.25rem 0.625rem; font-size: 0.68rem; font-weight: 600;
+    font-family: var(--mw-mono-font); border-radius: 999px;
+    border: 1px solid var(--mw-border); background: var(--mw-surface);
+    color: var(--mw-text-muted); cursor: pointer; transition: all 120ms;
+  }
+  .sc-variant-pill:hover { border-color: var(--mw-text-muted); color: var(--mw-text); }
+  .sc-variant-pill--active { background: var(--mw-accent); color: #fff; border-color: var(--mw-accent); }
+
   /* mode tabs */
   .cg-tabs {
     display: flex; gap: 2px; margin-bottom: 2rem;
@@ -189,8 +200,7 @@ var WIDGETS = {
 
   // ── Weekly Report specific ──
   monthlyTable:         { mode: 'weekly', cat: 'Weekly Report', wide: true, tall: true },
-  sectionCoverClassic:  { mode: 'weekly', cat: 'Weekly Report', wide: true, tall: true },
-  sectionCoverCentered: { mode: 'weekly', cat: 'Weekly Report', wide: true, tall: true },
+  sectionCover:         { mode: 'weekly', cat: 'Weekly Report', wide: true, tall: true },
   defCard:                 { mode: 'weekly', cat: 'Weekly Report' },
   insightCard:             { mode: 'weekly', cat: 'Weekly Report', tall: true },
 
@@ -281,8 +291,7 @@ var SAMPLES = {
       summaryRow: '합계', unitToggle: true, viewToggle: true, defaultUnit: '만원',
     });
   },
-  sectionCoverClassic:  function(el) { Maging.sectionCover(el, { style: 'classic',  kicker: 'WEEKLY REPORT · 4월 4주차', title: 'SaaS 주간보고', subtitle: 'SaaS B/U · Enterprise B/U', brand: 'flow.team', meta: '기준일 2026.04.27(월)' }); },
-  sectionCoverCentered: function(el) { Maging.sectionCover(el, { style: 'centered', kicker: 'WEEKLY REPORT · 4월 4주차', title: 'SaaS 주간보고', subtitle: 'SaaS B/U · Enterprise B/U', brand: 'flow.team', meta: '기준일 2026.04.27(월)' }); },
+  sectionCover:         function(el) { Maging.sectionCover(el, { style: 'classic', kicker: 'WEEKLY REPORT · 4월 4주차', title: 'SaaS 주간보고', subtitle: 'SaaS B/U · Enterprise B/U', brand: 'flow.team', meta: '기준일 2026.04.27(월)' }); },
 
   // ── Specialized ──
   mapChart:      function(el) { Maging.mapChart(el, { items: [{ region: '서울', value: 45 },{ region: '경기', value: 30 },{ region: '부산', value: 15 },{ region: '인천', value: 20 },{ region: '대구', value: 18 }] }); },
@@ -378,6 +387,7 @@ var LANDING_META = {
   logoBar: { title: 'Logo Bar', desc: '고객사/파트너 로고 나열 (social proof).' },
   ctaSection: { title: 'CTA Section', desc: '전환 유도 CTA 섹션.' },
   faqAccordion: { title: 'FAQ Accordion', desc: '아코디언 FAQ.' },
+  sectionCover: { title: 'Section Cover', desc: '보고서 표지/섹션 구분. 5가지 스타일.' },
   coverCard: { title: 'Cover Card', desc: '카드뉴스 표지. 후킹 타이틀 + 태그 + 그라데이션 배경.' },
   bodyCard: { title: 'Body Card', desc: '본문 카드. 1카드 1메시지 원칙. 넘버링 + 아이콘.' },
   dataCard: { title: 'Data Card', desc: '데이터 시각화 카드. 기존 maging 차트 위젯 내장.' },
@@ -441,9 +451,7 @@ var CODE = {
   alertBanner:   "const config = {\n  type: 'success',\n  title: '배포 완료',\n  message: 'v2.4.1'\n};\n\nMaging.alertBanner('#el', config);",
   mapChart:      "const config = {\n  items: [\n    { region: '서울', value: 45 },\n    { region: '경기', value: 30 },\n    { region: '부산', value: 15 }\n  ]\n};\n\nMaging.mapChart('#el', config);",
   cohortMatrix:  "const config = {\n  cohorts: ['1월','2월','3월'],\n  periods: ['M0','M1','M2'],\n  data: [\n    [100, 60, 40],\n    [100, 55, 35],\n    [100, 58, null]\n  ]\n};\n\nMaging.cohortMatrix('#el', config);",
-  sectionCoverClassic:  "const config = {\n  style: 'classic',\n  kicker: 'WEEKLY REPORT · 4월 4주차',\n  title: 'SaaS 주간보고',\n  subtitle: 'SaaS B/U · Enterprise B/U',\n  brand: 'flow.team',\n  meta: '기준일 2026.04.27(월)',\n};\n\nMaging.sectionCover('#el', config);",
-  sectionCoverCentered: "const config = {\n  style: 'centered',\n  kicker: 'WEEKLY REPORT · 4월 4주차',\n  title: 'SaaS 주간보고',\n  subtitle: 'SaaS B/U · Enterprise B/U',\n  brand: 'flow.team',\n  meta: '기준일 2026.04.27(월)',\n};\n\nMaging.sectionCover('#el', config);",
-  sectionCoverSplit:       "const config = {\n  style: 'split',\n  kicker: 'WEEKLY REPORT · 4월 4주차',\n  title: 'SaaS 주간보고',\n  subtitle: 'SaaS B/U · Enterprise B/U',\n  brand: 'flow.team',\n  meta: '기준일 2026.04.27(월)',\n};\n\nMaging.sectionCover('#el', config);",
+  sectionCover: "const config = {\n  style: 'classic',\n  kicker: 'WEEKLY REPORT · 4월 4주차',\n  title: 'SaaS 주간보고',\n  subtitle: 'SaaS B/U · Enterprise B/U',\n  brand: 'flow.team',\n  meta: '기준일 2026.04.27(월)',\n};\n\nMaging.sectionCover('#el', config);",
   defCard:       "const config = {\n  title: 'NPS 정의',\n  subtitle: 'Net Promoter Score · 분기별',\n  rows: [\n    { key: '정의', value: '\"우리 서비스를 동료에게 추천하시겠습니까?\"' },\n    { key: '측정', value: '1~10점 form, 분기별 발송' },\n    { key: '담당', value: '박진웅 · 1차 발송 완료' },\n  ],\n};\n\nMaging.defCard('#el', config);",
   insightCard:   "const config = {\n  title: 'KDB생명보험',\n  meta: '180인',\n  tag: 'AM · 박수연',\n  status: 'yellow',  // 'green' | 'yellow' | 'red'\n  bullets: [\n    '5월 계약 클로징 목표 — 법무 검토 완료 대기',\n    '사용자 범위 확대 협의 중',\n  ],\n  highlight: '계약서 최종본 4/30 수령 예정. 기한 내 서명 필요.',\n};\n\nMaging.insightCard('#el', config);",
   monthlyTable:  "const config = {\n  title: '월별 매출',\n  sub: '2026년',\n  rows: [\n    { name: '신규',   data: [99,175,142,223,290,248,385,332,227,173,479,227].map(v => v * 1e6) },\n    { name: '기고객', data: [522,685,523,633,567,641,653,545,547,539,660,532].map(v => v * 1e6) },\n  ],\n  summaryRow: '합계',\n  unitToggle: true,\n  viewToggle: true,\n  defaultUnit: '만원',\n};\n\nMaging.monthlyTable('#el', config);",
@@ -491,6 +499,88 @@ function highlightSyntax(code) {
 
 
 
+// ── Style variants: widgets with multiple styles ──
+var STYLE_VARIANTS = {
+  coverCard: {
+    variants: [
+      { label: 'gradient', value: 'gradient' },
+      { label: 'bold-type', value: 'bold-type' },
+      { label: 'number-hero', value: 'number-hero' },
+      { label: 'framed', value: 'framed' },
+      { label: 'accent-block', value: 'accent-block' },
+      { label: 'minimal', value: 'minimal' },
+    ],
+    render: function(el, v) {
+      var cfg = { icon: '🚀', tag: 'AI 트렌드', title: 'AI가 바꿀\n마케팅의 미래', subtitle: '마케터가 알아야 할 5가지', brand: '@maging.page', style: v };
+      if (v === 'number-hero') { cfg.number = 5; cfg.icon = undefined; }
+      if (v === 'bold-type') cfg.icon = undefined;
+      Maging.coverCard(el, cfg);
+    },
+    code: function(v) {
+      var lines = ['const config = {'];
+      if (v !== 'bold-type' && v !== 'number-hero') lines.push("  icon: '🚀',");
+      lines.push("  tag: 'AI 트렌드',", "  title: 'AI가 바꿀\\n마케팅의 미래',", "  subtitle: '마케터가 알아야 할 5가지',", "  brand: '@mybrand',", "  style: '" + v + "',");
+      if (v === 'number-hero') lines.push("  number: 5,");
+      lines.push('};', '', "Maging.coverCard('#card-cover', config);");
+      return lines.join('\n');
+    },
+  },
+  sectionCover: {
+    variants: [
+      { label: 'classic', value: 'classic' },
+      { label: 'centered', value: 'centered' },
+      { label: 'split', value: 'split' },
+      { label: 'fullbleed', value: 'fullbleed' },
+      { label: 'topband', value: 'topband' },
+    ],
+    render: function(el, v) {
+      Maging.sectionCover(el, { style: v, kicker: 'WEEKLY REPORT · 4월 4주차', title: 'SaaS 주간보고', subtitle: 'SaaS B/U · Enterprise B/U', brand: 'flow.team', meta: '기준일 2026.04.27(월)' });
+    },
+    code: function(v) {
+      return "const config = {\n  style: '" + v + "',\n  kicker: 'WEEKLY REPORT · 4월 4주차',\n  title: 'SaaS 주간보고',\n  subtitle: 'SaaS B/U · Enterprise B/U',\n  brand: 'flow.team',\n  meta: '기준일 2026.04.27(월)',\n};\n\nMaging.sectionCover('#el', config);";
+    },
+  },
+  alertBanner: {
+    variants: [
+      { label: 'info', value: 'info' },
+      { label: 'success', value: 'success' },
+      { label: 'warning', value: 'warning' },
+      { label: 'danger', value: 'danger' },
+    ],
+    render: function(el, v) {
+      Maging.alertBanner(el, { type: v, title: v === 'success' ? '배포 완료' : v === 'warning' ? '점검 예정' : v === 'danger' ? '장애 발생' : '안내', message: v === 'success' ? 'v2.4.1이 정상 배포되었습니다.' : v === 'warning' ? '오늘 22:00~24:00 정기 점검' : v === 'danger' ? 'API 응답 지연이 감지되었습니다.' : '시스템 공지사항입니다.' });
+    },
+    code: function(v) {
+      return "const config = {\n  type: '" + v + "',\n  title: '" + (v === 'success' ? '배포 완료' : v === 'warning' ? '점검 예정' : v === 'danger' ? '장애 발생' : '안내') + "',\n  message: '메시지 내용',\n};\n\nMaging.alertBanner('#el', config);";
+    },
+  },
+  barChart: {
+    variants: [
+      { label: 'horizontal', value: 'h' },
+      { label: 'vertical', value: 'v' },
+    ],
+    render: function(el, v) {
+      Maging.barChart(el, { items: [{ label: '영업', value: 45 },{ label: '마케팅', value: 32 },{ label: '개발', value: 68 },{ label: 'CS', value: 21 }], horizontal: v === 'h' });
+    },
+    code: function(v) {
+      return "const config = {\n  items: [\n    { label: '영업', value: 45 },\n    { label: '마케팅', value: 32 },\n    { label: '개발', value: 68 },\n    { label: 'CS', value: 21 }\n  ],\n  horizontal: " + (v === 'h' ? 'true' : 'false') + ",\n};\n\nMaging.barChart('#el', config);";
+    },
+  },
+  lineChart: {
+    variants: [
+      { label: 'line', value: 'line' },
+      { label: 'area', value: 'area' },
+      { label: 'stacked', value: 'stack' },
+    ],
+    render: function(el, v) {
+      Maging.lineChart(el, { categories: ['1월','2월','3월','4월','5월','6월'], series: [{ name: '매출', data: [12,14,13,16,18,21] }, { name: '비용', data: [8,9,10,11,12,13] }], area: v === 'area' || v === 'stack', stack: v === 'stack' });
+    },
+    code: function(v) {
+      return "const config = {\n  categories: ['1월','2월','3월','4월','5월','6월'],\n  series: [\n    { name: '매출', data: [12, 14, 13, 16, 18, 21] },\n    { name: '비용', data: [8, 9, 10, 11, 12, 13] }\n  ]," + (v === 'area' ? "\n  area: true," : v === 'stack' ? "\n  area: true,\n  stack: true," : '') + "\n};\n\nMaging.lineChart('#el', config);";
+    },
+  },
+};
+
 // ── Showcase: 1 row per component, all modes ──
 catOrder.forEach(function(cat) {
   var items = groups[cat];
@@ -518,7 +608,16 @@ catOrder.forEach(function(cat) {
     html += '<div class="sc-info">';
     html += '<div class="sc-name">' + title + ' <span class="sc-api">Maging.' + key + '(sel, config)</span></div>';
     html += '<div class="sc-desc">' + desc + '</div>';
-    if (code) html += '<div class="sc-code"><pre>' + highlightSyntax(code) + '</pre></div>';
+    // Style variant pills
+    var sv = STYLE_VARIANTS[key];
+    if (sv && sv.variants) {
+      html += '<div class="sc-variants" data-widget="' + key + '">';
+      sv.variants.forEach(function(v, i) {
+        html += '<button class="sc-variant-pill' + (i === 0 ? ' sc-variant-pill--active' : '') + '" data-style="' + v.value + '">' + v.label + '</button>';
+      });
+      html += '</div>';
+    }
+    if (code) html += '<div class="sc-code" id="code-' + key + '"><pre>' + highlightSyntax(code) + '</pre></div>';
     html += '</div>';
     html += '</div>';
   });
@@ -539,6 +638,36 @@ Object.keys(filtered).forEach(function(key) {
   }
 });
 
+
+// ── Style variant pill click handler (범용) ──
+document.addEventListener('click', function(e) {
+  var pill = e.target.closest('.sc-variant-pill');
+  if (!pill) return;
+  var wrap = pill.closest('.sc-variants');
+  var widgetKey = wrap.dataset.widget;
+  var styleVal = pill.dataset.style;
+  var sv = STYLE_VARIANTS[widgetKey];
+  if (!sv) return;
+
+  // Update active pill
+  wrap.querySelectorAll('.sc-variant-pill').forEach(function(p) { p.classList.remove('sc-variant-pill--active'); });
+  pill.classList.add('sc-variant-pill--active');
+
+  // Re-render preview
+  var previewEl = document.getElementById('preview-' + widgetKey);
+  if (previewEl && sv.render) {
+    previewEl.innerHTML = '';
+    try { sv.render(previewEl, styleVal); } catch(err) {}
+    // Resize charts after render
+    setTimeout(function() { window.dispatchEvent(new Event('resize')); }, 100);
+  }
+
+  // Update code sample
+  var codeEl = document.getElementById('code-' + widgetKey);
+  if (codeEl && sv.code) {
+    codeEl.querySelector('pre').innerHTML = highlightSyntax(sv.code(styleVal));
+  }
+});
 
 // Resize + fix compact charts
 function resizeCharts() {

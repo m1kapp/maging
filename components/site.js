@@ -57,46 +57,106 @@ class MagingNav extends HTMLElement {
         <button class="mw-site-nav__link mw-site-nav__link--dropdown${active === 'components' ? ' mw-site-nav__link--active' : ''}" type="button">
           컴포넌트 <svg class="mw-site-nav__caret" width="8" height="5" viewBox="0 0 8 5" fill="currentColor"><path d="M0 0L4 5L8 0Z"/></svg>
         </button>
-        <div class="mw-site-nav__menu">
-          <a href="${base}components.html?mode=core" class="mw-site-nav__menu-item">
-            <span class="mw-site-nav__menu-label">대시보드</span>
-            <span class="mw-site-nav__menu-desc">Metrics · Charts · Lists 공통 위젯</span>
-          </a>
-          <a href="${base}components.html?mode=weekly" class="mw-site-nav__menu-item">
-            <span class="mw-site-nav__menu-label">주간보고</span>
-            <span class="mw-site-nav__menu-desc">Monthly Table · Cover · Insight Card</span>
-          </a>
-          <a href="${base}components.html?mode=landing" class="mw-site-nav__menu-item">
-            <span class="mw-site-nav__menu-label">랜딩페이지</span>
-            <span class="mw-site-nav__menu-desc">Hero · Pricing · Testimonial</span>
-          </a>
-          <a href="${base}components.html?mode=cardnews" class="mw-site-nav__menu-item">
-            <span class="mw-site-nav__menu-label">카드뉴스</span>
-            <span class="mw-site-nav__menu-desc">Cover · Body · Data · Numbered · CTA</span>
-          </a>
+        <div class="mw-site-nav__menu mw-site-nav__menu--mega">
+          <div class="mw-site-nav__mega-col">
+            <a href="${base}components.html?mode=core" class="mw-site-nav__mega-head">
+              <span class="mw-site-nav__mega-icon">▦</span>
+              <span>
+                <span class="mw-site-nav__menu-label">대시보드</span>
+                <span class="mw-site-nav__menu-desc">KPI · 차트 · 테이블</span>
+              </span>
+            </a>
+            <a href="${base}components.html?mode=core&cat=Metrics" class="mw-site-nav__menu-item">Metrics (10종)</a>
+            <a href="${base}components.html?mode=core&cat=Charts" class="mw-site-nav__menu-item">Charts (13종)</a>
+            <a href="${base}components.html?mode=core&cat=Lists" class="mw-site-nav__menu-item">Lists & Status (5종)</a>
+          </div>
+          <div class="mw-site-nav__mega-col">
+            <a href="${base}components.html?mode=weekly" class="mw-site-nav__mega-head">
+              <span class="mw-site-nav__mega-icon">▤</span>
+              <span>
+                <span class="mw-site-nav__menu-label">주간보고</span>
+                <span class="mw-site-nav__menu-desc">A4 슬라이드 · 커버 · 인사이트</span>
+              </span>
+            </a>
+            <a href="${base}components.html?mode=weekly" class="mw-site-nav__menu-item">Section Cover (5종)</a>
+            <a href="${base}components.html?mode=weekly" class="mw-site-nav__menu-item">Insight · Def Card</a>
+            <a href="${base}components.html?mode=weekly" class="mw-site-nav__menu-item">Monthly Table</a>
+          </div>
+          <div class="mw-site-nav__mega-col">
+            <a href="${base}components.html?mode=landing" class="mw-site-nav__mega-head">
+              <span class="mw-site-nav__mega-icon">◐</span>
+              <span>
+                <span class="mw-site-nav__menu-label">랜딩페이지</span>
+                <span class="mw-site-nav__menu-desc">Hero · Pricing · FAQ</span>
+              </span>
+            </a>
+            <a href="${base}components.html?mode=landing" class="mw-site-nav__menu-item">Hero · CTA Section</a>
+            <a href="${base}components.html?mode=landing" class="mw-site-nav__menu-item">Pricing · Comparison</a>
+            <a href="${base}components.html?mode=landing" class="mw-site-nav__menu-item">Testimonial · FAQ</a>
+          </div>
+          <div class="mw-site-nav__mega-col">
+            <a href="${base}components.html?mode=cardnews" class="mw-site-nav__mega-head">
+              <span class="mw-site-nav__mega-icon">◳</span>
+              <span>
+                <span class="mw-site-nav__menu-label">카드뉴스</span>
+                <span class="mw-site-nav__menu-desc">캐러셀 11종 · 커버 6스타일</span>
+              </span>
+            </a>
+            <a href="${base}components.html?mode=cardnews" class="mw-site-nav__menu-item">Cover · Body · Data</a>
+            <a href="${base}components.html?mode=cardnews" class="mw-site-nav__menu-item">Quote · Stat · Compare</a>
+            <a href="${base}components.html?mode=cardnews" class="mw-site-nav__menu-item">Step · Checklist · CTA</a>
+          </div>
         </div>
       </div>
       <div class="mw-site-nav__dropdown">
         <button class="mw-site-nav__link mw-site-nav__link--dropdown${active === 'demo' ? ' mw-site-nav__link--active' : ''}" type="button">
           데모 <svg class="mw-site-nav__caret" width="8" height="5" viewBox="0 0 8 5" fill="currentColor"><path d="M0 0L4 5L8 0Z"/></svg>
         </button>
-        <div class="mw-site-nav__menu">
-          <a href="${base}dashboard/acme.html" class="mw-site-nav__menu-item">
-            <span class="mw-site-nav__menu-label">대시보드</span>
-            <span class="mw-site-nav__menu-desc">ACME 운영 대시보드</span>
-          </a>
-          <a href="${base}weekly-report/index.html" class="mw-site-nav__menu-item">
-            <span class="mw-site-nav__menu-label">주간보고</span>
-            <span class="mw-site-nav__menu-desc">SaaS 주간보고 덱 (8 슬라이드)</span>
-          </a>
-          <a href="${base}landing/startup.html" class="mw-site-nav__menu-item">
-            <span class="mw-site-nav__menu-label">랜딩페이지</span>
-            <span class="mw-site-nav__menu-desc">maging 랜딩 데모</span>
-          </a>
-          <a href="${base}card-news/index.html" class="mw-site-nav__menu-item">
-            <span class="mw-site-nav__menu-label">카드뉴스</span>
-            <span class="mw-site-nav__menu-desc">AI 마케팅 트렌드 캐러셀</span>
-          </a>
+        <div class="mw-site-nav__menu mw-site-nav__menu--mega">
+          <div class="mw-site-nav__mega-col">
+            <div class="mw-site-nav__mega-head">
+              <span class="mw-site-nav__mega-icon">▦</span>
+              <span>
+                <span class="mw-site-nav__menu-label">대시보드</span>
+                <span class="mw-site-nav__menu-desc">운영 · 매출 분석</span>
+              </span>
+            </div>
+            <a href="${base}dashboard/acme.html" class="mw-site-nav__menu-item">ACME 운영 대시보드</a>
+            <a href="${base}dashboard/sales.html" class="mw-site-nav__menu-item">매출 인사이트</a>
+          </div>
+          <div class="mw-site-nav__mega-col">
+            <div class="mw-site-nav__mega-head">
+              <span class="mw-site-nav__mega-icon">▤</span>
+              <span>
+                <span class="mw-site-nav__menu-label">주간보고</span>
+                <span class="mw-site-nav__menu-desc">A4 슬라이드 리포트</span>
+              </span>
+            </div>
+            <a href="${base}weekly-report/index.html" class="mw-site-nav__menu-item">SaaS 주간보고 · 15슬라이드</a>
+            <a href="${base}weekly-report/ecommerce.html" class="mw-site-nav__menu-item">이커머스 주간보고 · 5슬라이드</a>
+          </div>
+          <div class="mw-site-nav__mega-col">
+            <div class="mw-site-nav__mega-head">
+              <span class="mw-site-nav__mega-icon">◐</span>
+              <span>
+                <span class="mw-site-nav__menu-label">랜딩페이지</span>
+                <span class="mw-site-nav__menu-desc">마케팅 전환 페이지</span>
+              </span>
+            </div>
+            <a href="${base}landing/startup.html" class="mw-site-nav__menu-item">maging 소개</a>
+            <a href="${base}landing/edtech.html" class="mw-site-nav__menu-item">런핏 EdTech</a>
+          </div>
+          <div class="mw-site-nav__mega-col">
+            <div class="mw-site-nav__mega-head">
+              <span class="mw-site-nav__mega-icon">◳</span>
+              <span>
+                <span class="mw-site-nav__menu-label">카드뉴스</span>
+                <span class="mw-site-nav__menu-desc">인스타 · 링크드인 캐러셀</span>
+              </span>
+            </div>
+            <a href="${base}card-news/index.html" class="mw-site-nav__menu-item">AI 마케팅 가이드 · 11장</a>
+            <a href="${base}card-news/finance.html" class="mw-site-nav__menu-item">재테크 가이드</a>
+          </div>
         </div>
       </div>
       ${link(base + 'stack.html', '스택', 'stack')}
@@ -279,11 +339,11 @@ if (!document.getElementById('mw-site-css')) {
 .mw-site-nav__link--dropdown { cursor: pointer; border: none; background: none; }
 .mw-site-nav__caret { opacity: 0.55; vertical-align: middle; margin-left: 2px; display: inline-block; }
 
-/* dropdown */
+/* dropdown (normal) */
 .mw-site-nav__dropdown { position: relative; }
 .mw-site-nav__menu {
   position: absolute; top: calc(100% + 4px); left: 50%; transform: translateX(-50%);
-  min-width: 200px; padding: 0.375rem;
+  min-width: 220px; padding: 0.375rem; max-height: 80vh; overflow-y: auto;
   background: var(--mw-surface); border: 1px solid var(--mw-border);
   border-radius: var(--mw-radius); box-shadow: 0 8px 24px -8px rgba(0,0,0,0.15);
   opacity: 0; visibility: hidden; transition: opacity 150ms, visibility 150ms;
@@ -300,6 +360,49 @@ if (!document.getElementById('mw-site-css')) {
 .mw-site-nav__menu-item:hover { background: var(--mw-surface-2); }
 .mw-site-nav__menu-label { display: block; font-size: 0.78rem; font-weight: 600; font-family: var(--mw-font); }
 .mw-site-nav__menu-desc { display: block; font-size: 0.65rem; color: var(--mw-text-muted); font-family: var(--mw-font); margin-top: 0.1rem; }
+.mw-site-nav__menu-group { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--mw-text-muted); padding: 0.5rem 0 0.25rem; font-family: var(--mw-font); }
+.mw-site-nav__menu-group:first-child { padding-top: 0; }
+
+/* mega dropdown — full-width under nav */
+.mw-site-nav__dropdown:has(.mw-site-nav__menu--mega) { position: static; }
+.mw-site-nav__menu--mega {
+  position: absolute; top: 100%; left: 0; right: 0;
+  transform: none;
+  min-width: 0; max-height: none;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid var(--mw-border);
+  box-shadow: 0 8px 32px -6px rgba(0,0,0,0.1);
+  padding: 0;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  z-index: 100;
+}
+.mw-site-nav__mega-col {
+  display: flex; flex-direction: column;
+  padding: 1rem 1.25rem;
+}
+.mw-site-nav__mega-col + .mw-site-nav__mega-col { border-left: 1px solid var(--mw-border); }
+.mw-site-nav__menu--mega .mw-site-nav__menu-item {
+  display: block; font-size: 0.78rem; color: var(--mw-text-muted); font-family: var(--mw-font);
+  padding: 0.35rem 0.5rem; transition: color 120ms; text-decoration: none;
+  border-radius: calc(var(--mw-radius) * 0.4);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.mw-site-nav__menu--mega .mw-site-nav__menu-item:hover { color: var(--mw-text); background: var(--mw-surface-2); }
+.mw-site-nav__mega-head {
+  display: flex; align-items: center; gap: 0.625rem;
+  padding: 0 0.25rem 0.625rem; margin-bottom: 0.25rem;
+  text-decoration: none; color: inherit;
+}
+.mw-site-nav__mega-head .mw-site-nav__menu-label { font-size: 0.82rem; font-weight: 700; display: block; }
+.mw-site-nav__mega-head .mw-site-nav__menu-desc { font-size: 0.62rem; color: var(--mw-text-muted); display: block; margin-top: 0.05rem; white-space: nowrap; }
+.mw-site-nav__mega-icon {
+  display: flex; align-items: center; justify-content: center;
+  width: 2rem; height: 2rem; border-radius: calc(var(--mw-radius) * 0.5);
+  background: color-mix(in srgb, var(--mw-accent) 10%, var(--mw-surface-2));
+  color: var(--mw-accent); font-size: 0.9rem; flex-shrink: 0;
+}
 .mw-theme-shuffle { border: none; cursor: pointer; }
 .mw-theme-shuffle:hover svg { transform: rotate(180deg); }
 .mw-theme-shuffle svg { transition: transform 0.3s ease; }
