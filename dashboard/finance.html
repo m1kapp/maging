@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<script>!function(){var k='maging-theme',s=localStorage.getItem(k);if(!s)s='bloomberg';document.documentElement.setAttribute('data-theme',s);localStorage.setItem(k,s)}();</script>
+<title>Investment Portfolio — 투자 포트폴리오 · maging demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../dist/maging.css">
+<script defer src="../dist/maging-all.js" data-base="../dist/" data-no-tailwind></script>
+<script type="module" src="../components/site.js"></script>
+</head>
+<body class="mw-themed">
+<maging-nav active="demo"></maging-nav>
+<main class="max-w-[1100px] mx-auto px-6 py-4" style="word-break:keep-all">
+
+  <div id="page-hero" class="pt-4 pb-2"></div>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3" style="grid-auto-rows:140px">
+    <div id="kpi-1"></div><div id="kpi-2"></div>
+    <div id="kpi-3"></div><div id="kpi-4"></div>
+  </div>
+
+  <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
+    <div id="section-01"></div>
+    <div class="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-3 mt-3" style="grid-auto-rows:380px">
+      <div id="chart-return"></div>
+      <div id="chart-alloc"></div>
+    </div>
+  </div>
+
+  <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
+    <div id="section-02"></div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 mt-3" style="grid-auto-rows:380px">
+      <div id="chart-sector"></div>
+      <div id="chart-top"></div>
+    </div>
+  </div>
+
+  <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
+    <div id="section-03"></div>
+    <div class="grid grid-cols-1 gap-3 mt-3" style="grid-auto-rows:auto">
+      <div id="table-trades"></div>
+    </div>
+  </div>
+
+</main>
+<script>
+window.addEventListener('maging:ready', () => {
+  const fmt = Maging.fmt;
+
+  Maging.pageHeader('#page-hero', {
+    kicker: 'INVESTMENT PORTFOLIO',
+    title: '포트폴리오 현황',
+    subtitle: '2026년 5월 기준',
+    meta: 'Bloomberg 테마',
+  });
+
+  Maging.kpiCard('#kpi-1', {
+    label: '총 자산', unit: '원',
+    sparkline: [312000000,318000000,325000000,331000000,342000000,348000000,355000000,362000000,371000000,378000000,385000000,398000000],
+  });
+  Maging.kpiCard('#kpi-2', {
+    label: 'YTD 수익률', unit: '%',
+    sparkline: [1.2,2.8,3.5,4.1,5.8,6.2,7.1,8.3,9.5,10.2,11.8,12.4],
+  });
+  Maging.kpiCard('#kpi-3', {
+    label: '월 배당 수익', unit: '원',
+    sparkline: [420000,385000,445000,390000,460000,415000,480000,425000,495000,440000,510000,465000],
+  });
+  Maging.kpiCard('#kpi-4', {
+    label: '포트폴리오 베타', unit: '',
+    sparkline: [1.12,1.08,1.05,1.10,0.98,1.02,0.95,0.99,0.92,0.96,0.88,0.91],
+    deltaGoodWhen: 'negative',
+  });
+
+  Maging.sectionHead('#section-01', {
+    index: '01', kicker: 'PERFORMANCE', title: '수익률 · 자산배분', tag: '추이 · 비중',
+  });
+
+  Maging.lineChart('#chart-return', {
+    title: '월별 누적 수익률',
+    subtitle: '포트폴리오 vs KOSPI',
+    categories: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+    series: [
+      { name: '포트폴리오', data: [1.2,2.8,3.5,4.1,5.8,6.2,7.1,8.3,9.5,10.2,11.8,12.4] },
+      { name: 'KOSPI', data: [0.8,1.5,1.2,2.1,3.2,2.8,3.5,4.1,5.2,4.8,6.1,7.2] },
+    ],
+    yFormatter: v => v + '%',
+  });
+
+  Maging.donutChart('#chart-alloc', {
+    title: '자산 배분',
+    slices: [
+      { label: '국내 주식', value: 42 },
+      { label: '해외 주식', value: 28 },
+      { label: '채권', value: 18 },
+      { label: '대안투자', value: 8 },
+      { label: '현금성', value: 4 },
+    ],
+    centerLabel: '배분',
+  });
+
+  Maging.sectionHead('#section-02', {
+    index: '02', kicker: 'HOLDINGS', title: '섹터 · 종목', tag: '상세',
+  });
+
+  Maging.barChart('#chart-sector', {
+    title: '섹터별 수익률 (YTD)',
+    items: [
+      { label: '반도체', value: 22.4 },
+      { label: '2차전지', value: 15.8 },
+      { label: '바이오', value: 8.3 },
+      { label: '금융', value: 11.2 },
+      { label: '에너지', value: -3.5 },
+      { label: '소비재', value: 5.1 },
+    ],
+    horizontal: false,
+    yFormatter: v => (v > 0 ? '+' : '') + v + '%',
+    showLabels: true,
+  });
+
+  Maging.leaderboard('#chart-top', {
+    title: '수익률 TOP 5 종목',
+    items: [
+      { name: '삼성전자', meta: '+28.4%', percent: 95 },
+      { name: 'SK하이닉스', meta: '+24.1%', percent: 82 },
+      { name: 'NAVER', meta: '+18.7%', percent: 65 },
+      { name: '현대차', meta: '+15.2%', percent: 52 },
+      { name: '카카오', meta: '+11.8%', percent: 40 },
+    ],
+  });
+
+  Maging.sectionHead('#section-03', {
+    index: '03', kicker: 'TRADES', title: '최근 거래', tag: '매수 · 매도',
+  });
+
+  Maging.activityTable('#table-trades', {
+    title: '최근 거래 내역',
+    subtitle: '최근 30일',
+    columns: [
+      { key: 'date', label: '일자' },
+      { key: 'ticker', label: '종목' },
+      { key: 'type', label: '구분', render: v => {
+        const cls = v === '매수' ? 'success' : 'danger';
+        return '<span class="mw-badge mw-badge--' + cls + '">' + v + '</span>';
+      }},
+      { key: 'qty', label: '수량', align: 'right', render: v => v.toLocaleString() + '주' },
+      { key: 'price', label: '단가', align: 'right', render: v => v.toLocaleString() + '원' },
+      { key: 'amount', label: '금액', align: 'right', render: v => fmt.krw(v) },
+    ],
+    rows: [
+      { date: '5/02', ticker: '삼성전자', type: '매수', qty: 50, price: 82400, amount: 4120000 },
+      { date: '4/28', ticker: 'TIGER 미국S&P500', type: '매수', qty: 30, price: 18520, amount: 555600 },
+      { date: '4/25', ticker: '카카오', type: '매도', qty: 100, price: 52300, amount: 5230000 },
+      { date: '4/22', ticker: 'SK하이닉스', type: '매수', qty: 20, price: 214000, amount: 4280000 },
+      { date: '4/18', ticker: 'KODEX 200', type: '매도', qty: 200, price: 38450, amount: 7690000 },
+      { date: '4/15', ticker: 'NAVER', type: '매수', qty: 15, price: 287000, amount: 4305000 },
+    ],
+  });
+});
+</script>
+</body>
+</html>

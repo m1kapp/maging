@@ -123,6 +123,8 @@ class MagingNav extends HTMLElement {
             </div>
             <a href="${base}dashboard/acme.html" class="mw-site-nav__menu-item">B2B SaaS 운영 대시보드</a>
             <a href="${base}dashboard/sales.html" class="mw-site-nav__menu-item">매출 인사이트 · 데이터 연동</a>
+            <a href="${base}dashboard/hr.html" class="mw-site-nav__menu-item">HR 인사 대시보드</a>
+            <a href="${base}dashboard/finance.html" class="mw-site-nav__menu-item">투자 포트폴리오</a>
           </div>
           <div class="mw-site-nav__mega-col">
             <div class="mw-site-nav__mega-head">
@@ -156,6 +158,7 @@ class MagingNav extends HTMLElement {
             </div>
             <a href="${base}card-news/index.html" class="mw-site-nav__menu-item">AI 마케팅 가이드 · 11장</a>
             <a href="${base}card-news/finance.html" class="mw-site-nav__menu-item">재테크 가이드 · 11장</a>
+            <a href="${base}card-news/cafe.html" class="mw-site-nav__menu-item">카페 창업 가이드 · 10장</a>
           </div>
         </div>
       </div>
