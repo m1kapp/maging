@@ -1467,24 +1467,34 @@
     </div>
     <div class="example-grid">
       <a href="dashboard/acme.html" class="example-card">
-        <div class="example-card__kicker">DASHBOARD</div>
-        <div class="example-card__title">ACME KOREA 대시보드</div>
-        <div class="example-card__desc">37개 위젯·7개 섹션이 동작하는 실사용 예시. 테마 실시간 변경.</div>
+        <div class="example-card__kicker">B2B SAAS</div>
+        <div class="example-card__title">통합 운영 대시보드</div>
+        <div class="example-card__desc">매출·사용자·파이프라인·서비스 헬스. 37개 위젯이 하나의 화면에.</div>
+      </a>
+      <a href="dashboard/sales.html" class="example-card">
+        <div class="example-card__kicker">매출 분석</div>
+        <div class="example-card__title">매출 인사이트</div>
+        <div class="example-card__desc">CSV 데이터 연동. 제품군별 추이·YTD 비교·계획 달성률.</div>
       </a>
       <a href="weekly-report/index.html" class="example-card">
-        <div class="example-card__kicker">WEEKLY REPORT</div>
-        <div class="example-card__title">SaaS 주간보고</div>
-        <div class="example-card__desc">실제 B2B SaaS 보고서 구조 기반. 슬라이드 네비 + 월별 표 + 팀별 KPI.</div>
+        <div class="example-card__kicker">SaaS 주간보고</div>
+        <div class="example-card__title">팀별 KPI 15슬라이드</div>
+        <div class="example-card__desc">영업·CX·개발팀 KPI + 월별 테이블 + 인사이트 카드. PPTX/PDF export.</div>
       </a>
-      <a href="landing/startup.html" class="example-card">
-        <div class="example-card__kicker">LANDING PAGE</div>
-        <div class="example-card__title">스타트업 랜딩 스타터</div>
-        <div class="example-card__desc">Hero · Pricing · Testimonial · CTA — 랜딩 전용 컴포넌트 모음.</div>
+      <a href="weekly-report/ecommerce.html" class="example-card">
+        <div class="example-card__kicker">이커머스 주간보고</div>
+        <div class="example-card__title">마케팅팀 5슬라이드</div>
+        <div class="example-card__desc">GMV·채널별 ROAS·캠페인 성과·고객 퍼널. 마케팅 실무 보고서.</div>
       </a>
       <a href="card-news/index.html" class="example-card">
-        <div class="example-card__kicker">CARD NEWS</div>
-        <div class="example-card__title">AI 마케팅 카드뉴스</div>
-        <div class="example-card__desc">인스타·링크드인 캐러셀. 커버 + 본문 + 차트 + TOP 3 + CTA 8장 구성.</div>
+        <div class="example-card__kicker">카드뉴스</div>
+        <div class="example-card__title">AI 마케팅 가이드 · 11장</div>
+        <div class="example-card__desc">Step·비교·체크리스트·후기 등 11종 카드 타입 + number-hero 커버.</div>
+      </a>
+      <a href="card-news/finance.html" class="example-card">
+        <div class="example-card__kicker">카드뉴스</div>
+        <div class="example-card__title">재테크 가이드 · 11장</div>
+        <div class="example-card__desc">자산 증식 로드맵. 다크 테마 + 금융 데이터 시각화.</div>
       </a>
     </div>
   </div>
@@ -1520,7 +1530,66 @@
   </div>
 </section>
 
-<!-- ========= SECTION 8 — PHILOSOPHY ========= -->
+<!-- ========= SECTION 8 — WHY MAGING ========= -->
+<section style="border-top: 1px solid var(--mw-border);">
+  <div class="max-w-[900px] mx-auto px-6 py-20">
+    <div class="text-center mb-12">
+      <div class="kicker mb-3">WHY MAGING</div>
+      <h2 class="text-3xl md:text-5xl font-bold" style="letter-spacing: -0.02em; line-height: 1.2;">
+        차트 라이브러리가 아닙니다
+      </h2>
+      <p class="mw-muted mt-5 text-base" style="max-width: 560px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+        Recharts, Chart.js는 개발자가 코드를 짜서 차트를 만듭니다.<br>
+        maging은 <strong style="color:var(--mw-text)">AI가 프롬프트 하나로 전체 대시보드를 생성</strong>합니다.
+      </p>
+    </div>
+    <div style="overflow-x:auto">
+      <table style="width:100%; border-collapse:collapse; font-size:0.82rem; font-family:var(--mw-font);">
+        <thead>
+          <tr style="border-bottom:2px solid var(--mw-border);">
+            <th style="text-align:left; padding:0.75rem 0.5rem; color:var(--mw-text-muted); font-weight:500;"></th>
+            <th style="text-align:center; padding:0.75rem 0.5rem; color:var(--mw-accent); font-weight:700;">maging</th>
+            <th style="text-align:center; padding:0.75rem 0.5rem; color:var(--mw-text-muted); font-weight:500;">Recharts</th>
+            <th style="text-align:center; padding:0.75rem 0.5rem; color:var(--mw-text-muted); font-weight:500;">Chart.js</th>
+            <th style="text-align:center; padding:0.75rem 0.5rem; color:var(--mw-text-muted); font-weight:500;">Tremor</th>
+          </tr>
+        </thead>
+        <tbody id="compare-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<script>
+(function() {
+  var rows = [
+    ['CDN 한 줄로 즉시 사용', true, false, true, false],
+    ['빌드 스텝 없음', true, false, false, false],
+    ['LLM 프롬프트 최적화', true, false, false, false],
+    ['105개 브랜드 테마', true, false, false, false],
+    ['KPI·테이블·캘린더 등 비차트 위젯', true, false, false, true],
+    ['주간보고 A4 슬라이드', true, false, false, false],
+    ['카드뉴스 캐러셀', true, false, false, false],
+    ['PPTX/PDF export', true, false, false, false],
+    ['React 필수', false, true, false, true],
+    ['ECharts 기반 차트', true, false, false, false],
+  ];
+  var tbody = document.getElementById('compare-tbody');
+  if (!tbody) return;
+  var check = '<span style="color:var(--mw-success);font-weight:700">&#10003;</span>';
+  var cross = '<span style="color:var(--mw-text-muted);opacity:0.4">—</span>';
+  rows.forEach(function(r) {
+    var tr = document.createElement('tr');
+    tr.style.borderBottom = '1px solid var(--mw-border)';
+    tr.innerHTML = '<td style="padding:0.6rem 0.5rem;color:var(--mw-text)">' + r[0] + '</td>' +
+      [1,2,3,4].map(function(i) {
+        return '<td style="text-align:center;padding:0.6rem 0.5rem">' + (r[i] ? check : cross) + '</td>';
+      }).join('');
+    tbody.appendChild(tr);
+  });
+})();
+</script>
+
+<!-- ========= SECTION 9 — PHILOSOPHY ========= -->
 <section style="border-top: 1px solid var(--mw-border);">
   <div class="max-w-[900px] mx-auto px-6 py-20">
     <div class="philosophy">
