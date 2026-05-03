@@ -1,129 +1,105 @@
 # maging
 
-> CDN drop-in 엔터프라이즈 대시보드 위젯. ECharts 기반 · 25종 위젯 · 25개 브랜드 테마 · 빌드 스텝 없음.
+> 엔터프라이즈 리포트 빌더. 대시보드 · 주간보고 · 카드뉴스를 AI가 생성하고, 105개 브랜드 테마로 즉시 전환. CDN 한 줄, 빌드 스텝 없음.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.11/dist/maging.css">
-<script defer src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.11/dist/maging.js"></script>
-
-<div data-mw-widget="kpi-card"
-     data-mw-label="매출" data-mw-value="₩128억"
-     data-mw-delta="8.3"
-     data-mw-sparkline="420,445,430,468,510,548,580"></div>
+<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.19/dist/maging-all.js"></script>
+<body class="mw-themed">
 ```
 
-[**→ 라이브 데모**](./demo.html) · [**에이전트 지침 (AGENT.md)**](./AGENT.md)
+[**라이브 데모**](https://maging.page) · [**컴포넌트 갤러리**](https://maging.page/components.html) · [**npm**](https://www.npmjs.com/package/@m1kapp/maging)
 
 ---
 
-## 사용 방법
+## 문서 가이드
 
-### Declarative — `data-mw-widget`
-DOM 로드 시 자동 마운트. 간단한 위젯에 가장 빠름.
-```html
-<div data-mw-widget="line-chart" data-mw-config="cfg"></div>
-<script type="application/json" id="cfg">
-{ "categories": ["W1","W2"], "series": [{"name":"A","data":[1,2]}], "height": 240 }
-</script>
-```
+| 문서 | 대상 | 내용 |
+|------|------|------|
+| **[AGENT.md](./AGENT.md)** | LLM / AI 에이전트 | 위젯 API 전체 레퍼런스. LLM이 이 파일만 읽으면 대시보드 생성 가능 |
+| **[DESIGN.md](./DESIGN.md)** | 디자이너 / 기여자 | 시각 품질 기준 13섹션 — Shadow, Color, Typography, Responsive, 접근성, 다크모드, Anti-AI slop 등 |
+| **[llms/](./llms/)** | LLM 프롬프트 | 모드별 생성 지침 — dashboard, weekly-report, card-news, landing |
+| **이 README** | 개발자 | 설치, 위젯 목록, 테마, API 개요 |
 
-### Imperative — JS API
-동적 데이터·업데이트·외부 연동에. 핸들이 `.update()` / `.refresh()` / `.destroy()` 지원.
-```js
-const config = { title: '주간 매출', categories: [...], series: [...] };
-const chart = Maging.lineChart('#el', config);
-chart.update({ series: newData });
-```
+---
 
-## 위젯 32종
+## 4가지 모드
 
-**KPI/타일 (8)** · kpiCard · statCard · heroTile · metricStack · compareCard · countdownTile · ringProgress
-**차트 (10)** · lineChart · barChart · donutChart · funnelChart · gaugeChart · radarChart · treemapChart · scatterChart · sankeyChart · heatmapChart
-**리스트/테이블 (5)** · leaderboard · activityTable · timeline · inboxPreview · statusGrid
-**캘린더 (2)** · calendarHeatmap · eventCalendar
-**프로젝트 (1)** · progressStepper
+### 대시보드
+KPI · 차트 · 테이블 · 캘린더 — 37종 위젯으로 운영 대시보드 생성.
 
-각 위젯의 필드는 [AGENT.md §4](./AGENT.md) 참고. 런타임 메타데이터는 `Maging.meta[widgetName]`에서 확인.
+### 주간보고
+A4 가로 슬라이드 덱. 커버 5스타일 + pageHeader + KPI strip + monthlyTable + alertBanner. PPTX/PDF export.
 
-## 테마 35개
+### 카드뉴스
+인스타그램/링크드인 캐러셀. 11종 카드(Cover 6스타일, Body, Quote, Stat, Comparison, Checklist, Step, Testimonial, CTA). 4:5 비율.
 
-```js
-Maging.setTheme('bloomberg');  // 마운트된 모든 위젯 자동 리프레시
-```
+### 랜딩페이지
+Hero · Pricing · Feature Grid · Testimonial · FAQ — SaaS 전환 페이지.
 
-**Light (17)** · `claude` `linear` `stripe` `notion` `airbnb` `linkedin` `instagram` `youtube` `reddit` `medium` `apple` `duolingo`
+---
 
-**Dark (18)** · `vercel` `github` `x` `slack` `discord` `openai` `spotify` `twitch` `netflix` `figma` `amazon` `adobe` `bloomberg`
+## 위젯 37종 + 카드뉴스 11종
 
-각 테마는 `dist/themes/<name>.css`로 개별 로드 가능. 커스텀 색은 `--mw-accent`, `--mw-surface`, `--mw-text`, `--mw-radius` 등 CSS 변수를 `[data-theme="myteam"]` 스코프에서 덮어쓰기.
+**KPI/타일 (7)** · kpiCard · heroTile · metricChart · metricStack · compareCard · countdownTile · ringProgress  
+**차트 (13)** · lineChart · barChart · donutChart · funnelChart · gaugeChart · radarChart · treemapChart · scatterChart · sankeyChart · heatmapChart · waterfallChart · mapChart · cohortMatrix  
+**리스트/테이블 (5)** · leaderboard · activityTable · timeline · inboxPreview · statusGrid  
+**캘린더 (2)** · calendarHeatmap · eventCalendar  
+**프로젝트 (1)** · progressStepper  
+**구조 (5)** · pageHeader · sectionHead · alertBanner · bulletChart · sparklineList  
+**주간보고 (4)** · sectionCover · insightCard · defCard · monthlyTable  
+**카드뉴스 (11)** · coverCard · bodyCard · dataCard · numberedCard · quoteCard · statCard · comparisonCard · checklistCard · stepCard · testimonialCard · ctaCard
 
-## 드래그앤드롭 대시보드 (GridStack adapter)
+---
 
-편집 가능한 대시보드가 필요하면 `maging-grid.js` adapter 추가 로드:
-
-```html
-<!-- 의존: ECharts + GridStack -->
-<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack.min.css">
-<script src="https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack-all.js"></script>
-
-<!-- maging + adapter -->
-<link rel="stylesheet" href="./dist/maging.css">
-<script src="./dist/maging.js"></script>
-<script src="./dist/maging-grid.js"></script>
-```
+## 테마 105개
 
 ```js
-const dash = Maging.grid('#dashboard', {
-  items: [
-    { id: 'kpi-1', type: 'kpi-card', x: 0, y: 0, w: 3, h: 3,
-      config: { label: '매출', value: '₩128억', delta: 8.3, sparkline: [...] } },
-    { id: 'rev',   type: 'line-chart', x: 0, y: 3, w: 8, h: 6,
-      config: { title: '주간 매출', categories: [...], series: [...] } },
-  ],
-  autoSave: 'my-dashboard-v1',   // localStorage key (null이면 영속화 비활성)
-  editable: true,                 // false면 static view
-  gridOptions: { cellHeight: 60, margin: 8, column: 12 },  // GridStack options
-  onLayoutChange: (layout) => { /* ... */ },
+Maging.setTheme('bloomberg');
+```
+
+**Light (78)** · claude · linear · stripe · notion · airbnb · apple · hermes · tiffany · nike · tesla · starbucks · ...  
+**Dark (27)** · vercel · github · bloomberg · openai · spotify · netflix · discord · ...
+
+6개 디자인 철학 태그: `minimal` · `editorial` · `corporate` · `dark` · `bold` · `organic`
+
+---
+
+## 핵심 기능
+
+### Auto-derive (산수 금지)
+LLM이 직접 계산하지 않음. sparkline/series 데이터만 넣으면 value·delta를 위젯이 자동 계산.
+```js
+Maging.kpiCard('#kpi', {
+  label: '매출', unit: '원',
+  sparkline: [72억, 78억, 81억, 128억],
+  // → value "128.0억원", delta "58.0%" 자동
 });
-
-// 제어 API
-dash.lock();              // 편집 불가
-dash.unlock();            // 편집 가능
-dash.add({ type: 'bar-chart', x: 0, y: 99, w: 4, h: 5, config: {...} });
-dash.remove('kpi-1');
-dash.update('rev', { yMax: 1_000_000_000 });   // 특정 위젯 config 갱신
-dash.reset();             // localStorage 클리어 + 기본 레이아웃 복원
-dash.getLayout();         // 현재 배치 스냅샷 (저장/내보내기용)
 ```
 
-동작 원리:
-- 각 위젯이 `.grid-stack-item-content` 안에 마운트됨
-- GridStack이 cell 리사이즈 → maging 위젯 내부 `ResizeObserver`가 `chart.resize()` 호출 → ECharts 즉시 리렌더
-- 빌드 스텝 없음, vanilla JS, adapter는 ~200줄
+### HTML value 자동 감지
+`Maging.fmt.krw()` 등 HTML을 반환하는 포맷터를 value에 넣으면 자동 인식. `valueHTML: true` 수동 세팅 불필요.
 
-## 사이즈 토큰 (차트)
+### 105개 테마 즉시 전환
+`Maging.setTheme('vercel')` 한 줄로 모든 위젯 리프레시. localStorage 자동 영속화.
 
-차트 `height` 값은 3-티어에서 선택:
-```js
-const SIZE = { S: 120, M: 240, L: 360 };
-```
-- **S (120)**: `calendar-heatmap` 등 납작한 시계열
-- **M (240)**: 대부분의 차트 (기본)
-- **L (360)**: `treemap`, `scatter`, `sankey` 등 복합 시각화
+---
+
+## 설치
+
+| 방식 | 코드 |
+|------|------|
+| **CDN (권장)** | `<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.19/dist/maging-all.js"></script>` |
+| **npm** | `npm i @m1kapp/maging` |
+| **개별 로드** | `maging.css` + `maging.js` + ECharts 5 + Tailwind CDN |
+
+`maging-all.js`는 Pretendard + maging.css + Tailwind CDN + ECharts 5 + maging.js를 번들. `maging:ready` 이벤트 발생.
+
+---
 
 ## 의존성
 
-- [ECharts 5+](https://echarts.apache.org/) — 차트 위젯에 필수 (HTML 위젯만 쓰면 생략 가능)
-- Tailwind — 권장 (레이아웃용, 위젯 자체에는 불필요)
-
-## 설치 모드
-
-| 모드 | 로드 | 용도 |
-|---|---|---|
-| **Full bundle** | `dist/maging.css` + `dist/maging.js` | 모든 테마 포함. 토글 지원 필요 시 |
-| **Modular** | `dist/maging.core.css` + `dist/themes/<name>.css` | 단일 테마만 로드 (~1.5KB 절약) |
+- [ECharts 5+](https://echarts.apache.org/) — 차트 위젯 필수
+- Tailwind CSS — 레이아웃용 (권장, 필수 아님)
 
 ## 브라우저 지원
 
