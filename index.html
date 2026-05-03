@@ -28,24 +28,30 @@
   code, pre { font-family: var(--mw-mono-font); }
   .code {
     position: relative;
-    background: var(--mw-surface-2);
-    border: 1px solid var(--mw-border);
+    background: #1e1e2e;
     border-radius: var(--mw-radius);
     overflow: hidden;
   }
   .code pre {
-    margin: 0; padding: 1rem 1rem 1rem 1rem;
-    font-size: 0.78rem; line-height: 1.6;
-    color: var(--mw-text);
+    margin: 0; padding: 1rem 1.25rem;
+    font-size: 0.72rem; line-height: 1.7;
+    color: #cdd6f4;
     overflow-x: auto;
     white-space: pre;
+    tab-size: 2;
   }
+  .code .hl-kw { color: #cba6f7; }
+  .code .hl-str { color: #a6e3a1; }
+  .code .hl-num { color: #fab387; }
+  .code .hl-fn { color: #89dceb; }
+  .code .hl-prop { color: #b4befe; }
+  .code .hl-cmt { color: #6c7086; font-style: italic; }
   .code__copy {
     position: absolute; top: 0.5rem; right: 0.5rem;
     font-size: 0.7rem; padding: 0.25rem 0.55rem;
-    border: 1px solid var(--mw-border);
+    border: 1px solid rgba(255,255,255,0.15);
     border-radius: calc(var(--mw-radius) * 0.6);
-    background: var(--mw-surface);
+    background: rgba(255,255,255,0.08); color: #cdd6f4;
     color: var(--mw-text-muted);
     cursor: pointer;
     font-family: var(--mw-font);
@@ -54,7 +60,7 @@
   .code__copy:hover { color: var(--mw-text); border-color: var(--mw-accent); }
   .code__lang {
     position: absolute; top: 0.5rem; left: 0.75rem;
-    font-size: 0.65rem; color: var(--mw-text-muted);
+    font-size: 0.65rem; color: #6c7086;
     text-transform: uppercase; letter-spacing: 0.08em;
   }
   .code pre { padding-top: 2rem; }
@@ -3724,6 +3730,29 @@ Then wait for my next message before generating anything.`,
     document.body.appendChild(a); a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  });
+})();
+</script>
+
+<script>
+// Syntax highlight all .code pre code blocks
+(function() {
+  function hl(code) {
+    var s = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    s = s.replace(/(\/\/.*)$/gm, '<span class="hl-cmt">$1</span>');
+    s = s.replace(/('(?:[^'\\]|\\.)*')/g, '<span class="hl-str">$1</span>');
+    s = s.replace(/("(?:[^"\\]|\\.)*")/g, function(m) {
+      if (m.indexOf('hl-') >= 0) return m;
+      return '<span class="hl-str">' + m + '</span>';
+    });
+    s = s.replace(/\b(Maging)\.([\w]+)/g, '<span class="hl-fn">$1.$2</span>');
+    s = s.replace(/\b(const|let|var|function|return|new|if|else|true|false|null)\b/g, '<span class="hl-kw">$1</span>');
+    s = s.replace(/\b(\d+\.?\d*)\b/g, '<span class="hl-num">$1</span>');
+    s = s.replace(/^(\s*)([\w]+)(\s*:)/gm, '$1<span class="hl-prop">$2</span>$3');
+    return s;
+  }
+  document.querySelectorAll('.code pre code').forEach(function(el) {
+    el.innerHTML = hl(el.textContent);
   });
 })();
 </script>
