@@ -810,8 +810,8 @@
           var v = row[col.key];
           var content;
           if (typeof col.render === 'function') {
-            try { content = col.render(v, row); } catch (e) { content = v == null ? '' : escapeHTML(v); }
-          } else content = v == null ? '' : escapeHTML(v);
+            try { content = col.render(v, row); } catch (e) { content = v == null ? '' : _valOrEsc(String(v)); }
+          } else content = v == null ? '' : _valOrEsc(String(v));
           return '<td' + alignCls(col.align) + '>' + content + '</td>';
         }).join('');
         return '<tr>' + tds + '</tr>';
@@ -1474,7 +1474,7 @@
         return '<div class="mw-status__item">' +
           '<span class="mw-status__dot ' + statusCls + '"></span>' +
           '<span class="mw-status__label">' + escapeHTML(it.label) + '</span>' +
-          (it.value ? '<span class="mw-status__value">' + escapeHTML(it.value) + '</span>' : '') +
+          (it.value ? '<span class="mw-status__value">' + _valOrEsc(String(it.value)) + '</span>' : '') +
         '</div>';
       }).join('');
       el.innerHTML = headerHTML(data.title, data.subtitle) +
@@ -2339,7 +2339,7 @@
           '<div class="mw-goal__head">' +
             '<div class="mw-goal__label">' + escapeHTML(it.label) + sublabel + '</div>' +
             '<div class="mw-goal__stat">' +
-              '<span class="mw-goal__val">' + escapeHTML(data.valueFormatter(it.value)) + unit + '</span>' +
+              '<span class="mw-goal__val">' + _valOrEsc(String(data.valueFormatter(it.value))) + unit + '</span>' +
               '<span class="mw-goal__divider">/</span>' +
               '<span class="mw-goal__max">' + escapeHTML(data.valueFormatter(it.max)) + unit + '</span>' +
               '<span class="mw-goal__pct mw-goal__pct--' + color + '">' + pct + '%</span>' +
