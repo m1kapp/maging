@@ -1,6 +1,6 @@
-/*! maging-all v0.1.19 — single-tag bootstrap | MIT
+/*! maging-all v0.1.20 — single-tag bootstrap | MIT
  *
- *  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.19/dist/maging-all.js"></script>
+ *  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.20/dist/maging-all.js"></script>
  *
  *  Auto-injects (in this order):
  *    ① Fonts (via maging.css @import):
@@ -19,7 +19,7 @@
  *  CSS loads in parallel; JS runs after ECharts is ready.
  *
  *  Skip a default via data-attributes on this script tag:
- *    <script src="...maging-all.js" data-no-tailwind data-version="v0.1.19"></script>
+ *    <script src="...maging-all.js" data-no-tailwind data-version="v0.1.20"></script>
  *
  *  Events dispatched on window:
  *    'maging:ready'  — everything loaded, widgets can mount
@@ -38,7 +38,7 @@
   })();
 
   var ds = (self && self.dataset) || {};
-  var VERSION = ds.version || '0.1.19';
+  var VERSION = ds.version || '0.1.20';
   var BASE    = ds.base || 'https://cdn.jsdelivr.net/npm/@m1kapp/maging@' + VERSION + '/dist/';
 
   var SKIP_TAILWIND   = ds.noTailwind   != null;
@@ -72,6 +72,16 @@
     } catch (_e) { /* no-op */ }
   }
 
+  // Allow late listeners: if 'maging:ready' already fired, replay it.
+  var _readyDetail = null;
+  var _origAddEventListener = window.addEventListener;
+  window.addEventListener = function (type, fn, opts) {
+    _origAddEventListener.call(window, type, fn, opts);
+    if (type === 'maging:ready' && _readyDetail) {
+      try { fn(new CustomEvent('maging:ready', { detail: _readyDetail })); } catch (_e) {}
+    }
+  };
+
   // ① + ② CSS — parallel, non-blocking
   appendLink(BASE + 'maging.css');
 
@@ -92,7 +102,8 @@
       return loadScript(BASE + 'maging.js');
     })
     .then(function () {
-      emit('ready', { version: VERSION, base: BASE });
+      _readyDetail = { version: VERSION, base: BASE };
+      emit('ready', _readyDetail);
     })
     .catch(function (err) {
       console.error(err);

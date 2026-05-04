@@ -12,11 +12,8 @@
 (function (global) {
   'use strict';
 
-  var EC = (typeof echarts !== 'undefined') ? echarts : null;
-  if (!EC && typeof console !== 'undefined') {
-    console.warn('[magicwiget] ECharts is not loaded. Charts will not render. ' +
-      'Add <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js"></script> before magicwiget.js.');
-  }
+  // Lazy — echarts may arrive after maging.js in dynamic-loading setups (maging-all.js).
+  function EC() { return (typeof echarts !== 'undefined') ? echarts : null; }
 
   // ==========================================================
   // Helpers
@@ -45,6 +42,78 @@
       mono:     g('--mw-mono-font'),
       radius:   g('--mw-radius'),
     };
+  }
+
+  // Convert "#RRGGBB" → [r, g, b]. Returns null on failure.
+  function parseHex(hex) {
+    if (!hex || hex.charAt(0) !== '#') return null;
+    hex = hex.replace('#', '');
+    if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+    if (hex.length < 6) return null;
+    return [parseInt(hex.substr(0,2),16), parseInt(hex.substr(2,2),16), parseInt(hex.substr(4,2),16)];
+  }
+
+  // Apply alpha to a hex color → "rgba(r,g,b,a)". Falls back to raw color if parse fails.
+  function withAlpha(color, alpha) {
+    var rgb = parseHex(color);
+    if (!rgb) return color;
+    return 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',' + alpha + ')';
+  }
+
+  // RGB→HSV, rotate hue, enforce min saturation, HSV→RGB.
+  function rotateHue(rgb, deg) {
+    var r = rgb[0]/255, g = rgb[1]/255, b = rgb[2]/255;
+    var max = Math.max(r,g,b), min = Math.min(r,g,b), d = max - min;
+    var h = 0, s = max === 0 ? 0 : d / max, v = max;
+    if (d > 0) {
+      if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+      else if (max === g) h = ((b - r) / d + 2) / 6;
+      else h = ((r - g) / d + 4) / 6;
+    }
+    h = ((h * 360 + deg) % 360) / 360;
+    if (h < 0) h += 1;
+    // Ensure palette colors are always distinguishable
+    if (s < 0.45) s = 0.45;
+    if (v < 0.4) v = 0.55;
+    var i = Math.floor(h * 6), f = h * 6 - i, p = v*(1-s), q = v*(1-f*s), t = v*(1-(1-f)*s);
+    var ro, go, bo;
+    switch (i % 6) {
+      case 0: ro=v; go=t; bo=p; break; case 1: ro=q; go=v; bo=p; break;
+      case 2: ro=p; go=v; bo=t; break; case 3: ro=p; go=q; bo=v; break;
+      case 4: ro=t; go=p; bo=v; break; case 5: ro=v; go=p; bo=q; break;
+    }
+    return [Math.round(ro*255), Math.round(go*255), Math.round(bo*255)];
+  }
+
+  function rgbStr(rgb) { return 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')'; }
+  function rgbaStr(rgb, a) { return 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',' + a + ')'; }
+
+  // Build a chart palette with n visually distinct entries.
+  // Strategy: accent as primary hue, then evenly spaced hue rotations,
+  // each at full opacity first, then 60% round if more slots needed.
+  function buildPalette(c, n) {
+    if (n <= 0) return [];
+    var base = parseHex(c.accent) || [100, 100, 200];
+    if (n === 1) return [c.accent];
+
+    // Generate N distinct hues by rotating evenly around the wheel.
+    var hueCount = Math.min(n, 6);
+    // Slot 0 = accent with saturation guarantee (via 0° rotation)
+    var hues = [rotateHue(base, 0)];
+    var step = Math.max(40, Math.floor(360 / hueCount));
+    for (var i = 1; i < hueCount; i++) {
+      hues.push(rotateHue(base, step * i));
+    }
+
+    var out = [];
+    var opacities = [1, 0.55];
+    for (var oi = 0; oi < opacities.length && out.length < n; oi++) {
+      for (var hi = 0; hi < hues.length && out.length < n; hi++) {
+        if (opacities[oi] >= 1) out.push(rgbStr(hues[hi]));
+        else out.push(rgbaStr(hues[hi], opacities[oi]));
+      }
+    }
+    return out;
   }
 
   function baseTooltip(c) {
@@ -199,12 +268,12 @@
       el.innerHTML = headerHTML(data.title, data.subtitle) +
         '<div class="mw-chart__body"></div>' +
         extra;
-      if (!EC) return;
+      if (!EC()) return;
       var body = el.querySelector('.mw-chart__body');
       if (chart) chart.dispose();
-      chart = EC.init(body, null, { renderer: 'svg' });
+      chart = EC().init(body, null, { renderer: 'svg' });
       var c = getColors();
-      var palette = [c.accent, c.accent2, c.success, c.warning, c.danger];
+      var palette = buildPalette(c, 5);
       function currentSize() { return { width: body.offsetWidth || 0, height: body.offsetHeight || 0 }; }
       function buildAndSet() {
         var opt = buildOption(data, c, palette, currentSize());
@@ -285,10 +354,9 @@
         (showSpark ? '<div class="mw-kpi__spark"></div>' : '');
       if (chart) { chart.dispose(); chart = null; }
       if (ro) { ro.disconnect(); ro = null; }
-      if (EC && showSpark) {
+      if (EC() && showSpark) {
         var spark = el.querySelector('.mw-kpi__spark');
-        chart = EC.init(spark, null, { renderer: 'svg' });
-        chart.setOption({
+        var sparkOpt = {
           grid: { top: 2, right: 2, bottom: 2, left: 2 },
           xAxis: { type: 'category', show: false, data: data.sparkline.map(function (_, i) { return i; }) },
           yAxis: { type: 'value', show: false, scale: true },
@@ -304,9 +372,21 @@
                 ] },
             },
           }],
-        });
+        };
+        // Init ECharts only after layout gives the spark div a real width.
+        // container-type:inline-size can delay width computation.
+        function initSpark() {
+          chart = EC().init(spark, null, { renderer: 'svg' });
+          chart.setOption(sparkOpt);
+        }
+        if (spark.offsetWidth > 0) {
+          initSpark();
+        }
         if (typeof ResizeObserver !== 'undefined') {
-          ro = new ResizeObserver(function () { if (chart) chart.resize(); });
+          ro = new ResizeObserver(function () {
+            if (!chart && spark.offsetWidth > 0) initSpark();
+            if (chart) chart.resize();
+          });
           ro.observe(spark);
         }
       }
@@ -466,9 +546,14 @@
           },
           series: [{
             type: 'bar',
-            data: values.slice().reverse(),
+            data: (function () {
+              var rev = values.slice().reverse();
+              var pal = buildPalette(c, rev.length);
+              return rev.map(function (v, i) {
+                return { value: v, itemStyle: { color: pal[rev.length - 1 - i], borderRadius: [0, 4, 4, 0] } };
+              });
+            })(),
             barWidth: '58%',
-            itemStyle: { color: c.accent, borderRadius: [0, 4, 4, 0] },
             label: data.showLabels ? {
               show: true, position: 'right',
               color: c.muted, fontFamily: c.font, fontSize: 11,
@@ -494,21 +579,24 @@
           splitLine: { lineStyle: { color: c.border, type: [4, 4], opacity: 0.6 } },
         },
         series: [{
-          type: 'bar', data: values, barWidth: '50%',
-          itemStyle: { color: c.accent, borderRadius: [4, 4, 0, 0] },
+          type: 'bar', barWidth: '50%',
+          data: values.map(function (v, i) {
+            var pal = buildPalette(c, values.length);
+            return { value: v, itemStyle: { color: pal[i], borderRadius: [4, 4, 0, 0] } };
+          }),
         }],
       };
     });
   }
 
   // ==========================================================
-  // Widget: Funnel
+  // Widget: Funnel (ECharts trapezoid — single hue + conversion labels)
   // ==========================================================
   function funnelChart(el, config) {
     return _chartBase(el, config, {
       stages: [], valueSuffix: '',
     }, 'funnel-chart', function (data, c) {
-      var palette = [c.accent, c.accent2, c.warning, c.success, c.danger];
+      var stages = data.stages || [];
       return {
         textStyle: { fontFamily: c.font },
         tooltip: Object.assign({}, baseTooltip(c), {
@@ -516,15 +604,30 @@
         }),
         series: [{
           type: 'funnel',
-          left: '6%', right: '6%', top: 6, bottom: 6,
+          left: 80, right: 80, top: 6, bottom: 6,
           min: 0, sort: 'descending', gap: 3,
-          label: { show: true, position: 'inside', color: '#fff',
-                   fontFamily: c.font, fontSize: 11, fontWeight: 500 },
-          labelLine: { show: false },
-          data: data.stages.map(function (s, i) {
+          label: {
+            show: true, position: 'right',
+            fontFamily: c.font, fontSize: 11, color: c.muted,
+            formatter: function (p) {
+              var i = -1;
+              for (var k = 0; k < stages.length; k++) { if (stages[k].label === p.name) { i = k; break; } }
+              var line = escapeHTML(p.name) + '  ' + safeNum(p.value) + (data.valueSuffix || '');
+              if (i > 0) {
+                var prev = stages[i - 1].value;
+                var rate = prev > 0 ? (p.value / prev * 100).toFixed(1) : '0.0';
+                line += '  (' + rate + '%)';
+              }
+              return line;
+            },
+          },
+          labelLine: { show: true, length: 12, lineStyle: { color: c.border } },
+          itemStyle: { borderColor: c.surface, borderWidth: 1 },
+          data: stages.map(function (s, i) {
+            var opacity = stages.length > 1 ? (1 - i * 0.5 / (stages.length - 1)) : 1;
             return {
               name: s.label, value: s.value,
-              itemStyle: { color: palette[i % palette.length], borderColor: c.surface, borderWidth: 1 },
+              itemStyle: { color: c.accent, opacity: opacity },
             };
           }),
         }],
@@ -539,7 +642,7 @@
     return _chartBase(el, config, {
       slices: [],
       centerLabel: '합계', centerValue: null,
-    }, 'donut-chart', function (data, c, palette) {
+    }, 'donut-chart', function (data, c, palette, size) {
       var total = data.slices.reduce(function (s, x) { return s + (x.value || 0); }, 0);
       // Auto-normalize: if slices look like percentages but don't sum to 100, fix them
       if (total > 0 && total !== 100 && data.slices.every(function(s) { return s.value <= 100; }) && total > 80 && total < 120) {
@@ -548,19 +651,53 @@
         total = 100;
       }
       var centerVal = data.centerValue != null ? String(data.centerValue).replace(/<[^>]*>/g, '') : safeNum(total);
+      var w = size.width || 300;
+      var h = size.height || 200;
+      var narrow = w < 320;
+      var legendFmt = function (name) {
+        var s = data.slices.find(function (x) { return x.label === name; });
+        if (!s) return name;
+        var pct = total > 0 ? (s.value / total * 100).toFixed(0) : 0;
+        return name + '  ' + pct + '%';
+      };
+      var legend, pieCenter, pieRadius;
+      if (narrow) {
+        // Vertical layout: chart top, legend bottom (wrap, no scroll)
+        var legendH = Math.ceil(data.slices.length / 2) * 20 + 8;
+        var chartH = h - legendH - 10;
+        var r = Math.min(w, chartH) * 0.38;
+        pieCenter = ['50%', chartH / 2];
+        pieRadius = [r * 0.68, r];
+        legend = {
+          orient: 'horizontal', bottom: 0, left: 'center',
+          textStyle: { color: c.muted, fontFamily: c.font, fontSize: 10 },
+          icon: 'circle', itemWidth: 6, itemHeight: 6, itemGap: 8,
+          formatter: legendFmt,
+        };
+      } else {
+        // Horizontal layout: chart left, legend right
+        var dim = Math.min(w, h);
+        var legendW = 110;
+        var chartW = w - legendW;
+        var cx = Math.max(chartW / 2, dim * 0.35);
+        var outerR = Math.min(dim * 0.42, chartW * 0.45);
+        pieCenter = [cx, '50%'];
+        pieRadius = [outerR * 0.68, outerR];
+        legend = {
+          orient: 'vertical', right: 12, top: 'middle',
+          textStyle: { color: c.muted, fontFamily: c.font, fontSize: 11 },
+          icon: 'circle', itemWidth: 6, itemHeight: 6, itemGap: 10,
+          type: 'scroll', formatter: legendFmt,
+        };
+      }
       return {
         textStyle: { fontFamily: c.font },
         tooltip: baseTooltip(c),
-        legend: {
-          orient: 'vertical', right: 12, top: 'middle',
-          textStyle: { color: c.muted, fontFamily: c.font, fontSize: 11 },
-          icon: 'circle', itemWidth: 6, itemHeight: 6, itemGap: 14, itemGap: 10,
-          type: 'scroll',
-        },
+        legend: legend,
         series: [{
           type: 'pie',
-          radius: ['44%', '64%'],
-          center: ['30%', '50%'],
+          radius: pieRadius,
+          center: pieCenter,
           avoidLabelOverlap: false,
           label: {
             show: true, position: 'center',
@@ -571,12 +708,15 @@
             },
           },
           labelLine: { show: false },
-          data: data.slices.map(function (s, i) {
-            return {
-              name: s.label, value: s.value,
-              itemStyle: { color: s.color || palette[i % palette.length], borderColor: c.surface, borderWidth: 2 },
-            };
-          }),
+          data: (function () {
+            var pal = buildPalette(c, data.slices.length);
+            return data.slices.map(function (s, i) {
+              return {
+                name: s.label, value: s.value,
+                itemStyle: { color: s.color || pal[i], borderColor: c.surface, borderWidth: 2 },
+              };
+            });
+          })(),
         }],
       };
     });
@@ -592,19 +732,22 @@
 
     function render() {
       el.classList.add('mw-card');
+      var c = getColors();
+      var pal = buildPalette(c, (data.items || []).length);
       var list = (data.items || []).slice(0, 100).map(function (it, i) {
         var initial = it.initial || (it.name ? it.name.charAt(0) : '');
         var meta = it.meta != null ? it.meta : (it.percent + '%');
+        var barColor = it.color || pal[i % pal.length];
         return '' +
           '<div class="mw-lb__item">' +
-            '<div class="mw-avatar ' + (i === 0 ? 'mw-avatar--top' : '') + '">' + escapeHTML(initial) + '</div>' +
+            '<div class="mw-avatar ' + (i === 0 ? 'mw-avatar--top' : '') + '" style="background:' + barColor + '">' + escapeHTML(initial) + '</div>' +
             '<div class="mw-lb__body">' +
               '<div class="mw-lb__top">' +
                 '<div class="mw-lb__name">' + escapeHTML(it.name || '') + '</div>' +
                 '<div class="mw-lb__meta">' + escapeHTML(meta) + '</div>' +
               '</div>' +
               '<div class="mw-progress mw-lb__progress">' +
-                '<div class="mw-progress__fill" style="width:' + (it.percent || 0) + '%"></div>' +
+                '<div class="mw-progress__fill" style="width:' + (it.percent || 0) + '%;background:' + barColor + '"></div>' +
               '</div>' +
             '</div>' +
           '</div>';
@@ -1120,10 +1263,10 @@
 
       if (chart) { chart.dispose(); chart = null; }
       if (ro) { ro.disconnect(); ro = null; }
-      if (!EC || !data.series || !data.series.length || !data.categories || !data.categories.length) return;
+      if (!EC() || !data.series || !data.series.length || !data.categories || !data.categories.length) return;
 
       var chartEl = el.querySelector('.mw-mchrt__chart');
-      chart = EC.init(chartEl, null, { renderer: 'svg' });
+      chart = EC().init(chartEl, null, { renderer: 'svg' });
       var series = [];
 
       if (data.series[1] && data.series[1].data) {
@@ -2108,19 +2251,18 @@
       }).join('');
       el.innerHTML = headerHTML(data.title, data.subtitle) +
         '<div class="mw-sparklist__body">' + rows + '</div>';
-      if (!EC) return;
+      if (!EC()) return;
       data.items.forEach(function (it, i) {
         if (!it.sparkline || !it.sparkline.length) return;
         var spark = el.querySelector('.mw-sparklist__spark[data-idx="' + i + '"]');
         if (!spark) return;
-        var ch = EC.init(spark, null, { renderer: 'svg' });
         var col = c.accent;
         if (it.delta != null) {
           var goodWhenNeg = it.deltaGoodWhen === 'negative';
           var good = goodWhenNeg ? it.delta < 0 : it.delta > 0;
           col = good ? c.success : c.danger;
         }
-        ch.setOption({
+        var opt = {
           grid: { top: 2, right: 2, bottom: 2, left: 2 },
           xAxis: { type: 'category', show: false, data: it.sparkline.map(function (_, k) { return k; }) },
           yAxis: { type: 'value', show: false, scale: true },
@@ -2136,10 +2278,19 @@
                 ] },
             },
           }],
-        });
-        charts.push(ch);
+        };
+        var ch = null;
+        function initSpark() {
+          ch = EC().init(spark, null, { renderer: 'svg' });
+          ch.setOption(opt);
+          charts.push(ch);
+        }
+        if (spark.offsetWidth > 0) initSpark();
         if (typeof ResizeObserver !== 'undefined') {
-          var ro = new ResizeObserver(function () { if (ch) ch.resize(); });
+          var ro = new ResizeObserver(function () {
+            if (!ch && spark.offsetWidth > 0) initSpark();
+            if (ch) ch.resize();
+          });
           ro.observe(spark);
           ros.push(ro);
         }
@@ -2816,7 +2967,7 @@
   // Public API
   // ==========================================================
   var api = {
-    version: '0.1.19',
+    version: '0.1.20',
     kpiCard: kpiCard,
     lineChart: lineChart,
     barChart: barChart,

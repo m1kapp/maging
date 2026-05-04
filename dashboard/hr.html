@@ -5,8 +5,7 @@
 <script>!function(){var k='maging-theme',s=localStorage.getItem(k);if(!s)s='linkedin';document.documentElement.setAttribute('data-theme',s);localStorage.setItem(k,s)}();</script>
 <title>HR Analytics — 인사 대시보드 · maging demo</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="../dist/maging.css">
-<script defer src="../dist/maging-all.js" data-base="../dist/"></script>
+<script src="../dist/maging-all.js" data-base="../dist/"></script>
 <script type="module" src="../components/site.js"></script>
 </head>
 <body class="mw-themed">
@@ -17,7 +16,7 @@
 
   <div id="alert"></div>
 
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3" style="grid-auto-rows:140px">
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
     <div id="kpi-1"></div><div id="kpi-2"></div>
     <div id="kpi-3"></div><div id="kpi-4"></div>
   </div>
@@ -48,8 +47,6 @@
 </main>
 <script>
 window.addEventListener('maging:ready', () => {
-  const fmt = Maging.fmt;
-
   Maging.pageHeader('#page-hero', {
     kicker: 'HR ANALYTICS',
     title: '인사 대시보드',

@@ -8,10 +8,7 @@
 <meta name="description" content="maging 랜딩 모드 데모. 가상의 기업교육 플랫폼 런핏을 소개합니다.">
 
 <link rel="stylesheet" href="tw.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js"></script>
-<link rel="stylesheet" href="../dist/maging.css">
-<script src="../dist/maging.js"></script>
-<script src="../dist/maging-landing.js"></script>
+<script src="../dist/maging-all.js" data-base="../dist/" data-no-tailwind></script>
 <script type="module" src="../components/site.js"></script>
 
 <style>
@@ -138,6 +135,13 @@
 <maging-footer></maging-footer>
 
 <script>
+window.addEventListener('maging:ready', function () {
+var s = document.createElement('script');
+s.src = '../dist/maging-landing.js';
+s.onload = function () { initLanding(); };
+document.head.appendChild(s);
+});
+function initLanding() {
 /* ── Hero ── */
 Maging.heroSection('#hero', {
   kicker: '런핏 LearnFit',
@@ -269,6 +273,7 @@ Maging.ctaSection('#cta', {
     { label: '데모 예약', href: '#' },
   ]
 });
+} // initLanding
 </script>
 
 </body>
