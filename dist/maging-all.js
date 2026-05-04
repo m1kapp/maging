@@ -87,8 +87,15 @@
 
   // ③ Tailwind Play (optional)
   if (!SKIP_TAILWIND) {
+    // Suppress Tailwind CDN's "should not be used in production" warning —
+    // it surfaces in Claude Artifacts and confuses end-users.
+    var _origWarn = console.warn;
+    console.warn = function () {
+      if (arguments[0] && typeof arguments[0] === 'string' && arguments[0].indexOf('cdn.tailwindcss.com') !== -1) return;
+      return _origWarn.apply(console, arguments);
+    };
     loadScript('https://cdn.tailwindcss.com').catch(function (e) {
-      console.warn('[maging-all] Tailwind Play failed (non-fatal):', e.message);
+      _origWarn.call(console, '[maging-all] Tailwind Play failed (non-fatal):', e.message);
     });
   }
 
