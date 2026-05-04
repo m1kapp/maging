@@ -135,6 +135,10 @@
 
   function escapeHTML(s) {
     if (s == null || s === undefined) return '';
+    if (typeof s === 'object') {
+      if (typeof console !== 'undefined') console.warn('[maging] escapeHTML received object — use toStr() first:', s);
+      s = toStr(s);
+    }
     var str = String(s);
     if (str === 'NaN' || str === 'undefined' || str === 'Infinity' || str === '-Infinity') return '-';
     return str
@@ -171,6 +175,26 @@
   }
   /** Render value: pass through HTML, escape plain text */
   function _valOrEsc(v) { return (typeof v === 'string' && v.indexOf('<') >= 0) ? v : escapeHTML(v || ''); }
+
+  /** Coerce any value to a safe display string. Arrays/objects → join or JSON.
+   *  Warns in console so developers can fix the data shape. */
+  function toStr(v) {
+    if (v == null) return '';
+    if (typeof v === 'string') return v;
+    if (typeof v === 'number' || typeof v === 'boolean') return String(v);
+    if (typeof console !== 'undefined') {
+      console.warn('[maging] Expected string but got ' + (Array.isArray(v) ? 'Array' : typeof v) + ':', v);
+    }
+    if (Array.isArray(v)) {
+      return v.map(function (x) {
+        if (typeof x === 'string') return x;
+        if (x && typeof x === 'object') return x.label || x.name || x.text || x.title || JSON.stringify(x);
+        return String(x);
+      }).join(' · ');
+    }
+    if (typeof v === 'object') return v.label || v.name || v.text || v.title || JSON.stringify(v);
+    return String(v);
+  }
 
   /**
    * Auto-derive value/delta from sparkline or series data.
@@ -2371,6 +2395,8 @@
     el = q(el);
     if (!el) return null;
     var data = Object.assign({ kicker: '', title: '', subtitle: '', meta: '' }, config || {});
+    // Coerce all text fields — LLMs sometimes pass arrays/objects
+    ['kicker','title','subtitle','meta'].forEach(function(k) { data[k] = toStr(data[k]); });
     function render() {
       el.classList.add('mw-page-head');
       el.innerHTML =
@@ -2379,7 +2405,7 @@
           '<h1 class="mw-page-head__title">' + escapeHTML(data.title) + '</h1>' +
           (data.meta ? '<span class="mw-page-head__mono">' + escapeHTML(data.meta) + '</span>' : '') +
         '</div>' +
-        (data.subtitle ? '<div class="mw-page-head__meta"><span>' + escapeHTML(data.subtitle) + '</span></div>' : '');
+        (data.subtitle ? '<div class="mw-page-head__meta"><span>' + _valOrEsc(data.subtitle) + '</span></div>' : '');
     }
     render();
     var handle = { el: el, type: 'page-header', refresh: render,
