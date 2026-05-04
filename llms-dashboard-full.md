@@ -182,6 +182,7 @@ Maging.kpiCard('#kpi', {
 - 임의 클래스명 금지 — Grid + Maging API만.
 - 코드 주석 금지 — 토큰 낭비.
 - 수동 숫자 포맷터 금지 — `Maging.fmt.*` 사용.
+- Tailwind CDN 별도 로드 금지 — `maging-all.js`가 Tailwind를 이미 포함. `<script src="https://cdn.tailwindcss.com">` 추가하지 마라. `data-no-tailwind` 사용 금지.
 
 **Anti-AI slop (시각적 클리셰 금지):**
 - 보라+청록 그라데이션 배경 금지 — AI 생성물의 가장 흔한 배경색.
