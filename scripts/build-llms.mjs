@@ -24,11 +24,17 @@ import { SERVICE_RULES, HANDSHAKES } from './prompts.mjs';
 const __dir = dirname(fileURLToPath(import.meta.url));
 const root = join(__dir, '..');
 
-const core = readFileSync(join(root, 'llms/core.txt'), 'utf-8');
-const dashboard = readFileSync(join(root, 'llms/dashboard.txt'), 'utf-8');
-const landing = readFileSync(join(root, 'llms/landing.txt'), 'utf-8');
-const weeklyReport = readFileSync(join(root, 'llms/weekly-report.txt'), 'utf-8');
-const cardNews = readFileSync(join(root, 'llms/card-news.txt'), 'utf-8');
+const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf-8'));
+const VERSION = pkg.version;
+
+// Replace __VERSION__ placeholder in source files with actual version
+function injectVersion(txt) { return txt.replace(/__VERSION__/g, VERSION); }
+
+const core = injectVersion(readFileSync(join(root, 'llms/core.txt'), 'utf-8'));
+const dashboard = injectVersion(readFileSync(join(root, 'llms/dashboard.txt'), 'utf-8'));
+const landing = injectVersion(readFileSync(join(root, 'llms/landing.txt'), 'utf-8'));
+const weeklyReport = injectVersion(readFileSync(join(root, 'llms/weekly-report.txt'), 'utf-8'));
+const cardNews = injectVersion(readFileSync(join(root, 'llms/card-news.txt'), 'utf-8'));
 
 const fullBases = {
   dashboard: core + '\n' + dashboard,

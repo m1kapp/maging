@@ -66,7 +66,7 @@
   multi-series: `{ title?, categories, series:[{name,data}], stack?, yFormatter? }` — 그룹/스택 바. 계획 vs 실적 비교에 적합.
 **`donutChart`** `{ title?, slices:[{label,value,color?}], centerLabel? }`
   centerValue는 slices 합계에서 자동 계산. slices 합이 100 근처면 자동 정규화.
-**`funnelChart`** `{ title?, stages:[{label,value}], valueSuffix? }`
+**`funnelChart`** `{ title?, stages:[{label,value}], valueSuffix? }` — 전환 단계 전용 (유입→가입→결제). 크기 비교에 쓰지 마라 — barChart horizontal을 써라.
 **`gaugeChart`** `{ title?, label, value, max, unit, thresholds?, valueFormatter? }`
   `unit:'원'`이면 자동으로 억원/만원 포맷. `valueFormatter: (v) => ...`로 커스텀 가능.
 **`radarChart`** `{ title?, indicators:[{name,max}], series:[{name,data}] }`
@@ -196,6 +196,8 @@ Maging.kpiCard('#kpi', {
 - 라인차트 시리즈 3개 이상 금지 — 최대 2개. 3개 필요하면 차트를 분리하라.
 - 도넛 슬라이스 6개 이상 금지 — 최대 5개. 나머지는 '기타'로 합쳐라.
 - `barChart` items로 "1월 실적/1월 계획" 교대 나열 금지 — `series` 2개 + `categories` 월별로 써라.
+- `funnelChart`를 비순차 데이터(수입 항목, 카테고리 크기 비교)에 쓰지 마라 — `barChart` horizontal을 써라. 퍼널은 전환 단계(유입→가입→결제)에만.
+- `kpiCard`에 sparkline을 넣으면 반드시 `sparkLabel`로 기간을 명시하라 — 예: `sparkLabel:'최근 12개월'`.
 
 **Anti-AI slop (시각적 클리셰 금지):**
 - 보라+청록 그라데이션 배경 금지 — AI 생성물의 가장 흔한 배경색.

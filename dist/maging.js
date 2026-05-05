@@ -2532,9 +2532,8 @@
       var fmt = data.valueFormatter || safeNum;
       // If custom formatter is provided, don't auto-append unit (it's already in the formatted string)
       var unitSuffix = data.valueFormatter ? '' : (data.unit || '');
-      var toAlpha = function (hex, a) {
-        return hex + Math.round(a * 255).toString(16).padStart(2, '0');
-      };
+      // Use the global withAlpha helper (handles both hex and rgb)
+      var toAlpha = withAlpha;
 
       // Background qualitative bands (stacked horizontal bars)
       var bandSeries = [];

@@ -66,7 +66,7 @@
   multi-series: `{ title?, categories, series:[{name,data}], stack?, yFormatter? }` — 그룹/스택 바. 계획 vs 실적 비교에 적합.
 **`donutChart`** `{ title?, slices:[{label,value,color?}], centerLabel? }`
   centerValue는 slices 합계에서 자동 계산. slices 합이 100 근처면 자동 정규화.
-**`funnelChart`** `{ title?, stages:[{label,value}], valueSuffix? }`
+**`funnelChart`** `{ title?, stages:[{label,value}], valueSuffix? }` — 전환 단계 전용 (유입→가입→결제). 크기 비교에 쓰지 마라 — barChart horizontal을 써라.
 **`gaugeChart`** `{ title?, label, value, max, unit, thresholds?, valueFormatter? }`
   `unit:'원'`이면 자동으로 억원/만원 포맷. `valueFormatter: (v) => ...`로 커스텀 가능.
 **`radarChart`** `{ title?, indicators:[{name,max}], series:[{name,data}] }`
@@ -196,6 +196,8 @@ Maging.kpiCard('#kpi', {
 - 라인차트 시리즈 3개 이상 금지 — 최대 2개. 3개 필요하면 차트를 분리하라.
 - 도넛 슬라이스 6개 이상 금지 — 최대 5개. 나머지는 '기타'로 합쳐라.
 - `barChart` items로 "1월 실적/1월 계획" 교대 나열 금지 — `series` 2개 + `categories` 월별로 써라.
+- `funnelChart`를 비순차 데이터(수입 항목, 카테고리 크기 비교)에 쓰지 마라 — `barChart` horizontal을 써라. 퍼널은 전환 단계(유입→가입→결제)에만.
+- `kpiCard`에 sparkline을 넣으면 반드시 `sparkLabel`로 기간을 명시하라 — 예: `sparkLabel:'최근 12개월'`.
 
 **Anti-AI slop (시각적 클리셰 금지):**
 - 보라+청록 그라데이션 배경 금지 — AI 생성물의 가장 흔한 배경색.
@@ -287,7 +289,7 @@ MIT
 ### Setup
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.19/dist/maging-all.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.24/dist/maging-all.js"></script>
 <body class="mw-themed">
 ```
 
@@ -377,7 +379,9 @@ Outer wrapper: `<main class="max-w-[1100px] mx-auto px-6 py-4">`. Stack sections
 10. Section order: at-a-glance → real-time → trends → deep-dive → operations.
 11. **Density:** `gap-3` everywhere. `mt-5 pt-4` for sections. No large spacings.
 12. **Asymmetric grids:** Vary column ratios. Never repeat same pattern consecutively.
-13. **1차트 1인사이트:** 라인차트 시리즈 최대 2개. 데이터 3개 미만 시리즈는 라인차트 금지. 비교는 동일 카테고리끼리만.
+13. **1차트 1인사이트:** 라인차트 시리즈 최대 2개. 비교는 동일 카테고리끼리만.
+    - 2025실적 vs 2026실적 vs 2026계획 → 차트 2개로 분리: ① 2025 vs 2026 실적(YoY) ② 2026 실적 vs 계획(달성률).
+    - 데이터 포인트 3개 미만인 시리즈는 라인차트 금지 — 선이 아니라 점이 된다.
 14. Output one fenced code block: ` ```html … ``` `.
 15. **Powered by:** `</main>` 바로 뒤에 버전 표시를 넣어라: `<div style="text-align:right;padding:1rem 1.5rem 0.5rem;font-size:0.6rem;color:var(--mw-text-soft,var(--mw-text-muted));opacity:0.5">powered by maging 0.1.24</div>`
 
