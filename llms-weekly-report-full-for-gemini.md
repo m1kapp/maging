@@ -44,7 +44,8 @@
 
 ### METRIC
 **`kpiCard`** `{ label, sparkline, unit?, deltaGoodWhen?, icon?, compact?, sparkLabel? }`
-  value·delta는 sparkline에서 자동 계산 — 직접 넣지 마라. `unit:'원'`이면 자동으로 억원/만원 포맷. `sparkLabel:'최근 12개월'` — 스파크라인 아래 기간 표시. 같은 행 KPI는 전부 sparkline을 넣거나 전부 빼라.
+  value·delta는 sparkline에서 자동 계산 — 직접 넣지 마라. `unit:'원'`이면 자동으로 억원/만원 포맷.
+  `sparkLabel:'최근 12개월'` — 스파크라인 아래 기간 표시.
 **`heroTile`** `{ kicker?, value, tagline?, stats?:[{label,value}] }`
 **`metricChart`** `{ label, icon?, context?, categories, series:[{name,data}], target?, yFormatter? }`
   value·delta는 series[0].data에서 자동 계산 — 직접 넣지 마라.
@@ -56,7 +57,7 @@
   `unit:'원'`이면 자동으로 억원/만원 포맷. `valueFormatter: (v) => ...`로 커스텀 가능.
 **`bulletChart`** `{ value, target?, benchmark?, max, min?, ranges?, valueFormatter?, unit? }`
 **`sparklineList`** `{ title, items:[{label,sparkline,unit?,deltaGoodWhen?}] }`
-  각 item의 value·delta는 sparkline에서 자동 계산. `unit:'원'`이면 자동으로 억원/만원 포맷. `sparkLabel:'최근 12개월'` — 스파크라인 아래 기간 표시. 같은 행 KPI는 전부 sparkline을 넣거나 전부 빼라.
+  각 item의 value·delta는 sparkline에서 자동 계산. `unit:'원'`이면 자동으로 억원/만원 포맷.
 **`goalGrid`** `{ title, items:[{label,value,max,unit?,sublabel?}], thresholds? }`
 
 ### CHARTS
@@ -176,7 +177,7 @@ Maging.kpiCard('#kpi', {
 - **계획 vs 실적:** `barChart`의 `items`로 "1월 실적 / 1월 계획"을 교대로 넣지 마라 — `series` 2개(실적/계획)로 `categories`를 월별로 해야 나란히 비교된다.
 - **KPI에 delta:null 금지.** delta가 없으면 KPI 카드를 쓸 이유가 없다 — 비교 대상을 찾아서 delta를 넣거나, 단순 수치면 heroTile/metricStack을 써라.
 - **같은 행 KPI는 전부 sparkline을 넣거나 전부 빼라.** 섞으면 높이가 안 맞아서 레이아웃이 깨진다.
-- **grid-auto-rows 고정 금지.** 위젯이 자체 높이를 가지므로 `grid-auto-rows`를 지정하지 마라. 필요하면 `height` config를 써라.
+- **grid-auto-rows 고정 금지.** 위젯이 자체 높이를 가지므로 `grid-auto-rows`를 지정하지 마라. 필요하면 위젯의 `height` config를 써라.
 
 ---
 

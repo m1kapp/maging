@@ -36,7 +36,7 @@ Outer wrapper: `<main class="max-w-[1100px] mx-auto px-6 py-4">`. Stack sections
 <div id="page-hero" class="pt-4 pb-2"></div>
 <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
   <div id="section-01"></div>
-  <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-3 mt-3" style="grid-auto-rows:380px">
+  <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-3 mt-3">
     <div id="chart-a"></div><div id="chart-b"></div>
   </div>
 </div>
@@ -48,30 +48,30 @@ Outer wrapper: `<main class="max-w-[1100px] mx-auto px-6 py-4">`. Stack sections
 
 **1 · KPI Row**
 ```html
-<div class="grid grid-cols-2 md:grid-cols-4 gap-3" style="grid-auto-rows:140px">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
 ```
 
 **2 · Hero + Side (asymmetric)**
 ```html
-<div class="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-3" style="grid-auto-rows:380px">
+<div class="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-3">
 ```
 
 **3 · Equal Split**
 ```html
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-3" style="grid-auto-rows:380px">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
 ```
 
 **4 · Asymmetric Trio**
 ```html
-<div class="grid grid-cols-1 lg:grid-cols-[2fr_2fr_3fr] gap-3" style="grid-auto-rows:220px">
+<div class="grid grid-cols-1 lg:grid-cols-[2fr_2fr_3fr] gap-3">
 ```
 
 **5 · Full-Width Detail**
 ```html
-<div class="grid grid-cols-1 gap-3" style="grid-auto-rows:480px">
+<div class="grid grid-cols-1 gap-3">
 ```
 
-**Height tokens:** `mini 96px` · `tile 140px` · `gauge 220px` · `card 380px` · `detail 480px` · `tall 560px`
+위젯이 자체 높이를 가지므로 `grid-auto-rows` 불필요. 차트 위젯에 `height` config를 쓸 수 있다.
 
 ---
 
