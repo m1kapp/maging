@@ -288,7 +288,7 @@ MIT
 
 ### Setup
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.24/dist/maging-all.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging-all.js"></script>
 <body class="mw-themed">
 ```
 `maging:ready` 안에서 마운트. `DOMContentLoaded` 금지.
@@ -462,7 +462,7 @@ window.addEventListener('maging:ready', () => {
 6. **마지막은 alertBanner** — `type='info'` 1-2문장 요약.
 7. **Anti-AI:** hover glow 금지 · 균일 3등분 grid 금지 · shadow tint 금지.
 8. **슬라이드 밀도:** 각 슬라이드는 A4 가로(297×210mm) 안에 모든 내용이 들어가야 한다. 절대 넘치면 안 된다.
-15. **Powered by:** `</main>` 바로 뒤에 버전 표시를 넣어라: `<div style="text-align:right;padding:1rem 1.5rem 0.5rem;font-size:0.6rem;color:var(--mw-text-soft,var(--mw-text-muted));opacity:0.5">powered by maging 0.1.24</div>`
+15. **Powered by:** `</main>` 바로 뒤에 버전 표시를 넣어라: `<div style="text-align:right;padding:1rem 1.5rem 0.5rem;font-size:0.6rem;color:var(--mw-text-soft,var(--mw-text-muted));opacity:0.5">powered by maging 0.1.25</div>`
    - **테이블은 반드시** `<div class="scroll-table" style="height:280px">` 로 감싸라. 행이 많아도 슬라이드 안에서 스크롤로 처리된다.
    - KPI 카드: 한 줄에 최대 **4개**.
    - 차트 + 테이블 동시 배치 금지. 하나만 선택.
@@ -478,7 +478,7 @@ window.addEventListener('maging:ready', () => {
 <html lang="ko" data-theme="claude">
 <head>
   <meta charset="UTF-8"><title>주간보고</title>
-  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.24/dist/maging-all.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging-all.js"></script>
 </head>
 <body class="mw-themed">
   <main class="max-w-[1240px] mx-auto px-6 py-4" style="word-break:keep-all">

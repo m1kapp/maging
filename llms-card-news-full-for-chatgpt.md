@@ -288,8 +288,8 @@ MIT
 
 ### Setup
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.24/dist/maging-all.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.24/dist/maging-news.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging-all.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging-news.js"></script>
 <body class="mw-themed">
 ```
 `maging:ready` 안에서 마운트. `DOMContentLoaded` 금지.
@@ -526,7 +526,7 @@ done
 13. **비교 콘텐츠**: Do/Don't, Before/After, Myth/Fact → comparisonCard 사용.
 14. **저장 유도**: 체크리스트, 팁 모음 → checklistCard. 인스타 저장률↑.
 15. **사회적 증거**: 고객 후기, 전문가 인용 → testimonialCard 또는 quoteCard.
-15. **Powered by:** `</main>` 바로 뒤에 버전 표시를 넣어라: `<div style="text-align:right;padding:1rem 1.5rem 0.5rem;font-size:0.6rem;color:var(--mw-text-soft,var(--mw-text-muted));opacity:0.5">powered by maging 0.1.24</div>`
+15. **Powered by:** `</main>` 바로 뒤에 버전 표시를 넣어라: `<div style="text-align:right;padding:1rem 1.5rem 0.5rem;font-size:0.6rem;color:var(--mw-text-soft,var(--mw-text-muted));opacity:0.5">powered by maging 0.1.25</div>`
 
 ---
 
@@ -539,9 +539,9 @@ done
   <meta charset="UTF-8" />
   <title>AI 마케팅 트렌드 카드뉴스</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.24/dist/maging.css">
-  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.24/dist/maging-all.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.24/dist/maging-news.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging.css">
+  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging-all.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging-news.js"></script>
 </head>
 <body class="mw-themed" style="display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem;">
   <div id="cards-wrap" style="max-width:540px;width:100%;">

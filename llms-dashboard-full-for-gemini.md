@@ -289,7 +289,7 @@ MIT
 ### Setup
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.24/dist/maging-all.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging-all.js"></script>
 <body class="mw-themed">
 ```
 
@@ -383,7 +383,7 @@ Outer wrapper: `<main class="max-w-[1100px] mx-auto px-6 py-4">`. Stack sections
     - 2025실적 vs 2026실적 vs 2026계획 → 차트 2개로 분리: ① 2025 vs 2026 실적(YoY) ② 2026 실적 vs 계획(달성률).
     - 데이터 포인트 3개 미만인 시리즈는 라인차트 금지 — 선이 아니라 점이 된다.
 14. Output one fenced code block: ` ```html … ``` `.
-15. **Powered by:** `</main>` 바로 뒤에 버전 표시를 넣어라: `<div style="text-align:right;padding:1rem 1.5rem 0.5rem;font-size:0.6rem;color:var(--mw-text-soft,var(--mw-text-muted));opacity:0.5">powered by maging 0.1.24</div>`
+15. **Powered by:** `</main>` 바로 뒤에 버전 표시를 넣어라: `<div style="text-align:right;padding:1rem 1.5rem 0.5rem;font-size:0.6rem;color:var(--mw-text-soft,var(--mw-text-muted));opacity:0.5">powered by maging 0.1.25</div>`
 
 
 ## Service: Gemini (Canvas)
