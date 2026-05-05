@@ -3044,6 +3044,12 @@
 .mw-kpi__delta--good { color: var(--mw-success); }
 .mw-kpi__delta--bad  { color: var(--mw-danger); }
 .mw-kpi__spark { margin-top: var(--mw-space-3); height: 36px; width: 100%; position: relative; transform: translateZ(0); }
+.mw-kpi__spark-label {
+  font-size: 0.6rem;
+  color: var(--mw-text-soft, var(--mw-text-muted));
+  margin-top: var(--mw-space-1);
+  text-align: right;
+}
 
 /* KPI card never stretches to fill a taller grid cell */
 .mw-kpi { align-self: flex-start; }

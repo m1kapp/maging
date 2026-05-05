@@ -43,8 +43,8 @@
   공통 옵션: `title?`, `subtitle?` — 대부분의 카드 위젯에서 지원.
 
 ### METRIC
-**`kpiCard`** `{ label, sparkline, unit?, deltaGoodWhen?, icon?, compact? }`
-  value·delta는 sparkline에서 자동 계산 — 직접 넣지 마라. `unit:'원'`이면 자동으로 억원/만원 포맷.
+**`kpiCard`** `{ label, sparkline, unit?, deltaGoodWhen?, icon?, compact?, sparkLabel? }`
+  value·delta는 sparkline에서 자동 계산 — 직접 넣지 마라. `unit:'원'`이면 자동으로 억원/만원 포맷. `sparkLabel:'최근 12개월'` — 스파크라인 아래 기간 표시. 같은 행 KPI는 전부 sparkline을 넣거나 전부 빼라.
 **`heroTile`** `{ kicker?, value, tagline?, stats?:[{label,value}] }`
 **`metricChart`** `{ label, icon?, context?, categories, series:[{name,data}], target?, yFormatter? }`
   value·delta는 series[0].data에서 자동 계산 — 직접 넣지 마라.
@@ -56,7 +56,7 @@
   `unit:'원'`이면 자동으로 억원/만원 포맷. `valueFormatter: (v) => ...`로 커스텀 가능.
 **`bulletChart`** `{ value, target?, benchmark?, max, min?, ranges?, valueFormatter?, unit? }`
 **`sparklineList`** `{ title, items:[{label,sparkline,unit?,deltaGoodWhen?}] }`
-  각 item의 value·delta는 sparkline에서 자동 계산. `unit:'원'`이면 자동으로 억원/만원 포맷.
+  각 item의 value·delta는 sparkline에서 자동 계산. `unit:'원'`이면 자동으로 억원/만원 포맷. `sparkLabel:'최근 12개월'` — 스파크라인 아래 기간 표시. 같은 행 KPI는 전부 sparkline을 넣거나 전부 빼라.
 **`goalGrid`** `{ title, items:[{label,value,max,unit?,sublabel?}], thresholds? }`
 
 ### CHARTS

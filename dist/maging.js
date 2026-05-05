@@ -342,7 +342,7 @@
     var data = Object.assign({
       label: '', value: '', valueHTML: false, delta: null, sparkline: [],
       icon: '', compact: false, unit: '', valueFormatter: null,
-      deltaGoodWhen: 'positive',
+      deltaGoodWhen: 'positive', sparkLabel: '',
     }, config || {});
     // Auto-derive: sparkline → value, delta
     // unit:'원' → 자동으로 fmt.krw 적용
@@ -375,7 +375,9 @@
           '<div class="mw-kpi__value">' + (data.valueHTML || (typeof data.value === 'string' && data.value.indexOf('<') >= 0) ? data.value : escapeHTML(data.value)) + '</div>' +
           deltaHTML +
         '</div>' +
-        (showSpark ? '<div class="mw-kpi__spark"></div>' : '');
+        (showSpark ? '<div class="mw-kpi__spark"></div>' +
+          (data.sparkLabel ? '<div class="mw-kpi__spark-label">' + escapeHTML(data.sparkLabel) + '</div>' : '')
+         : '');
       if (chart) { chart.dispose(); chart = null; }
       if (ro) { ro.disconnect(); ro = null; }
       if (EC() && showSpark) {
