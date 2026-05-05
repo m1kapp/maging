@@ -524,7 +524,7 @@ done
 13. **비교 콘텐츠**: Do/Don't, Before/After, Myth/Fact → comparisonCard 사용.
 14. **저장 유도**: 체크리스트, 팁 모음 → checklistCard. 인스타 저장률↑.
 15. **사회적 증거**: 고객 후기, 전문가 인용 → testimonialCard 또는 quoteCard.
-15. **Powered by:** `</main>` 바로 뒤에 버전 표시를 넣어라: `<div style="text-align:right;padding:1rem 1.5rem 0.5rem;font-size:0.6rem;color:var(--mw-text-soft,var(--mw-text-muted));opacity:0.5">powered by maging 0.1.23</div>`
+15. **Powered by:** `</main>` 바로 뒤에 버전 표시를 넣어라: `<div style="text-align:right;padding:1rem 1.5rem 0.5rem;font-size:0.6rem;color:var(--mw-text-soft,var(--mw-text-muted));opacity:0.5">powered by maging 0.1.24</div>`
 
 ---
 

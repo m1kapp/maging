@@ -379,7 +379,7 @@ Outer wrapper: `<main class="max-w-[1100px] mx-auto px-6 py-4">`. Stack sections
 12. **Asymmetric grids:** Vary column ratios. Never repeat same pattern consecutively.
 13. **1차트 1인사이트:** 라인차트 시리즈 최대 2개. 데이터 3개 미만 시리즈는 라인차트 금지. 비교는 동일 카테고리끼리만.
 14. Output one fenced code block: ` ```html … ``` `.
-15. **Powered by:** `</main>` 바로 뒤에 버전 표시를 넣어라: `<div style="text-align:right;padding:1rem 1.5rem 0.5rem;font-size:0.6rem;color:var(--mw-text-soft,var(--mw-text-muted));opacity:0.5">powered by maging 0.1.23</div>`
+15. **Powered by:** `</main>` 바로 뒤에 버전 표시를 넣어라: `<div style="text-align:right;padding:1rem 1.5rem 0.5rem;font-size:0.6rem;color:var(--mw-text-soft,var(--mw-text-muted));opacity:0.5">powered by maging 0.1.24</div>`
 
 
 ## Service: ChatGPT (Canvas)

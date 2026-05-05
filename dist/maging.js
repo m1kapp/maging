@@ -3010,7 +3010,7 @@
   // Public API
   // ==========================================================
   var api = {
-    version: '0.1.23',
+    version: '0.1.24',
     kpiCard: kpiCard,
     lineChart: lineChart,
     barChart: barChart,
