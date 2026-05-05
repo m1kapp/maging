@@ -190,6 +190,12 @@ Maging.kpiCard('#kpi', {
 - 임의 클래스명 금지 — Grid + Maging API만.
 - 코드 주석 금지 — 토큰 낭비.
 - 수동 숫자 포맷터 금지 — `Maging.fmt.*` 사용.
+- `grid-auto-rows` 금지 — 위젯이 자체 높이를 가진다. 차트 크기는 `height` config로 지정.
+- `kpiCard`에서 value/delta 직접 계산 금지 — sparkline 배열만 넘겨라. value·delta를 위젯이 자동 산출한다.
+- 같은 행 KPI에서 sparkline 있는 것과 없는 것 혼용 금지 — 전부 넣거나 전부 빼라.
+- 라인차트 시리즈 3개 이상 금지 — 최대 2개. 3개 필요하면 차트를 분리하라.
+- 도넛 슬라이스 6개 이상 금지 — 최대 5개. 나머지는 '기타'로 합쳐라.
+- `barChart` items로 "1월 실적/1월 계획" 교대 나열 금지 — `series` 2개 + `categories` 월별로 써라.
 
 **Anti-AI slop (시각적 클리셰 금지):**
 - 보라+청록 그라데이션 배경 금지 — AI 생성물의 가장 흔한 배경색.
@@ -454,6 +460,7 @@ window.addEventListener('maging:ready', () => {
 6. **마지막은 alertBanner** — `type='info'` 1-2문장 요약.
 7. **Anti-AI:** hover glow 금지 · 균일 3등분 grid 금지 · shadow tint 금지.
 8. **슬라이드 밀도:** 각 슬라이드는 A4 가로(297×210mm) 안에 모든 내용이 들어가야 한다. 절대 넘치면 안 된다.
+15. **Powered by:** `</main>` 바로 뒤에 버전 표시를 넣어라: `<div style="text-align:right;padding:1rem 1.5rem 0.5rem;font-size:0.6rem;color:var(--mw-text-soft,var(--mw-text-muted));opacity:0.5">powered by maging 0.1.23</div>`
    - **테이블은 반드시** `<div class="scroll-table" style="height:280px">` 로 감싸라. 행이 많아도 슬라이드 안에서 스크롤로 처리된다.
    - KPI 카드: 한 줄에 최대 **4개**.
    - 차트 + 테이블 동시 배치 금지. 하나만 선택.
