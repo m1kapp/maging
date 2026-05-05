@@ -3074,7 +3074,10 @@
 @container card (min-inline-size: 121px) and (max-inline-size: 240px) {
   .mw-kpi__spark { height: 24px; margin-top: var(--mw-space-2); }
 }
-@container card (min-inline-size: 280px) {
+@container card (min-inline-size: 241px) {
+  .mw-kpi__spark { height: 36px; }
+}
+@container card (min-inline-size: 400px) {
   .mw-kpi__spark { height: 48px; }
 }
 

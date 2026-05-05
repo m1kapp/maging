@@ -126,10 +126,11 @@
   }
 
   function headerHTML(title, subtitle, rightHTML) {
+    title = toStr(title); subtitle = toStr(subtitle);
     if (!title && !subtitle && !rightHTML) return '';
     var left = '';
-    if (title)    left += '<h3 class="mw-header__title">' + title + '</h3>';
-    if (subtitle) left += '<div class="mw-header__subtitle">' + subtitle + '</div>';
+    if (title)    left += '<h3 class="mw-header__title">' + escapeHTML(title) + '</h3>';
+    if (subtitle) left += '<div class="mw-header__subtitle">' + escapeHTML(subtitle) + '</div>';
     return '<div class="mw-header"><div>' + left + '</div>' + (rightHTML || '') + '</div>';
   }
 
@@ -1046,7 +1047,8 @@
   function treemapChart(el, config) {
     return _chartBase(el, config, {
       items: [], valueFormatter: null,
-    }, 'treemap-chart', function (data, c, palette) {
+    }, 'treemap-chart', function (data, c) {
+      var palette = buildPalette(c, (data.items || []).length);
       var radiusN = parseInt(c.radius) || 0;
       return {
         textStyle: { fontFamily: c.font },
@@ -1162,7 +1164,7 @@
       nodes: [], links: [],
       valueFormatter: null,
     }, 'sankey-chart', function (data, c) {
-      var palette = [c.accent, c.accent2, c.success, c.warning, c.danger, c.muted];
+      var palette = buildPalette(c, data.nodes.length);
       return {
         textStyle: { fontFamily: c.font, color: c.text },
         tooltip: Object.assign({
@@ -2435,6 +2437,7 @@
     el = q(el);
     if (!el) return null;
     var data = Object.assign({ index: '', kicker: '', title: '', tag: '' }, config || {});
+    ['index','kicker','title','tag'].forEach(function(k) { data[k] = toStr(data[k]); });
     function render() {
       el.classList.add('mw-section-head');
       var kickerText = data.index ? (data.index + ' · ' + data.kicker) : data.kicker;
@@ -2466,6 +2469,7 @@
       action: null,
       dismissable: false,
     }, config || {});
+    ['title','message'].forEach(function(k) { data[k] = toStr(data[k]); });
 
     var icons = { info: 'ⓘ', warning: '▲', danger: '⚠', success: '✓' };
 

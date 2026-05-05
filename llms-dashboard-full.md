@@ -178,12 +178,6 @@ Maging.kpiCard('#kpi', {
 - **KPI에 delta:null 금지.** delta가 없으면 KPI 카드를 쓸 이유가 없다 — 비교 대상을 찾아서 delta를 넣거나, 단순 수치면 heroTile/metricStack을 써라.
 - **같은 행 KPI는 전부 sparkline을 넣거나 전부 빼라.** 섞으면 높이가 안 맞아서 레이아웃이 깨진다.
 - **grid-auto-rows 고정 금지.** 위젯이 자체 높이를 가지므로 `grid-auto-rows`를 지정하지 마라. 필요하면 `height` config를 써라.
-- **도넛 슬라이스 최대 5개.** 6개 이상이면 하위 항목을 '기타'로 합쳐라. 한 항목이 70%+ 이면 도넛 대신 `ringProgress`나 KPI를 써라.
-- **바 차트 스케일 편차:** TOP1이 TOP5의 50배 이상이면 전체를 한 차트에 넣지 마라 — 작은 바가 안 보인다. TOP3 + 나머지 합산, 또는 로그 스케일 대신 별도 차트.
-- **계획 vs 실적:** `barChart`의 `items`로 "1월 실적 / 1월 계획"을 교대로 넣지 마라 — `series` 2개(실적/계획)로 `categories`를 월별로 해야 나란히 비교된다.
-- **KPI에 delta:null 금지.** delta가 없으면 KPI 카드를 쓸 이유가 없다 — 비교 대상을 찾아서 delta를 넣거나, 단순 수치면 heroTile/metricStack을 써라.
-- **같은 행 KPI는 전부 sparkline을 넣거나 전부 빼라.** 섞으면 높이가 안 맞아서 레이아웃이 깨진다.
-- **grid-auto-rows 고정 금지.** 위젯이 자체 높이를 가지므로 `grid-auto-rows`를 지정하지 마라. 필요하면 `height` config를 써라.
 
 ---
 
