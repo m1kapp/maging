@@ -397,8 +397,8 @@
             areaStyle: {
               color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
                 colorStops: [
-                  { offset: 0, color: c.accent + '55' },
-                  { offset: 1, color: c.accent + '00' },
+                  { offset: 0, color: withAlpha(c.accent, 0.33) },
+                  { offset: 1, color: withAlpha(c.accent, 0) },
                 ] },
             },
           }],
@@ -464,8 +464,8 @@
           areaStyle: data.area ? {
             color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
               colorStops: [
-                { offset: 0, color: col + '55' },
-                { offset: 1, color: col + '08' },
+                { offset: 0, color: withAlpha(col, 0.33) },
+                { offset: 1, color: withAlpha(col, 0.03) },
               ] },
           } : undefined,
         };
@@ -1030,7 +1030,7 @@
             return {
               name: s.name,
               value: s.data,
-              areaStyle: { color: col + '22' },
+              areaStyle: { color: withAlpha(col, 0.13) },
               lineStyle: { color: col, width: 1.5 },
               itemStyle: { color: col },
               symbolSize: 3,
@@ -1327,8 +1327,8 @@
         areaStyle: {
           color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
             colorStops: [
-              { offset: 0, color: c.accent + '44' },
-              { offset: 1, color: c.accent + '06' },
+              { offset: 0, color: withAlpha(c.accent, 0.27) },
+              { offset: 1, color: withAlpha(c.accent, 0.02) },
             ] },
         },
         markPoint: lastIdx >= 0 ? {
@@ -2312,8 +2312,8 @@
             areaStyle: {
               color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
                 colorStops: [
-                  { offset: 0, color: col + '44' },
-                  { offset: 1, color: col + '00' },
+                  { offset: 0, color: withAlpha(col, 0.27) },
+                  { offset: 1, color: withAlpha(col, 0) },
                 ] },
             },
           }],
@@ -2530,6 +2530,8 @@
       ranges: [],
     }, 'bullet-chart', function (data, c) {
       var fmt = data.valueFormatter || safeNum;
+      // If custom formatter is provided, don't auto-append unit (it's already in the formatted string)
+      var unitSuffix = data.valueFormatter ? '' : (data.unit || '');
       var toAlpha = function (hex, a) {
         return hex + Math.round(a * 255).toString(16).padStart(2, '0');
       };
@@ -2566,7 +2568,7 @@
           xAxis: data.target,
           lineStyle: { color: c.text, width: 2 },
           label: { show: true, position: 'end',
-                   formatter: '목표 ' + fmt(data.target) + (data.unit || ''),
+                   formatter: '목표 ' + fmt(data.target) + unitSuffix,
                    color: c.text, fontSize: 10, fontFamily: c.font, fontWeight: 600,
                    distance: 4, backgroundColor: c.surface, padding: [2, 5],
                    borderColor: c.border, borderWidth: 1, borderRadius: 3 },
@@ -2577,7 +2579,7 @@
           xAxis: data.benchmark,
           lineStyle: { color: c.muted, width: 1, type: 'dashed' },
           label: { show: true, position: 'end',
-                   formatter: '벤치 ' + fmt(data.benchmark) + (data.unit || ''),
+                   formatter: '벤치 ' + fmt(data.benchmark) + unitSuffix,
                    color: c.muted, fontSize: 10, fontFamily: c.font,
                    distance: 4, backgroundColor: c.surface, padding: [2, 5],
                    borderColor: c.border, borderWidth: 1, borderRadius: 3 },
@@ -2599,9 +2601,9 @@
         grid: { top: 36, right: 24, bottom: 26, left: 12 },
         tooltip: Object.assign({ trigger: 'axis', axisPointer: { type: 'shadow' } }, baseTooltip(c), {
           formatter: function () {
-            var s = '<b>실적 ' + fmt(data.value) + (data.unit || '') + '</b>';
-            if (data.target != null) s += '<br/>목표: ' + fmt(data.target) + (data.unit || '');
-            if (data.benchmark != null) s += '<br/>벤치: ' + fmt(data.benchmark) + (data.unit || '');
+            var s = '<b>실적 ' + fmt(data.value) + unitSuffix + '</b>';
+            if (data.target != null) s += '<br/>목표: ' + fmt(data.target) + unitSuffix;
+            if (data.benchmark != null) s += '<br/>벤치: ' + fmt(data.benchmark) + unitSuffix;
             return s;
           },
         }),
