@@ -356,7 +356,10 @@
     function render() {
       var c = getColors();
       el.classList.add('mw-card', 'mw-kpi');
-      el.classList.toggle('mw-kpi--compact', !!data.compact);
+      // Auto-compact: if no sparkline, use compact to avoid wasted vertical space
+      var hasSpark = data.sparkline && data.sparkline.length;
+      var autoCompact = data.compact || !hasSpark;
+      el.classList.toggle('mw-kpi--compact', !!autoCompact);
       var deltaHTML = '';
       if (data.delta != null && !isNaN(data.delta)) {
         var goodWhenNeg = data.deltaGoodWhen === 'negative';
@@ -368,7 +371,7 @@
           arrow + ' ' + abs.toFixed(prec) + '%</div>';
       }
       var iconHTML = data.icon ? '<span class="mw-kpi__icon">' + escapeHTML(data.icon) + '</span>' : '';
-      var showSpark = !data.compact && data.sparkline && data.sparkline.length;
+      var showSpark = !autoCompact && hasSpark;
       el.innerHTML =
         '<div class="mw-kpi__label">' + iconHTML + '<span>' + escapeHTML(data.label) + '</span></div>' +
         '<div class="mw-kpi__row">' +
@@ -669,6 +672,14 @@
       slices: [],
       centerLabel: '합계', centerValue: null,
     }, 'donut-chart', function (data, c, palette, size) {
+      // Auto-group: if >5 slices, merge smallest into "기타"
+      if (data.slices.length > 5) {
+        var sorted = data.slices.slice().sort(function (a, b) { return (b.value || 0) - (a.value || 0); });
+        var top = sorted.slice(0, 4);
+        var rest = sorted.slice(4);
+        var restSum = rest.reduce(function (s, x) { return s + (x.value || 0); }, 0);
+        data.slices = top.concat([{ label: '기타', value: restSum }]);
+      }
       var total = data.slices.reduce(function (s, x) { return s + (x.value || 0); }, 0);
       // Auto-normalize: if slices look like percentages but don't sum to 100, fix them
       if (total > 0 && total !== 100 && data.slices.every(function(s) { return s.value <= 100; }) && total > 80 && total < 120) {
