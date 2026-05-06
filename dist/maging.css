@@ -4286,16 +4286,17 @@
 .mw-theme-fab {
   position: fixed;
   right: 1.25rem;
-  bottom: 1.25rem;
+  bottom: 20px;
   z-index: 120;
   font-family: var(--mw-font);
   display: flex;
   align-items: stretch;
   background: var(--mw-surface);
   border: 1px solid var(--mw-border);
-  border-radius: 10px;
+  border-radius: 999px;
   box-shadow: 0 8px 24px -6px rgba(0,0,0,.28), 0 2px 6px -2px rgba(0,0,0,.12);
   transition: box-shadow 0.15s, border-color 0.15s;
+  padding: 0.15rem;
 }
 .mw-theme-fab:hover {
   box-shadow: 0 12px 32px -8px rgba(0,0,0,.32), 0 4px 10px -2px rgba(0,0,0,.14);
@@ -4304,11 +4305,10 @@
 .mw-theme-fab__btn {
   display: inline-flex;
   align-items: center;
-  padding: 0.3rem;
+  padding: 0.25rem;
   background: none;
   border: none;
-  border-right: 1px solid var(--mw-border);
-  border-radius: 0;
+  border-radius: 50%;
   cursor: pointer;
   transition: background 0.12s;
 }
@@ -4319,9 +4319,9 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  width: 36px; height: 26px;
-  border-radius: 5px;
-  padding: 3px 4px;
+  width: 28px; height: 18px;
+  border-radius: 4px;
+  padding: 2px 3px;
   border: 1px solid color-mix(in srgb, var(--mw-border) 50%, transparent);
 }
 .mw-theme-fab__swatch-bars {

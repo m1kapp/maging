@@ -23,8 +23,13 @@
   .cover-slide .cover-host { height: 100%; }
   .cover-slide .cover-host > .pitch-cover { height: 100%; }
 
-  /* === Slide frame (reuses mw-slide from maging-weekly.js if loaded, else standalone) === */
-  .mw-slide { position: relative; width: 1240px; aspect-ratio: 297 / 210; background: var(--mw-bg); border: 1px solid var(--mw-border); border-radius: var(--mw-radius); overflow: hidden; transform-origin: top left; transform: scale(var(--slide-scale, 1)); font-family: var(--mw-font); }
+  /* === Slide viewer layout === */
+  body.mw-themed:has(pitch-sidebar) { background: color-mix(in srgb, var(--mw-bg) 82%, #808080); overflow: hidden; height: 100vh; }
+  body.mw-themed:has(pitch-sidebar) > .flex { max-width: fit-content; margin: 2rem auto; align-items: stretch; }
+  pitch-sidebar ~ main { background: transparent; padding: 0 !important; }
+
+  /* === Slide frame === */
+  .mw-slide { position: relative; width: 1240px; aspect-ratio: 297 / 210; background: var(--mw-bg); border: 1px solid color-mix(in srgb, var(--mw-border) 40%, transparent); border-left: none; border-radius: 0 2px 2px 0; overflow: hidden; transform-origin: top left; transform: scale(var(--slide-scale, 1)); font-family: var(--mw-font); box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.06); }
   .mw-slide__header { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px 0; }
   .mw-slide__label { font-size: 12px; font-weight: 600; color: var(--mw-text); }
   .mw-slide__body { flex: 1; display: flex; flex-direction: column; }
@@ -32,7 +37,8 @@
   .mw-slide__page { font-size: 10px; color: var(--mw-text-muted); font-variant-numeric: tabular-nums; }
 
   /* === Sidebar === */
-  .wrs { width: 240px; padding: 20px 14px 24px; border-right: 1px solid var(--mw-border); background: var(--mw-bg); font-family: var(--mw-font); position: sticky; top: 0; align-self: flex-start; max-height: 100vh; overflow-y: auto; flex-shrink: 0; }
+  pitch-sidebar { flex-shrink: 0; align-self: stretch; }
+  .wrs { width: 220px; height: 100%; padding: 20px 14px 24px; background: var(--mw-bg); border: 1px solid color-mix(in srgb, var(--mw-border) 40%, transparent); border-right: 1px solid var(--mw-border); border-radius: 2px 0 0 2px; font-family: var(--mw-font); overflow-y: auto; box-sizing: border-box; box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.06); }
   .wrs__head { padding: 8px 10px 14px; margin-bottom: 8px; border-bottom: 1px solid var(--mw-border); border-radius: 6px 6px 0 0; }
   .wrs__head--active { background: color-mix(in srgb, var(--mw-accent) 10%, transparent); border-bottom-color: var(--mw-accent); }
   .wrs__head--active .wrs__title { color: var(--mw-accent); }
@@ -54,23 +60,17 @@
   .wrn-bar__btn { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: transparent; border: 0; border-radius: 50%; color: var(--mw-text-muted); cursor: pointer; transition: background 0.15s, color 0.15s; }
   .wrn-bar__btn:hover { background: var(--mw-surface-2); color: var(--mw-text); }
 
+  /* Version label under FAB */
+  .mw-theme-fab::after { content: 'maging ' attr(data-version); display: block; position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%); font-size: 9px; color: var(--mw-text-muted); opacity: 0.4; white-space: nowrap; font-family: var(--mw-mono-font); letter-spacing: 0.02em; }
+
   /* === Presenter === */
-  body.presenter-mode { overflow: hidden; background: #000; }
-  body.presenter-mode .mw-site-nav { display: none !important; }
+  body.presenter-mode { overflow: hidden; background: #000 !important; }
+  body.presenter-mode .mw-site-nav,
+  body.presenter-mode pitch-sidebar,
   body.presenter-mode .wrs { display: none !important; }
-  body.presenter-mode pitch-sidebar { display: none !important; }
-  body.presenter-mode .flex { display: block; }
-  body.presenter-mode main { padding: 0 !important; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; min-width: 0; position: fixed; top: 0; left: 0; }
-  body.presenter-mode .mw-slide { border: none; border-radius: 0; transform-origin: center center; margin-bottom: 0 !important; }
-  body.presenter-mode .pitch-problem,
-  body.presenter-mode .pitch-solution,
-  body.presenter-mode .pitch-market,
-  body.presenter-mode .pitch-competitor,
-  body.presenter-mode .pitch-bizmodel,
-  body.presenter-mode .pitch-timeline,
-  body.presenter-mode .pitch-team,
-  body.presenter-mode .pitch-chain,
-  body.presenter-mode .pitch-compare { justify-content: center; }
+  body.presenter-mode > .flex { display: block; max-width: none; margin: 0; min-height: 0; }
+  body.presenter-mode main { padding: 0 !important; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; position: fixed; top: 0; left: 0; background: transparent !important; }
+  body.presenter-mode .mw-slide { border: none; border-radius: 0; transform-origin: center center; margin-bottom: 0 !important; box-shadow: none; }
 
   /* === Pitch Deck widget styles === */
 
@@ -258,7 +258,8 @@
         const items = [...document.querySelectorAll('.slide[data-label]')].map(el => ({
           id: el.id, label: el.dataset.label,
         }));
-        this.innerHTML = '<aside class="wrs">' +
+        this.style.display = 'block';
+        this.innerHTML = '<aside class="wrs" style="height:100%">' +
           '<a href="#cover" class="wrs__head' + (active === 'cover' ? ' wrs__head--active' : '') + '" style="text-decoration:none;color:inherit;cursor:pointer;display:block">' +
             '<div class="wrs__title">' + title + '</div>' +
             (round ? '<div class="wrs__date">' + round + '</div>' : '') +
@@ -593,14 +594,14 @@
       const main = document.querySelector('main');
       const cw = main ? main.clientWidth - 48 : innerWidth;
       const s = cw > 0 && cw < W ? cw/W : 1;
-      slides.forEach(el => { el.style.setProperty('--slide-scale', s.toFixed(4)); el.style.marginBottom = '-'+(H*(1-s)).toFixed(0)+'px'; });
+      slides.forEach(el => { el.style.setProperty('--slide-scale', s.toFixed(4)); el.style.marginBottom = '-'+(H*(1-s)).toFixed(0)+'px'; el.style.marginRight = '-'+(W*(1-s)).toFixed(0)+'px'; });
     }
     addEventListener('resize', scale); scale();
     addEventListener('keydown', e => {
       if (e.target.closest?.('input,textarea,select,[contenteditable]')) return;
       const k = e.key;
-      if (k==='ArrowRight'||k==='PageDown') { e.preventDefault(); ofs(1); }
-      else if (k==='ArrowLeft'||k==='PageUp') { e.preventDefault(); ofs(-1); }
+      if (k==='ArrowRight'||k==='ArrowDown'||k==='PageDown'||k===' ') { e.preventDefault(); e.stopPropagation(); ofs(1); }
+      else if (k==='ArrowLeft'||k==='ArrowUp'||k==='PageUp') { e.preventDefault(); e.stopPropagation(); ofs(-1); }
       else if (k==='Home') { e.preventDefault(); go(slides[0].id); }
       else if (k==='End') { e.preventDefault(); go(slides[slides.length-1].id); }
       else if (k==='f'||k==='F') { e.preventDefault(); document.body.classList.toggle('presenter-mode'); scale(); }

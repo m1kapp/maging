@@ -3298,6 +3298,7 @@
 
   // Theme metadata for the FAB picker (ordered mainstream → distinctive)
   var THEME_DATA = [
+    { value: 'flow', brand: 'Flow', desc: '라벤더 퍼플', bg: '#f7f6ff', accent: '#5f49dc', accent2: '#0ba898', warning: '#f5a520', danger: '#e84545' },
     { value: 'morningmate', brand: 'Morningmate', desc: '딥 퍼플 마젠타', bg: '#fef8ff', accent: '#9f00ba', accent2: '#ff7a00', warning: '#ffc700', danger: '#ff3d00' },
     { value: 'adobe', brand: 'Adobe', desc: '크리에이티브 레드', bg: '#1d1d1d', accent: '#fa0c00', accent2: '#ed1c24', warning: '#ffd000', danger: '#fa0c00' },
     { value: 'airbnb', brand: 'Airbnb', desc: '코랄 라운드', bg: '#ffffff', accent: '#ff5a5f', accent2: '#00a699', warning: '#fc642d', danger: '#c13515' },
@@ -3327,7 +3328,6 @@
     { value: 'fedex', brand: 'FedEx', desc: '퍼플 오렌지', bg: '#ffffff', accent: '#ff6600', accent2: '#4d148c', warning: '#ff6600', danger: '#c62828' },
     { value: 'ferrari', brand: 'Ferrari', desc: 'Ferrari Dark', bg: '#181818', accent: '#da291c', accent2: '#e56960', warning: '#f13a2c', danger: '#ff3b30' },
     { value: 'figma', brand: 'Figma', desc: '멀티 로고 컬러', bg: '#1e1e1e', accent: '#ff3737', accent2: '#874fff', warning: '#ff7237', danger: '#ff3737' },
-    { value: 'flow', brand: 'Flow', desc: '라벤더 퍼플', bg: '#f7f6ff', accent: '#5f49dc', accent2: '#0ba898', warning: '#f5a520', danger: '#e84545' },
     { value: 'forest', brand: 'Forest', desc: 'Forest Dark', bg: '#0a3625', accent: '#ccda47', accent2: '#e0ec70', warning: '#ccda47', danger: '#e06868' },
     { value: 'framer', brand: 'Framer', desc: 'Framer Light', bg: '#ffffff', accent: '#000000', accent2: '#a6a6a6', warning: '#f5a520', danger: '#ff3b30' },
     { value: 'github', brand: 'GitHub', desc: '딤드 다크', bg: '#0d1117', accent: '#58a6ff', accent2: '#a371f7', warning: '#d29922', danger: '#f85149' },
@@ -3410,6 +3410,7 @@
 
     var fab = document.createElement('div');
     fab.className = 'mw-theme-fab';
+    fab.dataset.version = (window.Maging && window.Maging.version) || '';
     fab.innerHTML =
       '<button type="button" class="mw-theme-fab__shuffle" aria-label="랜덤 테마" title="랜덤 테마">🎲</button>' +
       '<button type="button" class="mw-theme-fab__btn" aria-expanded="false" aria-label="테마 선택">' +
