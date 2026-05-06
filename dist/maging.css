@@ -4385,7 +4385,7 @@
   display: none;
   position: absolute;
   bottom: calc(100% + 8px);
-  left: 0;
+  right: 0;
   background: var(--mw-surface);
   border: 1px solid var(--mw-border);
   border-radius: 8px;
