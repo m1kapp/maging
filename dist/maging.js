@@ -3411,10 +3411,7 @@
     var fab = document.createElement('div');
     fab.className = 'mw-theme-fab';
     fab.innerHTML =
-      '<div class="mw-theme-fab__export-wrap" style="display:none">' +
-        '<button type="button" class="mw-theme-fab__export" aria-label="내보내기"></button>' +
-        '<div class="mw-theme-fab__export-menu"></div>' +
-      '</div>' +
+      '<button type="button" class="mw-theme-fab__shuffle" aria-label="랜덤 테마" title="랜덤 테마">🎲</button>' +
       '<button type="button" class="mw-theme-fab__btn" aria-expanded="false" aria-label="테마 선택">' +
         '<span class="mw-theme-fab__swatch-box" data-swatch="box">' +
           '<span class="mw-theme-fab__swatch-bars">' +
@@ -3425,7 +3422,10 @@
           '</span>' +
         '</span>' +
       '</button>' +
-      '<button type="button" class="mw-theme-fab__shuffle" aria-label="랜덤 테마" title="랜덤 테마">🎲</button>' +
+      '<div class="mw-theme-fab__export-wrap" style="display:none">' +
+        '<button type="button" class="mw-theme-fab__export" aria-label="내보내기"></button>' +
+        '<div class="mw-theme-fab__export-menu"></div>' +
+      '</div>' +
       '<div class="mw-theme-fab__panel" role="dialog" aria-label="테마 목록">' +
         '<div class="mw-theme-fab__head">' +
           '<span>Theme · ' + THEME_DATA.length + '</span>' +
