@@ -364,6 +364,7 @@ if (!document.getElementById('mw-site-css')) {
 .mw-site-nav__menu-group:first-child { padding-top: 0; }
 
 /* mega dropdown — full-width under nav */
+.mw-site-nav__dropdown:last-of-type .mw-site-nav__menu:not(.mw-site-nav__menu--mega) { left: auto; right: 0; transform: none; }
 .mw-site-nav__dropdown:has(.mw-site-nav__menu--mega) { position: static; }
 .mw-site-nav__menu--mega {
   position: absolute; top: 100%; left: 0; right: 0;

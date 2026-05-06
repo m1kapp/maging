@@ -102,21 +102,7 @@
 
 <maging-nav active="stack"></maging-nav>
 
-<nav class="stack-nav">
-  <div class="stack-nav__inner">
-    <div class="stack-nav__sections">
-      <a href="#section-01" class="stack-nav__sec" data-sec="section-01">Fonts</a>
-      <a href="#section-02" class="stack-nav__sec" data-sec="section-02">Libraries</a>
-      <a href="#section-03" class="stack-nav__sec" data-sec="section-03">Assets</a>
-      <a href="#section-04" class="stack-nav__sec" data-sec="section-04">Themes</a>
-      <a href="#section-05" class="stack-nav__sec" data-sec="section-05">Widgets</a>
-      <a href="#section-06" class="stack-nav__sec" data-sec="section-06">Build</a>
-      <a href="#section-07" class="stack-nav__sec" data-sec="section-07">Releases</a>
-    </div>
-  </div>
-</nav>
 
-<div id="global-alert"></div>
 
 <main class="max-w-[1080px] mx-auto px-6">
 
@@ -204,31 +190,24 @@
 <script>
 window.addEventListener('maging:ready', function () {
 
-  Maging.alertBanner('#global-alert', {
-    type: 'success',
-    title: 'v0.1.10 stable',
-    message: `${Maging.themes.length} brand themes · ${Object.keys(Maging.meta).length} widgets · 6 fonts · zero build step · CDN one-tag`,
-    dismissable: true,
-  });
-
   Maging.pageHeader('#page-hero', {
     kicker: 'THE STACK',
     title: 'maging의 재료들',
-    subtitle: '이 라이브러리를 가능하게 한 모든 것 — 무료 폰트, 오픈소스 라이브러리, 공개 CDN, 영감을 준 35개 브랜드, 검증 도구. 모두 출처와 라이선스를 밝힙니다.',
+    subtitle: '이 라이브러리를 가능하게 한 모든 것 — 무료 폰트, 오픈소스 라이브러리, 공개 CDN, 영감을 준 105개 브랜드, 검증 도구. 모두 출처와 라이선스를 밝힙니다.',
   });
 
   Maging.kpiCard('#s-fonts',   { label: 'Fonts',         value: '6',    compact: true });
   Maging.kpiCard('#s-libs',    { label: 'Libraries',     value: '2',    compact: true });
-  Maging.kpiCard('#s-widgets', { label: 'Widgets',       value: '31',   compact: true });
-  Maging.kpiCard('#s-themes',  { label: 'Brand Themes',  value: '35',   compact: true });
+  Maging.kpiCard('#s-widgets', { label: 'Widgets',       value: '73',   compact: true });
+  Maging.kpiCard('#s-themes',  { label: 'Brand Themes',  value: '105',  compact: true });
   Maging.kpiCard('#s-cdn',     { label: 'CDN Providers', value: '2',    compact: true });
   Maging.kpiCard('#s-oss',     { label: 'Open Source',   value: '100%', compact: true });
 
   Maging.sectionHead('#section-01', { index:'01', kicker:'FONTS',      title:'Fonts',              tag:'6종 · SIL OFL · 상업 사용 가능' });
   Maging.sectionHead('#section-02', { index:'02', kicker:'LIBRARIES',  title:'Libraries',          tag:'2종 · Apache 2.0 · MIT' });
   Maging.sectionHead('#section-03', { index:'03', kicker:'ASSETS',     title:'Assets & CDN',       tag:'CC0 · Free CDN' });
-  Maging.sectionHead('#section-04', { index:'04', kicker:'THEMES',     title:'Theme inspirations', tag:'35개 브랜드 · inspired by' });
-  Maging.sectionHead('#section-05', { index:'05', kicker:'WIDGETS',    title:'Widget Catalog',     tag:'31종 · 테마 연동 · ECharts 기반' });
+  Maging.sectionHead('#section-04', { index:'04', kicker:'THEMES',     title:'Theme inspirations', tag:'105개 브랜드 · inspired by' });
+  Maging.sectionHead('#section-05', { index:'05', kicker:'WIDGETS',    title:'Widget Catalog',     tag:'73종 · 테마 연동 · ECharts 기반' });
   Maging.sectionHead('#section-06', { index:'06', kicker:'BUILD',      title:'Build & Dev tools',  tag:'개발 검증용 · 사용자 미노출' });
   Maging.sectionHead('#section-07', { index:'07', kicker:'CHANGELOG',  title:'Release History',    tag:'recent · GitHub' });
 
@@ -304,31 +283,32 @@ window.addEventListener('maging:ready', function () {
 
   Maging.goalGrid('#widget-goals', {
     title: '위젯 카탈로그',
-    subtitle: '31종 전부 테마 연동 · zero dependencies',
+    subtitle: '73종 전부 테마 연동 · zero dependencies',
     items: [
-      { label: '차트 위젯',       value: 10, max: 10 },
-      { label: '메트릭 카드',     value: 7,  max: 7  },
-      { label: '테이블 & 피드',   value: 5,  max: 5  },
-      { label: '분석 & 시각화',   value: 9,  max: 9  },
+      { label: '대시보드 (Core)',  value: 36, max: 36 },
+      { label: '슬라이드 (보고)',  value: 4,  max: 4  },
+      { label: '슬라이드 (발표)',  value: 12, max: 12 },
+      { label: '카드뉴스',         value: 11, max: 11 },
+      { label: '랜딩페이지',       value: 10, max: 10 },
     ],
   });
 
   Maging.sparklineList('#widget-timeline', {
-    title: '주요 위젯',
-    subtitle: 'delta = 이번 릴리스 추가',
+    title: '성장 추이',
+    subtitle: '버전별 누적',
     items: [
-      { label: 'Chart 10종',         value: '10', delta: 0,  sparkline: [4,6,8,9,10,10,10] },
-      { label: 'Metric Card 7종',    value: '7',  delta: 0,  sparkline: [2,3,5,6,7,7,7]   },
-      { label: 'Table & Feed 5종',   value: '5',  delta: 0,  sparkline: [1,2,3,4,5,5,5]   },
-      { label: 'Analysis 9종',       value: '9',  delta: 1,  sparkline: [3,4,5,6,7,8,9]   },
-      { label: 'Brand Themes',       value: '35', delta: 0,  sparkline: [10,20,28,32,35,35,35] },
-      { label: 'Fonts',              value: '6',  delta: 0,  sparkline: [2,3,4,5,6,6,6]   },
+      { label: '대시보드 위젯',      value: '36', delta: 0,  sparkline: [10,18,24,28,32,36,36] },
+      { label: '슬라이드 위젯',      value: '16', delta: 12, sparkline: [0,0,0,4,4,4,16]      },
+      { label: '카드뉴스 위젯',      value: '11', delta: 0,  sparkline: [0,0,0,0,11,11,11]    },
+      { label: '랜딩 위젯',          value: '10', delta: 0,  sparkline: [0,0,0,0,0,10,10]     },
+      { label: '브랜드 테마',         value: '105', delta: 0, sparkline: [10,20,35,65,78,105,105] },
+      { label: '폰트',               value: '6',  delta: 0,  sparkline: [2,3,4,5,6,6,6]       },
     ],
   });
 
   Maging.progressStepper('#release-pipeline', {
     title: '릴리스 파이프라인',
-    subtitle: 'v0.1.10 · main → CDN',
+    subtitle: 'v0.1.25 · main → CDN',
     steps: [
       { label: '소스 작성',     status: 'done',    date: 'maging.js + maging.css' },
       { label: '번들 빌드',     status: 'done',    date: 'maging-all.js 통합' },
@@ -342,12 +322,12 @@ window.addEventListener('maging:ready', function () {
     title: '릴리스 노트',
     subtitle: '최근 변경 이력 · GitHub',
     items: [
-      { time: 'v0.1.10', text: '테마 Picker FAB — CDN carry, 픽스 적용',          type: 'success' },
-      { time: 'v0.1.9',  text: 'Theme FAB 라이브러리 내장 · 페이지 무관 auto-mount', type: 'info'    },
-      { time: 'v0.1.8',  text: 'KPI 카드 하단 여백 수정 · Tossface 이모지 통합',    type: 'info'    },
-      { time: 'v0.1.4',  text: '테마 Picker 정렬 탭 · 랜덤 초기화 · 핀 선택',      type: 'info'    },
-      { time: 'v0.1.2',  text: 'one-tag 부트스트랩 · Pretendard 번들 · 단어 롤러',  type: 'info'    },
-      { time: 'v0.1.1',  text: 'AI Output Formatter 피벗 — 대시보드 위젯 라이브러리 전환', type: 'warning' },
+      { time: 'v0.1.25', text: '슬라이드 모드 — 피치덱 위젯 12종 + chainFlow, compareSlide', type: 'success' },
+      { time: 'v0.1.24', text: '카드뉴스 모드 — 11종 위젯 + 커버 6스타일',                   type: 'success' },
+      { time: 'v0.1.20', text: '랜딩페이지 모드 — Hero, Pricing, FAQ 등 10종',               type: 'success' },
+      { time: 'v0.1.15', text: '주간보고 모드 — A4 슬라이드 + monthlyTable + sectionCover',  type: 'info'    },
+      { time: 'v0.1.10', text: '105개 브랜드 테마 완비 + 테마 Picker FAB',                    type: 'info'    },
+      { time: 'v0.1.1',  text: 'AI Output Formatter 피벗 — 대시보드 위젯 라이브러리 전환',    type: 'warning' },
     ],
   });
 
