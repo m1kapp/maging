@@ -27,27 +27,16 @@
   /* Canvas layout is in maging.css (shared with weekly-sidebar) */
 
   /* === Slide frame === */
-  .mw-slide { position: relative; width: 1240px; aspect-ratio: 297 / 210; background: var(--mw-bg); border: 1px solid color-mix(in srgb, var(--mw-border) 40%, transparent); border-left: none; border-radius: 0 2px 2px 0; overflow: hidden; transform-origin: top left; transform: scale(var(--slide-scale, 1)); font-family: var(--mw-font); box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.06); }
+  .mw-slide { position: relative; width: 1240px; aspect-ratio: 297 / 210; background: var(--mw-bg); border: 1px solid color-mix(in srgb, var(--mw-border) 40%, transparent); border-left: none; border-radius: 0 2px 2px 0; overflow: hidden; transform-origin: top left; transform: scale(var(--slide-scale, 1)); font-family: var(--mw-font); box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.06); margin: 0; }
   .mw-slide__header { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px 0; }
   .mw-slide__label { font-size: 12px; font-weight: 600; color: var(--mw-text); }
   .mw-slide__body { flex: 1; display: flex; flex-direction: column; }
   .mw-slide__footer { padding: 0 24px 10px; text-align: right; }
   .mw-slide__page { font-size: 10px; color: var(--mw-text-muted); font-variant-numeric: tabular-nums; }
 
-  /* === Sidebar === */
-  pitch-sidebar { flex-shrink: 0; align-self: stretch; }
-  .wrs { width: 220px; height: 100%; padding: 20px 14px 24px; background: var(--mw-bg); border: 1px solid color-mix(in srgb, var(--mw-border) 40%, transparent); border-right: 1px solid var(--mw-border); border-radius: 2px 0 0 2px; font-family: var(--mw-font); overflow-y: auto; box-sizing: border-box; box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.06); }
-  .wrs__head { padding: 8px 10px 14px; margin-bottom: 8px; border-bottom: 1px solid var(--mw-border); border-radius: 6px 6px 0 0; }
-  .wrs__head--active { background: color-mix(in srgb, var(--mw-accent) 10%, transparent); border-bottom-color: var(--mw-accent); }
-  .wrs__head--active .wrs__title { color: var(--mw-accent); }
-  .wrs__title { font-size: 14px; font-weight: 700; color: var(--mw-text); }
-  .wrs__date { font-size: 11px; color: var(--mw-text-muted); margin-top: 3px; }
-  .wrs__link { display: flex; align-items: center; gap: 8px; padding: 5px 8px 5px 12px; font-size: 12.5px; color: var(--mw-text); border-radius: 4px; text-decoration: none; line-height: 1.4; cursor: pointer; }
-  .wrs__link:hover { background: var(--mw-surface-2); }
-  .wrs__link--active { background: color-mix(in srgb, var(--mw-accent) 8%, var(--mw-surface-2)); font-weight: 600; }
-  .wrs__link--active .wrs__dash { color: var(--mw-accent); opacity: 1; }
-  .wrs__dash { color: var(--mw-text-muted); opacity: 0.3; font-size: 0.6rem; width: 10px; text-align: center; }
-  .wrs__lbl { flex: 1; }
+  /* === Sidebar (pitch-sidebar scoped — won't affect weekly-sidebar) === */
+  pitch-sidebar { flex-shrink: 0; align-self: stretch; display: flex; }
+  pitch-sidebar .wrs { width: 220px; min-height: 100%; padding: 20px 14px 24px; background: var(--mw-bg); border: 1px solid color-mix(in srgb, var(--mw-border) 40%, transparent); border-right: 1px solid var(--mw-border); border-radius: 2px 0 0 2px; font-family: var(--mw-font); overflow-y: auto; box-sizing: border-box; box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.06); scrollbar-width: thin; }
 
   /* === Bottom nav bar === */
   .wrn-bar { position: fixed; left: 50%; transform: translateX(-50%); bottom: 20px; width: max-content; display: inline-flex; align-items: center; gap: 4px; padding: 0.38rem 0.65rem; background: var(--mw-surface); border: 1px solid var(--mw-border); border-radius: 999px; box-shadow: 0 8px 24px -6px rgba(0,0,0,.28), 0 2px 6px -2px rgba(0,0,0,.12); font-size: 0.78rem; font-variant-numeric: tabular-nums; color: var(--mw-text); font-family: var(--mw-font); z-index: 50; }
@@ -68,7 +57,8 @@
   body.presenter-mode .wrs { display: none !important; }
   body.presenter-mode > .flex { display: block; max-width: none; margin: 0; min-height: 0; }
   body.presenter-mode main { padding: 0 !important; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; position: fixed; top: 0; left: 0; background: transparent !important; }
-  body.presenter-mode .mw-slide { border: none; border-radius: 0; transform-origin: center center; margin-bottom: 0 !important; box-shadow: none; }
+  body.presenter-mode .mw-slide { border: none; border-radius: 0; transform-origin: center center; margin-bottom: 0 !important; margin-right: 0 !important; box-shadow: none; }
+  body.presenter-mode .wrn-bar { z-index: 200; }
 
   /* === Pitch Deck widget styles === */
 
@@ -246,27 +236,71 @@
 `;
   document.head.appendChild(_style);
 
-  // ── 2. <pitch-sidebar> custom element ───────────────────────────────────────
+  // ── 2. <pitch-sidebar> — unified sidebar (BU/team grouping + page dots)
   if (!customElements.get('pitch-sidebar')) {
     class PitchSidebar extends HTMLElement {
       connectedCallback() {
         const active = this.getAttribute('active') || '';
         const title  = this.getAttribute('data-title') || 'Pitch Deck';
-        const round  = this.getAttribute('data-round') || '';
-        const items = [...document.querySelectorAll('.slide[data-label]')].map(el => ({
-          id: el.id, label: el.dataset.label,
+        const date   = this.getAttribute('data-round') || this.getAttribute('data-date') || '';
+
+        // Collect slides, group same-label into page dots
+        const rawItems = [...document.querySelectorAll('.slide[data-label]')].map(el => ({
+          id: el.id, label: el.dataset.label, bu: el.dataset.bu || '', team: el.dataset.team || '',
         }));
+        const navItems = [];
+        rawItems.forEach(item => {
+          const prev = navItems[navItems.length - 1];
+          if (prev && prev.label === item.label) {
+            prev.pages.push(item.id);
+          } else {
+            navItems.push({ ...item, pages: [item.id] });
+          }
+        });
+
+        // Group by BU/team (optional — flat if no BU)
+        const hasBU = navItems.some(it => it.bu);
+        let navHTML = '';
+        if (hasBU) {
+          const groups = [];
+          navItems.forEach(item => {
+            let g = groups.find(g => g.bu === item.bu);
+            if (!g) { g = { bu: item.bu, teams: [] }; groups.push(g); }
+            let t = g.teams.find(t => t.team === item.team);
+            if (!t) { t = { team: item.team, items: [] }; g.teams.push(t); }
+            t.items.push(item);
+          });
+          navHTML = groups.map(g =>
+            '<div class="wrs__group"><div class="wrs__bu">' + g.bu + '</div>' +
+            g.teams.map(t =>
+              '<div class="wrs__team">' + (t.team ? '<div class="wrs__team-label">' + t.team + '</div>' : '') +
+              t.items.map(it => this._renderItem(it, active)).join('') +
+              '</div>'
+            ).join('') + '</div>'
+          ).join('');
+        } else {
+          navHTML = navItems.map(it => this._renderItem(it, active)).join('');
+        }
+
         this.style.display = 'block';
-        this.innerHTML = '<aside class="wrs" style="height:100%">' +
-          '<a href="#cover" class="wrs__head' + (active === 'cover' ? ' wrs__head--active' : '') + '" style="text-decoration:none;color:inherit;cursor:pointer;display:block">' +
+        this.innerHTML = '<aside class="wrs">' +
+          '<a href="#cover" class="wrs__head' + (active === 'cover' ? ' wrs__head--active' : '') + '" style="text-decoration:none;color:inherit;cursor:pointer;display:block" data-nav="cover">' +
             '<div class="wrs__title">' + title + '</div>' +
-            (round ? '<div class="wrs__date">' + round + '</div>' : '') +
-          '</a>' +
-          items.map(it =>
-            '<a class="wrs__link' + (it.id === active ? ' wrs__link--active' : '') + '" data-nav="' + it.id + '">' +
-              '<span class="wrs__dash">―</span><span class="wrs__lbl">' + it.label + '</span></a>'
-          ).join('') +
+            (date ? '<div class="wrs__date">' + date + '</div>' : '') +
+          '</a>' + navHTML +
         '</aside>';
+      }
+      _renderItem(it, active) {
+        const isActive = it.pages.some(p => p === active);
+        const dots = it.pages.length > 1
+          ? '<span class="wrs__pages">' + it.pages.map((p, i) =>
+              '<a class="wrs__page-dot' + (p === active ? ' wrs__page-dot--active' : '') + '" data-nav="' + p + '" title="' + (i+1) + '/' + it.pages.length + '"></a>'
+            ).join('') + '</span>'
+          : '';
+        return '<div class="wrs__row">' +
+          '<a class="wrs__link' + (isActive ? ' wrs__link--active' : '') + '" data-nav="' + it.pages[0] + '">' +
+            '<span class="wrs__dash">―</span><span class="wrs__lbl">' + it.label + '</span>' +
+          '</a>' + dots + '</div>';
       }
     }
     customElements.define('pitch-sidebar', PitchSidebar);
@@ -588,7 +622,7 @@
     function ofs(d) { const i = slides.findIndex(s => s.hasAttribute('data-active')); go(slides[Math.max(0, Math.min(slides.length-1, i+d))].id); }
     function scale() {
       const W = 1240, H = W*(210/297);
-      if (document.body.classList.contains('presenter-mode')) { const s = Math.min(innerWidth/W, innerHeight/H); slides.forEach(el => { el.style.setProperty('--slide-scale', s.toFixed(4)); el.style.marginBottom = '0'; }); return; }
+      if (document.body.classList.contains('presenter-mode')) { const s = Math.min(innerWidth/W, innerHeight/H); slides.forEach(el => { el.style.setProperty('--slide-scale', s.toFixed(4)); el.style.marginBottom = '0'; el.style.marginRight = '0'; }); return; }
       const main = document.querySelector('main');
       const cw = main ? main.clientWidth - 48 : innerWidth;
       const s = cw > 0 && cw < W ? cw/W : 1;

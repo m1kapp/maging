@@ -5209,6 +5209,6 @@ maging-nav:not(:defined) { display: block; height: 44px; box-sizing: content-box
 body.mw-themed:has(weekly-sidebar),
 body.mw-themed:has(pitch-sidebar) { background: color-mix(in srgb, var(--mw-bg) 82%, #808080); overflow: hidden; height: 100vh; }
 body.mw-themed:has(weekly-sidebar) > .flex,
-body.mw-themed:has(pitch-sidebar) > .flex { max-width: fit-content; margin: 2rem auto; align-items: stretch; }
+body.mw-themed:has(pitch-sidebar) > .flex { max-width: fit-content; margin: 2.5rem auto; align-items: stretch; }
 weekly-sidebar ~ main,
 pitch-sidebar ~ main { background: transparent; padding: 0 !important; }
