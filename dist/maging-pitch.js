@@ -59,8 +59,18 @@
   body.presenter-mode .mw-site-nav { display: none !important; }
   body.presenter-mode .wrs { display: none !important; }
   body.presenter-mode pitch-sidebar { display: none !important; }
-  body.presenter-mode main { padding: 0 !important; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; min-width: 0; }
+  body.presenter-mode .flex { display: block; }
+  body.presenter-mode main { padding: 0 !important; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; min-width: 0; position: fixed; top: 0; left: 0; }
   body.presenter-mode .mw-slide { border: none; border-radius: 0; transform-origin: center center; margin-bottom: 0 !important; }
+  body.presenter-mode .pitch-problem,
+  body.presenter-mode .pitch-solution,
+  body.presenter-mode .pitch-market,
+  body.presenter-mode .pitch-competitor,
+  body.presenter-mode .pitch-bizmodel,
+  body.presenter-mode .pitch-timeline,
+  body.presenter-mode .pitch-team,
+  body.presenter-mode .pitch-chain,
+  body.presenter-mode .pitch-compare { justify-content: center; }
 
   /* === Pitch Deck widget styles === */
 
