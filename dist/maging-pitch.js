@@ -24,9 +24,7 @@
   .cover-slide .cover-host > .pitch-cover { height: 100%; }
 
   /* === Slide viewer layout === */
-  body.mw-themed:has(pitch-sidebar) { background: color-mix(in srgb, var(--mw-bg) 82%, #808080); overflow: hidden; height: 100vh; }
-  body.mw-themed:has(pitch-sidebar) > .flex { max-width: fit-content; margin: 2rem auto; align-items: stretch; }
-  pitch-sidebar ~ main { background: transparent; padding: 0 !important; }
+  /* Canvas layout is in maging.css (shared with weekly-sidebar) */
 
   /* === Slide frame === */
   .mw-slide { position: relative; width: 1240px; aspect-ratio: 297 / 210; background: var(--mw-bg); border: 1px solid color-mix(in srgb, var(--mw-border) 40%, transparent); border-left: none; border-radius: 0 2px 2px 0; overflow: hidden; transform-origin: top left; transform: scale(var(--slide-scale, 1)); font-family: var(--mw-font); box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.06); }

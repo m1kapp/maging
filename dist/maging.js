@@ -3795,9 +3795,23 @@
             for (var i = 0; i < els.length; i++) {
               var el = els[i];
               var cs = getComputedStyle(el);
-              // Backup & resolve colors
+              // Backup & resolve colors — try to preserve gradients for dom-to-pptx
               el.style.color = cs.color;
-              el.style.backgroundColor = cs.backgroundColor;
+              var bgImg = cs.backgroundImage;
+              if (bgImg && bgImg.indexOf('linear-gradient') === 0) {
+                // Resolved gradient (CSS vars & color-mix already computed to rgb())
+                // Clear shorthand first, then set image only
+                var origBg = el.style.background;
+                el.style.cssText += ';background:none !important;';
+                el.style.backgroundImage = bgImg;
+              } else if (bgImg && bgImg !== 'none') {
+                // Non-linear gradient or complex background — solid fallback
+                var fc = bgImg.match(/rgb[a]?\([^)]+\)/);
+                el.style.background = 'none';
+                el.style.backgroundColor = fc ? fc[0] : cs.backgroundColor;
+              } else {
+                el.style.backgroundColor = cs.backgroundColor;
+              }
               el.style.borderColor = cs.borderColor;
               // Backup & swap fonts
               var origFont = cs.fontFamily;

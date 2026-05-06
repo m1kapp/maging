@@ -5204,3 +5204,11 @@
 /* Nav placeholder — prevent flash before site.js loads */
 body.mw-themed { margin: 0; }
 maging-nav:not(:defined) { display: block; height: 44px; box-sizing: content-box; background: var(--mw-surface); border-bottom: 1px solid var(--mw-border); }
+
+/* Slide viewer canvas — shared by weekly-sidebar & pitch-sidebar */
+body.mw-themed:has(weekly-sidebar),
+body.mw-themed:has(pitch-sidebar) { background: color-mix(in srgb, var(--mw-bg) 82%, #808080); overflow: hidden; height: 100vh; }
+body.mw-themed:has(weekly-sidebar) > .flex,
+body.mw-themed:has(pitch-sidebar) > .flex { max-width: fit-content; margin: 2rem auto; align-items: stretch; }
+weekly-sidebar ~ main,
+pitch-sidebar ~ main { background: transparent; padding: 0 !important; }
