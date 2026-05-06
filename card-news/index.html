@@ -2,10 +2,9 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <script>!function(){var T=["flow","morningmate","claude","linear","stripe","airbnb","linkedin","apple","duolingo","github","spotify","netflix","figma","adobe","bloomberg","instagram","openai","vercel"],k="maging-theme",s=localStorage.getItem(k);if(!s||T.indexOf(s)<0)s="claude";document.documentElement.setAttribute("data-theme",s);localStorage.setItem(k,s)}();</script>
+    <script>!function(){var T=["flow","morningmate","claude","linear","stripe","airbnb","linkedin","apple","duolingo","github","spotify","netflix","figma","adobe","bloomberg"],k="maging-theme",s=localStorage.getItem(k);if(!s||T.indexOf(s)<0)s="claude";document.documentElement.setAttribute("data-theme",s);localStorage.setItem(k,s)}();</script>
     <title>카드뉴스 데모 — AI 마케팅 트렌드 2026</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="tw.css">
     <link rel="stylesheet" href="../dist/maging.css">
     <script defer src="../dist/maging-all.js" data-base="../dist/" data-no-tailwind></script>
     <script type="module" src="../components/site.js"></script>
@@ -40,12 +39,12 @@
 
         // 1. 커버 — number-hero 스타일 (리스티클)
         'card-cover': () => Maging.coverCard('#card-cover', {
+          icon: '🎯',
           tag: 'AI 마케팅 가이드',
           title: 'AI 마케팅\n실전 도입법',
           subtitle: '지금 바로 적용할 수 있는 실무 가이드',
           brand: BRAND,
-          style: 'number-hero',
-          number: 5,
+          style: 'gradient',
         }),
 
         // 2. 임팩트 수치 — statCard로 후킹

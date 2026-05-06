@@ -5,7 +5,6 @@
     <script>!function(){var T=["flow","morningmate","claude","linear","stripe","airbnb","linkedin","apple","duolingo","github","spotify","netflix","figma","adobe","bloomberg"],k="maging-theme",s=localStorage.getItem(k);if(!s||T.indexOf(s)<0)s="flow";document.documentElement.setAttribute("data-theme",s);localStorage.setItem(k,s)}();</script>
     <title>SaaS 주간보고 — 2026년 4월 4주차</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="tw.css">
     <link rel="stylesheet" href="../dist/maging.css">
     <script defer src="../dist/maging-all.js" data-base="../dist/" data-no-tailwind></script>
     <script type="module" src="../components/site.js"></script>
@@ -16,18 +15,6 @@
     <div class="flex">
     <weekly-sidebar active="cover" data-spa data-title="SaaS 주간보고" data-date="2026.04.27 · 4월 4주차"></weekly-sidebar>
     <main class="flex-1 px-6 py-4" style="word-break: keep-all; min-width: 0">
-
-      <!-- ── Code view panel ──────────────────────────────────── -->
-      <div id="code-view">
-        <div id="cv-header">
-          <span id="cv-title">// cover.js</span>
-          <div style="display:flex;gap:8px">
-            <button class="cv-btn" id="cv-copy">복사</button>
-            <button class="cv-btn cv-btn--accent" id="cv-back">← 미리보기</button>
-          </div>
-        </div>
-        <pre id="cv-pre"><code id="cv-code"></code></pre>
-      </div>
 
       <div class="max-w-[1240px] mx-auto" id="slides-wrap">
 
@@ -230,9 +217,6 @@
     <div class="wrn-bar">
       <span class="wrn-bar__indicator" id="deck-ind">1 <span class="wrn-bar__sep">/</span> 11</span>
       <span class="wrn-bar__divider"></span>
-      <button class="wrn-bar__btn" id="deck-code" type="button" title="코드보기 (C)" aria-label="코드보기">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-      </button>
       <button class="wrn-bar__btn" id="deck-fs" type="button" title="전체화면 (F)" aria-label="전체화면 토글">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 21 3 21 3 15"/><polyline points="15 3 21 3 21 9"/><line x1="3" y1="21" x2="10" y2="14"/><line x1="14" y1="10" x2="21" y2="3"/></svg>
       </button>

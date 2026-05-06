@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<script>!function(){var T=["flow","morningmate","claude","linear","stripe","airbnb","linkedin","apple","duolingo","github","spotify","netflix","figma","adobe","bloomberg"],k="maging-theme",s=localStorage.getItem(k);if(!s||T.indexOf(s)<0)s="spotify";document.documentElement.setAttribute("data-theme",s);localStorage.setItem(k,s)}();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>maging Launch Week · 5일간의 특별 이벤트</title>
+<meta name="description" content="maging Launch Week — 5월 12-16일, 킥오프부터 클로징까지 5일간의 프로덕트 런치 이벤트.">
+
+<link rel="stylesheet" href="../dist/maging.css">
+<script defer src="../dist/maging-all.js" data-base="../dist/" data-no-tailwind></script>
+<script type="module" src="../components/site.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  html { scroll-behavior: smooth; }
+  h1, h2, h3 { font-family: var(--mw-display-font); }
+
+  .grid-fill > *, .grid-fill > [id], .grid-fill > .mw-card { height: 100%; min-width: 0; min-height: 0; }
+  .grid-fill .mw-card { display: flex; flex-direction: column; box-sizing: border-box; height: 100%; min-height: 0; }
+
+  .lp-section {
+    max-width: 1100px; margin: 0 auto;
+    padding: 5rem 1.5rem; scroll-margin-top: 60px;
+  }
+  .lp-section--center { text-align: center; }
+  .lp-section__kicker {
+    font-size: var(--mw-text-xs); color: var(--mw-accent); text-transform: uppercase;
+    letter-spacing: 0.12em; font-family: var(--mw-font); margin-bottom: 0.75rem; font-weight: 600;
+  }
+  .lp-section__title {
+    font-size: clamp(1.5rem, 3vw, 2.125rem); font-weight: 700;
+    letter-spacing: -0.02em; margin-bottom: 0.75rem; font-family: var(--mw-display-font);
+  }
+  .lp-section__desc {
+    font-size: var(--mw-text-sm); color: var(--mw-text-muted);
+    max-width: 520px; line-height: 1.7; margin-bottom: 2.5rem;
+  }
+  .lp-section--center .lp-section__desc { margin-left: auto; margin-right: auto; }
+  .lp-divider {
+    max-width: 1100px; margin: 0 auto; padding: 0 1.5rem;
+    border: none; border-top: 1px solid var(--mw-border); opacity: 0.5;
+  }
+</style>
+</head>
+
+<body class="mw-themed">
+
+<maging-nav active="demo"></maging-nav>
+
+<!-- HERO -->
+<div id="hero"></div>
+
+<!-- Event countdown stats -->
+<section class="lp-section lp-section--center" style="padding-top:0;padding-bottom:3rem;">
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+    <div id="stat-1"></div>
+    <div id="stat-2"></div>
+    <div id="stat-3"></div>
+    <div id="stat-4"></div>
+  </div>
+</section>
+
+<hr class="lp-divider">
+
+<!-- FEATURE GRID: 일별 프로그램 -->
+<section id="program" class="lp-section lp-section--center">
+  <div class="lp-section__kicker">Program</div>
+  <div class="lp-section__title">5일간의 여정</div>
+  <div class="lp-section__desc">매일 새로운 세션과 경험이 준비되어 있습니다.</div>
+  <div id="feature-grid"></div>
+</section>
+
+<hr class="lp-divider">
+
+<!-- LOGO BAR: 참여 기업 -->
+<section class="lp-section lp-section--center" style="padding-top:3rem;padding-bottom:3rem;">
+  <div class="lp-section__kicker" style="margin-bottom:1.25rem;">Partners</div>
+  <div id="logos"></div>
+</section>
+
+<hr class="lp-divider">
+
+<!-- PRICING TABLE -->
+<section id="pricing" class="lp-section lp-section--center">
+  <div class="lp-section__kicker">Tickets</div>
+  <div class="lp-section__title">참가 티어</div>
+  <div class="lp-section__desc">모든 티어에 온라인 라이브 스트리밍이 포함됩니다.</div>
+  <div id="pricing-table"></div>
+</section>
+
+<hr class="lp-divider">
+
+<!-- TESTIMONIALS -->
+<section id="reviews" class="lp-section lp-section--center">
+  <div class="lp-section__kicker">Reviews</div>
+  <div class="lp-section__title">지난 이벤트 참가자 후기</div>
+  <div class="lp-section__desc"></div>
+  <div id="testimonials-grid"></div>
+</section>
+
+<hr class="lp-divider">
+
+<!-- CTA -->
+<div id="cta"></div>
+
+<hr class="lp-divider">
+
+<!-- FAQ -->
+<section id="faq" class="lp-section" style="max-width:720px;">
+  <div class="lp-section__kicker">FAQ</div>
+  <div class="lp-section__title">자주 묻는 질문</div>
+  <div id="faq-list" style="margin-top:1.5rem;"></div>
+</section>
+
+<maging-footer></maging-footer>
+
+<script>
+window.addEventListener('maging:ready', function () {
+var s = document.createElement('script');
+s.src = '../dist/maging-landing.js';
+s.onload = function () { initLanding(); };
+document.head.appendChild(s);
+});
+function initLanding() {
+
+/* ── Hero ── */
+Maging.heroSection('#hero', {
+  kicker: 'maging Launch Week',
+  title: '5일간의 특별 이벤트',
+  subtitle: '2026년 5월 12일 — 16일 · 프로덕트 런치, 워크숍, 해커톤을 한자리에.',
+  ctas: [
+    { label: '참가 등록', href: '#pricing', primary: true },
+    { label: '프로그램 보기', href: '#program' },
+  ]
+});
+
+/* ── Stats ── */
+var sc = { compact: true };
+Maging.kpiCard('#stat-1', Object.assign({}, sc, { label: '기간', value: '5일' }));
+Maging.kpiCard('#stat-2', Object.assign({}, sc, { label: '세션', value: '23개' }));
+Maging.kpiCard('#stat-3', Object.assign({}, sc, { label: '스피커', value: '18명' }));
+Maging.kpiCard('#stat-4', Object.assign({}, sc, { label: '잔여석', value: '47석' }));
+
+/* ── Feature Grid: 일별 프로그램 ── */
+Maging.featureGrid('#feature-grid', {
+  cols: 3,
+  items: [
+    { icon: '▶', title: 'Day 1 · 킥오프', desc: '제품 비전 발표와 로드맵 공개. 네트워킹 리셉션 포함.' },
+    { icon: '⚙', title: 'Day 2 · 워크숍', desc: 'Hands-on 세션 4개 동시 진행. 실습 중심.' },
+    { icon: '⌨', title: 'Day 3 · 해커톤', desc: '24시간 빌드 챌린지. 우승팀 상금 300만원.' },
+    { icon: '◎', title: 'Day 4 · 쇼케이스', desc: '해커톤 결과물 발표 + 파트너사 라이트닝 토크.' },
+    { icon: '★', title: 'Day 5 · 클로징', desc: '시상식, 차기 버전 프리뷰, 애프터파티.' },
+  ]
+});
+
+/* ── Logo Bar: 파트너 ── */
+Maging.logoBar('#logos', {
+  items: [
+    { name: 'Vercel' }, { name: 'Supabase' }, { name: 'Toss' },
+    { name: 'Wanted' }, { name: 'Inflearn' }, { name: 'Disquiet' },
+  ]
+});
+
+/* ── Pricing Table ── */
+Maging.pricingTable('#pricing-table', {
+  plans: [
+    {
+      name: 'Online',
+      desc: '어디서든 참여',
+      price: '무료',
+      features: [
+        '전 세션 라이브 스트리밍',
+        '녹화본 7일 제공',
+        '온라인 Q&A 참여',
+        '디지털 굿즈 팩',
+      ],
+      cta: { label: '무료 등록', href: '#' }
+    },
+    {
+      name: 'Pro',
+      desc: '오프라인 풀 액세스',
+      price: '₩99,000',
+      period: '1회',
+      popular: true,
+      badge: 'Best Value',
+      features: [
+        'Online 전체 포함',
+        '5일 오프라인 참석',
+        '워크숍 실습 좌석',
+        '점심 + 커피 제공',
+        '네트워킹 리셉션',
+      ],
+      cta: { label: '등록하기', href: '#' }
+    },
+    {
+      name: 'VIP',
+      desc: '프리미엄 경험',
+      price: '₩299,000',
+      period: '1회',
+      features: [
+        'Pro 전체 포함',
+        '스피커 1:1 미팅 (30분)',
+        'VIP 라운지 이용',
+        '해커톤 멘토 배정',
+        '한정판 굿즈 박스',
+        '애프터파티 VIP석',
+      ],
+      cta: { label: 'VIP 등록', href: '#' }
+    }
+  ]
+});
+
+/* ── Testimonials ── */
+Maging.testimonialGrid('#testimonials-grid', {
+  cols: 3,
+  items: [
+    {
+      quote: '해커톤에서 만든 프로토타입이 지금 회사 핵심 제품이 됐습니다. 이 이벤트 아니었으면 시작도 못 했을 거예요.',
+      name: '김도현', role: '풀스택 개발자', initial: 'K'
+    },
+    {
+      quote: '스피커 라인업이 진짜였어요. 평소 블로그로만 보던 분들이랑 직접 얘기할 수 있다는 게 VIP 티켓값을 했습니다.',
+      name: '이수진', role: 'PM @ 시리즈B', initial: 'L'
+    },
+    {
+      quote: '네트워킹이 억지스럽지 않아서 좋았어요. 자연스럽게 대화하다가 협업까지 이어진 케이스가 3건.',
+      name: '박준혁', role: '프리랜서 디자이너', initial: 'P'
+    },
+  ]
+});
+
+/* ── CTA ── */
+Maging.ctaSection('#cta', {
+  kicker: 'Limited Seats',
+  title: '좌석이 한정되어 있습니다',
+  desc: '오프라인 참가는 선착순 120명. 온라인은 제한 없이 무료입니다.',
+  ctas: [
+    { label: '참가 등록', href: '#pricing', primary: true },
+    { label: '프로그램 상세', href: '#program' },
+  ]
+});
+
+/* ── FAQ ── */
+Maging.faqAccordion('#faq-list', {
+  items: [
+    { q: '장소가 어디인가요?', a: '서울 성수동 일대입니다. 정확한 주소는 등록 확인 메일로 안내드려요.' },
+    { q: '환불 가능한가요?', a: '네. 행사 7일 전까지 100% 환불됩니다. 3일 전까지는 50%.' },
+    { q: '온라인으로만 참여해도 되나요?', a: '당연하죠. 무료 Online 티어로 전 세션 라이브 시청 가능합니다.' },
+    { q: '해커톤은 팀으로 참가하나요?', a: '1~4인 팀이면 됩니다. 혼자 와서 현장에서 팀 빌딩도 가능해요.' },
+    { q: '주차 지원 되나요?', a: '주차 공간이 제한적이라 대중교통을 권장합니다. 성수역 도보 5분.' },
+    { q: '식사가 포함되나요?', a: 'Pro/VIP 티어는 점심 + 오후 커피가 포함됩니다. Online 티어는 해당 없어요.' },
+  ]
+});
+
+} // initLanding
+</script>
+
+</body>
+</html>

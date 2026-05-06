@@ -35,12 +35,14 @@ const dashboard = injectVersion(readFileSync(join(root, 'llms/dashboard.txt'), '
 const landing = injectVersion(readFileSync(join(root, 'llms/landing.txt'), 'utf-8'));
 const weeklyReport = injectVersion(readFileSync(join(root, 'llms/weekly-report.txt'), 'utf-8'));
 const cardNews = injectVersion(readFileSync(join(root, 'llms/card-news.txt'), 'utf-8'));
+const pitchDeck = injectVersion(readFileSync(join(root, 'llms/pitch-deck.txt'), 'utf-8'));
 
 const fullBases = {
   dashboard: core + '\n' + dashboard,
   landing: core + '\n' + landing,
   'weekly-report': core + '\n' + weeklyReport,
   'card-news': core + '\n' + cardNews,
+  'pitch-deck': core + '\n' + pitchDeck,
 };
 
 const CDN_BASE = 'https://cdn.jsdelivr.net/npm/@m1kapp/maging';
@@ -50,6 +52,7 @@ const shortBases = {
   landing: `You are a maging landing page generator.\n\nFetch and read: ${CDN_BASE}/llms-landing-full.md\nIt has the complete setup, all widget APIs, themes, and generation rules.`,
   'weekly-report': `You are a maging weekly report generator.\n\nFetch and read: ${CDN_BASE}/llms-weekly-report-full.md\nIt has the complete setup, all widget APIs, themes, and generation rules for weekly reports.`,
   'card-news': `You are a maging card-news generator.\n\nFetch and read: ${CDN_BASE}/llms-card-news-full.md\nIt has the complete setup, all widget APIs, themes, and generation rules for card news.`,
+  'pitch-deck': `You are a maging pitch deck generator.\n\nFetch and read: ${CDN_BASE}/llms-pitch-deck-full.md\nIt has the complete setup, all widget APIs, themes, and generation rules for pitch decks.`,
 };
 
 const modeToHandshake = {
@@ -57,6 +60,7 @@ const modeToHandshake = {
   landing: 'landing',
   'weekly-report': 'weekly',
   'card-news': 'cardnews',
+  'pitch-deck': 'pitchdeck',
 };
 
 const services = ['flowai', 'claude', 'chatgpt', 'gemini'];

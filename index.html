@@ -5,9 +5,9 @@
 <script>!function(){var T=['flow','morningmate','claude','linear','stripe','airbnb','linkedin','apple','duolingo','github','spotify','netflix','figma','adobe','bloomberg'],k='maging-theme',s=localStorage.getItem(k);if(!s||T.indexOf(s)<0)s='flow';document.documentElement.setAttribute('data-theme',s);localStorage.setItem(k,s)}();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>maging — AI 답변을, 쓸 수 있는 결과물로.</title>
-<meta name="description" content="AI에게 프롬프트를 넣으면 엔터프라이즈 대시보드·주간보고·카드뉴스가 나옵니다. 37개 위젯 · 105개 브랜드 테마 · CDN 한 줄 · 빌드 없음.">
+<meta name="description" content="AI에게 프롬프트를 넣으면 대시보드·슬라이드·카드뉴스·랜딩페이지가 나옵니다. 47개 위젯 · 105개 브랜드 테마 · CDN 한 줄 · 빌드 없음.">
 <meta property="og:title" content="maging — AI 답변을, 쓸 수 있는 결과물로.">
-<meta property="og:description" content="프롬프트 하나로 엔터프라이즈 대시보드·주간보고·카드뉴스를 즉시 생성. 37개 위젯 · 105개 테마.">
+<meta property="og:description" content="프롬프트 하나로 대시보드·슬라이드·카드뉴스·랜딩페이지를 즉시 생성. 47개 위젯 · 105개 테마.">
 <meta property="og:type" content="website">
 
 <script src="./dist/maging-all.js" data-base="./dist/"></script>
@@ -1164,12 +1164,13 @@
     <h1 class="hero-title">
       AI 답변을,<br>
       쓸 수 있는
-      <span class="word-roller" aria-label="결과물 / 대시보드 / 주간보고 / 카드뉴스">
+      <span class="word-roller" aria-label="결과물 / 대시보드 / 슬라이드 / 카드뉴스 / 랜딩페이지">
         <span class="word-roller__inner">
           <span class="word-roller__item">결과물</span>
           <span class="word-roller__item">대시보드</span>
-          <span class="word-roller__item">주간보고</span>
+          <span class="word-roller__item">슬라이드</span>
           <span class="word-roller__item">카드뉴스</span>
+          <span class="word-roller__item">랜딩페이지</span>
           <span class="word-roller__item">결과물</span>
         </span>
       </span>로.
@@ -1208,7 +1209,7 @@
     </p>
     <p class="text-base md:text-lg mt-4" style="line-height: 1.65; max-width: 620px; margin-left: auto; margin-right: auto; color: var(--mw-text);">
       하지만 그걸<br>
-      <strong>대시보드·주간보고·카드뉴스로 정리하는 건 여전히 수작업</strong>입니다.
+      <strong>대시보드·슬라이드·카드뉴스·랜딩으로 정리하는 건 여전히 수작업</strong>입니다.
     </p>
   </div>
 </section>
@@ -1228,11 +1229,12 @@
     </p>
     <div class="mt-10 flex gap-4 flex-wrap justify-center" style="max-width: 720px; margin-left: auto; margin-right: auto;">
       <div class="solution-pill">📊 대시보드</div>
-      <div class="solution-pill">📋 주간보고</div>
+      <div class="solution-pill">📋 슬라이드</div>
       <div class="solution-pill">📱 카드뉴스</div>
+      <div class="solution-pill">🌐 랜딩페이지</div>
     </div>
     <p class="mw-muted text-sm mt-6" style="font-family: var(--mw-mono-font);">
-      모두 HTML 한 파일로 생성됩니다. <span style="opacity:0.55">· 랜딩페이지·프로토타입도 지원</span>
+      모두 HTML 한 파일로 생성됩니다.
     </p>
   </div>
 </section>
@@ -1275,8 +1277,9 @@
             <div class="ai-split__chips">
               <button class="ai-split__chip is-active" data-output="dashboard">대시보드</button>
               <button class="ai-split__chip" data-output="weekly">주간보고</button>
-              <button class="ai-split__chip" data-output="landing">랜딩페이지</button>
+              <button class="ai-split__chip" data-output="pitch-deck">피치덱</button>
               <button class="ai-split__chip" data-output="cardnews">카드뉴스</button>
+              <button class="ai-split__chip" data-output="landing">랜딩페이지</button>
             </div>
           </div>
           <div class="ai-split__filter">
@@ -1466,50 +1469,69 @@
       </h2>
     </div>
     <div class="example-grid">
+      <!-- 대시보드 -->
       <a href="dashboard/acme.html" class="example-card">
-        <div class="example-card__kicker">B2B SAAS</div>
-        <div class="example-card__title">통합 운영 대시보드</div>
+        <div class="example-card__kicker">대시보드 · 운영 모니터링</div>
+        <div class="example-card__title">B2B SaaS 운영 대시보드</div>
         <div class="example-card__desc">매출·사용자·파이프라인·서비스 헬스. 37개 위젯이 하나의 화면에.</div>
       </a>
       <a href="dashboard/sales.html" class="example-card">
-        <div class="example-card__kicker">매출 분석</div>
+        <div class="example-card__kicker">대시보드 · 매출/영업 분석</div>
         <div class="example-card__title">매출 인사이트</div>
         <div class="example-card__desc">CSV 데이터 연동. 제품군별 추이·YTD 비교·계획 달성률.</div>
       </a>
-      <a href="weekly-report/index.html" class="example-card">
-        <div class="example-card__kicker">SaaS 주간보고</div>
-        <div class="example-card__title">팀별 KPI 15슬라이드</div>
-        <div class="example-card__desc">영업·CX·개발팀 KPI + 월별 테이블 + 인사이트 카드. PPTX/PDF export.</div>
-      </a>
-      <a href="weekly-report/ecommerce.html" class="example-card">
-        <div class="example-card__kicker">이커머스 주간보고</div>
-        <div class="example-card__title">마케팅팀 5슬라이드</div>
-        <div class="example-card__desc">GMV·채널별 ROAS·캠페인 성과·고객 퍼널. 마케팅 실무 보고서.</div>
-      </a>
-      <a href="card-news/index.html" class="example-card">
-        <div class="example-card__kicker">카드뉴스</div>
-        <div class="example-card__title">AI 마케팅 가이드 · 11장</div>
-        <div class="example-card__desc">Step·비교·체크리스트·후기 등 11종 카드 타입 + number-hero 커버.</div>
-      </a>
-      <a href="card-news/finance.html" class="example-card">
-        <div class="example-card__kicker">카드뉴스</div>
-        <div class="example-card__title">재테크 가이드 · 11장</div>
-        <div class="example-card__desc">자산 증식 로드맵. 다크 테마 + 금융 데이터 시각화.</div>
-      </a>
-      <a href="dashboard/hr.html" class="example-card">
-        <div class="example-card__kicker">HR / 인사</div>
-        <div class="example-card__title">인사 대시보드</div>
-        <div class="example-card__desc">헤드카운트·채용 파이프라인·부서별 퇴사율. linkedin 테마.</div>
-      </a>
       <a href="dashboard/finance.html" class="example-card">
-        <div class="example-card__kicker">금융 / 투자</div>
+        <div class="example-card__kicker">대시보드 · 경영 리포트</div>
         <div class="example-card__title">투자 포트폴리오</div>
         <div class="example-card__desc">수익률·자산배분·섹터별 성과·거래 내역. bloomberg 테마.</div>
       </a>
+      <!-- 슬라이드 -->
+      <a href="pitch-deck/index.html" class="example-card">
+        <div class="example-card__kicker">슬라이드 · 투자 유치</div>
+        <div class="example-card__title">Series A 피치덱</div>
+        <div class="example-card__desc">Problem→Solution→Market→Ask. 11슬라이드 투자 프레젠테이션.</div>
+      </a>
+      <a href="weekly-report/index.html" class="example-card">
+        <div class="example-card__kicker">슬라이드 · 주간/정기 보고</div>
+        <div class="example-card__title">SaaS 주간보고 15슬라이드</div>
+        <div class="example-card__desc">영업·CX·개발팀 KPI + 월별 테이블 + 인사이트 카드.</div>
+      </a>
+      <a href="pitch-deck/strategy.html" class="example-card">
+        <div class="example-card__kicker">슬라이드 · 내부 제안/전략</div>
+        <div class="example-card__title">AI 활용 전략 보고서</div>
+        <div class="example-card__desc">가치 체인→사례→대비 분석→로드맵. chainFlow·compareSlide 활용.</div>
+      </a>
+      <!-- 카드뉴스 -->
+      <a href="card-news/index.html" class="example-card">
+        <div class="example-card__kicker">카드뉴스 · 교육/가이드</div>
+        <div class="example-card__title">AI 마케팅 실전 가이드</div>
+        <div class="example-card__desc">Step·비교·체크리스트로 구성된 How-to 캐러셀.</div>
+      </a>
+      <a href="card-news/finance.html" class="example-card">
+        <div class="example-card__kicker">카드뉴스 · 데이터 인사이트</div>
+        <div class="example-card__title">2026 재테크 트렌드 리포트</div>
+        <div class="example-card__desc">자산 배분·수익률 차트 기반 데이터 스토리텔링.</div>
+      </a>
       <a href="card-news/cafe.html" class="example-card">
-        <div class="example-card__kicker">카드뉴스</div>
-        <div class="example-card__title">카페 창업 가이드 · 10장</div>
-        <div class="example-card__desc">입지·인테리어·메뉴. 프랜차이즈 vs 개인카페 비교. starbucks 테마.</div>
+        <div class="example-card__kicker">카드뉴스 · 브랜드/서비스</div>
+        <div class="example-card__title">카페 창업 완전정복</div>
+        <div class="example-card__desc">입지 분석부터 메뉴 구성까지. 비교 카드로 의사결정 지원.</div>
+      </a>
+      <!-- 랜딩페이지 -->
+      <a href="landing/startup.html" class="example-card">
+        <div class="example-card__kicker">랜딩 · SaaS/개발 도구</div>
+        <div class="example-card__title">개발자 도구 랜딩</div>
+        <div class="example-card__desc">Hero·코드 블록·가격표·FAQ. 개발자 대상 전환 페이지.</div>
+      </a>
+      <a href="landing/edtech.html" class="example-card">
+        <div class="example-card__kicker">랜딩 · 교육/서비스</div>
+        <div class="example-card__title">교육 플랫폼 랜딩</div>
+        <div class="example-card__desc">후기·스텝 가이드·FAQ. 신뢰 기반 전환 페이지.</div>
+      </a>
+      <a href="landing/campaign.html" class="example-card">
+        <div class="example-card__kicker">랜딩 · 이벤트/캠페인</div>
+        <div class="example-card__title">Launch Week 이벤트</div>
+        <div class="example-card__desc">일정·티어 가격표·참가자 후기. 한정 좌석 긴급 CTA.</div>
       </a>
     </div>
   </div>

@@ -18,6 +18,7 @@ const MODES = {
   landing:   { label: 'Landing Page', demo: 'landing/startup.html' },
   weekly:    { label: 'Weekly Report', demo: 'weekly-report/index.html' },
   cardnews:  { label: 'Card News',    demo: 'card-news/index.html' },
+  pitchdeck: { label: 'Pitch Deck',   demo: 'pitch-deck/index.html' },
 };
 
 /* ── resolve base path from <script src> ── */
@@ -71,28 +72,15 @@ class MagingNav extends HTMLElement {
             <a href="${base}components.html?mode=core&cat=Lists" class="mw-site-nav__menu-item">Lists & Status (5종)</a>
           </div>
           <div class="mw-site-nav__mega-col">
-            <a href="${base}components.html?mode=weekly" class="mw-site-nav__mega-head">
+            <div class="mw-site-nav__mega-head">
               <span class="mw-site-nav__mega-icon">▤</span>
               <span>
-                <span class="mw-site-nav__menu-label">주간보고</span>
-                <span class="mw-site-nav__menu-desc">A4 슬라이드 · 커버 · 인사이트</span>
+                <span class="mw-site-nav__menu-label">슬라이드</span>
+                <span class="mw-site-nav__menu-desc">보고 · 발표 · 제안</span>
               </span>
-            </a>
-            <a href="${base}components.html?mode=weekly" class="mw-site-nav__menu-item">Section Cover (5종)</a>
-            <a href="${base}components.html?mode=weekly" class="mw-site-nav__menu-item">Insight · Def Card</a>
-            <a href="${base}components.html?mode=weekly" class="mw-site-nav__menu-item">Monthly Table</a>
-          </div>
-          <div class="mw-site-nav__mega-col">
-            <a href="${base}components.html?mode=landing" class="mw-site-nav__mega-head">
-              <span class="mw-site-nav__mega-icon">◐</span>
-              <span>
-                <span class="mw-site-nav__menu-label">랜딩페이지</span>
-                <span class="mw-site-nav__menu-desc">Hero · Pricing · FAQ</span>
-              </span>
-            </a>
-            <a href="${base}components.html?mode=landing" class="mw-site-nav__menu-item">Hero · CTA Section</a>
-            <a href="${base}components.html?mode=landing" class="mw-site-nav__menu-item">Pricing · Comparison</a>
-            <a href="${base}components.html?mode=landing" class="mw-site-nav__menu-item">Testimonial · FAQ</a>
+            </div>
+            <a href="${base}components.html?mode=weekly" class="mw-site-nav__menu-item">보고용 — Cover · Table · Insight</a>
+            <a href="${base}components.html?mode=pitchdeck" class="mw-site-nav__menu-item">발표용 — Problem · Market · Ask</a>
           </div>
           <div class="mw-site-nav__mega-col">
             <a href="${base}components.html?mode=cardnews" class="mw-site-nav__mega-head">
@@ -106,6 +94,18 @@ class MagingNav extends HTMLElement {
             <a href="${base}components.html?mode=cardnews" class="mw-site-nav__menu-item">Quote · Stat · Compare</a>
             <a href="${base}components.html?mode=cardnews" class="mw-site-nav__menu-item">Step · Checklist · CTA</a>
           </div>
+          <div class="mw-site-nav__mega-col">
+            <a href="${base}components.html?mode=landing" class="mw-site-nav__mega-head">
+              <span class="mw-site-nav__mega-icon">◐</span>
+              <span>
+                <span class="mw-site-nav__menu-label">랜딩페이지</span>
+                <span class="mw-site-nav__menu-desc">Hero · Pricing · FAQ</span>
+              </span>
+            </a>
+            <a href="${base}components.html?mode=landing" class="mw-site-nav__menu-item">Hero · CTA Section</a>
+            <a href="${base}components.html?mode=landing" class="mw-site-nav__menu-item">Pricing · Comparison</a>
+            <a href="${base}components.html?mode=landing" class="mw-site-nav__menu-item">Testimonial · FAQ</a>
+          </div>
         </div>
       </div>
       <div class="mw-site-nav__dropdown">
@@ -118,47 +118,48 @@ class MagingNav extends HTMLElement {
               <span class="mw-site-nav__mega-icon">▦</span>
               <span>
                 <span class="mw-site-nav__menu-label">대시보드</span>
-                <span class="mw-site-nav__menu-desc">운영 · 매출 분석</span>
+                <span class="mw-site-nav__menu-desc">실시간 · 단일 페이지</span>
               </span>
             </div>
-            <a href="${base}dashboard/acme.html" class="mw-site-nav__menu-item">B2B SaaS 운영 대시보드</a>
-            <a href="${base}dashboard/sales.html" class="mw-site-nav__menu-item">매출 인사이트 · 데이터 연동</a>
-            <a href="${base}dashboard/hr.html" class="mw-site-nav__menu-item">HR 인사 대시보드</a>
-            <a href="${base}dashboard/finance.html" class="mw-site-nav__menu-item">투자 포트폴리오</a>
+            <a href="${base}dashboard/acme.html" class="mw-site-nav__menu-item">운영 모니터링 · SaaS</a>
+            <a href="${base}dashboard/sales.html" class="mw-site-nav__menu-item">매출/영업 분석</a>
+            <a href="${base}dashboard/finance.html" class="mw-site-nav__menu-item">경영 리포트</a>
           </div>
           <div class="mw-site-nav__mega-col">
             <div class="mw-site-nav__mega-head">
               <span class="mw-site-nav__mega-icon">▤</span>
               <span>
-                <span class="mw-site-nav__menu-label">주간보고</span>
-                <span class="mw-site-nav__menu-desc">A4 슬라이드 리포트</span>
+                <span class="mw-site-nav__menu-label">슬라이드</span>
+                <span class="mw-site-nav__menu-desc">발표 · 보고 · 제안</span>
               </span>
             </div>
-            <a href="${base}weekly-report/index.html" class="mw-site-nav__menu-item">SaaS 주간보고 · 15 슬라이드</a>
-            <a href="${base}weekly-report/ecommerce.html" class="mw-site-nav__menu-item">이커머스 마케팅 · 5 슬라이드</a>
-          </div>
-          <div class="mw-site-nav__mega-col">
-            <div class="mw-site-nav__mega-head">
-              <span class="mw-site-nav__mega-icon">◐</span>
-              <span>
-                <span class="mw-site-nav__menu-label">랜딩페이지</span>
-                <span class="mw-site-nav__menu-desc">마케팅 전환 페이지</span>
-              </span>
-            </div>
-            <a href="${base}landing/startup.html" class="mw-site-nav__menu-item">개발자 도구 랜딩</a>
-            <a href="${base}landing/edtech.html" class="mw-site-nav__menu-item">교육 플랫폼 랜딩</a>
+            <a href="${base}pitch-deck/index.html" class="mw-site-nav__menu-item">투자 유치 · 피칭</a>
+            <a href="${base}weekly-report/index.html" class="mw-site-nav__menu-item">주간/정기 보고</a>
+            <a href="${base}pitch-deck/strategy.html" class="mw-site-nav__menu-item">내부 제안/전략</a>
           </div>
           <div class="mw-site-nav__mega-col">
             <div class="mw-site-nav__mega-head">
               <span class="mw-site-nav__mega-icon">◳</span>
               <span>
                 <span class="mw-site-nav__menu-label">카드뉴스</span>
-                <span class="mw-site-nav__menu-desc">인스타 · 링크드인 캐러셀</span>
+                <span class="mw-site-nav__menu-desc">인스타 · 링크드인</span>
               </span>
             </div>
-            <a href="${base}card-news/index.html" class="mw-site-nav__menu-item">AI 마케팅 가이드 · 11장</a>
-            <a href="${base}card-news/finance.html" class="mw-site-nav__menu-item">재테크 가이드 · 11장</a>
-            <a href="${base}card-news/cafe.html" class="mw-site-nav__menu-item">카페 창업 가이드 · 10장</a>
+            <a href="${base}card-news/index.html" class="mw-site-nav__menu-item">교육/가이드</a>
+            <a href="${base}card-news/finance.html" class="mw-site-nav__menu-item">데이터 인사이트</a>
+            <a href="${base}card-news/cafe.html" class="mw-site-nav__menu-item">브랜드/서비스 소개</a>
+          </div>
+          <div class="mw-site-nav__mega-col">
+            <div class="mw-site-nav__mega-head">
+              <span class="mw-site-nav__mega-icon">◐</span>
+              <span>
+                <span class="mw-site-nav__menu-label">랜딩페이지</span>
+                <span class="mw-site-nav__menu-desc">마케팅 · 전환</span>
+              </span>
+            </div>
+            <a href="${base}landing/startup.html" class="mw-site-nav__menu-item">SaaS/개발 도구</a>
+            <a href="${base}landing/edtech.html" class="mw-site-nav__menu-item">교육/서비스</a>
+            <a href="${base}landing/campaign.html" class="mw-site-nav__menu-item">이벤트/캠페인</a>
           </div>
         </div>
       </div>
@@ -265,15 +266,11 @@ if (!document.getElementById('mw-site-css')) {
 /* ── maging site nav ── */
 .mw-site-nav {
   position: sticky; top: 0; z-index: 60;
-  background: color-mix(in srgb, var(--mw-surface) 88%, transparent);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid color-mix(in srgb, var(--mw-border) 70%, transparent);
+  background: var(--mw-surface);
+  border-bottom: 1px solid var(--mw-border);
 }
-[data-theme="terminal"] .mw-site-nav { backdrop-filter: none; background: var(--mw-surface); }
 
 .mw-site-nav__inner {
-  max-width: 1280px; margin: 0 auto;
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 1.5rem; height: 44px; gap: 0.75rem;
   flex-wrap: wrap;

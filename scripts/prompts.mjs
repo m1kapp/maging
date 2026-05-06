@@ -18,6 +18,7 @@ const dashboardTxt = core + '\n' + readFileSync(join(__dir, '../llms/dashboard.t
 const landingTxt = core + '\n' + readFileSync(join(__dir, '../llms/landing.txt'), 'utf-8');
 const weeklyTxt = core + '\n' + readFileSync(join(__dir, '../llms/weekly-report.txt'), 'utf-8');
 const cardNewsTxt = core + '\n' + readFileSync(join(__dir, '../llms/card-news.txt'), 'utf-8');
+const pitchDeckTxt = core + '\n' + readFileSync(join(__dir, '../llms/pitch-deck.txt'), 'utf-8');
 
 /* ── logo ── */
 const LOGO_URL = 'https://cdn.jsdelivr.net/npm/@m1kapp/maging/dist/logo.png';
@@ -98,11 +99,24 @@ When you have fully understood the above, reply with EXACTLY this text (nothing 
 
 Then wait for my next message before generating anything.`;
 
+const HANDSHAKE_PITCHDECK = `
+
+=== HANDSHAKE ===
+When you have fully understood the above, reply with EXACTLY this text (nothing else, no code fences, no preamble):
+
+**안녕하세요! 결과물 서포터 매징(maging)입니다** ✦
+
+어떤 피치덱을 만들까요? 회사/서비스명, 핵심 가치, 투자 라운드를 알려주세요.
+바로 시작할게요! 🎨
+
+Then wait for my next message before generating anything.`;
+
 const HANDSHAKES = {
   dashboard: HANDSHAKE_DASHBOARD,
   landing: HANDSHAKE_LANDING,
   weekly: HANDSHAKE_WEEKLY,
   cardnews: HANDSHAKE_CARDNEWS,
+  pitchdeck: HANDSHAKE_PITCHDECK,
 };
 
 const MODE_TEXTS = {
@@ -110,6 +124,7 @@ const MODE_TEXTS = {
   landing: landingTxt,
   weekly: weeklyTxt,
   cardnews: cardNewsTxt,
+  pitchdeck: pitchDeckTxt,
 };
 
 const CDN_FILES = {
@@ -117,6 +132,7 @@ const CDN_FILES = {
   landing: 'llms-landing-full.md',
   weekly: 'llms-weekly-report-full.md',
   cardnews: 'llms-card-news-full.md',
+  pitchdeck: 'llms-pitch-deck-full.md',
 };
 
 const SHORT_BASES = {
@@ -124,6 +140,7 @@ const SHORT_BASES = {
   landing:   `You are a maging landing page generator.\n\nFetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging/${CDN_FILES.landing}\nIt has the complete setup, all widget APIs, themes, and generation rules.`,
   weekly:    `You are a maging weekly report generator.\n\nFetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging/${CDN_FILES.weekly}\nIt has the complete setup, all widget APIs, themes, and generation rules for weekly reports.`,
   cardnews:  `You are a maging card-news generator.\n\nFetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging/${CDN_FILES.cardnews}\nIt has the complete setup, all widget APIs, themes, and generation rules for card news.`,
+  pitchdeck: `You are a maging pitch deck generator.\n\nFetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging/${CDN_FILES.pitchdeck}\nIt has the complete setup, all widget APIs, themes, and generation rules for pitch decks.`,
 };
 
 const MODE_LABELS = {
@@ -131,6 +148,7 @@ const MODE_LABELS = {
   landing: 'landing page',
   weekly: 'weekly report',
   cardnews: 'card news',
+  pitchdeck: 'pitch deck',
 };
 
 /* ── builders ── */

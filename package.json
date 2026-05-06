@@ -23,7 +23,9 @@
     "html",
     "echarts",
     "tailwind",
-    "prompt-to-ui"
+    "prompt-to-ui",
+    "pitch-deck",
+    "presentation"
   ],
   "scripts": {
     "dev": "vite",

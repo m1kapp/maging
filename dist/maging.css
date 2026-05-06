@@ -5200,3 +5200,7 @@
   .lg\:grid-cols-\[5fr_2fr\] { grid-template-columns: 5fr 2fr; }
 }
 
+
+/* Nav placeholder — prevent flash before site.js loads */
+body.mw-themed { margin: 0; }
+maging-nav:not(:defined) { display: block; height: 44px; box-sizing: content-box; background: var(--mw-surface); border-bottom: 1px solid var(--mw-border); }

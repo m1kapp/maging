@@ -2,7 +2,7 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <script>!function(){var k='maging-theme',s=localStorage.getItem(k);if(!s)s='starbucks';document.documentElement.setAttribute('data-theme',s);localStorage.setItem(k,s)}();</script>
+    <script>!function(){var T=["flow","morningmate","claude","linear","stripe","airbnb","linkedin","apple","duolingo","github","spotify","netflix","figma","adobe","bloomberg"],k="maging-theme",s=localStorage.getItem(k);if(!s||T.indexOf(s)<0)s="flow";document.documentElement.setAttribute("data-theme",s);localStorage.setItem(k,s)}();</script>
     <title>카페 창업 가이드 — 카드뉴스 · maging demo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../dist/maging.css">
@@ -33,12 +33,12 @@
 
       window.NEWS_MOUNT = {
         'card-cover': () => Maging.coverCard('#card-cover', {
+          icon: '☕',
           tag: '카페 창업',
           title: '나만의 카페\n시작하기',
           subtitle: '예비 창업자를 위한 실전 가이드',
           brand: BRAND,
-          style: 'number-hero',
-          number: 5,
+          style: 'framed',
         }),
 
         'card-stat': () => Maging.statCard('#card-stat', {

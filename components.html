@@ -8,6 +8,7 @@
 <meta name="description" content="maging 위젯 갤러리. Core, Dashboard, Landing Page, Card News 모드별 컴포넌트를 확인하세요.">
 
 <script src="./dist/maging-all.js" data-base="./dist/"></script>
+<script src="./dist/maging-pitch.js"></script>
 <script type="module" src="./components/site.js"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,6 +46,7 @@
   .cg-section__badge--dashboard { background: color-mix(in srgb, var(--mw-success) 12%, transparent); color: var(--mw-success); }
   .cg-section__badge--landing { background: color-mix(in srgb, var(--mw-warning) 12%, transparent); color: var(--mw-warning); }
   .cg-section__badge--cardnews { background: color-mix(in srgb, #e91e63 12%, transparent); color: #e91e63; }
+  .cg-section__badge--pitchdeck { background: color-mix(in srgb, #7c3aed 12%, transparent); color: #7c3aed; }
 
   /* ── showcase: 1 row per component ── */
   .sc-item {
@@ -68,7 +70,13 @@
   .sc-preview:has(.mw-cover) > div { width: 100%; aspect-ratio: 297/210; }
   .sc-preview .mw-cover { height: 100%; }
   .sc-preview .mw-news-frame { max-width: 100%; }
-  .sc-preview > div:not(:has(.mw-card)):not(.mw-cover):not(:has(.mw-cover)):not(:has(.mw-chart__body)):not(.mw-codeblock):not(:has(.mw-codeblock)):not(:has(.table-toolbar)):not(:has(.mw-news-frame)) {
+
+  /* Pitch deck: A4 landscape frame with scaling */
+  .sc-preview .pitch-slide-frame { width: 1240px; aspect-ratio: 297 / 210; background: var(--mw-bg); overflow: hidden; transform-origin: top left; box-sizing: border-box; }
+  .sc-preview:has(.pitch-slide-frame) { overflow: hidden; }
+  .sc-preview:has(.scroll-table) { overflow: auto; max-height: 380px; }
+  .sc-preview:has(.pitch-slide-frame) > div { width: 100%; }
+  .sc-preview > div:not(:has(.mw-card)):not(.mw-cover):not(:has(.mw-cover)):not(:has(.mw-chart__body)):not(.mw-codeblock):not(:has(.mw-codeblock)):not(:has(.table-toolbar)):not(:has(.mw-news-frame)):not(:has(.pitch-slide-frame)) {
     background: var(--mw-surface); border: 1px solid var(--mw-border);
     border-radius: var(--mw-radius); padding: 0.75rem; box-sizing: border-box;
   }
@@ -206,11 +214,11 @@ var WIDGETS = {
   mapChart:        { mode: 'core', cat: 'Specialized', wide: true, tall: true },
   cohortMatrix:    { mode: 'core', cat: 'Specialized', wide: true, tall: true },
 
-  // ── Weekly Report specific ──
-  monthlyTable:         { mode: 'weekly', cat: 'Weekly Report', wide: true, tall: true },
-  sectionCover:         { mode: 'weekly', cat: 'Weekly Report', wide: true, tall: true },
-  defCard:                 { mode: 'weekly', cat: 'Weekly Report' },
-  insightCard:             { mode: 'weekly', cat: 'Weekly Report', tall: true },
+  // ── Slide: Report (보고용) ──
+  monthlyTable:         { mode: 'weekly', cat: '보고용 위젯', wide: true, tall: true },
+  sectionCover:         { mode: 'weekly', cat: '보고용 위젯', wide: true, tall: true },
+  defCard:                 { mode: 'weekly', cat: '보고용 위젯' },
+  insightCard:             { mode: 'weekly', cat: '보고용 위젯', tall: true },
 
   // ── Landing Page specific ──
   heroSection:     { mode: 'landing', cat: 'Landing Page', wide: true, tall: true },
@@ -236,9 +244,47 @@ var WIDGETS = {
   stepCard:        { mode: 'cardnews', cat: 'Card News', tall: true },
   testimonialCard: { mode: 'cardnews', cat: 'Card News', tall: true },
   ctaCard:         { mode: 'cardnews', cat: 'Card News', tall: true },
+
+  // ── Slide: Presentation (발표용) ──
+  pitchCover:        { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
+  problemSlide:      { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
+  solutionSlide:     { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
+  metricHighlight:   { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
+  marketSlide:       { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
+  competitorMatrix:  { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
+  bizModelSlide:     { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
+  timelineSlide:     { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
+  teamSlide:         { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
+  askSlide:          { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
+  chainFlow:         { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
+  compareSlide:      { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
 };
 
 /* ── Sample data for live previews ── */
+// Pitch deck: wrap widget in A4 landscape frame, scale to fit preview
+function _pitchFrame(el) {
+  var frame = document.createElement('div');
+  frame.className = 'pitch-slide-frame';
+  el.appendChild(frame);
+  return frame;
+}
+function _pitchScale(el) {
+  var frame = el.querySelector('.pitch-slide-frame');
+  if (!frame) return;
+  setTimeout(function() {
+    // Use sc-preview's inner width (accounts for border)
+    var preview = el.closest('.sc-preview');
+    var containerW = preview ? preview.clientWidth : (el.clientWidth || 400);
+    var FRAME_W = 1240;
+    var FRAME_H = FRAME_W * (210 / 297);
+    var scale = containerW / FRAME_W;
+    frame.style.transform = 'scale(' + scale.toFixed(6) + ')';
+    // Set el to exact scaled height, no rounding gap
+    el.style.height = (FRAME_H * scale) + 'px';
+    el.style.overflow = 'hidden';
+  }, 50);
+}
+
 var SAMPLES = {
   // ── Metrics ──
   kpiCard:       function(el) { Maging.kpiCard(el, { label: '매출', value: '128억', delta: 8.3, compact: true, sparkline: [40,55,48,62,75,88] }); },
@@ -290,6 +336,7 @@ var SAMPLES = {
     Maging.insightCard(el, { title: 'KDB생명보험', meta: '180인', tag: 'AM · 박수연', status: 'yellow', bullets: ['5월 계약 클로징 목표 — 법무 검토 완료 대기', '사용자 범위 확대 협의 중'], highlight: '계약서 최종본 4/30 수령 예정. 기한 내 서명 필요.' });
   },
   monthlyTable: function(el) {
+    el.style.minWidth = '1000px';
     Maging.monthlyTable(el, {
       title: '월별 매출', sub: '2026년',
       rows: [
@@ -329,6 +376,20 @@ var SAMPLES = {
   stepCard:      function(el) { Maging.stepCard(el, { step: '01', heading: '고객 세그먼트 분석', text: '기존 고객 데이터에서 행동 패턴을 추출하고 클러스터링합니다.', tip: '최소 3개월 이상의 데이터를 사용하세요', brand: '@maging.page' }); },
   testimonialCard: function(el) { Maging.testimonialCard(el, { quote: '도입 3개월 만에 마케팅 비용이 40% 절감됐습니다.', name: '이수진', role: '마케팅 팀장, ABC Corp', stars: 5, brand: '@maging.page' }); },
   ctaCard:       function(el) { Maging.ctaCard(el, { heading: '더 많은 AI 마케팅 팁이\n궁금하다면?', subtext: '팔로우하고 매주 새로운 트렌드를 받아보세요', ctas: [{ label: '팔로우하기', primary: true }], handles: [{ platform: 'Instagram', handle: '@maging.page' }], brand: '@maging.page' }); },
+
+  // ── Pitch Deck (A4 landscape frame with scaling) ──
+  pitchCover:       function(el) { var f = _pitchFrame(el); Maging.pitchCover(f, { company: 'Acme Corp', tagline: '혁신을 가속하는 AI 플랫폼', logo: '◆', subtitle: 'Series A · 2026', style: 'bold' }); _pitchScale(el); },
+  problemSlide:     function(el) { var f = _pitchFrame(el); Maging.problemSlide(f, { headline: '기업의 78%가 보고서 제작에 주당 8시간 이상 소비합니다', points: [{ icon: '⏱️', title: '반복 개발', desc: '같은 차트를 매번 처음부터 코딩' },{ icon: '🎨', title: '디자인 파편화', desc: '팀마다 다른 UI, 브랜드 불일치' },{ icon: '💸', title: '과도한 비용', desc: 'BI 도구 라이선스 연 $50K+' }], highlight: '연간 개발자 1인당 320시간 낭비' }); _pitchScale(el); },
+  solutionSlide:    function(el) { var f = _pitchFrame(el); Maging.solutionSlide(f, { headline: '프롬프트 한 줄로 프로덕션급 결과물 즉시 생성', before: { label: 'Before', items: ['2주 개발 사이클', '디자이너 필요', 'BI 라이선스 $50K/yr'] }, after: { label: 'After', items: ['30초 생성', '105개 테마 내장', 'CDN 무료'] } }); _pitchScale(el); },
+  metricHighlight:  function(el) { var f = _pitchFrame(el); Maging.metricHighlight(f, { metrics: [{ value: '37', unit: '개', label: '위젯 컴포넌트' },{ value: '105', unit: '개', label: '브랜드 테마' },{ value: '30', unit: '초', label: '생성 시간' }] }); _pitchScale(el); },
+  marketSlide:      function(el) { var f = _pitchFrame(el); Maging.marketSlide(f, { headline: 'AI Report Generation 시장', tam: { value: '$30B', label: 'TAM · 글로벌 BI' }, sam: { value: '$8B', label: 'SAM · 리포팅 자동화' }, som: { value: '$500M', label: 'SOM · AI 리포트 생성' }, insight: 'CAGR 23%', sources: ['Gartner 2025'] }); _pitchScale(el); },
+  competitorMatrix: function(el) { var f = _pitchFrame(el); Maging.competitorMatrix(f, { headline: '포지셔닝', axisX: { label: '유연성', low: '고정', high: '유연' }, axisY: { label: '속도', low: '수동', high: 'AI' }, players: [{ name: 'Us', x: 80, y: 95, highlight: true },{ name: 'Tableau', x: 85, y: 15 },{ name: 'Retool', x: 65, y: 35 }] }); _pitchScale(el); },
+  bizModelSlide:    function(el) { var f = _pitchFrame(el); Maging.bizModelSlide(f, { headline: '수익 모델', tiers: [{ name: 'Free', price: '$0', features: ['CDN 접근', '기본 테마'] },{ name: 'Pro', price: '$29', period: '/월', features: ['전체 테마', '우선 지원'], popular: true },{ name: 'Enterprise', price: 'Custom', features: ['SSO', 'SLA 99.9%'] }], note: 'Land & Expand' }); _pitchScale(el); },
+  timelineSlide:    function(el) { var f = _pitchFrame(el); Maging.timelineSlide(f, { headline: '로드맵', milestones: [{ date: '2025 Q4', title: 'MVP', done: true },{ date: '2026 Q1', title: '확장', done: true },{ date: '2026 Q2', title: '현재', active: true },{ date: '2026 H2', title: '엔터프라이즈' }] }); _pitchScale(el); },
+  teamSlide:        function(el) { var f = _pitchFrame(el); Maging.teamSlide(f, { headline: '팀', members: [{ name: '유민호', role: 'CEO', exp: 'B2B SaaS 10년' },{ name: '김개발', role: 'CTO', exp: '전 토스 프론트엔드' }] }); _pitchScale(el); },
+  askSlide:         function(el) { var f = _pitchFrame(el); Maging.askSlide(f, { headline: 'Series A · ₩30억', useOfFunds: [{ label: '엔지니어링', pct: 50 },{ label: 'GTM', pct: 30 },{ label: '운영', pct: 20 }], milestones: ['ARR ₩10억', '고객 30사', '글로벌 진출'], contact: { email: 'hello@acme.io', website: 'acme.io' } }); _pitchScale(el); },
+  chainFlow:        function(el) { var f = _pitchFrame(el); Maging.chainFlow(f, { headline: '가치 체인 — 3단 전달 구조', steps: [{ label: 'OUR PLATFORM', title: 'AI로 만든다', desc: '콘텐츠 생성 + 분석', accent: true },{ label: '무장시킴', title: '직원이 강해진다', desc: '영업·마케팅 역량 증폭' },{ label: '사로잡음', title: '고객이 찾아온다', desc: '매출 성장으로 직결' }] }); _pitchScale(el); },
+  compareSlide:     function(el) { var f = _pitchFrame(el); Maging.compareSlide(f, { headline: '왜 이 전략이 강력한가', left: { label: '기존 접근', rows: [{ key: '프레이밍', value: '업무 효율화' },{ key: '도입 근거', value: '비용 절감' },{ key: 'KPI', value: '사용률' },{ key: '지속성', value: '낮음' }] }, right: { label: '새로운 접근', rows: [{ key: '프레이밍', value: '매출 성장' },{ key: '도입 근거', value: '매출 기여' },{ key: 'KPI', value: '고객 반응, 매출' },{ key: '지속성', value: '높음' }] }, note: '비용 절감이 아니라 매출 성장으로 프레이밍하면 경영진이 움직인다.' }); _pitchScale(el); },
 };
 
 /* ============================================================
@@ -336,13 +397,15 @@ var SAMPLES = {
  * ============================================================ */
 var params = new URLSearchParams(window.location.search);
 var currentMode = params.get('mode') || 'core';
+// Legacy mode redirects
+if (currentMode === 'weekly' || currentMode === 'pitchdeck') currentMode = 'slide';
 
 // Mode tab definitions
 var MODES = [
   { key: 'core',    label: '대시보드',  desc: '대시보드·운영 모니터링에 공통으로 쓰이는 기본 위젯입니다. Metrics, Charts, Lists 등 모든 모드의 기반.' },
-  { key: 'weekly',  label: '주간보고',  desc: '주간보고·정기보고서 전용 위젯입니다. Section Cover, Insight Card 등 보고서 특화 컴포넌트.' },
-  { key: 'landing', label: '랜딩페이지', desc: '마케팅 랜딩페이지 전용 위젯입니다. Hero, Pricing, Testimonial 등 전환 최적화 컴포넌트.' },
+  { key: 'slide',   label: '슬라이드', desc: '보고·발표·제안용 슬라이드 위젯입니다. 보고용(Cover·Table·Insight) + 발표용(Problem·Market·Ask) 총 14종.' },
   { key: 'cardnews', label: '카드뉴스', desc: '인스타그램·링크드인 캐러셀 카드뉴스 전용 위젯 11종. Cover(6스타일), Body, Data, Quote, Stat, Comparison, Checklist, Step, Testimonial, CTA.' },
+  { key: 'landing', label: '랜딩페이지', desc: '마케팅 랜딩페이지 전용 위젯입니다. Hero, Pricing, Testimonial 등 전환 최적화 컴포넌트.' },
 ];
 
 // Build mode tabs
@@ -362,7 +425,11 @@ function getFilteredWidgets() {
   var result = {};
   Object.keys(WIDGETS).forEach(function(key) {
     var w = WIDGETS[key];
-    if (w.mode === currentMode) result[key] = w;
+    if (currentMode === 'slide') {
+      if (w.mode === 'weekly' || w.mode === 'pitchdeck') result[key] = w;
+    } else {
+      if (w.mode === currentMode) result[key] = w;
+    }
   });
   return result;
 }
@@ -407,14 +474,28 @@ var LANDING_META = {
   stepCard: { title: 'Step Card', desc: '순서 스텝. How-to 튜토리얼, 프로세스 설명.' },
   testimonialCard: { title: 'Testimonial Card', desc: '고객 후기 + 별점 + 아바타. 소셜 프루프.' },
   ctaCard: { title: 'CTA Card', desc: '행동 유도 마지막 장. 팔로우 · 링크 · DM.' },
+  pitchCover: { title: 'Pitch Cover', desc: '피치덱 표지. 회사명 + 태그라인 + 라운드. 3가지 스타일.' },
+  problemSlide: { title: 'Problem Slide', desc: '문제 제시. 큰 헤드라인 + pain point 카드 + 하이라이트.' },
+  solutionSlide: { title: 'Solution Slide', desc: '솔루션. Before/After 비교 또는 기능 그리드.' },
+  metricHighlight: { title: 'Metric Highlight', desc: '대형 숫자 임팩트. 트랙션·제품 지표 강조.' },
+  marketSlide: { title: 'Market Slide', desc: 'TAM/SAM/SOM 동심원. 시장 규모 시각화.' },
+  competitorMatrix: { title: 'Competitor Matrix', desc: '2×2 포지셔닝 매트릭스. 자사 위치 강조.' },
+  bizModelSlide: { title: 'Business Model', desc: '수익 모델. 프리미엄/구독 티어 비교.' },
+  timelineSlide: { title: 'Timeline Slide', desc: '로드맵. 가로 타임라인 + done/active 상태.' },
+  teamSlide: { title: 'Team Slide', desc: '팀 소개. 아바타 + 역할 + 경력.' },
+  askSlide: { title: 'Ask Slide', desc: '투자 요청. 금액 + 자금 용도 + 마일스톤.' },
+  chainFlow: { title: 'Chain Flow', desc: 'A→B→C 화살표 흐름도. 가치 체인 · 프로세스 · 유저 저니.' },
+  compareSlide: { title: 'Compare Slide', desc: '좌우 대비. Old vs New · 기존 vs 제안 · 현재 vs 목표.' },
 };
 
 // Category display order
 var CAT_ORDER_BY_MODE = {
   core:    ['Metrics', 'Charts', 'Lists', 'Calendar & Progress', 'Layout', 'Specialized'],
-  weekly:  ['Weekly Report'],
+  slide:   ['보고용 위젯', '발표용 위젯'],
+  weekly:  ['보고용 위젯'],
   landing: ['Landing Page'],
   cardnews: ['Card News'],
+  pitchdeck: ['발표용 위젯'],
 };
 
 var catOrder = CAT_ORDER_BY_MODE[currentMode] || CAT_ORDER_BY_MODE.core;
@@ -486,6 +567,20 @@ var CODE = {
   dataCard:      "const config = {\n  label: 'GLOBAL TREND',\n  title: 'AI 마케팅 도입률 추이',\n  widget: 'barChart',\n  widgetConfig: {\n    items: [\n      { label: '2022', value: 18 },\n      { label: '2023', value: 31 },\n      { label: '2024', value: 47 },\n      { label: '2025', value: 63 },\n      { label: '2026', value: 78 },\n    ],\n    yFormatter: v => v + '%',\n  },\n  brand: '@mybrand',\n};\n\nMaging.dataCard('#card-data', config);",
   numberedCard:  "const config = {\n  heading: 'AI 마케팅 도구 TOP 3',\n  items: [\n    { rank: '1', title: 'ChatGPT / Claude',\n      desc: '콘텐츠 초안, 카피라이팅', icon: '🤖' },\n    { rank: '2', title: 'Midjourney / DALL-E',\n      desc: '비주얼 생성', icon: '🖼️' },\n    { rank: '3', title: 'HubSpot AI',\n      desc: '리드 스코어링', icon: '📈' },\n  ],\n  brand: '@mybrand',\n};\n\nMaging.numberedCard('#card-top', config);",
   ctaCard:       "const config = {\n  heading: '더 많은 AI 마케팅 팁이\\n궁금하다면?',\n  subtext: '팔로우하고 매주 새로운 트렌드를 받아보세요',\n  ctas: [\n    { label: '팔로우하기', primary: true },\n  ],\n  handles: [\n    { platform: 'Instagram', handle: '@mybrand' },\n    { platform: 'LinkedIn', handle: 'mybrand' },\n  ],\n  brand: '@mybrand',\n};\n\nMaging.ctaCard('#card-cta', config);",
+
+  // ── Pitch Deck ──
+  pitchCover:      "const config = {\n  company: 'Acme Corp',\n  tagline: '혁신을 가속하는 AI 플랫폼',\n  logo: '◆',\n  subtitle: 'Series A · 2026',\n  style: 'bold',  // 'bold' | 'minimal' | 'gradient'\n};\n\nMaging.pitchCover('#el', config);",
+  problemSlide:    "const config = {\n  headline: '기업의 78%가 보고서 제작에\\n주당 8시간 이상 소비합니다',\n  points: [\n    { icon: '⏱️', title: '반복 개발',\n      desc: '같은 차트를 매번 처음부터 코딩' },\n    { icon: '🎨', title: '디자인 파편화',\n      desc: '팀마다 다른 UI, 브랜드 불일치' },\n    { icon: '💸', title: '과도한 비용',\n      desc: 'BI 도구 라이선스 연 $50K+' },\n  ],\n  highlight: '연간 개발자 1인당 320시간 낭비',\n};\n\nMaging.problemSlide('#el', config);",
+  solutionSlide:   "const config = {\n  headline: '프롬프트 한 줄로 프로덕션급 결과물',\n  before: {\n    label: 'Before',\n    items: ['2주 개발', '디자이너 필요', '$50K/yr'],\n  },\n  after: {\n    label: 'After',\n    items: ['30초 생성', '105개 테마', 'CDN 무료'],\n  },\n};\n\nMaging.solutionSlide('#el', config);",
+  metricHighlight: "const config = {\n  metrics: [\n    { value: '37', unit: '개', label: '위젯' },\n    { value: '105', unit: '개', label: '테마' },\n    { value: '30', unit: '초', label: '생성 시간' },\n  ],\n};\n\nMaging.metricHighlight('#el', config);",
+  marketSlide:     "const config = {\n  headline: 'AI Report Generation 시장',\n  tam: { value: '$30B', label: 'TAM · 글로벌 BI' },\n  sam: { value: '$8B', label: 'SAM · 리포팅 자동화' },\n  som: { value: '$500M', label: 'SOM · AI 리포트' },\n  insight: 'CAGR 23%',\n  sources: ['Gartner 2025'],\n};\n\nMaging.marketSlide('#el', config);",
+  competitorMatrix:"const config = {\n  headline: '포지셔닝',\n  axisX: { low: '고정', high: '유연' },\n  axisY: { low: '수동', high: 'AI' },\n  players: [\n    { name: 'Us', x: 80, y: 95, highlight: true },\n    { name: 'Tableau', x: 85, y: 15 },\n    { name: 'Retool', x: 65, y: 35 },\n  ],\n};\n\nMaging.competitorMatrix('#el', config);",
+  bizModelSlide:   "const config = {\n  headline: '수익 모델',\n  tiers: [\n    { name: 'Free', price: '$0',\n      features: ['CDN 접근', '기본 테마'] },\n    { name: 'Pro', price: '$29', period: '/월',\n      features: ['전체 테마', '우선 지원'],\n      popular: true },\n    { name: 'Enterprise', price: 'Custom',\n      features: ['SSO', 'SLA 99.9%'] },\n  ],\n  note: 'Land & Expand',\n};\n\nMaging.bizModelSlide('#el', config);",
+  timelineSlide:   "const config = {\n  headline: '로드맵',\n  milestones: [\n    { date: '2025 Q4', title: 'MVP', done: true },\n    { date: '2026 Q1', title: '확장', done: true },\n    { date: '2026 Q2', title: '현재', active: true },\n    { date: '2026 H2', title: '엔터프라이즈' },\n  ],\n};\n\nMaging.timelineSlide('#el', config);",
+  teamSlide:       "const config = {\n  headline: '팀',\n  members: [\n    { name: '유민호', role: 'CEO',\n      exp: 'B2B SaaS 10년' },\n    { name: '김개발', role: 'CTO',\n      exp: '전 토스 프론트엔드' },\n  ],\n};\n\nMaging.teamSlide('#el', config);",
+  askSlide:        "const config = {\n  headline: 'Series A · ₩30억',\n  useOfFunds: [\n    { label: '엔지니어링', pct: 50 },\n    { label: 'GTM', pct: 30 },\n    { label: '운영', pct: 20 },\n  ],\n  milestones: [\n    'ARR ₩10억',\n    '고객 30사',\n    '글로벌 진출',\n  ],\n  contact: {\n    email: 'hello@acme.io',\n    website: 'acme.io',\n  },\n};\n\nMaging.askSlide('#el', config);",
+  chainFlow:       "const config = {\n  headline: '가치 체인 — 3단 전달 구조',\n  steps: [\n    { label: 'PLATFORM', title: 'AI로 만든다',\n      desc: '콘텐츠 생성 + 분석', accent: true },\n    { label: '무장', title: '직원이 강해진다',\n      desc: '영업·마케팅 역량 증폭' },\n    { label: '결과', title: '고객이 찾아온다',\n      desc: '매출 성장 직결' },\n  ],\n};\n\nMaging.chainFlow('#el', config);",
+  compareSlide:    "const config = {\n  headline: '왜 이 전략이 강력한가',\n  left: {\n    label: '기존 접근',\n    rows: [\n      { key: '프레이밍', value: '업무 효율화' },\n      { key: 'KPI', value: '사용률' },\n    ],\n  },\n  right: {\n    label: '새로운 접근',\n    rows: [\n      { key: '프레이밍', value: '매출 성장' },\n      { key: 'KPI', value: '고객 반응' },\n    ],\n  },\n  note: '비용 절감이 아니라 매출 성장.',\n};\n\nMaging.compareSlide('#el', config);",
 };
 
 /* ============================================================
@@ -604,8 +699,9 @@ catOrder.forEach(function(cat) {
 
   var badgeClass = 'cg-section__badge--core';
   if (cat === 'Landing Page') badgeClass = 'cg-section__badge--landing';
-  if (cat === 'Weekly Report') badgeClass = 'cg-section__badge--dashboard';
+  if (cat === '보고용 위젯') badgeClass = 'cg-section__badge--pitchdeck';
   if (cat === 'Card News') badgeClass = 'cg-section__badge--cardnews';
+  if (cat === '발표용 위젯') badgeClass = 'cg-section__badge--pitchdeck';
 
   html += '<div class="cg-section">';
   html += '<div class="cg-section__head">';
