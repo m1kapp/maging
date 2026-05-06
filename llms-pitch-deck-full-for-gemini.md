@@ -594,112 +594,31 @@ window.addEventListener('maging:ready', () => {
 
 ---
 
-### Reference (완성 예제)
+### Reference (최소 구조)
 
 ```html
 <!DOCTYPE html>
 <html lang="ko" data-theme="linear">
 <head>
-  <meta charset="UTF-8"><title>maging — Series A Pitch</title>
+  <meta charset="UTF-8"><title>Pitch Deck</title>
   <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging-all.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging-pitch.js"></script>
 </head>
 <body class="mw-themed">
-  <main class="max-w-[1280px] mx-auto px-6 py-4">
+  <main class="max-w-[1240px] mx-auto px-6 py-4">
     <div id="slides-wrap">
-      <section class="slide cover-slide" id="cover" data-active>
-        <div class="cover-host"></div>
-      </section>
+      <section class="slide cover-slide" id="cover" data-active><div class="cover-host"></div></section>
       <section class="slide" id="problem" data-label="Problem"></section>
       <section class="slide" id="solution" data-label="Solution"></section>
-      <section class="slide" id="traction" data-label="Traction"></section>
-      <section class="slide" id="market" data-label="Market"></section>
-      <section class="slide" id="competition" data-label="Competition"></section>
-      <section class="slide" id="model" data-label="Business Model"></section>
-      <section class="slide" id="team" data-label="Team"></section>
-      <section class="slide" id="ask" data-label="The Ask"></section>
+      <!-- 필요한 슬라이드 추가 -->
     </div>
   </main>
-  <div style="text-align:right;padding:1rem 1.5rem 0.5rem;font-size:0.6rem;color:var(--mw-text-soft,var(--mw-text-muted));opacity:0.5">powered by maging 0.1.25</div>
   <script>
   window.addEventListener('maging:ready', () => {
     window.DECK_MOUNT = {
-      cover: () => Maging.pitchCover('#cover .cover-host', {
-        company: 'maging',
-        tagline: 'AI 답변을, 쓸 수 있는 결과물로',
-        logo: '◆',
-        subtitle: 'Series A · 2026',
-        style: 'bold',
-      }),
-      problem: () => Maging.problemSlide('#problem', {
-        headline: '기업의 78%가 보고서 제작에 주당 8시간 이상 소비합니다',
-        points: [
-          { icon: '⏱️', title: '반복 개발', desc: '같은 차트·테이블을 매번 처음부터 코딩' },
-          { icon: '🎨', title: '디자인 파편화', desc: '팀마다 다른 UI, 브랜드 일관성 부재' },
-          { icon: '🔄', title: '유지보수 지옥', desc: '데이터 변경 시 수동 업데이트 반복' },
-        ],
-        highlight: '연간 개발자 1인당 320시간 낭비',
-      }),
-      solution: () => Maging.solutionSlide('#solution', {
-        headline: '프롬프트 한 줄 → 엔터프라이즈급 결과물',
-        before: { label: 'Before', items: ['2주 개발 사이클', '디자이너 리소스 필요', 'BI 도구 라이선스 $50K/yr'] },
-        after: { label: 'After', items: ['30초 생성', '105개 브랜드 테마 내장', 'CDN 한 줄, 무료'] },
-      }),
-      traction: () => Maging.metricHighlight('#traction', {
-        metrics: [
-          { value: '37', unit: '개', label: '위젯 컴포넌트' },
-          { value: '105', unit: '개', label: '브랜드 테마' },
-          { value: '4', unit: '개', label: '아웃풋 모드' },
-          { value: '0', unit: '', label: '빌드 스텝' },
-        ],
-      }),
-      market: () => Maging.marketSlide('#market', {
-        headline: 'AI Report Generation 시장',
-        tam: { value: '$30B', label: 'TAM · 글로벌 BI 시장' },
-        sam: { value: '$8B', label: 'SAM · 엔터프라이즈 리포팅 자동화' },
-        som: { value: '$500M', label: 'SOM · AI 기반 리포트 생성' },
-        insight: 'CAGR 23% (2024-2028)',
-        sources: ['Gartner 2025', 'Markets & Markets'],
-      }),
-      competition: () => Maging.competitorMatrix('#competition', {
-        axisX: { label: '커스터마이징', low: '고정 템플릿', high: '완전 유연' },
-        axisY: { label: '생성 속도', low: '수동 개발', high: 'AI 즉시 생성' },
-        players: [
-          { name: 'maging', x: 80, y: 95, highlight: true },
-          { name: 'Tableau', x: 85, y: 15 },
-          { name: 'Chart.js', x: 40, y: 45 },
-          { name: 'Retool', x: 65, y: 35 },
-          { name: 'Gamma.app', x: 50, y: 75 },
-        ],
-      }),
-      model: () => Maging.bizModelSlide('#model', {
-        headline: '수익 모델',
-        tiers: [
-          { name: 'Open Source', price: '$0', features: ['CDN 접근', '37개 위젯', '15개 테마'] },
-          { name: 'Pro', price: '$29', period: '/월', features: ['105개 테마', 'PPTX 내보내기', '우선 지원'], popular: true },
-          { name: 'Enterprise', price: 'Custom', features: ['SSO/SAML', 'SLA 99.9%', '화이트레이블', '전담 CS'] },
-        ],
-        note: 'Land & Expand: 개발자 무료 도입 → 팀 유료 전환 → 기업 계약',
-      }),
-      team: () => Maging.teamSlide('#team', {
-        members: [
-          { name: '유민호', role: 'Founder & CEO', exp: 'B2B SaaS 10년, 프로덕트 & 엔지니어링' },
-        ],
-      }),
-      ask: () => Maging.askSlide('#ask', {
-        headline: 'Series A · ₩30억',
-        useOfFunds: [
-          { label: '엔지니어링', pct: 50 },
-          { label: 'GTM', pct: 30 },
-          { label: '운영', pct: 20 },
-        ],
-        milestones: [
-          '12개월 내 ARR ₩10억',
-          '엔터프라이즈 고객 30사',
-          '글로벌 베타 런칭',
-        ],
-        contact: { email: 'hello@maging.io', website: 'maging.m1k.app' },
-      }),
+      cover: () => Maging.pitchCover('#cover .cover-host', { company: '회사명', tagline: '한 줄 설명', style: 'bold' }),
+      problem: () => Maging.problemSlide('#problem', { headline: '문제 제시', points: [{ icon: '⏱️', title: '제목', desc: '설명' }] }),
+      solution: () => Maging.solutionSlide('#solution', { headline: '솔루션', before: { label: 'Before', items: ['항목'] }, after: { label: 'After', items: ['항목'] } }),
     };
   });
   </script>
