@@ -1,7 +1,7 @@
 /**
  * maging-pitch.js — Pitch Deck infrastructure
  *
- * Load after maging-all.js. Injects CSS, registers <pitch-sidebar>,
+ * Load after maging-all.js + maging-sidebar.js. Injects CSS
  * and exposes Maging.deck(MOUNT) + pitch-specific widgets.
  *
  * Usage:
@@ -24,19 +24,14 @@
   .cover-slide .cover-host > .pitch-cover { height: 100%; }
 
   /* === Slide viewer layout === */
-  /* Canvas layout is in maging.css (shared with weekly-sidebar) */
+  /* Canvas layout is in maging.css (shared via maging-sidebar) */
 
-  /* === Slide frame === */
-  .mw-slide { position: relative; width: 1240px; aspect-ratio: 297 / 210; background: var(--mw-bg); border: 1px solid color-mix(in srgb, var(--mw-border) 40%, transparent); border-left: none; border-radius: 0 2px 2px 0; overflow: hidden; transform-origin: top left; transform: scale(var(--slide-scale, 1)); font-family: var(--mw-font); box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.06); margin: 0; }
+  /* === Slide frame (border/radius handled by maging-sidebar.js) === */
   .mw-slide__header { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px 0; }
   .mw-slide__label { font-size: 12px; font-weight: 600; color: var(--mw-text); }
   .mw-slide__body { flex: 1; display: flex; flex-direction: column; }
   .mw-slide__footer { padding: 0 24px 10px; text-align: right; }
   .mw-slide__page { font-size: 10px; color: var(--mw-text-muted); font-variant-numeric: tabular-nums; }
-
-  /* === Sidebar (pitch-sidebar scoped — won't affect weekly-sidebar) === */
-  pitch-sidebar { flex-shrink: 0; align-self: stretch; display: flex; }
-  pitch-sidebar .wrs { width: 220px; min-height: 100%; padding: 20px 14px 24px; background: var(--mw-bg); border: 1px solid color-mix(in srgb, var(--mw-border) 40%, transparent); border-right: 1px solid var(--mw-border); border-radius: 2px 0 0 2px; font-family: var(--mw-font); overflow-y: auto; box-sizing: border-box; box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.06); scrollbar-width: thin; }
 
   /* === Bottom nav bar === */
   .wrn-bar { position: fixed; left: 50%; transform: translateX(-50%); bottom: 20px; width: max-content; display: inline-flex; align-items: center; gap: 4px; padding: 0.38rem 0.65rem; background: var(--mw-surface); border: 1px solid var(--mw-border); border-radius: 999px; box-shadow: 0 8px 24px -6px rgba(0,0,0,.28), 0 2px 6px -2px rgba(0,0,0,.12); font-size: 0.78rem; font-variant-numeric: tabular-nums; color: var(--mw-text); font-family: var(--mw-font); z-index: 50; }
@@ -53,7 +48,7 @@
   /* === Presenter === */
   body.presenter-mode { overflow: hidden; background: #000 !important; }
   body.presenter-mode .mw-site-nav,
-  body.presenter-mode pitch-sidebar,
+  body.presenter-mode maging-sidebar,
   body.presenter-mode .wrs { display: none !important; }
   body.presenter-mode > .flex { display: block; max-width: none; margin: 0; min-height: 0; }
   body.presenter-mode main { padding: 0 !important; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; position: fixed; top: 0; left: 0; background: transparent !important; }
@@ -128,7 +123,7 @@
   /* === Competitor Matrix === */
   .pitch-competitor { display: flex; flex-direction: column; height: 100%; padding: 48px 64px; box-sizing: border-box; }
   .pitch-competitor__headline { font-size: 2rem; font-weight: 700; color: var(--mw-text); margin-bottom: 20px; letter-spacing: -0.02em; }
-  .pitch-competitor__matrix { position: relative; min-height: 300px; margin: auto 0; border-left: 2px solid var(--mw-border); border-bottom: 2px solid var(--mw-border); border-radius: 0; background: transparent; overflow: visible; margin: 12px 24px 24px 36px; }
+  .pitch-competitor__matrix { position: relative; min-height: 300px; border-left: 2px solid var(--mw-border); border-bottom: 2px solid var(--mw-border); border-radius: 0; background: transparent; overflow: visible; margin: auto 24px auto 36px; }
   .pitch-competitor__dot { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 6px; z-index: 2; }
   .pitch-competitor__dot-circle { width: 14px; height: 14px; border-radius: 50%; background: var(--mw-text-muted); opacity: 0.3; transition: all 0.2s; }
   .pitch-competitor__dot--highlight .pitch-competitor__dot-circle { width: 24px; height: 24px; background: var(--mw-accent); opacity: 1; box-shadow: 0 0 0 6px color-mix(in srgb, var(--mw-accent) 15%, transparent); }
@@ -138,8 +133,8 @@
   .pitch-competitor__midline-y { position: absolute; left: 50%; top: 0; bottom: 0; border-left: 1px dashed color-mix(in srgb, var(--mw-border) 60%, transparent); }
   .pitch-competitor__label-low-x { position: absolute; bottom: -22px; left: 0; font-size: 0.72rem; color: var(--mw-text-muted); font-weight: 500; }
   .pitch-competitor__label-high-x { position: absolute; bottom: -22px; right: 0; font-size: 0.72rem; color: var(--mw-text-muted); font-weight: 500; }
-  .pitch-competitor__label-low-y { position: absolute; left: -32px; bottom: 0; font-size: 0.72rem; color: var(--mw-text-muted); font-weight: 500; writing-mode: vertical-rl; transform: rotate(180deg); }
-  .pitch-competitor__label-high-y { position: absolute; left: -32px; top: 0; font-size: 0.72rem; color: var(--mw-text-muted); font-weight: 500; writing-mode: vertical-rl; transform: rotate(180deg); }
+  .pitch-competitor__label-low-y { position: absolute; left: -32px; bottom: 0; font-size: 0.72rem; color: var(--mw-text-muted); font-weight: 500; writing-mode: vertical-rl; }
+  .pitch-competitor__label-high-y { position: absolute; left: -32px; top: 0; font-size: 0.72rem; color: var(--mw-text-muted); font-weight: 500; writing-mode: vertical-rl; }
 
   /* === Business Model === */
   .pitch-bizmodel { display: flex; flex-direction: column; height: 100%; padding: 48px 64px; box-sizing: border-box; }
@@ -232,81 +227,11 @@
   .pitch-compare__col--right .pitch-compare__row-val { color: #fff; }
   .pitch-compare__note { margin-top: 20px; font-size: 0.85rem; font-weight: 600; color: var(--mw-text); }
 
-  /* (Navigation, Sidebar, Presenter mode — all provided by maging-weekly.js) */
+  /* (Sidebar provided by maging-sidebar.js) */
 `;
   document.head.appendChild(_style);
 
-  // ── 2. <pitch-sidebar> — unified sidebar (BU/team grouping + page dots)
-  if (!customElements.get('pitch-sidebar')) {
-    class PitchSidebar extends HTMLElement {
-      connectedCallback() {
-        const active = this.getAttribute('active') || '';
-        const title  = this.getAttribute('data-title') || 'Pitch Deck';
-        const date   = this.getAttribute('data-round') || this.getAttribute('data-date') || '';
-
-        // Collect slides, group same-label into page dots
-        const rawItems = [...document.querySelectorAll('.slide[data-label]')].map(el => ({
-          id: el.id, label: el.dataset.label, bu: el.dataset.bu || '', team: el.dataset.team || '',
-        }));
-        const navItems = [];
-        rawItems.forEach(item => {
-          const prev = navItems[navItems.length - 1];
-          if (prev && prev.label === item.label) {
-            prev.pages.push(item.id);
-          } else {
-            navItems.push({ ...item, pages: [item.id] });
-          }
-        });
-
-        // Group by BU/team (optional — flat if no BU)
-        const hasBU = navItems.some(it => it.bu);
-        let navHTML = '';
-        if (hasBU) {
-          const groups = [];
-          navItems.forEach(item => {
-            let g = groups.find(g => g.bu === item.bu);
-            if (!g) { g = { bu: item.bu, teams: [] }; groups.push(g); }
-            let t = g.teams.find(t => t.team === item.team);
-            if (!t) { t = { team: item.team, items: [] }; g.teams.push(t); }
-            t.items.push(item);
-          });
-          navHTML = groups.map(g =>
-            '<div class="wrs__group"><div class="wrs__bu">' + g.bu + '</div>' +
-            g.teams.map(t =>
-              '<div class="wrs__team">' + (t.team ? '<div class="wrs__team-label">' + t.team + '</div>' : '') +
-              t.items.map(it => this._renderItem(it, active)).join('') +
-              '</div>'
-            ).join('') + '</div>'
-          ).join('');
-        } else {
-          navHTML = navItems.map(it => this._renderItem(it, active)).join('');
-        }
-
-        this.style.display = 'block';
-        this.innerHTML = '<aside class="wrs">' +
-          '<a href="#cover" class="wrs__head' + (active === 'cover' ? ' wrs__head--active' : '') + '" style="text-decoration:none;color:inherit;cursor:pointer;display:block" data-nav="cover">' +
-            '<div class="wrs__title">' + title + '</div>' +
-            (date ? '<div class="wrs__date">' + date + '</div>' : '') +
-          '</a>' + navHTML +
-        '</aside>';
-      }
-      _renderItem(it, active) {
-        const isActive = it.pages.some(p => p === active);
-        const dots = it.pages.length > 1
-          ? '<span class="wrs__pages">' + it.pages.map((p, i) =>
-              '<a class="wrs__page-dot' + (p === active ? ' wrs__page-dot--active' : '') + '" data-nav="' + p + '" title="' + (i+1) + '/' + it.pages.length + '"></a>'
-            ).join('') + '</span>'
-          : '';
-        return '<div class="wrs__row">' +
-          '<a class="wrs__link' + (isActive ? ' wrs__link--active' : '') + '" data-nav="' + it.pages[0] + '">' +
-            '<span class="wrs__dash">―</span><span class="wrs__lbl">' + it.label + '</span>' +
-          '</a>' + dots + '</div>';
-      }
-    }
-    customElements.define('pitch-sidebar', PitchSidebar);
-  }
-
-  // ── 3. Pitch-specific widgets ───────────────────────────────────────────────
+  // ── 2. Pitch-specific widgets ───────────────────────────────────────────────
   // NOTE: widget functions are registered in registerWidgets() which is called
   // at maging:ready time, when window.Maging is guaranteed to be the real object.
   function registerWidgets(M) {
@@ -581,7 +506,7 @@
 
   } // end registerWidgets
 
-  // ── 4. Deck infrastructure ─────────────────────────────────────────────────
+  // ── 3. Deck infrastructure (sidebar provided by maging-sidebar.js) ─────────────────────────────────────────────────
   function initDeck(MOUNT) {
     const slides = [...document.querySelectorAll('section.slide')];
     const mounted = {};
@@ -613,8 +538,8 @@
       slides.forEach(s => s.toggleAttribute('data-active', s === t));
       history.replaceState(null, '', '#' + id);
       if (!mounted[id]) { mounted[id] = true; MOUNT[id]?.(); }
-      document.querySelectorAll('pitch-sidebar .wrs__link').forEach(a => a.classList.toggle('wrs__link--active', a.dataset.nav === id));
-      const head = document.querySelector('pitch-sidebar .wrs__head');
+      document.querySelectorAll('maging-sidebar .wrs__link').forEach(a => a.classList.toggle('wrs__link--active', a.dataset.nav === id));
+      const head = document.querySelector('maging-sidebar .wrs__head');
       if (head) head.classList.toggle('wrs__head--active', id === 'cover');
       const idx = slides.indexOf(t);
       if (indEl) indEl.innerHTML = (idx + 1) + ' <span class="wrn-bar__sep">/</span> ' + slides.length;
@@ -622,11 +547,24 @@
     function ofs(d) { const i = slides.findIndex(s => s.hasAttribute('data-active')); go(slides[Math.max(0, Math.min(slides.length-1, i+d))].id); }
     function scale() {
       const W = 1240, H = W*(210/297);
-      if (document.body.classList.contains('presenter-mode')) { const s = Math.min(innerWidth/W, innerHeight/H); slides.forEach(el => { el.style.setProperty('--slide-scale', s.toFixed(4)); el.style.marginBottom = '0'; el.style.marginRight = '0'; }); return; }
-      const main = document.querySelector('main');
-      const cw = main ? main.clientWidth - 48 : innerWidth;
-      const s = cw > 0 && cw < W ? cw/W : 1;
-      slides.forEach(el => { el.style.setProperty('--slide-scale', s.toFixed(4)); el.style.marginBottom = '-'+(H*(1-s)).toFixed(0)+'px'; el.style.marginRight = '-'+(W*(1-s)).toFixed(0)+'px'; });
+      const flexEl = document.querySelector('body > .flex');
+      if (document.body.classList.contains('presenter-mode')) {
+        if (flexEl) { flexEl.style.transform = ''; flexEl.style.marginBottom = ''; }
+        const s = Math.min(innerWidth/W, innerHeight/H);
+        slides.forEach(el => { el.style.setProperty('--slide-scale', s.toFixed(4)); el.style.marginBottom = '0'; el.style.marginRight = '0'; });
+        return;
+      }
+      // Normal: scale entire flex container (sidebar + slide together)
+      slides.forEach(el => { el.style.setProperty('--slide-scale', '1'); el.style.marginBottom = '0'; el.style.marginRight = '0'; });
+      if (!flexEl) return;
+      const sidebar = document.querySelector('maging-sidebar .wrs');
+      const sidebarW = sidebar ? sidebar.offsetWidth : 220;
+      const totalW = sidebarW + W;
+      const available = innerWidth;
+      const s = available < totalW ? available / totalW : 1;
+      flexEl.style.transformOrigin = 'top center';
+      flexEl.style.transform = s < 1 ? 'scale(' + s.toFixed(4) + ')' : '';
+      flexEl.style.marginBottom = s < 1 ? '-' + (H * (1 - s)).toFixed(0) + 'px' : '';
     }
     addEventListener('resize', scale); scale();
     addEventListener('keydown', e => {
@@ -649,7 +587,7 @@
     go(h && slides.find(s => s.id === h) ? h : slides[0].id);
   }
 
-  // ── 5. Expose & auto-init ──────────────────────────────────────────────────
+  // ── 4. Expose & auto-init ──────────────────────────────────────────────────
   if (window.Maging) { registerWidgets(window.Maging); }
   window.addEventListener('maging:ready', () => {
     if (window.Maging) { registerWidgets(window.Maging); }

@@ -8,12 +8,13 @@
     <link rel="stylesheet" href="../dist/maging.css">
     <script defer src="../dist/maging-all.js" data-base="../dist/" data-no-tailwind></script>
     <script type="module" src="../components/site.js"></script>
+    <script defer src="../dist/maging-sidebar.js"></script>
     <script defer src="../dist/maging-weekly.js"></script>
   </head>
   <body class="mw-themed">
     <maging-nav active="demo"></maging-nav>
     <div class="flex">
-    <weekly-sidebar active="cover" data-spa data-title="SaaS 주간보고" data-date="2026.04.27 · 4월 4주차"></weekly-sidebar>
+    <maging-sidebar active="cover" data-title="SaaS 주간보고" data-date="2026.04.27 · 4월 4주차"></maging-sidebar>
     <main class="flex-1 px-6 py-4" style="word-break: keep-all; min-width: 0">
 
       <div class="max-w-[1240px] mx-auto" id="slides-wrap">
@@ -207,13 +208,6 @@
     </main>
     </div>
 
-    <!-- ── Deck floating nav (SPA — managed by JS) ───────────── -->
-    <a class="wrn wrn--prev" id="deck-prev" style="display:none" href="#" aria-label="이전 슬라이드">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-    </a>
-    <a class="wrn wrn--next" id="deck-next" style="display:none" href="#" aria-label="다음 슬라이드">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-    </a>
     <div class="wrn-bar">
       <span class="wrn-bar__indicator" id="deck-ind">1 <span class="wrn-bar__sep">/</span> 11</span>
       <span class="wrn-bar__divider"></span>

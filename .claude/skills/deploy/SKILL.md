@@ -32,6 +32,16 @@ index.html
 
 치환 후 grep으로 이전 버전이 남아있지 않은지 확인. 남은 게 있으면 모두 수정.
 
+### 2.5단계: LLM 프롬프트 빌드
+
+llms-*.md 파일은 빌드 결과물이다. 소스는 `llms/*.txt`.
+`llms/` 폴더가 수정되었거나, llms-*.md와 소스가 불일치할 수 있으므로 항상 빌드를 실행한다:
+
+```bash
+node scripts/build-llms.mjs
+git add llms*.md
+```
+
 ### 3단계: 커밋 & 푸시
 
 ```bash

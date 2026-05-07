@@ -1,7 +1,7 @@
 /**
  * maging-weekly.js — Weekly Report deck infrastructure
  *
- * Load after maging.js. Injects CSS, registers <weekly-sidebar>,
+ * Load after maging.js + maging-sidebar.js. Injects CSS
  * and exposes Maging.deck(MOUNT) API.
  *
  * Usage:
@@ -49,14 +49,10 @@
 
   .row-unit { color: var(--mw-text-muted); font-size: 0.85em; font-weight: 400; margin-left: 4px; }
   .cover-slide { padding: 0; }
-  .cover-slide > .mw-cover { width: 100%; aspect-ratio: 297 / 210; min-height: auto; }
+  .cover-slide > .mw-cover { width: 100%; height: 100%; aspect-ratio: auto; min-height: auto; border: none; border-radius: 0; box-shadow: none; }
 
   .rag-row { display: flex; flex-wrap: wrap; gap: var(--mw-space-2); margin-top: var(--mw-space-3); }
 
-  .wrn { position: fixed; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--mw-surface); border: 1px solid var(--mw-border); border-radius: 50%; color: var(--mw-text-muted); text-decoration: none; box-shadow: var(--mw-shadow); opacity: 0.4; transition: opacity 0.15s, color 0.15s; z-index: 50; }
-  .wrn:hover { opacity: 1; color: var(--mw-text); }
-  .wrn--prev { left: 256px; }
-  .wrn--next { right: 16px; }
   .wrn-bar { position: fixed; left: 50%; transform: translateX(-50%); bottom: 20px; width: max-content; display: inline-flex; align-items: center; gap: 4px; padding: 0.38rem 0.65rem; background: var(--mw-surface); border: 1px solid var(--mw-border); border-radius: 999px; box-shadow: 0 8px 24px -6px rgba(0,0,0,.28), 0 2px 6px -2px rgba(0,0,0,.12); font-size: 0.78rem; font-variant-numeric: tabular-nums; color: var(--mw-text); font-family: var(--mw-font); transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s; z-index: 50; }
   .wrn-bar:hover { transform: translateX(-50%) translateY(-1px); box-shadow: 0 12px 32px -6px rgba(0,0,0,.32), 0 4px 10px -2px rgba(0,0,0,.14); border-color: var(--mw-accent); }
   .wrn-bar__indicator { font-weight: 500; padding: 0 4px; letter-spacing: -0.01em; }
@@ -80,95 +76,12 @@
   body.presenter-mode .wrs { display: none !important; }
   body.presenter-mode main { padding: 0 !important; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; }
   body.presenter-mode .mw-slide { border: none; border-radius: 0; transform-origin: center center; }
-  body.presenter-mode .wrn--prev { left: 16px !important; }
 
-  .wrs { width: 240px; padding: 20px 14px 24px; border-right: 1px solid var(--mw-border); background: var(--mw-bg); font-family: var(--mw-font); position: sticky; top: 0; align-self: flex-start; max-height: 100vh; overflow-y: auto; flex-shrink: 0; }
-  .wrs__head { padding: 8px 10px 14px; margin-bottom: 8px; border-bottom: 1px solid var(--mw-border); border-radius: 6px 6px 0 0; transition: background 120ms; }
-  .wrs__head:hover { background: var(--mw-surface-2); }
-  .wrs__head--active { background: color-mix(in srgb, var(--mw-accent) 10%, transparent); border-bottom-color: var(--mw-accent); }
-  .wrs__head--active .wrs__title { color: var(--mw-accent); }
-  .wrs__title { font-size: 14px; font-weight: 700; color: var(--mw-text); letter-spacing: -0.01em; }
-  .wrs__date  { font-size: 11px; color: var(--mw-text-muted); margin-top: 3px; font-variant-numeric: tabular-nums; }
-  .wrs__group { margin-top: 16px; }
-  .wrs__bu    { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mw-text-muted); padding: 4px 8px 6px; font-weight: 600; }
-  .wrs__team  { margin-top: 4px; padding-bottom: 6px; }
-  .wrs__team-label { font-size: 11px; color: var(--mw-text-muted); padding: 4px 8px; font-weight: 500; }
-  .wrs__link  { display: flex; align-items: center; gap: 8px; padding: 5px 8px 5px 12px; font-size: 12.5px; color: var(--mw-text); border-radius: 4px; text-decoration: none; line-height: 1.4; }
-  .wrs__link:hover { background: var(--mw-surface-2); }
-  .wrs__link--active { background: color-mix(in srgb, var(--mw-accent) 8%, var(--mw-surface-2)); font-weight: 600; }
-  .wrs__link--active .wrs__dash { color: var(--mw-accent); opacity: 1; }
-  .wrs__link--active .wrs__lbl { color: var(--mw-accent); }
-  .wrs__row { display: flex; align-items: center; gap: 0.25rem; }
-  .wrs__dash { color: var(--mw-text-muted); opacity: 0.3; font-size: 0.6rem; flex-shrink: 0; width: 10px; text-align: center; }
-  .wrs__link--active .wrs__dash { color: var(--mw-accent); opacity: 1; }
-  .wrs__pages { display: flex; gap: 4px; margin-left: auto; flex-shrink: 0; padding-right: 0.25rem; }
-  .wrs__page-dot { width: 6px; height: 6px; border-radius: 50%; border: 1.5px solid var(--mw-text-muted); opacity: 0.35; cursor: pointer; transition: all 120ms; }
-  .wrs__page-dot:hover { opacity: 0.7; border-color: var(--mw-accent); }
-  .wrs__page-dot--active { background: var(--mw-accent); border-color: var(--mw-accent); opacity: 1; }
-  .wrs__lbl  { flex: 1; }
+  /* Sidebar styles provided by maging-sidebar.js */
 `;
   document.head.appendChild(_style);
 
-  // ── 2. <weekly-sidebar> custom element (DOM-driven) ─────────────────────────
-  class WeeklySidebar extends HTMLElement {
-    connectedCallback() {
-      const active = this.getAttribute('active') || '';
-      const title  = this.getAttribute('data-title') || 'SaaS 주간보고';
-      const date   = this.getAttribute('data-date')  || '';
-
-      const rawItems = [...document.querySelectorAll('.slide[data-label]')].map(el => ({
-        id: el.id, label: el.dataset.label, bu: el.dataset.bu || '', team: el.dataset.team || '', href: '#' + el.id,
-      }));
-      // Group same-label slides into one nav item with page dots
-      const navItems = [];
-      rawItems.forEach(item => {
-        const prev = navItems[navItems.length - 1];
-        if (prev && prev.label === item.label) {
-          prev.pages.push(item.id);
-        } else {
-          navItems.push({ ...item, pages: [item.id] });
-        }
-      });
-
-      const groups = [];
-      navItems.forEach(item => {
-        let g = groups.find(g => g.bu === item.bu);
-        if (!g) { g = { bu: item.bu, teams: [] }; groups.push(g); }
-        let t = g.teams.find(t => t.team === item.team);
-        if (!t) { t = { team: item.team, items: [] }; g.teams.push(t); }
-        t.items.push(item);
-      });
-
-      this.innerHTML = `
-        <aside class="wrs">
-          <a href="#cover" class="wrs__head" style="text-decoration:none;color:inherit;cursor:pointer;display:block;">
-            <div class="wrs__title">${title}</div>
-            ${date ? `<div class="wrs__date">${date}</div>` : ''}
-          </a>
-          ${groups.map(g => `
-            <div class="wrs__group">
-              <div class="wrs__bu">${g.bu}</div>
-              ${g.teams.map(t => `
-                <div class="wrs__team">
-                  ${t.team ? `<div class="wrs__team-label">${t.team}</div>` : ''}
-                  ${t.items.map(it => `
-                    <div class="wrs__row${it.pages.some(p => p === active) ? ' wrs__row--active' : ''}">
-                      <a href="#${it.pages[0]}" class="wrs__link${it.pages[0] === active ? ' wrs__link--active' : ''}">
-                        <span class="wrs__dash">―</span>
-                        <span class="wrs__lbl">${it.label}</span>
-                      </a>
-                      ${it.pages.length > 1 ? '<span class="wrs__pages">' + it.pages.map((p, pi) =>
-                        '<a href="#' + p + '" class="wrs__page-dot' + (p === active ? ' wrs__page-dot--active' : '') + '" title="' + (pi+1) + '/' + it.pages.length + '"></a>'
-                      ).join('') + '</span>' : ''}
-                    </div>`).join('')}
-                </div>`).join('')}
-            </div>`).join('')}
-        </aside>`;
-    }
-  }
-  customElements.define('weekly-sidebar', WeeklySidebar);
-
-  // ── 3. Maging.deck(MOUNT) ────────────────────────────────────────────────────
+  // ── 2. Maging.deck(MOUNT) — sidebar provided by maging-sidebar.js ────────────────────────────────────────────────────
   function initDeck(MOUNT) {
     const slides     = [...document.querySelectorAll('section.slide')];
     const SLIDE_IDS  = slides.map(s => s.id);
@@ -193,8 +106,6 @@
       const footer = '<div class="mw-slide__footer">' + pageNum + '</div>';
       s.innerHTML = header + '<div class="mw-slide__body">' + content + '</div>' + footer;
     });
-    const prevBtn    = document.getElementById('deck-prev');
-    const nextBtn    = document.getElementById('deck-next');
     const indEl      = document.getElementById('deck-ind');
     const slidesWrap = document.getElementById('slides-wrap');
     const codeView   = document.getElementById('code-view');
@@ -212,19 +123,15 @@
       history.replaceState(null, '', '#' + id);
       if (!mounted[id]) { mounted[id] = true; MOUNT[id]?.(); }
       if (codeViewOpen) openCodeView();
-      document.querySelectorAll('weekly-sidebar a.wrs__link').forEach(a => {
-        const href = a.getAttribute('href') || '';
-        if (href.startsWith('#')) a.classList.toggle('wrs__link--active', href === '#' + id);
+      document.querySelectorAll('maging-sidebar .wrs__link').forEach(a => {
+        a.classList.toggle('wrs__link--active', a.dataset.nav === id);
       });
-      document.querySelectorAll('weekly-sidebar .wrs__page-dot').forEach(d => {
-        const href = d.getAttribute('href') || '';
-        if (href.startsWith('#')) d.classList.toggle('wrs__page-dot--active', href === '#' + id);
+      document.querySelectorAll('maging-sidebar .wrs__page-dot').forEach(d => {
+        d.classList.toggle('wrs__page-dot--active', d.dataset.nav === id);
       });
-      const head = document.querySelector('weekly-sidebar .wrs__head');
+      const head = document.querySelector('maging-sidebar .wrs__head');
       if (head) head.classList.toggle('wrs__head--active', id === 'cover');
       const idx = SLIDE_IDS.indexOf(id);
-      if (prevBtn) { prevBtn.dataset.target = idx > 0 ? slides[idx - 1].id : ''; prevBtn.style.display = idx > 0 ? '' : 'none'; }
-      if (nextBtn) { nextBtn.dataset.target = idx < slides.length - 1 ? slides[idx + 1].id : ''; nextBtn.style.display = idx < slides.length - 1 ? '' : 'none'; }
       if (indEl)   { indEl.innerHTML = (idx + 1) + ' <span class="wrn-bar__sep">/</span> ' + slides.length; }
       // Refresh only the active slide's charts (not all — hidden ones get 0 size)
       setTimeout(() => {
@@ -245,20 +152,20 @@
     function scaleSlide() {
       const SLIDE_W = 1240;
       const SLIDE_H = SLIDE_W * (210 / 297);
+      const flexEl = document.querySelector('body > .flex');
 
       if (document.body.classList.contains('presenter-mode')) {
-        // Presenter: scale to fill viewport, centered
+        if (flexEl) { flexEl.style.transform = ''; flexEl.style.marginBottom = ''; }
         const vw = window.innerWidth, vh = window.innerHeight;
-        const scaleX = vw / SLIDE_W;
-        const scaleY = vh / SLIDE_H;
-        const scale = Math.min(scaleX, scaleY);
+        const scale = Math.min(vw / SLIDE_W, vh / SLIDE_H);
         slides.forEach(s => {
           s.style.width = '';
           s.style.height = '';
           s.style.aspectRatio = '';
           s.style.setProperty('--slide-scale', scale.toFixed(4));
+          s.style.marginBottom = '0';
+          s.style.marginRight = '0';
         });
-        // Center the slide in viewport
         const main = document.querySelector('main');
         if (main) {
           main.style.display = 'flex';
@@ -270,22 +177,28 @@
         return;
       }
 
-      // Normal mode: scale to fit container width
+      // Normal: scale entire flex container (sidebar + slide together)
       const main = document.querySelector('main');
       if (main) { main.style.display = ''; main.style.alignItems = ''; main.style.justifyContent = ''; main.style.width = ''; main.style.height = ''; }
-
-      // Use main content area width as reference
-      const mainEl = document.querySelector('main');
-      const containerW = mainEl ? mainEl.clientWidth - 48 : window.innerWidth; // 48 = px-6 * 2
-      const scale = containerW < SLIDE_W ? containerW / SLIDE_W : 1;
 
       slides.forEach(s => {
         s.style.width = '';
         s.style.height = '';
         s.style.aspectRatio = '';
-        s.style.setProperty('--slide-scale', scale.toFixed(4));
-        s.style.marginBottom = '-' + (SLIDE_H * (1 - scale)).toFixed(0) + 'px';
+        s.style.setProperty('--slide-scale', '1');
+        s.style.marginBottom = '0';
+        s.style.marginRight = '0';
       });
+
+      if (!flexEl) return;
+      const sidebar = document.querySelector('maging-sidebar .wrs');
+      const sidebarW = sidebar ? sidebar.offsetWidth : 220;
+      const totalW = sidebarW + SLIDE_W;
+      const available = window.innerWidth;
+      const s = available < totalW ? available / totalW : 1;
+      flexEl.style.transformOrigin = 'top center';
+      flexEl.style.transform = s < 1 ? 'scale(' + s.toFixed(4) + ')' : '';
+      flexEl.style.marginBottom = s < 1 ? '-' + (SLIDE_H * (1 - s)).toFixed(0) + 'px' : '';
     }
 
     function toggleFullscreen() {
@@ -346,11 +259,9 @@
     });
 
     document.addEventListener('click', (e) => {
-      const wrn = e.target.closest('#deck-prev, #deck-next');
-      if (wrn) { e.preventDefault(); const t = wrn.dataset.target; if (t) activateById(t); return; }
       if (e.target.closest('#deck-fs')) { toggleFullscreen(); return; }
-      const a = e.target.closest('weekly-sidebar a.wrs__link');
-      if (a) { const href = a.getAttribute('href') || ''; if (href.startsWith('#')) { e.preventDefault(); activateById(href.slice(1)); } }
+      const nav = e.target.closest('maging-sidebar [data-nav]');
+      if (nav) { e.preventDefault(); activateById(nav.dataset.nav); }
     });
 
     window.addEventListener('hashchange', () => {

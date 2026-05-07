@@ -16,9 +16,9 @@ const MODES = {
   core:      { label: 'Core',         demo: null },
   dashboard: { label: 'Dashboard',    demo: 'dashboard/acme.html' },
   landing:   { label: 'Landing Page', demo: 'landing/startup.html' },
-  weekly:    { label: 'Weekly Report', demo: 'weekly-report/index.html' },
+  weekly:    { label: 'Weekly Report', demo: 'slide/weekly-report.html' },
   cardnews:  { label: 'Card News',    demo: 'card-news/index.html' },
-  pitchdeck: { label: 'Pitch Deck',   demo: 'pitch-deck/index.html' },
+  pitchdeck: { label: 'Pitch Deck',   demo: 'slide/pitch-deck.html' },
 };
 
 /* ── resolve base path from <script src> ── */
@@ -133,9 +133,11 @@ class MagingNav extends HTMLElement {
                 <span class="mw-site-nav__menu-desc">발표 · 보고 · 제안</span>
               </span>
             </div>
-            <a href="${base}pitch-deck/index.html" class="mw-site-nav__menu-item">투자 유치 · 피칭</a>
-            <a href="${base}weekly-report/index.html" class="mw-site-nav__menu-item">주간/정기 보고</a>
-            <a href="${base}pitch-deck/strategy.html" class="mw-site-nav__menu-item">내부 제안/전략</a>
+            <a href="${base}slide/pitch-deck.html" class="mw-site-nav__menu-item">투자 유치 · 피칭</a>
+            <a href="${base}slide/proposal.html" class="mw-site-nav__menu-item">도입 제안</a>
+            <a href="${base}slide/strategy.html" class="mw-site-nav__menu-item">내부 전략</a>
+            <a href="${base}slide/weekly-report.html" class="mw-site-nav__menu-item">SaaS 주간보고</a>
+            <a href="${base}slide/ecommerce.html" class="mw-site-nav__menu-item">이커머스 주간보고</a>
           </div>
           <div class="mw-site-nav__mega-col">
             <div class="mw-site-nav__mega-head">
@@ -215,7 +217,7 @@ class MagingFooter extends HTMLElement {
     <div style="display:flex;gap:1.25rem;font-size:var(--mw-text-xs);" class="mw-muted">
       <a href="${base}components.html" style="color:inherit;">컴포넌트</a>
       <a href="${base}dashboard/acme.html" style="color:inherit;">대시보드 데모</a>
-      <a href="${base}weekly-report/index.html" style="color:inherit;">주간보고 데모</a>
+      <a href="${base}slide/weekly-report.html" style="color:inherit;">주간보고 데모</a>
       <a href="${base}landing/startup.html" style="color:inherit;">랜딩페이지 데모</a>
       <a href="${base}card-news/index.html" style="color:inherit;">카드뉴스 데모</a>
       <a href="${base}stack.html" style="color:inherit;">스택</a>

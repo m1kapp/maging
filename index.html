@@ -1486,17 +1486,17 @@
         <div class="example-card__desc">수익률·자산배분·섹터별 성과·거래 내역. bloomberg 테마.</div>
       </a>
       <!-- 슬라이드 -->
-      <a href="pitch-deck/index.html" class="example-card">
+      <a href="slide/pitch-deck.html" class="example-card">
         <div class="example-card__kicker">슬라이드 · 투자 유치</div>
         <div class="example-card__title">Series A 피치덱</div>
         <div class="example-card__desc">Problem→Solution→Market→Ask. 11슬라이드 투자 프레젠테이션.</div>
       </a>
-      <a href="weekly-report/index.html" class="example-card">
+      <a href="slide/weekly-report.html" class="example-card">
         <div class="example-card__kicker">슬라이드 · 주간/정기 보고</div>
         <div class="example-card__title">SaaS 주간보고 15슬라이드</div>
         <div class="example-card__desc">영업·CX·개발팀 KPI + 월별 테이블 + 인사이트 카드.</div>
       </a>
-      <a href="pitch-deck/strategy.html" class="example-card">
+      <a href="slide/strategy.html" class="example-card">
         <div class="example-card__kicker">슬라이드 · 내부 제안/전략</div>
         <div class="example-card__title">AI 활용 전략 보고서</div>
         <div class="example-card__desc">가치 체인→사례→대비 분석→로드맵. chainFlow·compareSlide 활용.</div>
@@ -1723,7 +1723,7 @@
       <p class="mw-muted mt-3">
         아래는 대표 7종의 라이브 예제입니다. 나머지 위젯 (Heatmap · Gauge · Radar · Treemap · Scatter · Sankey · HeroTile · RingProgress · CompareCard · MetricStack · Countdown · StatusGrid · Timeline · InboxPreview · CalendarHeatmap · EventCalendar · ProgressStepper · Waterfall · Cohort · SparklineList · GoalGrid · BulletChart · MapChart 등)은
         <a href="dashboard/acme.html" style="color: var(--mw-accent); text-decoration: underline;">대시보드 데모</a>와
-        <a href="weekly-report/index.html" style="color: var(--mw-accent); text-decoration: underline;">주간보고 데모</a>에서 실전 사용 예시를 볼 수 있습니다.
+        <a href="slide/weekly-report.html" style="color: var(--mw-accent); text-decoration: underline;">주간보고 데모</a>에서 실전 사용 예시를 볼 수 있습니다.
       </p>
     </div>
 
@@ -1980,7 +1980,7 @@ Maging.setTheme('bloomberg');
     <div class="mt-10 flex gap-3 flex-wrap justify-center">
       <a href="#use-with-ai" class="pill pill--primary" style="padding: 0.9rem 1.75rem; font-size: 1rem;">Try maging →</a>
       <a href="dashboard/acme.html" class="pill" style="padding: 0.9rem 1.75rem; font-size: 1rem;">대시보드 데모</a>
-      <a href="weekly-report/index.html" class="pill" style="padding: 0.9rem 1.75rem; font-size: 1rem;">주간보고 데모</a>
+      <a href="slide/weekly-report.html" class="pill" style="padding: 0.9rem 1.75rem; font-size: 1rem;">주간보고 데모</a>
       <a href="card-news/index.html" class="pill" style="padding: 0.9rem 1.75rem; font-size: 1rem;">카드뉴스 데모</a>
     </div>
   </div>
@@ -2605,7 +2605,7 @@ Maging.activityTable('#tbl', {
 
 \`\`\`html
 <div class="flex">
-  <weekly-sidebar active="cover" data-title="SaaS 주간보고" data-date="2026.04.27"></weekly-sidebar>
+  <maging-sidebar active="cover" data-title="SaaS 주간보고" data-date="2026.04.27"></maging-sidebar>
   <main class="flex-1 min-w-0 px-6 py-4" style="word-break:keep-all">
     <div id="slides-wrap" class="max-w-[1240px] mx-auto">
       <section class="slide cover-slide" id="cover" data-active></section>
@@ -2622,7 +2622,7 @@ window.addEventListener('maging:ready', () => {
   });
 });
 \`\`\`
-\`weekly-sidebar\`는 \`section.slide[data-label]\` 자동 수집 → nav 생성. 단일 페이지는 sidebar 불필요.
+\`maging-sidebar\`는 \`section.slide[data-label]\` 자동 수집 → nav 생성. 단일 페이지는 sidebar 불필요.
 
 ---
 

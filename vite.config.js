@@ -37,7 +37,7 @@ export default defineConfig({
         acme:       resolve(__dirname, 'dashboard/acme.html'),
         sales:      resolve(__dirname, 'dashboard/sales.html'),
         startup:    resolve(__dirname, 'landing/startup.html'),
-        weekly:     resolve(__dirname, 'weekly-report/index.html'),
+        weekly:     resolve(__dirname, 'slide/weekly-report.html'),
         cardnews:   resolve(__dirname, 'card-news/index.html'),
       },
     },
