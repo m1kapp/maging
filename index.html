@@ -1071,22 +1071,6 @@
 </section>
 
 
-<!-- ========= THEME SHOWCASE + LIVE PREVIEW ========= -->
-<section id="themes" style="border-top: 1px solid var(--mw-border);">
-  <div class="max-w-[1280px] mx-auto px-6 py-16">
-    <div style="text-align: center; max-width: 640px; margin: 0 auto 2.5rem;">
-      <div class="kicker">THEME SYSTEM</div>
-      <h2 class="text-3xl md:text-4xl font-bold mt-2">같은 데이터. 35가지 인격.</h2>
-      <p class="mw-muted mt-3">CSS 변수 하나로 전체 분위기가 바뀝니다. 데이터와 레이아웃은 그대로.</p>
-      <p class="mw-muted mt-2 text-xs" style="font-family: var(--mw-mono-font);">Light 22 · Dark 13</p>
-    </div>
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6" id="hero-kpis"></div>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-      <div id="showcase-line"></div>
-      <div id="showcase-donut"></div>
-    </div>
-  </div>
-</section>
 
 <!-- ========= INSTALL ========= -->
 <section style="border-top: 1px solid var(--mw-border);">
@@ -1168,49 +1152,6 @@ document.querySelectorAll('.code').forEach(function (block) {
 // Wait for maging (defer-loaded)
 // ============================================================
 window.addEventListener('maging:ready', function () {
-  // Hero KPI row
-  var kpiHost = document.getElementById('hero-kpis');
-  [
-    { label: '이번 달 매출', value: '₩128억', delta: 8.3,
-      sparkline: [420,445,430,468,475,490,510,505,530,548,562,580] },
-    { label: '활성 사용자',  value: '42,180', delta: 5.1,
-      sparkline: [38200,38900,39100,39700,40200,40400,40800,41100,41400,41600,41900,42180] },
-    { label: '신규 계약',    value: '127건',  delta: -2.3,
-      sparkline: [22,28,19,31,25,29,34,21,26,30,24,27] },
-    { label: '평균 응답',    value: '1.4초',  delta: -12.0, deltaGoodWhen: 'negative',
-      sparkline: [1.8,1.75,1.9,1.7,1.65,1.55,1.5,1.48,1.45,1.42,1.4,1.4] }
-  ].forEach(function (cfg) {
-    var el = document.createElement('div');
-    kpiHost.appendChild(el);
-    Maging.kpiCard(el, cfg);
-  });
-
-  // Theme showcase (2 big widgets)
-  Maging.lineChart('#showcase-line', {
-    title: '주간 매출 추이',
-    subtitle: '최근 12주 · Enterprise / SMB',
-    categories: ['W01','W02','W03','W04','W05','W06','W07','W08','W09','W10','W11','W12'],
-    series: [
-      { name: 'Enterprise', data: [420,445,430,468,475,490,510,505,530,548,562,580] },
-      { name: 'SMB',        data: [160,170,165,175,180,188,195,200,210,220,228,240] }
-    ],
-    stack: true,
-    yFormatter: function (v) { return v + 'M'; },
-    height: 300
-  });
-  Maging.donutChart('#showcase-donut', {
-    title: '제품 카테고리',
-    subtitle: '이번 달 판매 비중',
-    slices: [
-      { label: 'Enterprise',   value: 548 },
-      { label: 'Professional', value: 312 },
-      { label: 'Team',         value: 178 },
-      { label: 'Starter',      value: 84 }
-    ],
-    centerLabel: '전체 판매',
-    centerValue: '1,122건',
-    height: 300
-  });
 
 });
 </script>

@@ -118,4 +118,50 @@
     }
     customElements.define('maging-sidebar', MagingSidebar);
   }
+
+  // ── Shared bottom nav bar (used by maging-pitch.js and maging-weekly.js) ──
+  window._magingNavBar = function(slideCount) {
+    if (document.getElementById('deck-nav-bar')) return;
+    // Skip if HTML already has a wrn-bar (e.g. weekly templates)
+    if (document.querySelector('.wrn-bar')) return;
+    var bar = document.createElement('div');
+    bar.className = 'wrn-bar';
+    bar.id = 'deck-nav-bar';
+    var hasCodeView = !!document.getElementById('code-view');
+    bar.innerHTML = '<span class="wrn-bar__indicator" id="deck-ind">1 <span class="wrn-bar__sep">/</span> ' + slideCount + '</span>' +
+      '<span class="wrn-bar__divider"></span>' +
+      (hasCodeView ? '<button class="wrn-bar__btn" id="deck-code" type="button" title="코드보기 (C)" aria-label="코드보기"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3L1 8l4 5M11 3l4 5-4 5"/></svg></button>' : '') +
+      '<button class="wrn-bar__btn" id="deck-fs" type="button" title="전체화면 (F)" aria-label="전체화면"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg></button>';
+    document.body.appendChild(bar);
+  };
+
+  // ── Shared slide scaling (used by maging-pitch.js and maging-weekly.js) ──
+  window._magingScaleSlides = function(slides) {
+    const SLIDE_W = 1240, SLIDE_H = SLIDE_W * (210 / 297);
+    const flexEl = document.querySelector('body > .flex');
+    if (document.body.classList.contains('presenter-mode')) {
+      if (flexEl) { flexEl.style.transform = ''; flexEl.style.marginBottom = ''; flexEl.style.marginTop = ''; }
+      const s = Math.min(innerWidth / SLIDE_W, innerHeight / SLIDE_H);
+      slides.forEach(function(el) { el.style.setProperty('--slide-scale', s.toFixed(4)); el.style.marginBottom = '0'; el.style.marginRight = '0'; });
+      return;
+    }
+    slides.forEach(function(el) { el.style.setProperty('--slide-scale', '1'); el.style.marginBottom = '0'; el.style.marginRight = '0'; });
+    if (!flexEl) return;
+    var sidebar = document.querySelector('maging-sidebar .wrs');
+    var sidebarW = sidebar ? sidebar.offsetWidth : 220;
+    var totalW = sidebarW + SLIDE_W;
+    var available = innerWidth;
+    var s = available < totalW ? available / totalW : 1;
+    flexEl.style.transformOrigin = 'top left';
+    flexEl.style.transform = s < 1 ? 'scale(' + s.toFixed(4) + ')' : '';
+    // Vertically center: compensate phantom space from transform
+    var actualH = flexEl.scrollHeight;
+    var phantomH = actualH * (1 - s);
+    var navH = (document.querySelector('maging-nav') || document.querySelector('.mw-site-nav') || {}).offsetHeight || 45;
+    var visualH = actualH * s;
+    var freeSpace = Math.max(0, innerHeight - navH - visualH);
+    var pad = freeSpace / 2;
+    flexEl.style.marginTop = s < 1 ? pad + 'px' : 'auto';
+    flexEl.style.marginBottom = s < 1 ? (-phantomH + pad) + 'px' : 'auto';
+  };
 })();

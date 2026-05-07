@@ -149,57 +149,7 @@
       activateById(slides[Math.max(0, Math.min(slides.length - 1, cur + offset))].id);
     }
 
-    function scaleSlide() {
-      const SLIDE_W = 1240;
-      const SLIDE_H = SLIDE_W * (210 / 297);
-      const flexEl = document.querySelector('body > .flex');
-
-      if (document.body.classList.contains('presenter-mode')) {
-        if (flexEl) { flexEl.style.transform = ''; flexEl.style.marginBottom = ''; }
-        const vw = window.innerWidth, vh = window.innerHeight;
-        const scale = Math.min(vw / SLIDE_W, vh / SLIDE_H);
-        slides.forEach(s => {
-          s.style.width = '';
-          s.style.height = '';
-          s.style.aspectRatio = '';
-          s.style.setProperty('--slide-scale', scale.toFixed(4));
-          s.style.marginBottom = '0';
-          s.style.marginRight = '0';
-        });
-        const main = document.querySelector('main');
-        if (main) {
-          main.style.display = 'flex';
-          main.style.alignItems = 'center';
-          main.style.justifyContent = 'center';
-          main.style.width = '100vw';
-          main.style.height = '100vh';
-        }
-        return;
-      }
-
-      // Normal: scale entire flex container (sidebar + slide together)
-      const main = document.querySelector('main');
-      if (main) { main.style.display = ''; main.style.alignItems = ''; main.style.justifyContent = ''; main.style.width = ''; main.style.height = ''; }
-
-      slides.forEach(s => {
-        s.style.width = '';
-        s.style.height = '';
-        s.style.aspectRatio = '';
-        s.style.setProperty('--slide-scale', '1');
-        s.style.marginBottom = '0';
-        s.style.marginRight = '0';
-      });
-
-      if (!flexEl) return;
-      const sidebar = document.querySelector('maging-sidebar .wrs');
-      const sidebarW = sidebar ? sidebar.offsetWidth : 220;
-      const totalW = sidebarW + SLIDE_W;
-      const available = window.innerWidth;
-      const s = available < totalW ? available / totalW : 1;
-      flexEl.style.transformOrigin = 'top center';
-      flexEl.style.transform = s < 1 ? 'scale(' + s.toFixed(4) + ')' : '';
-      flexEl.style.marginBottom = s < 1 ? '-' + (SLIDE_H * (1 - s)).toFixed(0) + 'px' : '';
-    }
+    function scaleSlide() { if (window._magingScaleSlides) window._magingScaleSlides(slides); }
 
     function toggleFullscreen() {
       const isOn = document.body.classList.toggle('presenter-mode');

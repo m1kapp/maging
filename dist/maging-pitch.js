@@ -227,6 +227,128 @@
   .pitch-compare__col--right .pitch-compare__row-val { color: #fff; }
   .pitch-compare__note { margin-top: 20px; font-size: 0.85rem; font-weight: 600; color: var(--mw-text); }
 
+  /* === Deep Dive Slide — v2-faithful + slides-grab minimal === */
+  .pitch-deepdive { display:flex;flex-direction:column;height:100%;padding:2% 4%;box-sizing:border-box }
+  .pitch-deepdive__role { display:flex;align-items:center;gap:3%;padding:2.5% 4%;border-radius:var(--mw-radius) var(--mw-radius) 0 0;background:var(--mw-surface);border:1px solid var(--mw-border);border-bottom:none }
+  .pitch-deepdive__role-group {}
+  .pitch-deepdive__role-label { font-size:clamp(8px,.7vw,10px);font-family:var(--mw-mono-font);letter-spacing:2px;text-transform:uppercase;font-weight:500;margin-bottom:2px }
+  .pitch-deepdive__role-from .pitch-deepdive__role-label { color:var(--mw-accent) }
+  .pitch-deepdive__role-to .pitch-deepdive__role-label { color:var(--mw-text-muted) }
+  .pitch-deepdive__role-name { font-size:clamp(13px,1.3vw,18px);font-weight:700;color:var(--mw-text) }
+  .pitch-deepdive__role-arrow { font-size:clamp(18px,1.8vw,24px);color:var(--mw-accent);opacity:.4 }
+  .pitch-deepdive__role-msg { margin-left:auto;font-size:clamp(10px,.95vw,13px);color:var(--mw-text-muted);font-style:italic }
+  .pitch-deepdive__grid { display:grid;grid-template-columns:repeat(var(--dd-cols,3),1fr);gap:0;border-radius:0 0 var(--mw-radius) var(--mw-radius);overflow:hidden;border:1px solid var(--mw-border);border-top:none;flex:1 }
+  .pitch-deepdive__col { padding:3% 3%;border-right:1px solid var(--mw-border);display:flex;flex-direction:column }
+  .pitch-deepdive__col:last-child { border-right:none }
+  .pitch-deepdive__col-title { font-size:clamp(11px,1.1vw,14px);font-weight:700;color:var(--mw-accent);margin-bottom:10px;display:flex;align-items:center;gap:8px }
+  .pitch-deepdive__col-title::before { content:'';width:6px;height:6px;border-radius:50%;background:var(--mw-accent);flex-shrink:0 }
+  .pitch-deepdive__items { list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0;flex:1 }
+  .pitch-deepdive__item { padding:10px 0;border-bottom:1px solid var(--mw-border);flex:1;display:flex;flex-direction:column;justify-content:center }
+  .pitch-deepdive__item:last-child { border-bottom:none }
+  .pitch-deepdive__item-title { font-size:clamp(10px,1vw,13px);font-weight:600;color:var(--mw-text);display:block;margin-bottom:2px }
+  .pitch-deepdive__item-desc { font-size:clamp(9px,.9vw,12px);color:var(--mw-text-muted);line-height:1.4 }
+
+  /* === Quote Slide === */
+  .pitch-quote { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 80px 100px; box-sizing: border-box; text-align: center; }
+  .pitch-quote__mark { font-size: 4rem; line-height: 1; color: var(--mw-accent); opacity: 0.2; font-family: Georgia, serif; }
+  .pitch-quote__text { font-size: 1.6rem; font-weight: 500; color: var(--mw-text); line-height: 1.5; margin-top: 8px; max-width: 720px; font-style: italic; letter-spacing: -0.01em; }
+  .pitch-quote__attribution { margin-top: 28px; font-size: 0.85rem; color: var(--mw-accent); font-weight: 600; }
+  .pitch-quote__source { font-size: 0.78rem; color: var(--mw-text-muted); margin-top: 4px; }
+  .pitch-quote--left { align-items: flex-start; text-align: left; padding: 60px 64px; }
+  .pitch-quote--left .pitch-quote__text { font-size: 1.35rem; }
+  .pitch-quote--boxed { padding: 48px 64px; align-items: stretch; }
+  .pitch-quote--boxed .pitch-quote__inner { padding: 36px 40px; border-left: 3px solid var(--mw-accent); background: color-mix(in srgb, var(--mw-accent) 4%, var(--mw-surface)); border-radius: 0 var(--mw-radius) var(--mw-radius) 0; text-align: left; }
+  .pitch-quote--boxed .pitch-quote__text { font-size: 1.2rem; }
+
+  /* === Callout (reusable bottom bar for any slide) === */
+  .pitch-callout { margin-top: 20px; padding: 16px 24px; border-radius: var(--mw-radius); font-size: 0.9rem; font-weight: 600; color: var(--mw-text); line-height: 1.5; }
+  .pitch-callout--accent { background: var(--mw-accent); color: #fff; }
+  .pitch-callout--surface { background: var(--mw-surface); border: 1px solid var(--mw-border); }
+  .pitch-callout--highlight { background: color-mix(in srgb, var(--mw-accent) 6%, var(--mw-surface)); border-left: 3px solid var(--mw-accent); border-radius: 0 var(--mw-radius) var(--mw-radius) 0; }
+
+  /* === Reference Table === */
+  .pitch-reftable { display: flex; flex-direction: column; height: 100%; padding: 48px 64px; box-sizing: border-box; }
+  .pitch-reftable__headline { font-size: 2rem; font-weight: 700; color: var(--mw-text); margin-bottom: 28px; letter-spacing: -0.02em; }
+  .pitch-reftable__table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: var(--mw-radius); overflow: hidden; border: 1px solid var(--mw-border); margin: auto 0; }
+  .pitch-reftable__table th { background: var(--mw-surface); text-align: left; padding: 10px 14px; font-size: 0.75rem; font-weight: 600; color: var(--mw-accent); border-bottom: 2px solid var(--mw-accent); }
+  .pitch-reftable__table td { padding: 10px 14px; vertical-align: top; border-bottom: 1px solid var(--mw-border); font-size: 0.82rem; color: var(--mw-text-muted); }
+  .pitch-reftable__table tr:last-child td { border-bottom: none; }
+  .pitch-reftable__table td strong { color: var(--mw-text); }
+  .pitch-reftable__table tr.pitch-reftable--highlight { background: color-mix(in srgb, var(--mw-accent) 6%, transparent); }
+  .pitch-reftable__table tr.pitch-reftable--highlight td { color: var(--mw-accent); font-weight: 600; }
+  .pitch-reftable__footnote { margin-top: 12px; font-size: 0.7rem; color: var(--mw-text-muted); }
+
+  /* === Flywheel Slide (node-and-edge infographic) === */
+  .pitch-flywheel { display:flex;flex-direction:column;height:100%;padding:3% 4.5%;box-sizing:border-box }
+  .pitch-flywheel__headline { font-size:clamp(18px,2.5vw,32px);font-weight:700;color:var(--mw-text);margin-bottom:1%;letter-spacing:-.02em;text-align:center }
+  .pitch-flywheel__sub { font-size:clamp(11px,1.1vw,15px);color:var(--mw-text-muted);margin-bottom:2%;max-width:600px;line-height:1.5;text-align:center;margin-left:auto;margin-right:auto }
+  .pitch-flywheel__canvas { flex:1;display:flex;align-items:center;justify-content:center;min-height:0 }
+  .pitch-flywheel__svg { width:100%;height:100%;max-width:640px;max-height:480px }
+  .pitch-flywheel__summary { margin-top:2%;padding:2% 3%;border-radius:var(--mw-radius);background:var(--mw-accent);color:#fff;display:flex;align-items:center;gap:3% }
+  .pitch-flywheel__summary-icon { font-size:clamp(14px,1.4vw,22px);opacity:.4 }
+  .pitch-flywheel__summary-title { font-size:clamp(11px,1vw,14px);font-weight:700 }
+  .pitch-flywheel__summary-desc { font-size:clamp(9px,.85vw,12px);opacity:.7;margin-top:1px }
+
+  /* === Story Slide (3-col Before → Action → Result) === */
+  .pitch-story { display: flex; flex-direction: column; height: 100%; padding: 48px 64px; box-sizing: border-box; }
+  .pitch-story__headline { font-size: 2rem; font-weight: 700; color: var(--mw-text); margin-bottom: 28px; letter-spacing: -0.02em; max-width: 85%; }
+  .pitch-story__card { border-radius: var(--mw-radius); overflow: hidden; border: 1px solid var(--mw-border); margin: auto 0; }
+  .pitch-story__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+  .pitch-story__cell { padding: 24px; border-right: 1px solid var(--mw-border); }
+  .pitch-story__cell:last-child { border-right: none; }
+  .pitch-story__tag { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; margin-bottom: 10px; }
+  .pitch-story__cell:nth-child(1) .pitch-story__tag { color: var(--mw-text-muted); }
+  .pitch-story__cell:nth-child(2) .pitch-story__tag { color: var(--mw-warning, #f59e0b); }
+  .pitch-story__cell:nth-child(3) .pitch-story__tag { color: var(--mw-success, #22c55e); }
+  .pitch-story__cell-title { font-size: 1rem; font-weight: 700; color: var(--mw-text); margin-bottom: 8px; }
+  .pitch-story__cell-desc { font-size: 0.82rem; color: var(--mw-text-muted); line-height: 1.5; }
+  .pitch-story__footer { padding: 16px 24px; background: var(--mw-surface); border-top: 1px solid var(--mw-border); font-size: 0.82rem; color: var(--mw-text-muted); }
+  .pitch-story__flow { display: flex; align-items: center; gap: 0; margin-top: 16px; }
+  .pitch-story__flow-step { flex: 1; padding: 10px 14px; border-radius: calc(var(--mw-radius) * 0.7); text-align: center; font-size: 0.82rem; font-weight: 600; background: var(--mw-surface); border: 1px solid var(--mw-border); color: var(--mw-text); }
+  .pitch-story__flow-step:first-child { background: var(--mw-accent); color: #fff; border-color: var(--mw-accent); }
+  .pitch-story__flow-arrow { padding: 0 8px; font-size: 1rem; color: var(--mw-accent); opacity: 0.4; }
+
+  /* === SWOT Slide (2x2 matrix) === */
+  .pitch-swot { display: flex; flex-direction: column; height: 100%; padding: 48px 64px; box-sizing: border-box; }
+  .pitch-swot__headline { font-size: 2rem; font-weight: 700; color: var(--mw-text); margin-bottom: 28px; letter-spacing: -0.02em; }
+  .pitch-swot__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-radius: var(--mw-radius); overflow: hidden; border: 1px solid var(--mw-border); margin: auto 0; flex: 1; }
+  .pitch-swot__quad { padding: 24px; display: flex; flex-direction: column; border-right: 1px solid var(--mw-border); border-bottom: 1px solid var(--mw-border); }
+  .pitch-swot__quad:nth-child(2) { border-right: none; }
+  .pitch-swot__quad:nth-child(3) { border-bottom: none; }
+  .pitch-swot__quad:nth-child(4) { border-right: none; border-bottom: none; }
+  .pitch-swot__quad-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; margin-bottom: 12px; }
+  .pitch-swot__quad:nth-child(1) .pitch-swot__quad-label { color: var(--mw-accent); }
+  .pitch-swot__quad:nth-child(2) .pitch-swot__quad-label { color: var(--mw-warning, #f59e0b); }
+  .pitch-swot__quad:nth-child(3) .pitch-swot__quad-label { color: var(--mw-success, #22c55e); }
+  .pitch-swot__quad:nth-child(4) .pitch-swot__quad-label { color: var(--mw-danger, #ef4444); }
+  .pitch-swot__quad:nth-child(1) { background: color-mix(in srgb, var(--mw-accent) 4%, var(--mw-surface)); }
+  .pitch-swot__quad:nth-child(2) { background: color-mix(in srgb, var(--mw-warning, #f59e0b) 4%, var(--mw-surface)); }
+  .pitch-swot__quad:nth-child(3) { background: color-mix(in srgb, var(--mw-success, #22c55e) 4%, var(--mw-surface)); }
+  .pitch-swot__quad:nth-child(4) { background: color-mix(in srgb, var(--mw-danger, #ef4444) 4%, var(--mw-surface)); }
+  .pitch-swot__item { font-size: 0.82rem; color: var(--mw-text); padding: 6px 0; line-height: 1.4; }
+
+  /* === Roadmap Slide (parallel-track Gantt) === */
+  .pitch-roadmap { display: flex; flex-direction: column; height: 100%; padding: 48px 64px; box-sizing: border-box; }
+  .pitch-roadmap__headline { font-size: 2rem; font-weight: 700; color: var(--mw-text); margin-bottom: 28px; letter-spacing: -0.02em; }
+  .pitch-roadmap__periods { display: grid; gap: 0; margin-left: 100px; margin-bottom: 0; }
+  .pitch-roadmap__period { text-align: center; font-size: 0.72rem; font-weight: 600; color: var(--mw-text-muted); text-transform: uppercase; letter-spacing: 0.06em; padding: 8px 0; border-bottom: 2px solid var(--mw-border); }
+  .pitch-roadmap__track { display: flex; align-items: center; border-bottom: 1px solid var(--mw-border); min-height: 48px; }
+  .pitch-roadmap__track-label { width: 100px; flex-shrink: 0; font-size: 0.8rem; font-weight: 600; color: var(--mw-text); padding-right: 16px; }
+  .pitch-roadmap__track-bars { display: grid; gap: 0; flex: 1; position: relative; min-height: 48px; align-items: center; }
+  .pitch-roadmap__bar { border-radius: 4px; padding: 6px 12px; font-size: 0.72rem; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pitch-roadmap__bar--accent { background: var(--mw-accent); }
+  .pitch-roadmap__bar--muted { background: var(--mw-text-muted); opacity: 0.3; }
+  .pitch-roadmap__bar--surface { background: var(--mw-surface-2); color: var(--mw-text); border: 1px solid var(--mw-border); }
+
+  /* === Feature Slide (icon + title + desc grid) === */
+  .pitch-features { display: flex; flex-direction: column; height: 100%; padding: 48px 64px; box-sizing: border-box; }
+  .pitch-features__headline { font-size: 2rem; font-weight: 700; color: var(--mw-text); margin-bottom: 36px; letter-spacing: -0.02em; max-width: 85%; }
+  .pitch-features__grid { display: grid; gap: 20px; margin: auto 0; }
+  .pitch-features__item { padding: 24px; background: var(--mw-surface); border: 1px solid var(--mw-border); border-radius: var(--mw-radius); }
+  .pitch-features__icon { font-size: 1.6rem; margin-bottom: 12px; }
+  .pitch-features__title { font-size: 1rem; font-weight: 700; color: var(--mw-text); margin-bottom: 6px; }
+  .pitch-features__desc { font-size: 0.82rem; color: var(--mw-text-muted); line-height: 1.5; }
+
   /* (Sidebar provided by maging-sidebar.js) */
 `;
   document.head.appendChild(_style);
@@ -459,7 +581,8 @@
   M.chainFlow = function (sel, cfg) {
     const el = typeof sel === 'string' ? document.querySelector(sel) : sel;
     if (!el) return;
-    const { headline = '', steps = [], footer = '' } = cfg;
+    const { headline = '', steps = [], footer = '', callout = '' } = cfg;
+    const calloutHTML = callout ? '<div class="pitch-callout pitch-callout--surface">' + callout + '</div>' : '';
     el.innerHTML = `
       <div class="pitch-chain">
         ${headline ? '<div class="pitch-chain__headline">' + headline + '</div>' : ''}
@@ -474,19 +597,21 @@
           }).join('')}
         </div>
         ${footer ? '<div class="pitch-chain__footer">' + footer + '</div>' : ''}
+        ${calloutHTML}
       </div>`;
   };
 
   M.compareSlide = function (sel, cfg) {
     const el = typeof sel === 'string' ? document.querySelector(sel) : sel;
     if (!el) return;
-    const { headline = '', left = {}, right = {}, note = '' } = cfg;
-    function renderRows(rows, side) {
+    const { headline = '', left = {}, right = {}, note = '', callout = '' } = cfg;
+    function renderRows(rows) {
       return rows.map(r => `<div class="pitch-compare__row">
         <span class="pitch-compare__row-key">${r.key}</span>
         <span class="pitch-compare__row-val">${r.value}</span>
       </div>`).join('');
     }
+    const calloutHTML = callout ? '<div class="pitch-callout pitch-callout--surface">' + callout + '</div>' : '';
     el.innerHTML = `
       <div class="pitch-compare">
         ${headline ? '<div class="pitch-compare__headline">' + headline + '</div>' : ''}
@@ -501,6 +626,254 @@
           </div>
         </div>
         ${note ? '<div class="pitch-compare__note">' + note + '</div>' : ''}
+        ${calloutHTML}
+      </div>`;
+  };
+
+  // ── Deep Dive Slide ──────────────────────────────────────────────────────
+  M.deepDiveSlide = function (sel, cfg) {
+    const el = typeof sel === 'string' ? document.querySelector(sel) : sel;
+    if (!el) return;
+    const { role, columns = [], callout = '' } = cfg;
+    const roleHTML = role ? `
+      <div class="pitch-deepdive__role">
+        <div class="pitch-deepdive__role-group pitch-deepdive__role-from">
+          <div class="pitch-deepdive__role-label">${role.from?.label || 'From'}</div>
+          <div class="pitch-deepdive__role-name">${role.from?.name || ''}</div>
+        </div>
+        <div class="pitch-deepdive__role-arrow">→</div>
+        <div class="pitch-deepdive__role-group pitch-deepdive__role-to">
+          <div class="pitch-deepdive__role-label">${role.to?.label || 'To'}</div>
+          <div class="pitch-deepdive__role-name">${role.to?.name || ''}</div>
+        </div>
+        ${role.message ? '<div class="pitch-deepdive__role-msg">' + role.message + '</div>' : ''}
+      </div>` : '';
+    const gridHTML = columns.map(c => `
+      <div class="pitch-deepdive__col">
+        <div class="pitch-deepdive__col-title">${c.title}</div>
+        <div class="pitch-deepdive__items">
+          ${(c.items || []).map(it => `
+            <div class="pitch-deepdive__item">
+              <div class="pitch-deepdive__item-title">${it.title}</div>
+              ${it.desc ? '<div class="pitch-deepdive__item-desc">' + it.desc + '</div>' : ''}
+            </div>`).join('')}
+        </div>
+      </div>`).join('');
+    const calloutHTML = callout ? '<div class="pitch-callout pitch-callout--surface">' + callout + '</div>' : '';
+    const colCount = columns.length || 3;
+    el.innerHTML = `
+      <div class="pitch-deepdive">
+        ${roleHTML}
+        <div class="pitch-deepdive__grid" style="--dd-cols:${colCount}">${gridHTML}</div>
+        ${calloutHTML}
+      </div>`;
+  };
+
+  // ── Quote Slide ─────────────────────────────────────────────────────────
+  M.quoteSlide = function (sel, cfg) {
+    const el = typeof sel === 'string' ? document.querySelector(sel) : sel;
+    if (!el) return;
+    const { quote = '', attribution = '', source = '', style = 'center' } = cfg;
+    if (style === 'boxed') {
+      el.innerHTML = `
+        <div class="pitch-quote pitch-quote--boxed">
+          <div class="pitch-quote__inner">
+            <div class="pitch-quote__text">${quote}</div>
+            ${attribution ? '<div class="pitch-quote__attribution">— ' + attribution + '</div>' : ''}
+            ${source ? '<div class="pitch-quote__source">' + source + '</div>' : ''}
+          </div>
+        </div>`;
+    } else {
+      el.innerHTML = `
+        <div class="pitch-quote${style === 'left' ? ' pitch-quote--left' : ''}">
+          <div class="pitch-quote__mark">"</div>
+          <div class="pitch-quote__text">${quote}</div>
+          ${attribution ? '<div class="pitch-quote__attribution">— ' + attribution + '</div>' : ''}
+          ${source ? '<div class="pitch-quote__source">' + source + '</div>' : ''}
+        </div>`;
+    }
+  };
+
+  // ── Reference Table ─────────────────────────────────────────────────────
+  M.referenceTable = function (sel, cfg) {
+    const el = typeof sel === 'string' ? document.querySelector(sel) : sel;
+    if (!el) return;
+    const { headline = '', columns = [], rows = [], footnote = '', callout = '' } = cfg;
+    const thead = columns.length ? '<thead><tr>' + columns.map(c => '<th>' + c + '</th>').join('') + '</tr></thead>' : '';
+    const tbody = rows.map(r => {
+      const cls = r.highlight ? ' class="pitch-reftable--highlight"' : '';
+      return '<tr' + cls + '>' + (r.values || []).map(v => '<td>' + v + '</td>').join('') + '</tr>';
+    }).join('');
+    const calloutHTML = callout ? '<div class="pitch-callout pitch-callout--surface">' + callout + '</div>' : '';
+    el.innerHTML = `
+      <div class="pitch-reftable">
+        ${headline ? '<div class="pitch-reftable__headline">' + headline + '</div>' : ''}
+        <table class="pitch-reftable__table">${thead}<tbody>${tbody}</tbody></table>
+        ${footnote ? '<div class="pitch-reftable__footnote">' + footnote + '</div>' : ''}
+        ${calloutHTML}
+      </div>`;
+  };
+
+  // ── Flywheel Slide (node-and-edge infographic style) ────────────────────
+  M.flywheelSlide = function (sel, cfg) {
+    const el = typeof sel === 'string' ? document.querySelector(sel) : sel;
+    if (!el) return;
+    const { headline = '', sub = '', steps = [], summary, hub = '', callout = '' } = cfg;
+    const n = steps.length || 4;
+    const W = 640, H = 440, cx = W/2, cy = H/2 + 10;
+    const R = 130; // circle radius for nodes
+    const nodeSize = 36; // icon box size
+    const toRad = d => (d-90)*Math.PI/180;
+    const px = (r,a) => cx+r*Math.cos(toRad(a));
+    const py = (r,a) => cy+r*Math.sin(toRad(a));
+    const f = v => v.toFixed(1);
+    const iconColors = ['var(--mw-accent)','#22c55e','#f59e0b','#3b82f6','#ec4899','#8b5cf6'];
+    const defaultIcons = ['⚡','🔄','📤','💪','🚀','📊'];
+    let svg = '<svg class="pitch-flywheel__svg" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" style="font-family:var(--mw-font,sans-serif)">';
+    // Circular arrow path — thin gray line with arrowheads between nodes
+    var arrowR = R;
+    for (let i = 0; i < n; i++) {
+      var a1 = i*(360/n) + 18; // start after node
+      var a2 = (i+1)*(360/n) - 18; // end before next node
+      var large = (a2-a1)>180?1:0;
+      // Arc
+      svg += '<path d="M'+f(px(arrowR,a1))+','+f(py(arrowR,a1))+' A'+arrowR+','+arrowR+' 0 '+large+' 1 '+f(px(arrowR,a2))+','+f(py(arrowR,a2))+'" fill="none" stroke="var(--mw-border)" stroke-width="1.5"/>';
+      // Arrowhead at end
+      var tipA = a2+3, baseA = a2-4;
+      var tipX = px(arrowR,tipA), tipY = py(arrowR,tipA);
+      var b1x = px(arrowR+6,baseA), b1y = py(arrowR+6,baseA);
+      var b2x = px(arrowR-6,baseA), b2y = py(arrowR-6,baseA);
+      svg += '<path d="M'+f(tipX)+','+f(tipY)+' L'+f(b1x)+','+f(b1y)+' L'+f(b2x)+','+f(b2y)+'Z" fill="var(--mw-text-muted)" opacity="0.4"/>';
+    }
+    // Central icon
+    svg += '<circle cx="'+cx+'" cy="'+cy+'" r="32" fill="none" stroke="var(--mw-border)" stroke-width="1"/>';
+    svg += '<text x="'+cx+'" y="'+cy+'" text-anchor="middle" dominant-baseline="central" font-size="20" fill="var(--mw-text-muted)" opacity="0.3">'+(hub?'':'⚙')+'</text>';
+    if (hub) svg += '<text x="'+cx+'" y="'+cy+'" text-anchor="middle" dominant-baseline="central" font-size="10" font-weight="600" fill="var(--mw-text-muted)">'+hub+'</text>';
+    // Nodes + labels
+    for (let i = 0; i < n; i++) {
+      var angle = i*(360/n);
+      var nx = px(R,angle), ny = py(R,angle);
+      var icon = steps[i].icon || defaultIcons[i%defaultIcons.length];
+      var color = iconColors[i%iconColors.length];
+      var hs = nodeSize/2;
+      // Icon box — rounded rect with color bg
+      svg += '<rect x="'+f(nx-hs)+'" y="'+f(ny-hs)+'" width="'+nodeSize+'" height="'+nodeSize+'" rx="8" fill="'+color+'" opacity="0.12"/>';
+      svg += '<text x="'+f(nx)+'" y="'+f(ny)+'" text-anchor="middle" dominant-baseline="central" font-size="18">'+icon+'</text>';
+      // Label — positioned outside the circle
+      var labelR = R + 56;
+      var lx = px(labelR, angle), ly = py(labelR, angle);
+      var anchor = 'middle';
+      if (angle > 30 && angle < 150) anchor = 'start';
+      if (angle > 210 && angle < 330) anchor = 'end';
+      svg += '<text x="'+f(lx)+'" y="'+f(ly-7)+'" text-anchor="'+anchor+'" font-size="12" font-weight="700" fill="var(--mw-text)">'+(i+1)+'. '+steps[i].title+'</text>';
+      if (steps[i].desc) svg += '<text x="'+f(lx)+'" y="'+f(ly+8)+'" text-anchor="'+anchor+'" font-size="9" fill="var(--mw-text-muted)">'+steps[i].desc+'</text>';
+    }
+    svg += '</svg>';
+    const sumHTML = summary?'<div class="pitch-flywheel__summary"><div class="pitch-flywheel__summary-icon">↻</div><div><div class="pitch-flywheel__summary-title">'+summary.title+'</div>'+(summary.desc?'<div class="pitch-flywheel__summary-desc">'+summary.desc+'</div>':'')+'</div></div>':'';
+    const calloutHTML = callout?'<div class="pitch-callout pitch-callout--surface">'+callout+'</div>':'';
+    el.innerHTML = '<div class="pitch-flywheel">'+
+      (headline?'<div class="pitch-flywheel__headline">'+headline+'</div>':'')+
+      (sub?'<div class="pitch-flywheel__sub">'+sub+'</div>':'')+
+      '<div class="pitch-flywheel__canvas">'+svg+'</div>'+
+      sumHTML+calloutHTML+'</div>';
+  };
+
+  // ── Story Slide (3-col Before → Action → Result) ───────────────────────
+  M.storySlide = function (sel, cfg) {
+    const el = typeof sel === 'string' ? document.querySelector(sel) : sel;
+    if (!el) return;
+    const { headline = '', chapters = [], footer = '', flow = [], callout = '' } = cfg;
+    const chaptersHTML = chapters.map(c => `
+      <div class="pitch-story__cell">
+        <div class="pitch-story__tag">${c.tag || ''}</div>
+        <div class="pitch-story__cell-title">${c.title}</div>
+        <div class="pitch-story__cell-desc">${c.desc}</div>
+      </div>`).join('');
+    const flowHTML = flow.length ? `
+      <div class="pitch-story__flow">
+        ${flow.map((f, i) => {
+          const arrow = i < flow.length - 1 ? '<div class="pitch-story__flow-arrow">→</div>' : '';
+          return '<div class="pitch-story__flow-step">' + f + '</div>' + arrow;
+        }).join('')}
+      </div>` : '';
+    const calloutHTML = callout ? '<div class="pitch-callout pitch-callout--surface">' + callout + '</div>' : '';
+    el.innerHTML = `
+      <div class="pitch-story">
+        ${headline ? '<div class="pitch-story__headline">' + headline + '</div>' : ''}
+        <div class="pitch-story__card">
+          <div class="pitch-story__grid">${chaptersHTML}</div>
+          ${footer ? '<div class="pitch-story__footer">' + footer + '</div>' : ''}
+        </div>
+        ${flowHTML}
+        ${calloutHTML}
+      </div>`;
+  };
+
+  // ── SWOT Slide (2x2 matrix) ─────────────────────────────────────────────
+  M.swotSlide = function (sel, cfg) {
+    const el = typeof sel === 'string' ? document.querySelector(sel) : sel;
+    if (!el) return;
+    const { headline = '', quadrants = [], callout = '' } = cfg;
+    const quadsHTML = quadrants.map(q => `
+      <div class="pitch-swot__quad">
+        <div class="pitch-swot__quad-label">${q.label}</div>
+        ${(q.items || []).map(it => '<div class="pitch-swot__item">• ' + it + '</div>').join('')}
+      </div>`).join('');
+    const calloutHTML = callout ? '<div class="pitch-callout pitch-callout--surface">' + callout + '</div>' : '';
+    el.innerHTML = `
+      <div class="pitch-swot">
+        ${headline ? '<div class="pitch-swot__headline">' + headline + '</div>' : ''}
+        <div class="pitch-swot__grid">${quadsHTML}</div>
+        ${calloutHTML}
+      </div>`;
+  };
+
+  // ── Roadmap Slide (parallel-track Gantt) ─────────────────────────────────
+  M.roadmapSlide = function (sel, cfg) {
+    const el = typeof sel === 'string' ? document.querySelector(sel) : sel;
+    if (!el) return;
+    const { headline = '', periods = [], tracks = [], callout = '' } = cfg;
+    const n = periods.length || 4;
+    const periodsHTML = `<div class="pitch-roadmap__periods" style="grid-template-columns:repeat(${n},1fr)">
+      ${periods.map(p => '<div class="pitch-roadmap__period">' + p + '</div>').join('')}</div>`;
+    const tracksHTML = tracks.map(t => {
+      const bars = (t.items || []).map(it => {
+        const col = 'grid-column:' + (it.start + 1) + '/' + (it.end + 2);
+        const cls = it.style || 'accent';
+        return '<div class="pitch-roadmap__bar pitch-roadmap__bar--' + cls + '" style="' + col + '">' + it.title + '</div>';
+      }).join('');
+      return `<div class="pitch-roadmap__track">
+        <div class="pitch-roadmap__track-label">${t.label}</div>
+        <div class="pitch-roadmap__track-bars" style="grid-template-columns:repeat(${n},1fr)">${bars}</div>
+      </div>`;
+    }).join('');
+    const calloutHTML = callout ? '<div class="pitch-callout pitch-callout--surface">' + callout + '</div>' : '';
+    el.innerHTML = `
+      <div class="pitch-roadmap">
+        ${headline ? '<div class="pitch-roadmap__headline">' + headline + '</div>' : ''}
+        ${periodsHTML}
+        ${tracksHTML}
+        ${calloutHTML}
+      </div>`;
+  };
+
+  // ── Feature Slide (icon + title + desc grid) ────────────────────────────
+  M.featureSlide = function (sel, cfg) {
+    const el = typeof sel === 'string' ? document.querySelector(sel) : sel;
+    if (!el) return;
+    const { headline = '', items = [], cols = 3, callout = '' } = cfg;
+    const itemsHTML = items.map(it => `
+      <div class="pitch-features__item">
+        ${it.icon ? '<div class="pitch-features__icon">' + it.icon + '</div>' : ''}
+        <div class="pitch-features__title">${it.title}</div>
+        ${it.desc ? '<div class="pitch-features__desc">' + it.desc + '</div>' : ''}
+      </div>`).join('');
+    const calloutHTML = callout ? '<div class="pitch-callout pitch-callout--surface">' + callout + '</div>' : '';
+    el.innerHTML = `
+      <div class="pitch-features">
+        ${headline ? '<div class="pitch-features__headline">' + headline + '</div>' : ''}
+        <div class="pitch-features__grid" style="grid-template-columns:repeat(${cols},1fr)">${itemsHTML}</div>
+        ${calloutHTML}
       </div>`;
   };
 
@@ -519,18 +892,9 @@
       s.innerHTML = header + '<div class="mw-slide__body">' + content + '</div>';
     });
 
-    // Inject bottom nav bar
-    if (!document.getElementById('pitch-nav-bar')) {
-      const bar = document.createElement('div');
-      bar.className = 'wrn-bar';
-      bar.id = 'pitch-nav-bar';
-      bar.innerHTML = '<span class="wrn-bar__indicator" id="pitch-ind">1 <span class="wrn-bar__sep">/</span> ' + slides.length + '</span>' +
-        '<span class="wrn-bar__divider"></span>' +
-        '<button class="wrn-bar__btn" id="pitch-fs" type="button" title="전체화면 (F)" aria-label="전체화면">' +
-        '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg></button>';
-      document.body.appendChild(bar);
-    }
-    const indEl = document.getElementById('pitch-ind');
+    // Inject shared bottom nav bar
+    if (window._magingNavBar) window._magingNavBar(slides.length);
+    const indEl = document.getElementById('deck-ind');
 
     function go(id) {
       const t = slides.find(s => s.id === id);
@@ -545,27 +909,7 @@
       if (indEl) indEl.innerHTML = (idx + 1) + ' <span class="wrn-bar__sep">/</span> ' + slides.length;
     }
     function ofs(d) { const i = slides.findIndex(s => s.hasAttribute('data-active')); go(slides[Math.max(0, Math.min(slides.length-1, i+d))].id); }
-    function scale() {
-      const W = 1240, H = W*(210/297);
-      const flexEl = document.querySelector('body > .flex');
-      if (document.body.classList.contains('presenter-mode')) {
-        if (flexEl) { flexEl.style.transform = ''; flexEl.style.marginBottom = ''; }
-        const s = Math.min(innerWidth/W, innerHeight/H);
-        slides.forEach(el => { el.style.setProperty('--slide-scale', s.toFixed(4)); el.style.marginBottom = '0'; el.style.marginRight = '0'; });
-        return;
-      }
-      // Normal: scale entire flex container (sidebar + slide together)
-      slides.forEach(el => { el.style.setProperty('--slide-scale', '1'); el.style.marginBottom = '0'; el.style.marginRight = '0'; });
-      if (!flexEl) return;
-      const sidebar = document.querySelector('maging-sidebar .wrs');
-      const sidebarW = sidebar ? sidebar.offsetWidth : 220;
-      const totalW = sidebarW + W;
-      const available = innerWidth;
-      const s = available < totalW ? available / totalW : 1;
-      flexEl.style.transformOrigin = 'top center';
-      flexEl.style.transform = s < 1 ? 'scale(' + s.toFixed(4) + ')' : '';
-      flexEl.style.marginBottom = s < 1 ? '-' + (H * (1 - s)).toFixed(0) + 'px' : '';
-    }
+    function scale() { if (window._magingScaleSlides) window._magingScaleSlides(slides); }
     addEventListener('resize', scale); scale();
     addEventListener('keydown', e => {
       if (e.target.closest?.('input,textarea,select,[contenteditable]')) return;
@@ -580,7 +924,7 @@
     document.addEventListener('click', e => {
       const nav = e.target.closest('[data-nav]');
       if (nav) { e.preventDefault(); go(nav.dataset.nav); return; }
-      if (e.target.closest('#pitch-fs')) { document.body.classList.toggle('presenter-mode'); scale(); }
+      if (e.target.closest('#deck-fs')) { document.body.classList.toggle('presenter-mode'); scale(); }
     });
     addEventListener('hashchange', () => { const id = location.hash.slice(1); if (id && slides.find(s => s.id === id)) go(id); });
     const h = location.hash.slice(1);

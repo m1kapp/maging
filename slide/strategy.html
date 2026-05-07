@@ -29,11 +29,14 @@
       <section class="slide" id="case-profile" data-label="06 · Case Study"></section>
       <section class="slide" id="case-data" data-label="06 · 핵심 지표"></section>
       <section class="slide" id="support" data-label="07 · 3가지 서포트"></section>
-      <section class="slide" id="compare-why" data-label="08 · Why This Works"></section>
-      <section class="slide" id="scale" data-label="09 · Scale"></section>
-      <section class="slide" id="workshop" data-label="10 · Workshop"></section>
-      <section class="slide" id="evidence" data-label="11 · 증거"></section>
-      <section class="slide" id="ask" data-label="12 · Next Step"></section>
+      <section class="slide" id="deepdive-mr" data-label="07-1 · 전문의약품"></section>
+      <section class="slide" id="deepdive-hbb" data-label="07-2 · HB&B 영업"></section>
+      <section class="slide" id="flywheel" data-label="08 · Flywheel"></section>
+      <section class="slide" id="compare-why" data-label="09 · Why This Works"></section>
+      <section class="slide" id="scale" data-label="10 · Scale"></section>
+      <section class="slide" id="workshop" data-label="11 · Workshop"></section>
+      <section class="slide" id="evidence" data-label="12 · 증거"></section>
+      <section class="slide" id="ask" data-label="13 · Next Step"></section>
 
     </div>
   </main>
@@ -73,25 +76,16 @@
         highlight: '근본 원인: 도구의 가치를 내부 효율에만 국한 → ROI가 모호해진다.',
       }),
 
-      // ═══ S4: 실제 사례 ═══
-      scene: () => Maging.solutionSlide('#scene', {
-        headline: '실제로 있었던 일입니다 — MR 김 대리의 사례',
-        before: {
-          label: 'Before',
-          items: [
-            '독감 시즌. 우리 백신을 써달라고 말로만 설명',
-            '병원장은 "알겠습니다" 하고 기존 거래처 백신을 씀',
-            '차별화 포인트가 없었음',
-          ],
-        },
-        after: {
-          label: 'AI + 직접 행동',
-          items: [
-            'AI로 "플루아릭스테트라" 홍보 전단지를 직접 제작',
-            '근처 아파트 단지를 하루 동안 직접 돌며 배포',
-            '예방접종 문의 증가 → 병원 매출 증가 → 병원장이 먼저 "그 백신 더 보내줘" 연락',
-          ],
-        },
+      // ═══ S4: 실제 사례 (storySlide) ═══
+      scene: () => Maging.storySlide('#scene', {
+        headline: '실제로 있었던 일입니다',
+        chapters: [
+          { tag: 'Before', title: 'MR 김 대리', desc: '독감 시즌. 우리 백신을 써달라고 말로만 설명. 병원장은 "알겠습니다" 하고 기존 거래처 백신을 씀.' },
+          { tag: 'What he did', title: '전단지를 직접 만들었다', desc: 'AI로 "플루아릭스테트라" 홍보 전단지를 제작. 근처 아파트 단지를 하루 동안 직접 돌며 배포.' },
+          { tag: 'Result', title: '환자가 병원으로 갔다', desc: '예방접종 문의 증가 → 병원 매출 증가 → 병원장이 먼저 "그 백신 더 보내줘" 연락.' },
+        ],
+        footer: '이 MR은 포토샵 자격증이 있어서 가능했습니다. <strong>AI는 모든 MR에게 이 역량을 줍니다.</strong>',
+        flow: ['AI로 전단지를 만들고', 'MR이 직접 뿌리고', '환자가 병원에 간다'],
       }),
 
       // ═══ S5: INSIGHT ═══
@@ -142,6 +136,73 @@
           { label: 'SUPPORT 3', title: '운영', desc: '간호사 교육 · 복약 안내 · 접수 체크리스트 · SOP로 퍼뜨린다' },
         ],
         footer: '전단지는 시작일 뿐입니다. AI가 있으면 한 사람이 마케팅·분석·운영 세 가지 지원을 동시에 받습니다.',
+      }),
+
+      // ═══ Deep Dive: 전문의약품 (deepDiveSlide) ═══
+      'deepdive-mr': () => Maging.deepDiveSlide('#deepdive-mr', {
+        role: {
+          from: { label: 'Employee', name: 'MR (영업사원)' },
+          to: { label: 'Customer', name: '병원 / 의사' },
+          message: '영업을 넘어 가치를 직접 만든다',
+        },
+        columns: [
+          { title: '마케팅', items: [
+            { title: '홍보 전단지', desc: '위내시경·건강검진 홍보물을 AI로 제작, 인근 아파트 배포' },
+            { title: '시즌 캠페인', desc: '독감·대상포진 시즌별 예방접종 포스터 제작' },
+            { title: '병원 SNS 콘텐츠', desc: '인스타 카드뉴스 5장 + 캡션 한 번에 생성' },
+            { title: '건강 칼럼', desc: '병원 블로그에 올릴 질환별 건강 정보 초안 작성' },
+          ]},
+          { title: '데이터 분석', items: [
+            { title: '경쟁 병원 분석', desc: '반경 3km 내 경쟁 병원 대비 차별화 포인트 도출' },
+            { title: '시즌 인사이트', desc: '환절기 GERD 30%↑ 등 계절 트렌드 → 캠페인 연결' },
+            { title: '처방 트렌드', desc: '엑셀 데이터를 30초 만에 시각화 대시보드로 변환' },
+            { title: '환자 패턴 분석', desc: '재방문율·이탈 시점 파악 → 타겟 마케팅 제안' },
+          ]},
+          { title: '운영', items: [
+            { title: '간호사 교육 자료', desc: '케이캡 적응증·복용법·부작용 대응 가이드' },
+            { title: '건강 상식 웹툰', desc: '환자 대기실용 질환 예방·관리 만화 콘텐츠' },
+            { title: '복약 안내서', desc: '환자에게 전달할 약 복용법 A4 한 장 요약' },
+            { title: '접수 체크리스트', desc: '건강검진 사전 안내·준비사항 체크시트' },
+          ]},
+        ],
+      }),
+
+      // ═══ Deep Dive: HB&B 영업 ═══
+      'deepdive-hbb': () => Maging.deepDiveSlide('#deepdive-hbb', {
+        role: {
+          from: { label: 'Employee', name: '컨디션 영업사원' },
+          to: { label: 'Customer', name: '편의점 / 마트 바이어' },
+          message: '영업을 넘어 가치를 직접 만든다',
+        },
+        columns: [
+          { title: '마케팅', items: [
+            { title: '매대 POP 디자인', desc: '"금요일엔 컨디션" 요일별·시즌별 매대 시안 제작' },
+            { title: '프로모션 포스터', desc: '1+1, 묶음 할인 등 판촉 시각물 즉시 생성' },
+            { title: '편의점 SNS 콜라보', desc: '점주가 바로 올릴 수 있는 인스타 콘텐츠 제공' },
+          ]},
+          { title: '데이터 분석', items: [
+            { title: '요일별 판매 분석', desc: '금요일 매출 3배 등 패턴 파악 → 재고 최적화' },
+            { title: '시즌 수요 예측', desc: '연말·휴가철 성수기 발주량 가이드 리포트' },
+            { title: '경쟁사 모니터링', desc: '가격·프로모션·신제품 비교 보고서' },
+          ]},
+          { title: '운영', items: [
+            { title: '알바생 교육 카드', desc: '30초 안에 읽고 설명할 수 있는 제품 요약' },
+            { title: '진열 가이드', desc: '냉장고·매대별 최적 배치 매뉴얼' },
+            { title: '고객 응대 스크립트', desc: 'POS에서 바로 참고할 추천·응대 가이드' },
+          ]},
+        ],
+      }),
+
+      // ═══ Flywheel ═══
+      flywheel: () => Maging.flywheelSlide('#flywheel', {
+        headline: '마케팅·분석·운영을 지탱하는 플라이휠',
+        steps: [
+          { title: 'AI로 해낸다', desc: 'AI를 사용하여 마케팅 자료를 생성합니다.', icon: '🤖' },
+          { title: 'flow로 관리', desc: '고객별 프로젝트를 관리합니다.', icon: '📋' },
+          { title: 'flow에서 공유', desc: '성공 사례를 공유합니다.', icon: '🔗' },
+          { title: '조직이 강해진다', desc: '조직의 역량을 강화합니다.', icon: '⚙' },
+        ],
+        summary: { title: 'AI는 만들고, flow는 관리하고 퍼뜨린다', desc: 'AI만 쓰면 1명. AI + flow를 쓰면 체계적으로 잘하는 조직이 됩니다.' },
       }),
 
       // ═══ S10: WHY THIS WORKS ═══
