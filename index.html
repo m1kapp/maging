@@ -410,49 +410,6 @@
     font-family: var(--mw-mono-font); white-space: nowrap;
   }
 
-  /* ========= USE WITH AI section (legacy) ========= */
-  .ai-step {
-    display: flex; gap: 1.25rem;
-    padding: 1.5rem;
-    background: var(--mw-surface);
-    border: 1px solid var(--mw-border);
-    border-radius: var(--mw-radius);
-    transition: border-color 200ms, transform 200ms;
-    position: relative;
-  }
-  .ai-step:hover {
-    border-color: color-mix(in srgb, var(--mw-accent) 50%, var(--mw-border));
-  }
-  .ai-step::before {
-    content: '';
-    position: absolute;
-    left: 52px; top: 100%;
-    width: 2px; height: 20px;
-    background: linear-gradient(to bottom, var(--mw-border), transparent);
-  }
-  .ai-step:last-of-type::before { display: none; }
-  .ai-step__num {
-    flex-shrink: 0;
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    background: color-mix(in srgb, var(--mw-accent) 12%, transparent);
-    color: var(--mw-accent);
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--mw-mono-font);
-    font-weight: 700;
-    font-size: 0.9rem;
-  }
-  .ai-step__body { flex: 1; min-width: 0; }
-  .ai-step__title {
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: var(--mw-text);
-  }
-  .ai-step__desc {
-    font-size: 0.85rem;
-    color: var(--mw-text-muted);
-    margin-top: 0.25rem;
-  }
 
   /* Prompt card */
   .ai-prompt {
@@ -642,98 +599,6 @@
     color: var(--mw-text-muted);
   }
 
-  /* LLM platform list */
-  .ai-llms {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 0.625rem;
-  }
-  .ai-llm {
-    display: flex; align-items: center; gap: 0.625rem;
-    padding: 0.75rem 0.875rem;
-    border: 1px solid var(--mw-border);
-    border-radius: calc(var(--mw-radius) * 0.8);
-    background: var(--mw-surface-2);
-    color: var(--mw-text);
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 500;
-    transition: transform 160ms, border-color 160ms, background 160ms;
-  }
-  .ai-llm:hover {
-    transform: translateY(-2px);
-    border-color: var(--mw-accent);
-    background: var(--mw-surface);
-  }
-  .ai-llm__logo {
-    width: 20px; height: 20px; flex-shrink: 0;
-  }
-  /* invert X logo on dark themes (it's pure black) */
-  .ai-llm__logo--invert { filter: none; }
-  [data-theme="vercel"] .ai-llm__logo--invert,
-  [data-theme="github"] .ai-llm__logo--invert,
-  [data-theme="x"] .ai-llm__logo--invert,
-  [data-theme="slack"] .ai-llm__logo--invert,
-  [data-theme="discord"] .ai-llm__logo--invert,
-  [data-theme="openai"] .ai-llm__logo--invert,
-  [data-theme="spotify"] .ai-llm__logo--invert,
-  [data-theme="twitch"] .ai-llm__logo--invert,
-  [data-theme="netflix"] .ai-llm__logo--invert,
-  [data-theme="figma"] .ai-llm__logo--invert,
-  [data-theme="amazon"] .ai-llm__logo--invert,
-  [data-theme="adobe"] .ai-llm__logo--invert,
-  [data-theme="bloomberg"] .ai-llm__logo--invert { filter: invert(1); }
-  .ai-llm__name { font-family: var(--mw-font); }
-
-  /* Example bubbles */
-  .ai-examples { display: flex; flex-direction: column; gap: 0.5rem; }
-  .ai-example {
-    display: flex; align-items: flex-start; gap: 0.625rem;
-    padding: 0.75rem 0.875rem;
-    background: var(--mw-surface-2);
-    border-radius: calc(var(--mw-radius) * 0.8);
-    border: 1px solid var(--mw-border);
-  }
-  .ai-example__user {
-    flex-shrink: 0;
-    padding: 0.15rem 0.5rem;
-    font-size: 0.65rem;
-    font-weight: 600;
-    background: var(--mw-accent);
-    color: #fff;
-    border-radius: calc(var(--mw-radius) * 0.5);
-    font-family: var(--mw-mono-font);
-    letter-spacing: 0.04em;
-  }
-  [data-theme="vercel"] .ai-example__user,
-  [data-theme="spotify"] .ai-example__user,
-  [data-theme="slack"] .ai-example__user,
-  [data-theme="amazon"] .ai-example__user,
-  [data-theme="mailchimp"] .ai-example__user,
-  [data-theme="ups"] .ai-example__user,
-  [data-theme="deere"] .ai-example__user { color: #000; }
-  .ai-example__text {
-    font-size: 0.84rem;
-    color: var(--mw-text);
-    line-height: 1.5;
-    word-break: keep-all;
-  }
-
-  /* Result checklist */
-  .ai-result {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-    gap: 0.5rem;
-  }
-  .ai-result__item {
-    font-size: 0.82rem;
-    color: var(--mw-text);
-    padding: 0.4rem 0.75rem;
-    background: color-mix(in srgb, var(--mw-success) 8%, transparent);
-    border: 1px solid color-mix(in srgb, var(--mw-success) 30%, transparent);
-    border-radius: calc(var(--mw-radius) * 0.7);
-    font-family: var(--mw-font);
-  }
 
   /* Floating toast */
   .ai-toast {
@@ -853,251 +718,18 @@
     .word-roller__inner { animation: none; }
   }
 
-  /* ========= Solution pills ========= */
-  .solution-pill {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    padding: 0.7rem 1.15rem;
-    background: var(--mw-surface);
-    border: 1px solid var(--mw-border);
-    border-radius: 999px;
-    font-size: 0.92rem;
-    font-weight: 500;
-    color: var(--mw-text);
-    box-shadow: 0 2px 8px -3px rgba(0, 0, 0, 0.06);
-    transition: transform 160ms, border-color 160ms;
-  }
-  .solution-pill:hover {
-    transform: translateY(-2px);
-    border-color: var(--mw-accent);
-  }
-
-  /* ========= Value grid (Section 4) ========= */
-  .value-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 0.875rem;
-  }
-  .value-card {
-    padding: 1.875rem 1.5rem;
-    background: var(--mw-surface);
-    border: 1px solid var(--mw-border);
-    border-radius: var(--mw-radius);
-    transition: border-color 200ms, transform 200ms, box-shadow 200ms;
-  }
-  .value-card:hover {
-    border-color: color-mix(in srgb, var(--mw-accent) 60%, var(--mw-border));
-    transform: translateY(-3px);
-    box-shadow: 0 12px 32px -12px color-mix(in srgb, var(--mw-accent) 20%, rgba(0,0,0,0.08));
-  }
-  .value-card__icon {
-    width: 40px; height: 40px;
-    display: inline-flex; align-items: center; justify-content: center;
-    background: color-mix(in srgb, var(--mw-accent) 12%, transparent);
-    color: var(--mw-accent);
-    border-radius: calc(var(--mw-radius) * 0.7);
-    font-size: 1.15rem;
-    line-height: 1;
-    margin-bottom: 1rem;
-  }
-  .value-card__title {
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: var(--mw-text);
-    margin-bottom: 0.4rem;
-    letter-spacing: -0.01em;
-  }
-  .value-card__desc {
-    font-size: 0.85rem;
-    color: var(--mw-text-muted);
-    line-height: 1.6;
-  }
-
-  /* ========= Positioning diagram ========= */
-  .positioning {
-    position: relative;
-    max-width: 760px;
-    margin: 0 auto;
-    aspect-ratio: 1 / 1;
-    max-height: 560px;
-  }
-  .positioning__grid {
-    position: absolute;
-    inset: 40px 40px 40px 40px;
-    border-left: 2px solid var(--mw-border);
-    border-bottom: 2px solid var(--mw-border);
-  }
-  .positioning__axis-y {
-    position: absolute;
-    left: 8px;
-    top: 50%;
-    transform: translateY(-50%) rotate(-90deg);
-    transform-origin: center;
-    font-size: 0.7rem;
-    font-family: var(--mw-mono-font);
-    color: var(--mw-text-muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-  .positioning__axis-x {
-    position: absolute;
-    left: 50%;
-    bottom: 8px;
-    transform: translateX(-50%);
-    font-size: 0.7rem;
-    font-family: var(--mw-mono-font);
-    color: var(--mw-text-muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-  .positioning__label-top {
-    position: absolute;
-    left: 50%;
-    top: -2px;
-    transform: translateX(-50%) translateY(-100%);
-    font-size: 0.68rem;
-    font-family: var(--mw-mono-font);
-    color: var(--mw-text-muted);
-    letter-spacing: 0.05em;
-  }
-  .positioning__label-bottom {
-    position: absolute;
-    left: 50%;
-    bottom: -2px;
-    transform: translateX(-50%) translateY(100%);
-    font-size: 0.68rem;
-    font-family: var(--mw-mono-font);
-    color: var(--mw-text-muted);
-    letter-spacing: 0.05em;
-  }
-  .positioning__label-left {
-    position: absolute;
-    top: 50%;
-    left: -4px;
-    transform: translateY(-50%) translateX(-100%) rotate(-90deg);
-    transform-origin: right center;
-    font-size: 0.68rem;
-    font-family: var(--mw-mono-font);
-    color: var(--mw-text-muted);
-    letter-spacing: 0.05em;
-    white-space: nowrap;
-  }
-  .positioning__label-right {
-    position: absolute;
-    top: 50%;
-    right: -4px;
-    transform: translateY(-50%) translateX(100%) rotate(-90deg);
-    transform-origin: left center;
-    font-size: 0.68rem;
-    font-family: var(--mw-mono-font);
-    color: var(--mw-text-muted);
-    letter-spacing: 0.05em;
-    white-space: nowrap;
-  }
-  .positioning__item {
-    position: absolute;
-    padding: 0.45rem 0.75rem;
-    background: var(--mw-surface);
-    border: 1px solid var(--mw-border);
-    border-radius: calc(var(--mw-radius) * 0.7);
-    font-size: 0.78rem;
-    color: var(--mw-text-muted);
-    white-space: nowrap;
-    transform: translate(-50%, -50%);
-  }
-  .positioning__item--me {
-    background: var(--mw-accent);
-    color: #fff;
-    border-color: var(--mw-accent);
-    font-weight: 600;
-    font-size: 0.85rem;
-    padding: 0.6rem 1rem;
-    box-shadow: 0 6px 20px -4px color-mix(in srgb, var(--mw-accent) 35%, transparent);
-    animation: mePulse 2.8s ease-in-out infinite;
-  }
-  [data-theme="vercel"] .positioning__item--me,
-  [data-theme="spotify"] .positioning__item--me,
-  [data-theme="slack"] .positioning__item--me,
-  [data-theme="amazon"] .positioning__item--me,
-  [data-theme="mailchimp"] .positioning__item--me,
-  [data-theme="ups"] .positioning__item--me,
-  [data-theme="deere"] .positioning__item--me { color: #000; }
-  @keyframes mePulse {
-    0%, 100% { transform: translate(-50%, -50%) scale(1); }
-    50%      { transform: translate(-50%, -50%) scale(1.04); }
-  }
-
-  /* ========= Target user cards ========= */
-  .target-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 0.875rem;
-  }
-  .target-card {
-    padding: 1.5rem;
-    background: var(--mw-surface);
-    border: 1px solid var(--mw-border);
-    border-radius: var(--mw-radius);
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    transition: border-color 200ms, transform 200ms;
-  }
-  .target-card:hover {
-    border-color: color-mix(in srgb, var(--mw-accent) 50%, var(--mw-border));
-    transform: translateX(2px);
-  }
-  .target-card__icon {
-    flex-shrink: 0;
-    width: 36px; height: 36px;
-    border-radius: calc(var(--mw-radius) * 0.7);
-    background: color-mix(in srgb, var(--mw-accent) 14%, transparent);
-    color: var(--mw-accent);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.05rem;
-  }
-  .target-card__text {
-    flex: 1;
-    font-size: 0.9rem;
-    color: var(--mw-text);
-    line-height: 1.55;
-    word-break: keep-all;
-  }
-
-  /* ========= Philosophy ========= */
-  .philosophy {
-    max-width: 700px;
-    margin: 0 auto;
-    text-align: center;
-    padding: 2rem 0;
-  }
-  .philosophy__title {
-    font-size: 1.75rem;
-    font-weight: 700;
-    font-family: var(--mw-display-font);
-    letter-spacing: -0.02em;
-    color: var(--mw-text);
-  }
-  .philosophy__body {
-    font-size: 1rem;
-    color: var(--mw-text-muted);
-    margin-top: 1rem;
-    line-height: 1.7;
-  }
-  .philosophy__body strong {
-    color: var(--mw-text);
-    font-weight: 600;
-  }
 
   /* ========= Example cards ========= */
   .example-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
   }
+  @media (min-width: 768px) { .example-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 1024px) { .example-grid { grid-template-columns: repeat(4, 1fr); } }
   .example-card {
     position: relative;
-    padding: 1.5rem;
+    padding: 1.25rem;
     background: var(--mw-surface);
     border: 1px solid var(--mw-border);
     border-radius: var(--mw-radius);
@@ -1125,13 +757,13 @@
     margin-bottom: 0.5rem;
   }
   .example-card__title {
-    font-size: 1.05rem;
+    font-size: 0.92rem;
     font-weight: 600;
     color: var(--mw-text);
-    margin-bottom: 0.375rem;
+    margin-bottom: 0.25rem;
   }
   .example-card__desc {
-    font-size: 0.82rem;
+    font-size: 0.75rem;
     color: var(--mw-text-muted);
     line-height: 1.5;
   }
@@ -1196,61 +828,14 @@
   </div>
 </section>
 
-<!-- ========= SECTION 1 — PROBLEM ========= -->
-<section style="border-top: 1px solid var(--mw-border);">
-  <div class="max-w-[900px] mx-auto px-6 py-20 text-center">
-    <div class="kicker mb-4">THE PROBLEM</div>
-    <h2 class="text-3xl md:text-5xl font-bold" style="letter-spacing: -0.02em; line-height: 1.2;">
-      AI는 잘 설명하지만,<br>
-      <span style="color: var(--mw-text-muted);">결과물은 만들어주지 않습니다.</span>
-    </h2>
-    <p class="text-base md:text-lg mw-muted mt-8" style="line-height: 1.65; max-width: 620px; margin-left: auto; margin-right: auto;">
-      ChatGPT에 물어보면<br>
-      분석도 해주고, 인사이트도 줍니다.
-    </p>
-    <p class="text-base md:text-lg mt-4" style="line-height: 1.65; max-width: 620px; margin-left: auto; margin-right: auto; color: var(--mw-text);">
-      하지만 그걸<br>
-      <strong>대시보드·슬라이드·카드뉴스·랜딩으로 정리하는 건 여전히 수작업</strong>입니다.
-    </p>
-  </div>
-</section>
-
-<!-- ========= SECTION 2 — SOLUTION ========= -->
-<section style="background: color-mix(in srgb, var(--mw-accent) 4%, var(--mw-surface));">
-  <div class="max-w-[900px] mx-auto px-6 py-20 text-center">
-    <div class="kicker mb-4" style="color: var(--mw-accent);">THE SOLUTION</div>
-    <h2 class="text-3xl md:text-5xl font-bold" style="letter-spacing: -0.02em; line-height: 1.2;">
-      maging은 그 <span style="color: var(--mw-accent);">"마지막 단계"</span>를<br>
-      자동화합니다.
-    </h2>
-    <p class="text-base md:text-lg mw-muted mt-8" style="line-height: 1.65; max-width: 620px; margin-left: auto; margin-right: auto;">
-      데이터나 요청을 입력하면<br>
-      AI가 만든 내용을<br>
-      <strong style="color: var(--mw-text);">바로 사용할 수 있는 형태로 변환</strong>합니다.
-    </p>
-    <div class="mt-10 flex gap-4 flex-wrap justify-center" style="max-width: 720px; margin-left: auto; margin-right: auto;">
-      <div class="solution-pill">📊 대시보드</div>
-      <div class="solution-pill">📋 슬라이드</div>
-      <div class="solution-pill">📱 카드뉴스</div>
-      <div class="solution-pill">🌐 랜딩페이지</div>
-    </div>
-    <p class="mw-muted text-sm mt-6" style="font-family: var(--mw-mono-font);">
-      모두 HTML 한 파일로 생성됩니다.
-    </p>
-  </div>
-</section>
-
-<!-- ========= SECTION 3 — HOW IT WORKS ========= -->
+<!-- ========= HOW IT WORKS ========= -->
 <section id="use-with-ai" style="border-top: 1px solid var(--mw-border);">
   <div class="max-w-[1100px] mx-auto px-6 py-20">
     <div class="text-center mb-12">
       <div class="kicker mb-3">HOW IT WORKS</div>
-      <h2 class="text-3xl md:text-5xl font-bold" style="letter-spacing: -0.02em; line-height: 1.2;">
-        어떻게 동작하나요
+      <h2 class="text-3xl md:text-4xl font-bold" style="letter-spacing: -0.02em; line-height: 1.2;">
+        프롬프트 복사 → 붙여넣기 → 완성
       </h2>
-      <p class="mw-muted mt-5 text-base md:text-lg" style="max-width: 560px; margin-left: auto; margin-right: auto; line-height: 1.6;">
-        프롬프트 복사 → LLM에 붙여넣기 → HTML 결과 → 공유.
-      </p>
     </div>
 
     <!-- Split-screen Browser Simulation -->
@@ -1383,88 +968,36 @@
   </div>
 </section>
 
-<!-- ========= SECTION 4 — CORE VALUES ========= -->
-<section style="background: color-mix(in srgb, var(--mw-accent) 4%, var(--mw-surface));">
-  <div class="max-w-[1100px] mx-auto px-6 py-20">
-    <div class="text-center mb-12">
-      <div class="kicker mb-3" style="color: var(--mw-accent);">WHAT YOU GET</div>
-      <h2 class="text-3xl md:text-5xl font-bold" style="letter-spacing: -0.02em; line-height: 1.2;">
-        결과를 <span style="color: var(--mw-accent);">"형태"</span>로 만듭니다
-      </h2>
-    </div>
-    <div class="value-grid">
-      <div class="value-card">
-        <div class="value-card__icon">⚙️</div>
-        <div class="value-card__title">코딩 없이</div>
-        <div class="value-card__desc">복잡한 설정 없이 바로 생성합니다.</div>
+<!-- ========= STATS STRIP ========= -->
+<section style="border-top: 1px solid var(--mw-border); border-bottom: 1px solid var(--mw-border);">
+  <div class="max-w-[900px] mx-auto px-6 py-10">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div>
+        <div class="text-3xl font-bold" style="letter-spacing: -0.03em; color: var(--mw-text);" id="stat-widgets">73</div>
+        <div class="mw-muted text-xs mt-1" style="font-family: var(--mw-mono-font); text-transform: uppercase; letter-spacing: 0.08em;">위젯</div>
       </div>
-      <div class="value-card">
-        <div class="value-card__icon">🎨</div>
-        <div class="value-card__title">디자인 없이</div>
-        <div class="value-card__desc">35개 브랜드 테마가 자동 적용됩니다.</div>
+      <div>
+        <div class="text-3xl font-bold" style="letter-spacing: -0.03em; color: var(--mw-text);">105</div>
+        <div class="mw-muted text-xs mt-1" style="font-family: var(--mw-mono-font); text-transform: uppercase; letter-spacing: 0.08em;">브랜드 테마</div>
       </div>
-      <div class="value-card">
-        <div class="value-card__icon">📎</div>
-        <div class="value-card__title">한 파일로</div>
-        <div class="value-card__desc">HTML 하나로 공유 가능합니다.</div>
+      <div>
+        <div class="text-3xl font-bold" style="letter-spacing: -0.03em; color: var(--mw-text);">4</div>
+        <div class="mw-muted text-xs mt-1" style="font-family: var(--mw-mono-font); text-transform: uppercase; letter-spacing: 0.08em;">출력 모드</div>
       </div>
-      <div class="value-card">
-        <div class="value-card__icon">↯</div>
-        <div class="value-card__title">즉시 사용</div>
-        <div class="value-card__desc">열면 바로 보고 가능한 결과물입니다.</div>
+      <div>
+        <div class="text-3xl font-bold" style="letter-spacing: -0.03em; color: var(--mw-text);">0</div>
+        <div class="mw-muted text-xs mt-1" style="font-family: var(--mw-mono-font); text-transform: uppercase; letter-spacing: 0.08em;">빌드 스텝</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ========= SECTION 5 — POSITIONING ========= -->
-<section style="border-top: 1px solid var(--mw-border);">
-  <div class="max-w-[1100px] mx-auto px-6 py-20">
-    <div class="text-center mb-12">
-      <div class="kicker mb-3">POSITIONING</div>
-      <h2 class="text-3xl md:text-5xl font-bold" style="letter-spacing: -0.02em; line-height: 1.2;">
-        기존 도구와의 <span style="color: var(--mw-accent);">차이</span>
-      </h2>
-    </div>
-
-    <div class="positioning">
-      <div class="positioning__label-top">Polished Output</div>
-      <div class="positioning__label-bottom">Raw Output</div>
-      <div class="positioning__label-left">Manual</div>
-      <div class="positioning__label-right">AI Generated</div>
-
-      <div class="positioning__grid"></div>
-
-      <!-- Quadrant I (top-right): AI + Polished — maging -->
-      <div class="positioning__item positioning__item--me" style="top: 22%; left: 72%;">★ maging</div>
-
-      <!-- Quadrant II (top-left): Manual + Polished -->
-      <div class="positioning__item" style="top: 18%; left: 25%;">Canva</div>
-      <div class="positioning__item" style="top: 30%; left: 18%;">Figma</div>
-      <div class="positioning__item" style="top: 10%; left: 35%;">Keynote</div>
-
-      <!-- Quadrant III (bottom-left): Manual + Raw -->
-      <div class="positioning__item" style="top: 70%; left: 18%;">Excel</div>
-      <div class="positioning__item" style="top: 82%; left: 30%;">CSV</div>
-
-      <!-- Quadrant IV (bottom-right): AI + Raw -->
-      <div class="positioning__item" style="top: 70%; left: 72%;">ChatGPT (raw)</div>
-      <div class="positioning__item" style="top: 85%; left: 82%;">Claude (text)</div>
-    </div>
-
-    <p class="mw-muted text-center mt-10 text-base" style="max-width: 620px; margin-left: auto; margin-right: auto; line-height: 1.65;">
-      대부분의 도구는 "만들거나" 또는 "생성만" 합니다.<br>
-      <strong style="color: var(--mw-text);">maging은 생성된 내용을 결과물로 완성합니다.</strong>
-    </p>
-  </div>
-</section>
-
-<!-- ========= SECTION 6 — EXAMPLES ========= -->
+<!-- ========= EXAMPLES ========= -->
 <section style="border-top: 1px solid var(--mw-border);">
   <div class="max-w-[1100px] mx-auto px-6 py-20">
     <div class="text-center mb-12">
       <div class="kicker mb-3">EXAMPLES</div>
-      <h2 class="text-3xl md:text-5xl font-bold" style="letter-spacing: -0.02em; line-height: 1.2;">
+      <h2 class="text-3xl md:text-4xl font-bold" style="letter-spacing: -0.02em; line-height: 1.2;">
         이렇게 나옵니다
       </h2>
     </div>
@@ -1537,119 +1070,25 @@
   </div>
 </section>
 
-<!-- ========= SECTION 7 — TARGET USERS ========= -->
-<section style="background: color-mix(in srgb, var(--mw-accent) 4%, var(--mw-surface));">
-  <div class="max-w-[1100px] mx-auto px-6 py-20">
-    <div class="text-center mb-12">
-      <div class="kicker mb-3">WHO IT'S FOR</div>
-      <h2 class="text-3xl md:text-5xl font-bold" style="letter-spacing: -0.02em; line-height: 1.2;">
-        이런 분들에게 <span style="color: var(--mw-accent);">맞습니다</span>
-      </h2>
+
+<!-- ========= THEME SHOWCASE + LIVE PREVIEW ========= -->
+<section id="themes" style="border-top: 1px solid var(--mw-border);">
+  <div class="max-w-[1280px] mx-auto px-6 py-16">
+    <div style="text-align: center; max-width: 640px; margin: 0 auto 2.5rem;">
+      <div class="kicker">THEME SYSTEM</div>
+      <h2 class="text-3xl md:text-4xl font-bold mt-2">같은 데이터. 35가지 인격.</h2>
+      <p class="mw-muted mt-3">CSS 변수 하나로 전체 분위기가 바뀝니다. 데이터와 레이아웃은 그대로.</p>
+      <p class="mw-muted mt-2 text-xs" style="font-family: var(--mw-mono-font);">Light 22 · Dark 13</p>
     </div>
-    <div class="target-grid">
-      <div class="target-card">
-        <div class="target-card__icon">▤</div>
-        <div class="target-card__text">매주 반복되는 보고서에 지친 팀장·기획자</div>
-      </div>
-      <div class="target-card">
-        <div class="target-card__icon">▦</div>
-        <div class="target-card__text">팀별로 제각각인 보고서 포맷을 통일하고 싶은 사람</div>
-      </div>
-      <div class="target-card">
-        <div class="target-card__icon">⬡</div>
-        <div class="target-card__text">AI 분석 결과를 임원에게 바로 공유해야 하는 사람</div>
-      </div>
-      <div class="target-card">
-        <div class="target-card__icon">↯</div>
-        <div class="target-card__text">CSV·데이터를 대시보드로 빠르게 시각화하고 싶은 사람</div>
-      </div>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6" id="hero-kpis"></div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div id="showcase-line"></div>
+      <div id="showcase-donut"></div>
     </div>
   </div>
 </section>
 
-<!-- ========= SECTION 8 — WHY MAGING ========= -->
-<section style="border-top: 1px solid var(--mw-border);">
-  <div class="max-w-[900px] mx-auto px-6 py-20">
-    <div class="text-center mb-12">
-      <div class="kicker mb-3">WHY MAGING</div>
-      <h2 class="text-3xl md:text-5xl font-bold" style="letter-spacing: -0.02em; line-height: 1.2;">
-        차트 라이브러리가 아닙니다
-      </h2>
-      <p class="mw-muted mt-5 text-base" style="max-width: 560px; margin-left: auto; margin-right: auto; line-height: 1.6;">
-        Recharts, Chart.js는 개발자가 코드를 짜서 차트를 만듭니다.<br>
-        maging은 <strong style="color:var(--mw-text)">AI가 프롬프트 하나로 전체 대시보드를 생성</strong>합니다.
-      </p>
-    </div>
-    <div style="overflow-x:auto">
-      <table style="width:100%; border-collapse:collapse; font-size:0.82rem; font-family:var(--mw-font);">
-        <thead>
-          <tr style="border-bottom:2px solid var(--mw-border);">
-            <th style="text-align:left; padding:0.75rem 0.5rem; color:var(--mw-text-muted); font-weight:500;"></th>
-            <th style="text-align:center; padding:0.75rem 0.5rem; color:var(--mw-accent); font-weight:700;">maging</th>
-            <th style="text-align:center; padding:0.75rem 0.5rem; color:var(--mw-text-muted); font-weight:500;">Recharts</th>
-            <th style="text-align:center; padding:0.75rem 0.5rem; color:var(--mw-text-muted); font-weight:500;">Chart.js</th>
-            <th style="text-align:center; padding:0.75rem 0.5rem; color:var(--mw-text-muted); font-weight:500;">Tremor</th>
-          </tr>
-        </thead>
-        <tbody id="compare-tbody"></tbody>
-      </table>
-    </div>
-  </div>
-</section>
-<script>
-(function() {
-  var rows = [
-    ['CDN 한 줄로 즉시 사용', true, false, true, false],
-    ['빌드 스텝 없음', true, false, false, false],
-    ['LLM 프롬프트 최적화', true, false, false, false],
-    ['105개 브랜드 테마', true, false, false, false],
-    ['KPI·테이블·캘린더 등 비차트 위젯', true, false, false, true],
-    ['주간보고 A4 슬라이드', true, false, false, false],
-    ['카드뉴스 캐러셀', true, false, false, false],
-    ['PPTX/PDF export', true, false, false, false],
-    ['React 필수', false, true, false, true],
-    ['ECharts 기반 차트', true, false, false, false],
-  ];
-  var tbody = document.getElementById('compare-tbody');
-  if (!tbody) return;
-  var check = '<span style="color:var(--mw-success);font-weight:700">&#10003;</span>';
-  var cross = '<span style="color:var(--mw-text-muted);opacity:0.4">—</span>';
-  rows.forEach(function(r) {
-    var tr = document.createElement('tr');
-    tr.style.borderBottom = '1px solid var(--mw-border)';
-    tr.innerHTML = '<td style="padding:0.6rem 0.5rem;color:var(--mw-text)">' + r[0] + '</td>' +
-      [1,2,3,4].map(function(i) {
-        return '<td style="text-align:center;padding:0.6rem 0.5rem">' + (r[i] ? check : cross) + '</td>';
-      }).join('');
-    tbody.appendChild(tr);
-  });
-})();
-</script>
-
-<!-- ========= SECTION 9 — PHILOSOPHY ========= -->
-<section style="border-top: 1px solid var(--mw-border);">
-  <div class="max-w-[900px] mx-auto px-6 py-20">
-    <div class="philosophy">
-      <div class="kicker mb-3">PHILOSOPHY</div>
-      <div class="philosophy__title">AI는 이미 충분히 똑똑합니다.</div>
-      <p class="philosophy__body">
-        부족한 건 <strong>"표현 방식"</strong>입니다.<br>
-        maging은 AI의 결과를<br>
-        <strong>사람이 바로 사용할 수 있게</strong> 만듭니다.
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- ========= LIVE PREVIEW (demoted, small accent) ========= -->
-<section style="border-top: 1px solid var(--mw-border);">
-  <div class="max-w-[1280px] mx-auto px-6 py-12">
-    <div class="kicker mb-3 text-center">LIVE PREVIEW · 상단 테마 토글로 바꿔보세요</div>
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3" id="hero-kpis"></div>
-  </div>
-</section>
-
-<!-- ========= INSTALL (one-liner prominent) ========= -->
+<!-- ========= INSTALL ========= -->
 <section style="border-top: 1px solid var(--mw-border);">
   <div class="max-w-[1000px] mx-auto px-6 py-16">
     <div class="text-center mb-8">
@@ -1657,8 +1096,8 @@
       <h2 class="text-3xl md:text-4xl font-bold" style="letter-spacing: -0.02em;">
         한 줄이면 끝.
       </h2>
-      <p class="mw-muted mt-3 text-sm">
-        Pretendard · maging.css · Tailwind · ECharts · maging.js 전부 자동 로드.
+      <p class="mw-muted mt-3 text-xs" style="font-family: var(--mw-mono-font);">
+        Pretendard + maging.css + Tailwind + ECharts + maging.js 자동 로드
       </p>
     </div>
 
@@ -1669,13 +1108,9 @@
 &lt;body class="mw-themed"&gt;</code></pre>
     </div>
 
-    <p class="mw-muted text-xs mt-3 text-center">
-      ✨ <code>maging-all.js</code> = Pretendard + maging CSS + Tailwind Play + ECharts + maging JS · 로드 순서 보장 · <code>window.addEventListener('maging:ready', …)</code> 이벤트 발화
-    </p>
-
     <details class="mt-6" style="border: 1px dashed var(--mw-border); border-radius: var(--mw-radius); padding: 1rem 1.25rem;">
       <summary class="mw-muted text-sm" style="cursor: pointer; font-weight: 500;">
-        🛠 개발자용: 수동 설치 (세세한 제어 원할 때)
+        수동 설치 (세세한 제어 원할 때)
       </summary>
       <div class="code mt-4">
         <div class="code__lang">html</div>
@@ -1688,300 +1123,23 @@
       <p class="mw-muted text-xs mt-2">
         개별 로드. 의존성 버전 고정·Tailwind 제외·자체 Pretendard 등 커스터마이즈 가능.
       </p>
-      <p class="mw-muted text-xs mt-2">
-        one-liner에서 특정 의존성만 끄고 싶으면:<br>
-        <code>&lt;script src=".../maging-all.js" data-no-tailwind data-no-echarts&gt;&lt;/script&gt;</code>
-      </p>
     </details>
   </div>
 </section>
 
-<!-- (FEATURES 4-card 그리드는 Section 4로 대체됨) -->
-
-<!-- ========= THEME SHOWCASE ========= -->
-<section id="themes">
-  <div class="max-w-[1280px] mx-auto px-6 py-16">
-    <div style="text-align: center; max-width: 640px; margin: 0 auto 2.5rem;">
-      <div class="kicker">THEME SYSTEM</div>
-      <h2 class="text-3xl md:text-4xl font-bold mt-2">같은 데이터. 35가지 인격.</h2>
-      <p class="mw-muted mt-3">상단의 테마 토글을 눌러보세요. 아래 차트들은 CSS 변수만 바뀌고, 데이터와 레이아웃은 그대로입니다.</p>
-      <p class="mw-muted mt-2 text-xs">Light 22 · Dark 13 — 각 테마는 <code>dist/themes/&lt;name&gt;.css</code>로 분리 사용 가능.</p>
-    </div>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-      <div id="showcase-line"></div>
-      <div id="showcase-donut"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ========= WIDGET GALLERY ========= -->
-<section id="widgets">
-  <div class="max-w-[1280px] mx-auto px-6 py-16">
-    <div style="max-width: 640px; margin-bottom: 2.5rem;">
-      <div class="kicker">WIDGET GALLERY</div>
-      <h2 class="text-3xl md:text-4xl font-bold mt-2">40+ 위젯.</h2>
-      <p class="mw-muted mt-3">
-        아래는 대표 7종의 라이브 예제입니다. 나머지 위젯 (Heatmap · Gauge · Radar · Treemap · Scatter · Sankey · HeroTile · RingProgress · CompareCard · MetricStack · Countdown · StatusGrid · Timeline · InboxPreview · CalendarHeatmap · EventCalendar · ProgressStepper · Waterfall · Cohort · SparklineList · GoalGrid · BulletChart · MapChart 등)은
-        <a href="dashboard/acme.html" style="color: var(--mw-accent); text-decoration: underline;">대시보드 데모</a>와
-        <a href="slide/weekly-report.html" style="color: var(--mw-accent); text-decoration: underline;">주간보고 데모</a>에서 실전 사용 예시를 볼 수 있습니다.
-      </p>
-    </div>
-
-    <div class="space-y-12">
-
-      <!-- 1. KPI Card -->
-      <div>
-        <h3 class="font-semibold text-lg">1. KPI 카드 <span class="mw-muted font-normal text-sm">kpiCard</span></h3>
-        <p class="mw-muted text-sm mt-1 mb-4">숫자 · 이전 대비 증감 · 스파크라인</p>
-        <div class="gallery">
-          <div id="ex-kpi"></div>
-          <div class="code">
-            <div class="code__lang">js</div>
-            <button class="code__copy">복사</button>
-<pre><code>Maging.kpiCard('#el', {
-  label: '이번 달 매출',
-  value: '₩128억',
-  delta: 8.3,
-  sparkline: [420,445,430,468,475,490,510,530,548,562,580]
-});</code></pre>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2. Line Chart -->
-      <div>
-        <h3 class="font-semibold text-lg">2. 라인 차트 <span class="mw-muted font-normal text-sm">lineChart</span></h3>
-        <p class="mw-muted text-sm mt-1 mb-4">다중 시리즈 · 누적(stack) · 영역 채우기 옵션</p>
-        <div class="gallery">
-          <div id="ex-line"></div>
-          <div class="code">
-            <div class="code__lang">js</div>
-            <button class="code__copy">복사</button>
-<pre><code>Maging.lineChart('#el', {
-  title: '주간 매출', subtitle: '최근 12주',
-  categories: ['W01','W02','W03','W04','W05','W06',
-               'W07','W08','W09','W10','W11','W12'],
-  series: [
-    { name: 'Enterprise', data: [420,445,430,468,475,
-      490,510,505,530,548,562,580] },
-    { name: 'SMB', data: [160,170,165,175,180,188,
-      195,200,210,220,228,240] }
-  ],
-  stack: true,
-  yFormatter: v =&gt; v + 'M',
-  height: 260
-});</code></pre>
-          </div>
-        </div>
-      </div>
-
-      <!-- 3. Bar Chart -->
-      <div>
-        <h3 class="font-semibold text-lg">3. 바 차트 <span class="mw-muted font-normal text-sm">barChart</span></h3>
-        <p class="mw-muted text-sm mt-1 mb-4">가로/세로 · 라벨 · 포매터</p>
-        <div class="gallery">
-          <div id="ex-bar"></div>
-          <div class="code">
-            <div class="code__lang">js</div>
-            <button class="code__copy">복사</button>
-<pre><code>Maging.barChart('#el', {
-  title: '지역별 매출',
-  items: [
-    { label: '서울', value: 1250 },
-    { label: '경기', value: 980 },
-    { label: '부산', value: 720 },
-    { label: '인천', value: 540 },
-    { label: '대구', value: 410 }
-  ],
-  horizontal: true,
-  yFormatter: v =&gt; v + 'M',
-  height: 260
-});</code></pre>
-          </div>
-        </div>
-      </div>
-
-      <!-- 4. Funnel -->
-      <div>
-        <h3 class="font-semibold text-lg">4. 퍼널 차트 <span class="mw-muted font-normal text-sm">funnelChart</span></h3>
-        <p class="mw-muted text-sm mt-1 mb-4">단계별 전환 시각화 (영업 파이프라인 등)</p>
-        <div class="gallery">
-          <div id="ex-funnel"></div>
-          <div class="code">
-            <div class="code__lang">js</div>
-            <button class="code__copy">복사</button>
-<pre><code>Maging.funnelChart('#el', {
-  title: '영업 파이프라인',
-  stages: [
-    { label: '리드',   value: 2400 },
-    { label: '검증',   value: 1380 },
-    { label: '데모',   value: 820 },
-    { label: '제안',   value: 410 },
-    { label: '성약',   value: 127 }
-  ],
-  height: 260
-});</code></pre>
-          </div>
-        </div>
-      </div>
-
-      <!-- 5. Donut -->
-      <div>
-        <h3 class="font-semibold text-lg">5. 도넛 차트 <span class="mw-muted font-normal text-sm">donutChart</span></h3>
-        <p class="mw-muted text-sm mt-1 mb-4">중앙 라벨 · 자동 합계</p>
-        <div class="gallery">
-          <div id="ex-donut"></div>
-          <div class="code">
-            <div class="code__lang">js</div>
-            <button class="code__copy">복사</button>
-<pre><code>Maging.donutChart('#el', {
-  title: '제품 카테고리',
-  slices: [
-    { label: 'Enterprise',   value: 548 },
-    { label: 'Professional', value: 312 },
-    { label: 'Team',         value: 178 },
-    { label: 'Starter',      value: 84 }
-  ],
-  centerLabel: '전체 판매',
-  centerValue: '1,122건',
-  height: 260
-});</code></pre>
-          </div>
-        </div>
-      </div>
-
-      <!-- 6. Leaderboard -->
-      <div>
-        <h3 class="font-semibold text-lg">6. 리더보드 <span class="mw-muted font-normal text-sm">leaderboard</span></h3>
-        <p class="mw-muted text-sm mt-1 mb-4">아바타 · 이름 · 진행률 바 (ECharts 사용 안 함)</p>
-        <div class="gallery">
-          <div id="ex-lb"></div>
-          <div class="code">
-            <div class="code__lang">js</div>
-            <button class="code__copy">복사</button>
-<pre><code>Maging.leaderboard('#el', {
-  title: '영업 TOP 5',
-  subtitle: '분기 목표 달성률',
-  items: [
-    { name: '김지훈', initial: '김', percent: 98, meta: '98% · ₩245M' },
-    { name: '이수민', initial: '이', percent: 94, meta: '94% · ₩220M' },
-    { name: '정하늘', initial: '정', percent: 87, meta: '87% · ₩198M' },
-    { name: '박민재', initial: '박', percent: 82, meta: '82% · ₩175M' },
-    { name: '최유리', initial: '최', percent: 76, meta: '76% · ₩148M' }
-  ]
-});</code></pre>
-          </div>
-        </div>
-      </div>
-
-      <!-- 7. Activity Table -->
-      <div>
-        <h3 class="font-semibold text-lg">7. 활동 테이블 <span class="mw-muted font-normal text-sm">activityTable</span></h3>
-        <p class="mw-muted text-sm mt-1 mb-4">커스텀 렌더러 · LIVE 뱃지 · 상태 뱃지</p>
-        <div class="gallery">
-          <div id="ex-table"></div>
-          <div class="code">
-            <div class="code__lang">js</div>
-            <button class="code__copy">복사</button>
-<pre><code>Maging.activityTable('#el', {
-  title: '최근 거래', live: true,
-  columns: [
-    { key: 'time',    label: '시간' },
-    { key: 'company', label: '고객사' },
-    { key: 'amount',  label: '금액',  align: 'right',
-      render: v =&gt; Maging.fmt.krw(v) },
-    { key: 'status',  label: '상태', align: 'right',
-      render: (_, r) =&gt; `&lt;span class="mw-badge mw-badge--${r.statusCls}"&gt;${r.statusLabel}&lt;/span&gt;` }
-  ],
-  rows: [
-    { time: '3분 전', company: '한빛테크', amount: 45200000,
-      statusCls: 'success', statusLabel: '완료' },
-    { time: '8분 전', company: '블루스퀘어', amount: 18500000,
-      statusCls: 'success', statusLabel: '완료' },
-    { time: '14분 전', company: '유니온시스템', amount: 62000000,
-      statusCls: 'warning', statusLabel: '진행중' }
-  ]
-});</code></pre>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ========= USAGE MODES ========= -->
-<section id="usage">
-  <div class="max-w-[1280px] mx-auto px-6 py-16">
-    <div style="max-width: 640px; margin-bottom: 2rem;">
-      <div class="kicker">USAGE</div>
-      <h2 class="text-3xl md:text-4xl font-bold mt-2">두 가지 사용 방식.</h2>
-      <p class="mw-muted mt-3">어느 쪽이든 편한 걸 쓰세요. 결과는 같습니다.</p>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-      <div class="mw-card">
-        <h4 class="font-semibold text-base">① Declarative <span class="mw-muted font-normal text-sm">HTML 속성 자동 마운트</span></h4>
-        <p class="mw-muted text-sm mt-1.5 mb-3">페이지 로드 시 <code>[data-mw-widget]</code>을 자동으로 스캔합니다. 간단한 위젯에 가장 빠른 방법.</p>
-        <div class="code">
-          <div class="code__lang">html</div>
-          <button class="code__copy">복사</button>
-<pre><code>&lt;!-- 간단한 값은 data 속성으로 --&gt;
-&lt;div data-mw-widget="kpi-card"
-     data-mw-label="매출"
-     data-mw-value="₩128억"
-     data-mw-delta="8.3"
-     data-mw-sparkline="420,445,430,468,475,490"&gt;&lt;/div&gt;
-
-&lt;!-- 복잡한 config는 JSON script 참조 --&gt;
-&lt;div data-mw-widget="line-chart" data-mw-config="rev-cfg"&gt;&lt;/div&gt;
-&lt;script type="application/json" id="rev-cfg"&gt;
-{ "title": "매출", "categories": ["W1","W2"],
-  "series": [{ "name": "A", "data": [10, 20] }] }
-&lt;/script&gt;</code></pre>
-        </div>
-      </div>
-
-      <div class="mw-card">
-        <h4 class="font-semibold text-base">② Imperative <span class="mw-muted font-normal text-sm">JS API</span></h4>
-        <p class="mw-muted text-sm mt-1.5 mb-3">동적 데이터, 업데이트, 외부 API 연동 등 모든 케이스. 핸들을 받아 <code>.update(data)</code> 가능.</p>
-        <div class="code">
-          <div class="code__lang">js</div>
-          <button class="code__copy">복사</button>
-<pre><code>// 마운트
-const kpi = Maging.kpiCard('#el', {
-  label: '매출', value: '₩128억', delta: 8.3,
-  sparkline: [420, 445, 430, 468, 475]
-});
-
-// 나중에 데이터만 업데이트
-kpi.update({ value: '₩142억', delta: 10.9 });
-
-// 테마 변경 — 모든 위젯 자동 재렌더
-Maging.setTheme('bloomberg');
-
-// 리사이즈는 자동 처리됨</code></pre>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ========= FINAL CTA ========= -->
-<section style="background: color-mix(in srgb, var(--mw-accent) 7%, var(--mw-surface)); border-top: 1px solid var(--mw-border); position: relative; overflow: hidden;">
+<section style="border-top: 1px solid var(--mw-border); position: relative; overflow: hidden;">
   <div class="max-w-[900px] mx-auto px-6 py-28 text-center" style="position: relative; z-index: 1;">
     <h2 style="font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700; letter-spacing: -0.035em; line-height: 1.05;">
       말하면,<br>
       <span style="color: var(--mw-accent);">결과물로 나옵니다.</span>
     </h2>
     <p class="mw-muted mt-5" style="font-size: 1rem; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.6;">
-      한 줄짜리 부트스트랩 + 자연어 요청 → 완성된 HTML.
+      CDN 한 줄 + 프롬프트 하나 → 완성된 HTML.
     </p>
     <div class="mt-10 flex gap-3 flex-wrap justify-center">
-      <a href="#use-with-ai" class="pill pill--primary" style="padding: 0.9rem 1.75rem; font-size: 1rem;">Try maging →</a>
-      <a href="dashboard/acme.html" class="pill" style="padding: 0.9rem 1.75rem; font-size: 1rem;">대시보드 데모</a>
-      <a href="slide/weekly-report.html" class="pill" style="padding: 0.9rem 1.75rem; font-size: 1rem;">주간보고 데모</a>
-      <a href="card-news/index.html" class="pill" style="padding: 0.9rem 1.75rem; font-size: 1rem;">카드뉴스 데모</a>
+      <a href="#use-with-ai" class="pill pill--primary" style="padding: 0.9rem 1.75rem; font-size: 1rem;">프롬프트 복사하기 →</a>
+      <a href="components.html" class="pill" style="padding: 0.9rem 1.75rem; font-size: 1rem;">컴포넌트 둘러보기</a>
     </div>
   </div>
 </section>
@@ -2054,96 +1212,6 @@ window.addEventListener('maging:ready', function () {
     height: 300
   });
 
-  // Gallery examples (one per widget)
-  Maging.kpiCard('#ex-kpi', {
-    label: '이번 달 매출',
-    value: '₩128억',
-    delta: 8.3,
-    sparkline: [420,445,430,468,475,490,510,530,548,562,580]
-  });
-
-  Maging.lineChart('#ex-line', {
-    title: '주간 매출', subtitle: '최근 12주',
-    categories: ['W01','W02','W03','W04','W05','W06','W07','W08','W09','W10','W11','W12'],
-    series: [
-      { name: 'Enterprise', data: [420,445,430,468,475,490,510,505,530,548,562,580] },
-      { name: 'SMB',        data: [160,170,165,175,180,188,195,200,210,220,228,240] }
-    ],
-    stack: true,
-    yFormatter: function (v) { return v + 'M'; },
-    height: 260
-  });
-
-  Maging.barChart('#ex-bar', {
-    title: '지역별 매출',
-    items: [
-      { label: '서울', value: 1250 },
-      { label: '경기', value: 980 },
-      { label: '부산', value: 720 },
-      { label: '인천', value: 540 },
-      { label: '대구', value: 410 }
-    ],
-    horizontal: true,
-    yFormatter: function (v) { return v + 'M'; },
-    height: 260
-  });
-
-  Maging.funnelChart('#ex-funnel', {
-    title: '영업 파이프라인',
-    stages: [
-      { label: '리드', value: 2400 },
-      { label: '검증', value: 1380 },
-      { label: '데모', value: 820 },
-      { label: '제안', value: 410 },
-      { label: '성약', value: 127 }
-    ],
-    height: 260
-  });
-
-  Maging.donutChart('#ex-donut', {
-    title: '제품 카테고리',
-    slices: [
-      { label: 'Enterprise',   value: 548 },
-      { label: 'Professional', value: 312 },
-      { label: 'Team',         value: 178 },
-      { label: 'Starter',      value: 84 }
-    ],
-    centerLabel: '전체 판매',
-    centerValue: '1,122건',
-    height: 260
-  });
-
-  Maging.leaderboard('#ex-lb', {
-    title: '영업 TOP 5',
-    subtitle: '분기 목표 달성률',
-    items: [
-      { name: '김지훈', initial: '김', percent: 98, meta: '98% · ₩245M' },
-      { name: '이수민', initial: '이', percent: 94, meta: '94% · ₩220M' },
-      { name: '정하늘', initial: '정', percent: 87, meta: '87% · ₩198M' },
-      { name: '박민재', initial: '박', percent: 82, meta: '82% · ₩175M' },
-      { name: '최유리', initial: '최', percent: 76, meta: '76% · ₩148M' }
-    ]
-  });
-
-  Maging.activityTable('#ex-table', {
-    title: '최근 거래', live: true,
-    columns: [
-      { key: 'time',    label: '시간' },
-      { key: 'company', label: '고객사' },
-      { key: 'amount',  label: '금액', align: 'right',
-        render: function (v) { return Maging.fmt.krw(v); } },
-      { key: 'status', label: '상태', align: 'right',
-        render: function (_, r) {
-          return '<span class="mw-badge mw-badge--' + r.statusCls + '">' + r.statusLabel + '</span>';
-        } }
-    ],
-    rows: [
-      { time: '3분 전',  company: '한빛테크',     amount: 45200000, statusCls: 'success', statusLabel: '완료' },
-      { time: '8분 전',  company: '블루스퀘어',   amount: 18500000, statusCls: 'success', statusLabel: '완료' },
-      { time: '14분 전', company: '유니온시스템', amount: 62000000, statusCls: 'warning', statusLabel: '진행중' },
-      { time: '22분 전', company: '미래엔터프라이즈', amount: 8400000, statusCls: 'muted', statusLabel: '대기' }
-    ]
-  });
 });
 </script>
 
