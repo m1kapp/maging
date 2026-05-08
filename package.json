@@ -28,6 +28,7 @@
     "presentation"
   ],
   "scripts": {
+    "predev": "lsof -ti:3456 | xargs kill -9 2>/dev/null; true",
     "dev": "next dev --port 3456",
     "build": "next build",
     "start": "next start",

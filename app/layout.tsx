@@ -1,6 +1,4 @@
 import './globals.css';
-import { Nav } from '@/components/Nav';
-import { Footer } from '@/components/Footer';
 
 export const metadata = {
   title: 'maging — AI 답변을, 쓸 수 있는 결과물로.',
@@ -11,7 +9,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko" suppressHydrationWarning>
       <head>
-        {/* Theme init — runs before paint to avoid flash */}
         <script
           dangerouslySetInnerHTML={{
             __html: `!function(){var T=['flow','morningmate','claude','linear','stripe','airbnb','linkedin','apple','duolingo','github','spotify','netflix','figma','adobe','bloomberg'],k='maging-theme',s=localStorage.getItem(k);if(!s||T.indexOf(s)<0)s='flow';document.documentElement.setAttribute('data-theme',s);localStorage.setItem(k,s)}();`,
@@ -24,13 +21,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap"
           rel="stylesheet"
         />
-        {/* maging-all.js — must be a regular script so document.currentScript works for data-base */}
         <script defer src="/dist/maging-all.js" data-base="/dist/" />
       </head>
       <body className="mw-themed">
-        <Nav />
         {children}
-        <Footer />
       </body>
     </html>
   );
