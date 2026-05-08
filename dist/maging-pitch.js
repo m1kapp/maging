@@ -879,9 +879,12 @@
 
   } // end registerWidgets
 
-  // ── 3. Deck infrastructure (sidebar provided by maging-sidebar.js) ─────────────────────────────────────────────────
-  function initDeck(MOUNT) {
-    const slides = [...document.querySelectorAll('section.slide')];
+  // ── 3. Deck infrastructure ─────────────────────────────────────────────────
+  // root: optional container scope (defaults to document for legacy HTML usage)
+  function initDeck(MOUNT, root) {
+    const scope = root || document;
+    const slides = [...scope.querySelectorAll('section.slide')];
+    if (!slides.length) return;
     const mounted = {};
     slides.forEach((s, i) => {
       s.classList.add('mw-slide');
@@ -902,11 +905,17 @@
       slides.forEach(s => s.toggleAttribute('data-active', s === t));
       history.replaceState(null, '', '#' + id);
       if (!mounted[id]) { mounted[id] = true; MOUNT[id]?.(); }
-      document.querySelectorAll('maging-sidebar .wrs__link').forEach(a => a.classList.toggle('wrs__link--active', a.dataset.nav === id));
-      const head = document.querySelector('maging-sidebar .wrs__head');
+      // Update sidebar within scope
+      scope.querySelectorAll('maging-sidebar .wrs__link, [data-nav].wrs__link').forEach(a => a.classList.toggle('wrs__link--active', a.dataset.nav === id));
+      scope.querySelectorAll('maging-sidebar .wrs__page-dot, [data-nav].wrs__page-dot').forEach(a => a.classList.toggle('wrs__page-dot--active', a.dataset.nav === id));
+      const head = scope.querySelector('maging-sidebar .wrs__head');
       if (head) head.classList.toggle('wrs__head--active', id === 'cover');
       const idx = slides.indexOf(t);
       if (indEl) indEl.innerHTML = (idx + 1) + ' <span class="wrn-bar__sep">/</span> ' + slides.length;
+      // Resize ECharts in active slide
+      if (typeof echarts !== 'undefined') {
+        t.querySelectorAll('[_echarts_instance_]').forEach(el => { const inst = echarts.getInstanceByDom(el); if (inst) inst.resize(); });
+      }
     }
     function ofs(d) { const i = slides.findIndex(s => s.hasAttribute('data-active')); go(slides[Math.max(0, Math.min(slides.length-1, i+d))].id); }
     function scale() { if (window._magingScaleSlides) window._magingScaleSlides(slides); }
@@ -931,21 +940,57 @@
     go(h && slides.find(s => s.id === h) ? h : slides[0].id);
   }
 
-  // ── 4. Pitch page builder — Maging.page({ mode: 'pitch', slides: [...] }) ──
+  // ── 4. Build sidebar HTML directly (avoids web component timing issues) ──
+  function _buildSidebarHTML(title, date, slideConfigs) {
+    const items = [];
+    slideConfigs.forEach(s => {
+      if (s.cover || !s.label) return;
+      const prev = items[items.length - 1];
+      if (prev && prev.label === s.label) { prev.pages.push(s.id); }
+      else { items.push({ label: s.label, bu: s.bu || '', team: s.team || '', pages: [s.id] }); }
+    });
+    const hasBU = items.some(it => it.bu);
+    function renderItem(it) {
+      const dots = it.pages.length > 1
+        ? '<span class="wrs__pages">' + it.pages.map((p, i) =>
+            '<a class="wrs__page-dot" data-nav="' + p + '"></a>').join('') + '</span>' : '';
+      return '<div class="wrs__row"><a class="wrs__link" data-nav="' + it.pages[0] + '">' +
+        '<span class="wrs__dash">\u2015</span><span class="wrs__lbl">' + it.label + '</span></a>' + dots + '</div>';
+    }
+    let navHTML = '';
+    if (hasBU) {
+      const groups = [];
+      items.forEach(item => {
+        let g = groups.find(x => x.bu === item.bu);
+        if (!g) { g = { bu: item.bu, teams: [] }; groups.push(g); }
+        let t = g.teams.find(x => x.team === item.team);
+        if (!t) { t = { team: item.team, items: [] }; g.teams.push(t); }
+        t.items.push(item);
+      });
+      navHTML = groups.map(g =>
+        '<div class="wrs__group"><div class="wrs__bu">' + g.bu + '</div>' +
+        g.teams.map(t => '<div class="wrs__team">' + (t.team ? '<div class="wrs__team-label">' + t.team + '</div>' : '') +
+          t.items.map(renderItem).join('') + '</div>').join('') + '</div>').join('');
+    } else { navHTML = items.map(renderItem).join(''); }
+    return '<aside class="wrs"><a class="wrs__head wrs__head--active" data-nav="cover" style="text-decoration:none;color:inherit;cursor:pointer;display:block">' +
+      '<div class="wrs__title">' + (title || '') + '</div>' + (date ? '<div class="wrs__date">' + date + '</div>' : '') +
+      '</a>' + navHTML + '</aside>';
+  }
+
+  // ── 5. Pitch page builder — Maging.page({ mode: 'pitch', slides: [...] }) ──
   function pitchPage(cfg) {
     const M = window.Maging;
     const slides = cfg.slides || [];
     const container = document.createElement('main');
     container.style.cssText = 'display:flex;min-height:100vh;';
 
-    // Sidebar — created here but appended AFTER body mount
-    // (connectedCallback needs slides in DOM to build navigation)
+    // Sidebar — plain HTML (no web component, no connectedCallback timing)
     const sTitle = cfg.sidebarTitle || cfg.title || '';
     const sDate = cfg.sidebarDate || cfg.date || '';
-    const sidebar = document.createElement('maging-sidebar');
-    sidebar.setAttribute('active', 'cover');
-    if (sTitle) sidebar.setAttribute('data-title', sTitle);
-    if (sDate) sidebar.setAttribute('data-date', sDate);
+    const sidebarWrap = document.createElement('div');
+    sidebarWrap.style.cssText = 'flex-shrink:0;align-self:stretch;display:flex;';
+    sidebarWrap.innerHTML = _buildSidebarHTML(sTitle, sDate, slides);
+    container.appendChild(sidebarWrap);
 
     // Slide area
     const slideArea = document.createElement('div');
@@ -963,13 +1008,11 @@
       if (s.team) sec.dataset.team = s.team;
       slideArea.appendChild(sec);
 
-      // Build mount function from widgets array
       const widgets = s.widgets || [];
       MOUNT[s.id] = () => {
         widgets.forEach(w => {
-          const typeName = w.type;
-          const fn = M[typeName];
-          if (!fn) { console.warn('[maging.page/pitch] Unknown widget: ' + typeName); return; }
+          const fn = M[w.type];
+          if (!fn) { console.warn('[maging.page/pitch] Unknown widget: ' + w.type); return; }
           const wCfg = {};
           for (const k in w) { if (k !== 'type') wCfg[k] = w[k]; }
           fn(sec, wCfg);
@@ -977,16 +1020,9 @@
       };
     });
 
-    // Mount to DOM first (initDeck needs slides in DOM)
+    // Mount then init deck (scoped to container)
     document.body.appendChild(container);
-
-    // Insert sidebar AFTER body mount — connectedCallback needs slides already in DOM
-    container.insertBefore(sidebar, container.firstChild);
-
-    // Init deck after DOM is ready
-    setTimeout(() => {
-      initDeck(MOUNT);
-    }, 0);
+    setTimeout(() => initDeck(MOUNT, container), 0);
 
     return M._pageResult(container, cfg, 'pitch');
   }

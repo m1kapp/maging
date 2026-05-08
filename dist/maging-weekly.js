@@ -82,8 +82,9 @@
   document.head.appendChild(_style);
 
   // ── 2. Maging.deck(MOUNT) — sidebar provided by maging-sidebar.js ────────────────────────────────────────────────────
-  function initDeck(MOUNT) {
-    const slides     = [...document.querySelectorAll('section.slide')];
+  function initDeck(MOUNT, root) {
+    const scope = root || document;
+    const slides     = [...scope.querySelectorAll('section.slide')];
     const SLIDE_IDS  = slides.map(s => s.id);
     const mounted    = {};
 
@@ -123,13 +124,13 @@
       history.replaceState(null, '', '#' + id);
       if (!mounted[id]) { mounted[id] = true; MOUNT[id]?.(); }
       if (codeViewOpen) openCodeView();
-      document.querySelectorAll('maging-sidebar .wrs__link').forEach(a => {
+      scope.querySelectorAll('.wrs__link[data-nav]').forEach(a => {
         a.classList.toggle('wrs__link--active', a.dataset.nav === id);
       });
-      document.querySelectorAll('maging-sidebar .wrs__page-dot').forEach(d => {
+      scope.querySelectorAll('.wrs__page-dot[data-nav]').forEach(d => {
         d.classList.toggle('wrs__page-dot--active', d.dataset.nav === id);
       });
-      const head = document.querySelector('maging-sidebar .wrs__head');
+      const head = scope.querySelector('.wrs__head');
       if (head) head.classList.toggle('wrs__head--active', id === 'cover');
       const idx = SLIDE_IDS.indexOf(id);
       if (indEl)   { indEl.innerHTML = (idx + 1) + ' <span class="wrn-bar__sep">/</span> ' + slides.length; }
@@ -363,19 +364,51 @@
   }
 
   // ── Weekly page builder — Maging.page({ mode: 'weekly', slides: [...] }) ──
+  // Build sidebar HTML directly (shared logic with pitch)
+  function _buildSidebarHTML(title, date, slideConfigs) {
+    const items = [];
+    slideConfigs.forEach(s => {
+      if (s.cover || !s.label) return;
+      const prev = items[items.length - 1];
+      if (prev && prev.label === s.label) { prev.pages.push(s.id); }
+      else { items.push({ label: s.label, bu: s.bu || '', team: s.team || '', pages: [s.id] }); }
+    });
+    const hasBU = items.some(it => it.bu);
+    function renderItem(it) {
+      const dots = it.pages.length > 1
+        ? '<span class="wrs__pages">' + it.pages.map(p => '<a class="wrs__page-dot" data-nav="' + p + '"></a>').join('') + '</span>' : '';
+      return '<div class="wrs__row"><a class="wrs__link" data-nav="' + it.pages[0] + '"><span class="wrs__dash">\u2015</span><span class="wrs__lbl">' + it.label + '</span></a>' + dots + '</div>';
+    }
+    let navHTML = '';
+    if (hasBU) {
+      const groups = [];
+      items.forEach(item => {
+        let g = groups.find(x => x.bu === item.bu); if (!g) { g = { bu: item.bu, teams: [] }; groups.push(g); }
+        let t = g.teams.find(x => x.team === item.team); if (!t) { t = { team: item.team, items: [] }; g.teams.push(t); }
+        t.items.push(item);
+      });
+      navHTML = groups.map(g => '<div class="wrs__group"><div class="wrs__bu">' + g.bu + '</div>' +
+        g.teams.map(t => '<div class="wrs__team">' + (t.team ? '<div class="wrs__team-label">' + t.team + '</div>' : '') +
+          t.items.map(renderItem).join('') + '</div>').join('') + '</div>').join('');
+    } else { navHTML = items.map(renderItem).join(''); }
+    return '<aside class="wrs"><a class="wrs__head wrs__head--active" data-nav="cover" style="text-decoration:none;color:inherit;cursor:pointer;display:block">' +
+      '<div class="wrs__title">' + (title || '') + '</div>' + (date ? '<div class="wrs__date">' + date + '</div>' : '') +
+      '</a>' + navHTML + '</aside>';
+  }
+
   function weeklyPage(cfg) {
     const M = window.Maging;
     const slides = cfg.slides || [];
     const container = document.createElement('main');
     container.style.cssText = 'display:flex;min-height:100vh;';
 
-    // Sidebar — appended AFTER body mount (connectedCallback needs slides in DOM)
+    // Sidebar — plain HTML
     const sTitle = cfg.sidebarTitle || cfg.title || '';
     const sDate = cfg.sidebarDate || cfg.date || '';
-    const sidebar = document.createElement('maging-sidebar');
-    sidebar.setAttribute('active', 'cover');
-    if (sTitle) sidebar.setAttribute('data-title', sTitle);
-    if (sDate) sidebar.setAttribute('data-date', sDate);
+    const sidebarWrap = document.createElement('div');
+    sidebarWrap.style.cssText = 'flex-shrink:0;align-self:stretch;display:flex;';
+    sidebarWrap.innerHTML = _buildSidebarHTML(sTitle, sDate, slides);
+    container.appendChild(sidebarWrap);
 
     const slideArea = document.createElement('div');
     slideArea.style.cssText = 'flex:1;min-width:0;';
@@ -394,9 +427,8 @@
       const widgets = s.widgets || [];
       MOUNT[s.id] = () => {
         widgets.forEach(w => {
-          const typeName = w.type;
-          const fn = M[typeName];
-          if (!fn) { console.warn('[maging.page/weekly] Unknown widget: ' + typeName); return; }
+          const fn = M[w.type];
+          if (!fn) { console.warn('[maging.page/weekly] Unknown widget: ' + w.type); return; }
           const wCfg = {};
           for (const k in w) { if (k !== 'type') wCfg[k] = w[k]; }
           fn(sec, wCfg);
@@ -404,11 +436,8 @@
       };
     });
 
-    // Mount first so initDeck can find slides in DOM
     document.body.appendChild(container);
-    // Insert sidebar AFTER body mount — connectedCallback needs slides already in DOM
-    container.insertBefore(sidebar, container.firstChild);
-    setTimeout(() => initDeck(MOUNT), 0);
+    setTimeout(() => initDeck(MOUNT, container), 0);
 
     return M._pageResult(container, cfg, 'weekly');
   }
