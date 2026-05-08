@@ -32,14 +32,22 @@ export function MagingPage({ config, scripts = [] }: MagingPageProps) {
         setReady(true);
         return;
       }
-      // Load mode scripts sequentially
+      // Load mode scripts, skipping already-loaded ones
+      const toLoad = scripts.filter(src => !document.querySelector('script[src="' + src + '"]'));
+      if (toLoad.length === 0) {
+        setReady(true);
+        return;
+      }
       let loaded = 0;
-      scripts.forEach(src => {
+      toLoad.forEach(src => {
         const s = document.createElement('script');
         s.src = src;
         s.onload = () => {
           loaded++;
-          if (loaded >= scripts.length) setReady(true);
+          if (loaded >= toLoad.length) {
+            // Give the script a tick to execute and register widgets
+            setTimeout(() => setReady(true), 0);
+          }
         };
         document.head.appendChild(s);
       });
