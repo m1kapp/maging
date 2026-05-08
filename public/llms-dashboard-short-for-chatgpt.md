@@ -1,0 +1,1 @@
+../llms-dashboard-short-for-chatgpt.md

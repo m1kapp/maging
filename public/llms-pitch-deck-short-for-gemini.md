@@ -1,0 +1,1 @@
+../llms-pitch-deck-short-for-gemini.md

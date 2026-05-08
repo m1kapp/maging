@@ -1,0 +1,1 @@
+../llms-landing-short-for-claude.md

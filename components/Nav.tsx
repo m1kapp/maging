@@ -127,7 +127,8 @@ export function Nav() {
                 </div>
                 <Link href="/demo/dashboard/acme" className="mw-site-nav__menu-item">운영 모니터링 · SaaS</Link>
                 <Link href="/demo/dashboard/sales" className="mw-site-nav__menu-item">매출/영업 분석</Link>
-                <Link href="/demo/dashboard/finance" className="mw-site-nav__menu-item">경영 리포트</Link>
+                <Link href="/demo/dashboard/finance" className="mw-site-nav__menu-item">투자 포트폴리오</Link>
+                <Link href="/demo/dashboard/hr" className="mw-site-nav__menu-item">HR 애널리틱스</Link>
               </div>
               <div className="mw-site-nav__mega-col">
                 <div className="mw-site-nav__mega-head">
@@ -138,7 +139,10 @@ export function Nav() {
                   </span>
                 </div>
                 <Link href="/demo/slide/pitch" className="mw-site-nav__menu-item">투자 유치 · 피칭</Link>
+                <Link href="/demo/slide/proposal" className="mw-site-nav__menu-item">도입 제안</Link>
+                <Link href="/demo/slide/strategy" className="mw-site-nav__menu-item">이노엔 · 내부 전략</Link>
                 <Link href="/demo/slide/weekly" className="mw-site-nav__menu-item">SaaS 주간보고</Link>
+                <Link href="/demo/slide/ecommerce" className="mw-site-nav__menu-item">이커머스 주간보고</Link>
               </div>
               <div className="mw-site-nav__mega-col">
                 <div className="mw-site-nav__mega-head">
@@ -149,6 +153,8 @@ export function Nav() {
                   </span>
                 </div>
                 <Link href="/demo/news" className="mw-site-nav__menu-item">교육/가이드</Link>
+                <Link href="/demo/news/finance" className="mw-site-nav__menu-item">데이터 인사이트</Link>
+                <Link href="/demo/news/cafe" className="mw-site-nav__menu-item">브랜드/서비스 소개</Link>
               </div>
               <div className="mw-site-nav__mega-col">
                 <div className="mw-site-nav__mega-head">
@@ -159,6 +165,8 @@ export function Nav() {
                   </span>
                 </div>
                 <Link href="/demo/landing/startup" className="mw-site-nav__menu-item">SaaS/개발 도구</Link>
+                <Link href="/demo/landing/edtech" className="mw-site-nav__menu-item">교육/서비스</Link>
+                <Link href="/demo/landing/campaign" className="mw-site-nav__menu-item">이벤트/캠페인</Link>
               </div>
             </div>
           </div>

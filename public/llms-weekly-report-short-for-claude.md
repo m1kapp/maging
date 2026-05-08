@@ -1,0 +1,1 @@
+../llms-weekly-report-short-for-claude.md
