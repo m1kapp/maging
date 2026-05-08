@@ -1024,6 +1024,47 @@
     activateByIdx(initIdx >= 0 ? initIdx : 0);
   }
 
+  // ── News page builder — Maging.page({ mode: 'news', cards: [...] }) ──
+  function newsPage(cfg) {
+    const M = window.Maging;
+    const cards = cfg.cards || [];
+    const brand = cfg.brand || '';
+
+    const container = document.createElement('main');
+    container.style.cssText = 'display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 60px);';
+
+    const wrap = document.createElement('div');
+    wrap.id = 'cards-wrap';
+    wrap.style.cssText = 'max-width:540px;width:100%;';
+    container.appendChild(wrap);
+
+    const MOUNT = {};
+    cards.forEach(c => {
+      const sec = document.createElement('section');
+      sec.className = 'news-card';
+      sec.id = c.id;
+      wrap.appendChild(sec);
+
+      const cardType = c.type;
+      MOUNT[c.id] = () => {
+        const fn = M[cardType];
+        if (!fn) { console.warn('[maging.page/news] Unknown card: ' + cardType); return; }
+        const cCfg = {};
+        for (const k in c) { if (k !== 'type' && k !== 'id') cCfg[k] = c[k]; }
+        if (brand && !cCfg.brand) cCfg.brand = brand;
+        fn(sec, cCfg);
+      };
+    });
+
+    const nav = document.createElement('news-nav');
+    container.appendChild(nav);
+
+    document.body.appendChild(container);
+    setTimeout(() => initNewsDeck(MOUNT), 0);
+
+    return M._pageResult(container, cfg, 'news');
+  }
+
   // ── Expose APIs ───────────────────────────────────────────────────────────
   function register(M) {
     M.coverCard = coverCard;
@@ -1038,6 +1079,8 @@
     M.stepCard = stepCard;
     M.testimonialCard = testimonialCard;
     M.newsDeck = initNewsDeck;
+    M._pageBuilders = M._pageBuilders || {};
+    M._pageBuilders.news = newsPage;
   }
 
   if (window.Maging) register(window.Maging);

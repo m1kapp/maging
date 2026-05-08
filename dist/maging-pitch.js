@@ -931,10 +931,60 @@
     go(h && slides.find(s => s.id === h) ? h : slides[0].id);
   }
 
-  // ── 4. Expose & auto-init ──────────────────────────────────────────────────
+  // ── 4. Pitch page builder — Maging.page({ mode: 'pitch', slides: [...] }) ──
+  function pitchPage(cfg) {
+    const M = window.Maging;
+    const slides = cfg.slides || [];
+    const container = document.createElement('main');
+    container.style.cssText = 'display:flex;min-height:100vh;';
+
+    // Slide area
+    const slideArea = document.createElement('div');
+    slideArea.style.cssText = 'flex:1;min-width:0;';
+    container.appendChild(slideArea);
+
+    // Create slide sections
+    const MOUNT = {};
+    slides.forEach(s => {
+      const sec = document.createElement('section');
+      sec.className = 'slide' + (s.cover ? ' cover-slide' : '');
+      sec.id = s.id;
+      if (s.label) sec.dataset.label = s.label;
+      if (s.bu) sec.dataset.bu = s.bu;
+      if (s.team) sec.dataset.team = s.team;
+      slideArea.appendChild(sec);
+
+      // Build mount function from widgets array
+      const widgets = s.widgets || [];
+      MOUNT[s.id] = () => {
+        widgets.forEach(w => {
+          const typeName = w.type;
+          const fn = M[typeName];
+          if (!fn) { console.warn('[maging.page/pitch] Unknown widget: ' + typeName); return; }
+          const wCfg = {};
+          for (const k in w) { if (k !== 'type') wCfg[k] = w[k]; }
+          fn(sec, wCfg);
+        });
+      };
+    });
+
+    // Auto-mount
+    document.body.appendChild(container);
+
+    // Init deck after DOM is ready
+    setTimeout(() => initDeck(MOUNT), 0);
+
+    return M._pageResult(container, cfg, 'pitch');
+  }
+
+  // ── 5. Expose & auto-init ──────────────────────────────────────────────────
   if (window.Maging) { registerWidgets(window.Maging); }
   window.addEventListener('maging:ready', () => {
-    if (window.Maging) { registerWidgets(window.Maging); }
+    if (window.Maging) {
+      registerWidgets(window.Maging);
+      window.Maging._pageBuilders = window.Maging._pageBuilders || {};
+      window.Maging._pageBuilders.pitch = pitchPage;
+    }
     // Use setTimeout(0) to ensure inline script's maging:ready handler
     // (which sets DECK_MOUNT) has run first — critical when maging:ready
     // replays synchronously during addEventListener() call.

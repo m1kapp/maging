@@ -362,17 +362,61 @@
     }
   }
 
+  // ── Weekly page builder — Maging.page({ mode: 'weekly', slides: [...] }) ──
+  function weeklyPage(cfg) {
+    const M = window.Maging;
+    const slides = cfg.slides || [];
+    const container = document.createElement('main');
+    container.style.cssText = 'display:flex;min-height:100vh;';
+
+    const slideArea = document.createElement('div');
+    slideArea.style.cssText = 'flex:1;min-width:0;';
+    container.appendChild(slideArea);
+
+    const MOUNT = {};
+    slides.forEach(s => {
+      const sec = document.createElement('section');
+      sec.className = 'slide' + (s.cover ? ' cover-slide' : '');
+      sec.id = s.id;
+      if (s.label) sec.dataset.label = s.label;
+      if (s.bu) sec.dataset.bu = s.bu;
+      if (s.team) sec.dataset.team = s.team;
+      slideArea.appendChild(sec);
+
+      const widgets = s.widgets || [];
+      MOUNT[s.id] = () => {
+        widgets.forEach(w => {
+          const typeName = w.type;
+          const fn = M[typeName];
+          if (!fn) { console.warn('[maging.page/weekly] Unknown widget: ' + typeName); return; }
+          const wCfg = {};
+          for (const k in w) { if (k !== 'type') wCfg[k] = w[k]; }
+          fn(sec, wCfg);
+        });
+      };
+    });
+
+    document.body.appendChild(container);
+    setTimeout(() => initDeck(MOUNT), 0);
+
+    return M._pageResult(container, cfg, 'weekly');
+  }
+
   // Expose Maging.deck() + Maging.monthlyTable()
   // — 즉시 등록: maging.js를 sync로 로드한 환경(components 갤러리 등)
   if (window.Maging) {
     window.Maging.deck = initDeck;
     window.Maging.monthlyTable = monthlyTable;
+    window.Maging._pageBuilders = window.Maging._pageBuilders || {};
+    window.Maging._pageBuilders.weekly = weeklyPage;
   }
   // — maging:ready 이벤트: maging-all.js 환경 + DECK_MOUNT 자동 실행
   window.addEventListener('maging:ready', () => {
     if (window.Maging) {
       window.Maging.deck = initDeck;
       window.Maging.monthlyTable = monthlyTable;
+      window.Maging._pageBuilders = window.Maging._pageBuilders || {};
+      window.Maging._pageBuilders.weekly = weeklyPage;
     }
     if (window.DECK_MOUNT) initDeck(window.DECK_MOUNT);
   });

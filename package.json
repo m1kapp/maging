@@ -28,22 +28,25 @@
     "presentation"
   ],
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "build:tw": "tailwindcss -i weekly-report/tw-input.css -o weekly-report/tw.css --content weekly-report/index.html --minify && tailwindcss -i weekly-report/tw-input.css -o landing/tw.css --content landing/startup.html --minify && tailwindcss -i card-news/tw-input.css -o card-news/tw.css --content card-news/index.html --minify",
+    "dev": "next dev --port 3456",
+    "build": "next build",
+    "start": "next start",
     "build:llms": "node scripts/build-llms.mjs",
     "sync": "node scripts/sync-index.mjs",
     "count-tokens": "node scripts/count-prompt-tokens.mjs",
     "import-theme": "node scripts/import-designmd.mjs",
-    "import-all": "node scripts/batch-import-designmd.mjs",
-    "vercel-build": "vite build"
+    "import-all": "node scripts/batch-import-designmd.mjs"
   },
   "devDependencies": {
     "@anthropic-ai/tokenizer": "^0.0.4",
     "@tailwindcss/cli": "^4.2.4",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "gpt-tokenizer": "^2.9.0",
+    "next": "^16.2.6",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
     "tailwindcss": "^4.2.4",
-    "vite": "^8.0.10"
+    "typescript": "^6.0.3"
   }
 }

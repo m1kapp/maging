@@ -3122,11 +3122,21 @@
     fmt: fmt,
     seeded: seeded,
 
+    // Mode-specific page builder registry — each mode script registers its builder here.
+    _pageBuilders: {},
+
     // ================================================================
-    // Maging.page(config) — One-shot declarative dashboard generator
+    // Maging.page(config) — Declarative page generator (all modes)
     // ================================================================
     page: function (cfg) {
       if (!cfg) return;
+
+      var mode = cfg.mode || 'dashboard';
+
+      // Dispatch to mode-specific builder if registered
+      if (mode !== 'dashboard' && api._pageBuilders[mode]) {
+        return api._pageBuilders[mode](cfg);
+      }
 
       // ── Type shorthand → full function name ──
       var TYPE_MAP = {
@@ -3283,7 +3293,7 @@
         });
       });
 
-      // Mount to DOM
+      // Auto-mount to DOM (backward compat)
       var body = document.body;
       var existing = body.querySelector('main');
       if (existing) {
@@ -3292,7 +3302,90 @@
         body.appendChild(container);
       }
 
-      return container;
+      return api._pageResult(container, cfg, 'dashboard');
+    },
+
+    // ================================================================
+    // PageResult factory — shared by all mode builders
+    // ================================================================
+    _pageResult: function (el, cfg, mode) {
+      var mounted = !!el.parentNode;
+
+      // Determine CDN scripts needed per mode
+      var MODE_SCRIPTS = {
+        dashboard: [],
+        landing:   ['maging-landing.js'],
+        pitch:     ['maging-sidebar.js', 'maging-pitch.js'],
+        weekly:    ['maging-sidebar.js', 'maging-weekly.js'],
+        news:      ['maging-news.js'],
+      };
+
+      return {
+        el: el,
+
+        mount: function (sel) {
+          var target = sel ? q(sel) : document.body;
+          if (!target) { console.warn('[maging.page] mount target not found: ' + sel); return this; }
+          if (el.parentNode) el.parentNode.removeChild(el);
+          target.appendChild(el);
+          mounted = true;
+          return this;
+        },
+
+        toHtml: function (opts) {
+          opts = opts || {};
+          var theme = opts.theme || api.getTheme() || 'flow';
+          var title = cfg.title || (cfg.header && cfg.header.title) || 'maging';
+          var ver = opts.version || api.version;
+          var cdn = opts.cdn || 'https://cdn.jsdelivr.net/npm/@m1kapp/maging@' + ver + '/dist';
+
+          // Serialize config — strip functions, preserve string shorthands
+          var safeCfg = JSON.stringify(cfg, function (key, val) {
+            if (typeof val === 'function') return undefined;
+            return val;
+          }, 2);
+
+          var scripts = MODE_SCRIPTS[mode] || [];
+          var extraTags = scripts.map(function (s) {
+            return '  <script src="' + cdn + '/' + s + '"><\/script>';
+          }).join('\n');
+
+          return [
+            '<!DOCTYPE html>',
+            '<html lang="ko" data-theme="' + theme + '">',
+            '<head>',
+            '<meta charset="UTF-8">',
+            '<meta name="viewport" content="width=device-width, initial-scale=1">',
+            '<title>' + title + '</title>',
+            '<link rel="stylesheet" href="' + cdn + '/maging.css">',
+            '<script src="' + cdn + '/maging-all.js"><\/script>',
+            extraTags ? extraTags : '',
+            '</head>',
+            '<body class="mw-themed">',
+            '<div id="app"></div>',
+            '<script>',
+            'window.addEventListener("maging:ready", function () {',
+            '  Maging.page(' + safeCfg + ').mount("#app");',
+            '});',
+            '<\/script>',
+            '</body>',
+            '</html>'
+          ].filter(Boolean).join('\n');
+        },
+
+        destroy: function () {
+          if (el.parentNode) el.parentNode.removeChild(el);
+          // Dispose ECharts instances within this page
+          if (typeof echarts !== 'undefined') {
+            var charts = el.querySelectorAll('[_echarts_instance_]');
+            for (var i = 0; i < charts.length; i++) {
+              var inst = echarts.getInstanceByDom(charts[i]);
+              if (inst) inst.dispose();
+            }
+          }
+          mounted = false;
+        }
+      };
     },
   };
 

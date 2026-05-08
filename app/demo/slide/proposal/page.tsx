@@ -1,0 +1,153 @@
+import { Metadata } from 'next';
+import { MagingPage } from '@/components/MagingPage';
+
+export const metadata: Metadata = {
+  title: '제안서 — maging',
+  description: 'maging 슬라이드 모드 데모. 프로젝트 제안서.',
+};
+
+const config = {
+  mode: 'pitch',
+  slides: [
+    {
+      id: 'cover',
+      cover: true,
+      widgets: [{
+        type: 'pitchCover',
+        company: 'CS팀',
+        tagline: 'AI 고객 응대 자동화 도입 제안',
+        logo: '🤖',
+        subtitle: '내부 전략 제안 · 2026.05',
+        style: 'bold',
+      }],
+    },
+    {
+      id: 'problem',
+      label: 'Problem',
+      widgets: [{
+        type: 'problemSlide',
+        headline: 'CS팀 인력 부족과 응답 지연이 고객 이탈을 가속화하고 있습니다',
+        points: [
+          { icon: '⏱️', title: '응답 시간 지연', desc: '평균 첫 응답까지 4.2시간. 업계 평균(1시간) 대비 4배 초과. 고객 만족도 하락의 1위 요인.' },
+          { icon: '🔄', title: '반복 문의 70%', desc: '전체 인입 문의의 70%가 FAQ로 해결 가능한 단순 반복 질문. 상담원 시간 낭비.' },
+          { icon: '👤', title: '인력 부족', desc: '현재 상담원 8명, 일 평균 인입 320건. 1인당 40건 처리로 야근 상시화.' },
+          { icon: '📉', title: '고객 이탈 증가', desc: '응답 지연 고객의 23%가 3개월 내 이탈. 연간 추정 매출 손실 ₩8억원.' },
+        ],
+        highlight: '반복 문의 70%를 자동화하면 상담원이 고부가가치 업무에 집중할 수 있습니다',
+      }],
+    },
+    {
+      id: 'solution',
+      label: 'Solution',
+      widgets: [{
+        type: 'solutionSlide',
+        headline: 'AI 챗봇 + 기존 FAQ 연동으로 즉시 응답 체계 구축',
+        before: {
+          label: 'Before · 현재',
+          items: ['평균 응답 4.2시간', '상담원 8명 풀가동', '단순 문의도 수동 처리', '주말·야간 응대 불가'],
+        },
+        after: {
+          label: 'After · AI 도입',
+          items: ['단순 문의 즉시 응답 (< 5초)', '상담원은 복잡 케이스 집중', '기존 FAQ DB 자동 연동', '24/7 무중단 응대'],
+        },
+      }],
+    },
+    {
+      id: 'product',
+      label: '예상 효과',
+      widgets: [{
+        type: 'metricHighlight',
+        metrics: [
+          { value: '-80', unit: '%', label: '평균 응답 시간' },
+          { value: '-40', unit: '%', label: '인건비 절감' },
+          { value: '+15', unit: 'pt', label: 'CSAT 만족도' },
+          { value: '70', unit: '%', label: '자동 해결률' },
+        ],
+      }],
+    },
+    {
+      id: 'timeline',
+      label: 'Timeline',
+      widgets: [{
+        type: 'timelineSlide',
+        headline: '도입 로드맵',
+        milestones: [
+          { date: '2026.06', title: 'PoC 착수', desc: 'FAQ 100건 학습 + 내부 테스트', active: true },
+          { date: '2026.07', title: '파일럿 운영', desc: '특정 채널(카카오톡) 한정 배포' },
+          { date: '2026.08', title: '성과 평가', desc: 'KPI 리뷰 + 개선점 도출' },
+          { date: '2026 Q4', title: '전사 확대', desc: '전 채널 적용 + 고도화' },
+          { date: '2027 Q1', title: '고도화', desc: '음성 ARS 연동 + 다국어' },
+        ],
+      }],
+    },
+    {
+      id: 'competition',
+      label: '솔루션 비교',
+      widgets: [{
+        type: 'competitorMatrix',
+        headline: '솔루션 비교 — 도입 방식별 평가',
+        axisX: { label: '커스터마이징 자유도', low: '제한적', high: '완전 자유' },
+        axisY: { label: '도입 속도', low: '6개월+', high: '1개월 내' },
+        players: [
+          { name: '하이브리드(추천)', x: 70, y: 80, highlight: true },
+          { name: '자체 개발', x: 95, y: 15 },
+          { name: '외부 SaaS A', x: 30, y: 90 },
+          { name: '외부 SaaS B', x: 40, y: 85 },
+          { name: '기존 IVR 확장', x: 50, y: 40 },
+        ],
+      }],
+    },
+    {
+      id: 'model',
+      label: '비용 비교',
+      widgets: [{
+        type: 'bizModelSlide',
+        headline: '비용 비교 — 현재 vs 도입 후',
+        tiers: [
+          { name: '현재 (AS-IS)', price: '₩9.6억', period: '/년', features: ['상담원 8명 인건비', '야근·주말 수당', '이탈 고객 매출 손실 ₩8억', '교육·온보딩 비용'] },
+          { name: 'AI 도입 후', price: '₩5.2억', period: '/년', features: ['상담원 5명 (복잡 케이스)', 'AI 솔루션 라이선스 ₩6000만', '인프라 운영비 ₩2000만', '이탈률 50% 감소'], popular: true },
+          { name: '절감 효과', price: '₩4.4억', period: '/년', features: ['인건비 -40%', '이탈 매출 회복 ₩4억', 'ROI 880%', '18개월 BEP 달성'] },
+        ],
+        note: '초기 투자 ₩5000만원 → 18개월 내 손익분기 → 연 ₩4.4억 순절감',
+      }],
+    },
+    {
+      id: 'team',
+      label: 'TF 구성',
+      widgets: [{
+        type: 'teamSlide',
+        headline: '프로젝트 TF 구성',
+        members: [
+          { name: '김서연', role: 'TF 리더 (CS팀장)', exp: 'CS 운영 8년 · 프로세스 혁신 전담' },
+          { name: '박준혁', role: 'AI 엔지니어', exp: 'NLP/LLM 개발 5년 · 챗봇 PoC 담당' },
+          { name: '이하은', role: '데이터 분석', exp: 'FAQ 데이터 정제 · 성과 측정 KPI 설계' },
+          { name: '정민수', role: 'IT 인프라', exp: 'API 연동 · 보안 검토 · 시스템 통합' },
+        ],
+      }],
+    },
+    {
+      id: 'ask',
+      label: '요청사항',
+      widgets: [{
+        type: 'askSlide',
+        headline: '요청사항 · ₩5000만원',
+        useOfFunds: [
+          { label: 'AI 솔루션 라이선스', pct: 40 },
+          { label: '인프라 구축', pct: 30 },
+          { label: 'TF 운영비', pct: 20 },
+          { label: '예비비', pct: 10 },
+        ],
+        milestones: [
+          '3개월 PoC 기간 승인 (2026.06-08)',
+          'PoC 성공 시 전사 확대 예산 별도 편성',
+          'TF 전담 인력 4명 배정 승인',
+        ],
+        contact: { email: 'cs-team@company.com', website: '내부 Confluence 페이지' },
+      }],
+    },
+  ],
+};
+
+export default function ProposalPage() {
+  return <MagingPage config={config} scripts={['/dist/maging-sidebar.js', '/dist/maging-pitch.js']} />;
+}

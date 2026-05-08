@@ -1,4 +1,5 @@
 node_modules
+.next
 _site
 .DS_Store
 *.log

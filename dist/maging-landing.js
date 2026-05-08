@@ -657,4 +657,108 @@
   M.codeBlock = codeBlock;
   M.comparisonTable = comparisonTable;
 
+  // ──────────────────────────────────────────────
+  // Landing page builder — Maging.page({ mode: 'landing', sections: [...] })
+  // ──────────────────────────────────────────────
+  var LANDING_TYPE_MAP = {
+    hero: 'heroSection',
+    logos: 'logoBar',
+    features: 'featureGrid',
+    pricing: 'pricingTable',
+    testimonials: 'testimonialGrid',
+    faq: 'faqAccordion',
+    steps: 'stepGuide',
+    code: 'codeBlock',
+    comparison: 'comparisonTable',
+    cta: 'ctaSection',
+  };
+
+  // Section types that use full-width (no lp-section wrapper)
+  var FULL_WIDTH = { hero: 1, cta: 1 };
+  // Section types that get centered text
+  var CENTERED = { features: 1, comparison: 1, testimonials: 1, pricing: 1 };
+
+  function landingPage(cfg) {
+    var container = document.createElement('div');
+    container.className = 'mw-themed';
+    container.style.wordBreak = 'keep-all';
+
+    var sections = cfg.sections || [];
+    sections.forEach(function (sec, si) {
+      var sType = sec.type || 'hero';
+      var fnName = LANDING_TYPE_MAP[sType] || sType;
+      var fn = M[fnName];
+      if (!fn) {
+        console.warn('[maging.page/landing] Unknown section type: ' + sType);
+        return;
+      }
+
+      // Divider between sections (skip before first, after hero, before cta)
+      if (si > 0 && sType !== 'cta' && sections[si - 1].type !== 'hero') {
+        var hr = document.createElement('hr');
+        hr.className = 'lp-divider';
+        hr.style.cssText = 'max-width:1100px;margin:0 auto;padding:0 1.5rem;border:none;border-top:1px solid var(--mw-border);opacity:0.5;';
+        container.appendChild(hr);
+      }
+
+      if (FULL_WIDTH[sType]) {
+        // Full-width sections (hero, cta) — widget creates its own wrapper
+        var el = document.createElement('div');
+        container.appendChild(el);
+        fn(el, sec);
+      } else {
+        // Wrapped in lp-section
+        var wrap = document.createElement('section');
+        wrap.className = 'lp-section' + (CENTERED[sType] ? ' lp-section--center' : '');
+        wrap.style.cssText = 'max-width:1100px;margin:0 auto;padding:5rem 1.5rem;scroll-margin-top:60px;';
+        container.appendChild(wrap);
+
+        // Kicker + title above the widget (if provided)
+        if (sec.kicker || sec.sectionTitle) {
+          if (sec.kicker) {
+            var kickerEl = document.createElement('div');
+            kickerEl.className = 'lp-section__kicker';
+            kickerEl.style.cssText = 'font-size:var(--mw-text-xs);color:var(--mw-accent);text-transform:uppercase;letter-spacing:0.12em;font-family:var(--mw-font);margin-bottom:0.75rem;font-weight:600;';
+            kickerEl.textContent = sec.kicker;
+            wrap.appendChild(kickerEl);
+          }
+          if (sec.sectionTitle) {
+            var titleEl = document.createElement('div');
+            titleEl.className = 'lp-section__title';
+            titleEl.style.cssText = 'font-size:clamp(1.5rem,3vw,2.125rem);font-weight:700;letter-spacing:-0.02em;margin-bottom:0.75rem;font-family:var(--mw-display-font);';
+            titleEl.textContent = sec.sectionTitle;
+            wrap.appendChild(titleEl);
+          }
+          if (sec.sectionDesc) {
+            var descEl = document.createElement('div');
+            descEl.className = 'lp-section__desc';
+            descEl.style.cssText = 'font-size:var(--mw-text-sm);color:var(--mw-text-muted);max-width:520px;line-height:1.7;margin-bottom:2.5rem;';
+            if (CENTERED[sType]) descEl.style.cssText += 'margin-left:auto;margin-right:auto;';
+            descEl.textContent = sec.sectionDesc;
+            wrap.appendChild(descEl);
+          }
+        }
+
+        var widgetEl = document.createElement('div');
+        wrap.appendChild(widgetEl);
+
+        // Build widget config — pass all sec props except meta keys
+        var widgetCfg = {};
+        for (var k in sec) {
+          if (k === 'type' || k === 'kicker' || k === 'sectionTitle' || k === 'sectionDesc') continue;
+          widgetCfg[k] = sec[k];
+        }
+        fn(widgetEl, widgetCfg);
+      }
+    });
+
+    // Auto-mount
+    document.body.appendChild(container);
+
+    return M._pageResult(container, cfg, 'landing');
+  }
+
+  M._pageBuilders = M._pageBuilders || {};
+  M._pageBuilders.landing = landingPage;
+
 })(typeof window !== 'undefined' ? window : this);
