@@ -938,6 +938,15 @@
     const container = document.createElement('main');
     container.style.cssText = 'display:flex;min-height:100vh;';
 
+    // Sidebar (created first so it appears on the left)
+    const sTitle = cfg.sidebarTitle || cfg.title || '';
+    const sDate = cfg.sidebarDate || cfg.date || '';
+    const sidebar = document.createElement('maging-sidebar');
+    sidebar.setAttribute('active', 'cover');
+    if (sTitle) sidebar.setAttribute('data-title', sTitle);
+    if (sDate) sidebar.setAttribute('data-date', sDate);
+    container.appendChild(sidebar);
+
     // Slide area
     const slideArea = document.createElement('div');
     slideArea.style.cssText = 'flex:1;min-width:0;';
@@ -968,7 +977,7 @@
       };
     });
 
-    // Auto-mount
+    // Mount to DOM first (initDeck needs slides in DOM)
     document.body.appendChild(container);
 
     // Init deck after DOM is ready
