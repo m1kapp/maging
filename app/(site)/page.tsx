@@ -30,8 +30,8 @@ const config = {
       ],
       outputs: [
         { id: 'dashboard', label: '대시보드' },
-        { id: 'weekly', label: '슬라이드' },
-        { id: 'cardnews', label: '카드뉴스' },
+        { id: 'weekly-report', label: '슬라이드' },
+        { id: 'card-news', label: '카드뉴스' },
         { id: 'landing', label: '랜딩페이지' },
       ],
       sizes: ['short', 'full'],
@@ -39,32 +39,32 @@ const config = {
       defaultSize: 'full',
       promptBaseUrl: '/',
       requests: {
-        dashboard: '3월 매출 CSV 기반으로 경영진 리뷰용 대시보드 만들어줘',
-        weekly: 'SaaS팀 4월 4주차 주간보고 만들어줘. 영업·CS·개발·AX 4개 팀',
-        landing: 'AI 코드 리뷰 SaaS 랜딩페이지 만들어줘. 히어로+기능+가격+FAQ',
-        cardnews: 'AI 마케팅 트렌드 카드뉴스 만들어줘. 10장짜리',
+        'dashboard': '3월 매출 CSV 기반으로 경영진 리뷰용 대시보드 만들어줘',
+        'weekly-report': 'SaaS팀 4월 4주차 주간보고 만들어줘. 영업·CS·개발·AX 4개 팀',
+        'landing': 'AI 코드 리뷰 SaaS 랜딩페이지 만들어줘. 히어로+기능+가격+FAQ',
+        'card-news': 'AI 마케팅 트렌드 카드뉴스 만들어줘. 10장짜리',
       },
       handshakes: {
-        dashboard: '데이터 파일을 첨부하거나, 만들고 싶은 대시보드를 자유롭게 설명해주세요.',
-        weekly: '주간보고를 만들어 드릴게요. 팀 구조와 KPI를 알려주세요.',
-        landing: '랜딩페이지를 만들어 드릴게요. 제품 정보를 알려주세요.',
-        cardnews: '카드뉴스를 만들어 드릴게요. 주제와 장수를 알려주세요.',
+        'dashboard': '데이터 파일을 첨부하거나, 만들고 싶은 대시보드를 자유롭게 설명해주세요.',
+        'weekly-report': '주간보고를 만들어 드릴게요. 팀 구조와 KPI를 알려주세요.',
+        'landing': '랜딩페이지를 만들어 드릴게요. 제품 정보를 알려주세요.',
+        'card-news': '카드뉴스를 만들어 드릴게요. 주제와 장수를 알려주세요.',
       },
       previews: {
-        dashboard: [
+        'dashboard': [
           { type: 'kpiCard', compact: true, label: '매출', value: '128억', delta: 8.3 },
           { type: 'kpiCard', compact: true, label: 'DAU', value: '48K', delta: 12.4 },
           { type: 'lineChart', categories: ['1월', '2월', '3월', '4월', '5월', '6월'], series: [{ name: '매출', data: [72, 78, 81, 88, 91, 128] }] },
         ],
-        weekly: [
+        'weekly-report': [
           { type: 'kpiCard', compact: true, label: '신규매출', value: '30억', delta: 18.5 },
           { type: 'kpiCard', compact: true, label: '달성률', value: '96%', delta: -3.8 },
         ],
-        cardnews: [
+        'card-news': [
           { type: 'kpiCard', compact: true, label: 'AI 도입률', value: '78%', delta: 15.2 },
           { type: 'barChart', items: [{ label: '마케팅', value: 78 }, { label: '영업', value: 65 }, { label: 'CS', value: 52 }] },
         ],
-        landing: [
+        'landing': [
           { type: 'kpiCard', compact: true, label: '위젯', value: '73개' },
           { type: 'kpiCard', compact: true, label: '테마', value: '105개' },
         ],
