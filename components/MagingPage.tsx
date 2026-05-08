@@ -24,19 +24,29 @@ export function MagingPage({ config, scripts = [], fullscreen = false }: MagingP
 
   // Load additional mode scripts (e.g. maging-landing.js, maging-pitch.js)
   useEffect(() => {
-    function checkReady() {
+    const mode = (config as any).mode || 'dashboard';
+
+    function checkCoreReady() {
       return !!window.Maging?.page;
     }
 
-    function onReady() {
+    function checkBuilderReady() {
+      if (mode === 'dashboard') return true;
+      return !!window.Maging?._pageBuilders?.[mode];
+    }
+
+    function loadScriptsAndSetReady() {
       if (scripts.length === 0) {
         setReady(true);
         return;
       }
-      // Load mode scripts, skipping already-loaded ones
       const toLoad = scripts.filter(src => !document.querySelector('script[src="' + src + '"]'));
       if (toLoad.length === 0) {
-        setReady(true);
+        // Scripts already loaded — poll for builder registration
+        const poll = setInterval(() => {
+          if (checkBuilderReady()) { clearInterval(poll); setReady(true); }
+        }, 10);
+        setTimeout(() => clearInterval(poll), 3000); // safety timeout
         return;
       }
       let loaded = 0;
@@ -46,19 +56,21 @@ export function MagingPage({ config, scripts = [], fullscreen = false }: MagingP
         s.onload = () => {
           loaded++;
           if (loaded >= toLoad.length) {
-            // Give the script a tick to execute and register widgets
-            setTimeout(() => setReady(true), 0);
+            // Poll until builder is registered (IIFE may need a tick)
+            const poll = setInterval(() => {
+              if (checkBuilderReady()) { clearInterval(poll); setReady(true); }
+            }, 10);
+            setTimeout(() => clearInterval(poll), 3000);
           }
         };
         document.head.appendChild(s);
       });
     }
 
-    if (checkReady()) {
-      onReady();
+    if (checkCoreReady()) {
+      loadScriptsAndSetReady();
     } else {
-      window.addEventListener('maging:ready', onReady);
-      return () => window.removeEventListener('maging:ready', onReady);
+      window.addEventListener('maging:ready', () => loadScriptsAndSetReady());
     }
   }, []);
 
@@ -69,7 +81,10 @@ export function MagingPage({ config, scripts = [], fullscreen = false }: MagingP
     // Clear previous content
     ref.current.innerHTML = '';
 
-    const page = window.Maging.page(config);
+    // Call mode builder directly if available, otherwise core page()
+    const mode = (config as any).mode || 'dashboard';
+    const builder = mode !== 'dashboard' ? window.Maging._pageBuilders?.[mode] : null;
+    const page = builder ? builder(config) : window.Maging.page(config);
     if (page?.el) {
       if (fullscreen) {
         // Slides/news — page already mounted to body by builder, leave it there.

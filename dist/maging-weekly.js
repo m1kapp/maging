@@ -369,14 +369,13 @@
     const container = document.createElement('main');
     container.style.cssText = 'display:flex;min-height:100vh;';
 
-    // Sidebar
+    // Sidebar — appended AFTER body mount (connectedCallback needs slides in DOM)
     const sTitle = cfg.sidebarTitle || cfg.title || '';
     const sDate = cfg.sidebarDate || cfg.date || '';
     const sidebar = document.createElement('maging-sidebar');
     sidebar.setAttribute('active', 'cover');
     if (sTitle) sidebar.setAttribute('data-title', sTitle);
     if (sDate) sidebar.setAttribute('data-date', sDate);
-    container.appendChild(sidebar);
 
     const slideArea = document.createElement('div');
     slideArea.style.cssText = 'flex:1;min-width:0;';
@@ -407,6 +406,8 @@
 
     // Mount first so initDeck can find slides in DOM
     document.body.appendChild(container);
+    // Insert sidebar AFTER body mount — connectedCallback needs slides already in DOM
+    container.insertBefore(sidebar, container.firstChild);
     setTimeout(() => initDeck(MOUNT), 0);
 
     return M._pageResult(container, cfg, 'weekly');
