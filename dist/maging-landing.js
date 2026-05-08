@@ -188,7 +188,7 @@
       '.mw-cta-section__actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }',
 
       /* ── FAQ accordion ── */
-      '.mw-faq { max-width: 720px; }',
+      '.mw-faq { width: 100%; }',
       '.mw-faq__item { border-bottom: 1px solid var(--mw-border); }',
       '.mw-faq__q {',
       '  width: 100%; background: none; border: none; padding: 1.125rem 0; cursor: pointer;',
