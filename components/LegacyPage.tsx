@@ -7,11 +7,14 @@ export function LegacyPage({ src, fullscreen = false }: { src: string; fullscree
         src={src}
         style={{
           position: 'fixed',
-          inset: 0,
+          top: 44,
+          left: 0,
+          right: 0,
+          bottom: 0,
           width: '100vw',
-          height: '100vh',
+          height: 'calc(100vh - 44px)',
           border: 'none',
-          zIndex: 9999,
+          zIndex: 50,
           background: 'var(--mw-bg, #fff)',
         }}
       />
