@@ -1283,6 +1283,9 @@
     container.className = 'mw-themed';
     container.style.wordBreak = 'keep-all';
 
+    // Mount early so widgets can query DOM (aiDemo needs getElementById)
+    document.body.appendChild(container);
+
     var sections = cfg.sections || [];
     sections.forEach(function (sec, si) {
       var sType = sec.type || 'hero';
@@ -1351,9 +1354,6 @@
         fn(widgetEl, widgetCfg);
       }
     });
-
-    // Auto-mount
-    document.body.appendChild(container);
 
     return M._pageResult(container, cfg, 'landing');
   }
