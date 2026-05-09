@@ -134,6 +134,52 @@
     return '<div class="mw-header"><div>' + left + '</div>' + (rightHTML || '') + '</div>';
   }
 
+  // ==========================================================
+  // _applyCommon — shared customization params for ALL widgets.
+  // Call AFTER render() sets innerHTML, so badge/note/html/style
+  // are appended to the final DOM.
+  // ==========================================================
+  function _applyCommon(el, data) {
+    if (!el || !data) return;
+    // style — inline styles on the card container
+    if (data.style && typeof data.style === 'object') {
+      for (var k in data.style) { if (data.style.hasOwnProperty(k)) el.style[k] = data.style[k]; }
+    }
+    // accent — per-widget accent color override
+    if (data.accent) {
+      el.style.setProperty('--mw-accent', data.accent);
+    }
+    // noBorder — remove card border + shadow
+    if (data.noBorder) {
+      el.style.border = 'none';
+      el.style.boxShadow = 'none';
+    }
+    // badge — top-right tag (LIVE, NEW, Q2, etc.)
+    if (data.badge) {
+      var bdg = document.createElement('div');
+      bdg.className = 'mw-badge--floating';
+      bdg.textContent = data.badge;
+      bdg.style.cssText = 'position:absolute;top:0.5rem;right:0.5rem;font-size:0.6rem;font-weight:600;font-family:var(--mw-mono-font);padding:0.15rem 0.45rem;border-radius:999px;background:color-mix(in srgb,var(--mw-accent) 12%,transparent);color:var(--mw-accent);letter-spacing:0.03em;text-transform:uppercase;z-index:2;';
+      el.style.position = el.style.position || 'relative';
+      el.appendChild(bdg);
+    }
+    // note — bottom footnote text
+    if (data.note) {
+      var nt = document.createElement('div');
+      nt.className = 'mw-note';
+      nt.textContent = data.note;
+      nt.style.cssText = 'font-size:0.65rem;color:var(--mw-text-muted);margin-top:0.625rem;padding-top:0.5rem;border-top:1px dashed var(--mw-border);font-family:var(--mw-font);';
+      el.appendChild(nt);
+    }
+    // html — inject custom HTML at the bottom of the widget
+    if (data.html) {
+      var wrap = document.createElement('div');
+      wrap.className = 'mw-custom-html';
+      wrap.innerHTML = data.html;
+      el.appendChild(wrap);
+    }
+  }
+
   function escapeHTML(s) {
     if (s == null || s === undefined) return '';
     if (typeof s === 'object') {
@@ -298,7 +344,7 @@
       if (chart) chart.dispose();
       chart = EC().init(body, null, { renderer: 'svg' });
       var c = getColors();
-      var palette = buildPalette(c, 5);
+      var palette = (data.colors && Array.isArray(data.colors)) ? data.colors : buildPalette(c, 5);
       function currentSize() { return { width: body.offsetWidth || 0, height: body.offsetHeight || 0 }; }
       function buildAndSet() {
         var opt = buildOption(data, c, palette, currentSize());
@@ -317,6 +363,7 @@
         });
         ro.observe(body);
       }
+      _applyCommon(el, data);
     }
     render();
     var handle = {
@@ -368,8 +415,9 @@
         var arrow = data.delta >= 0 ? '▲' : '▼';
         var abs = Math.abs(Number(data.delta));
         var prec = abs > 0 && abs < 1 ? 2 : 1;
+        var suffix = data.deltaSuffix || '%';
         deltaHTML = '<div class="mw-kpi__delta mw-kpi__delta--' + (good ? 'good' : 'bad') + '">' +
-          arrow + ' ' + abs.toFixed(prec) + '%</div>';
+          arrow + ' ' + abs.toFixed(prec) + suffix + '</div>';
       }
       var iconHTML = data.icon ? '<span class="mw-kpi__icon">' + escapeHTML(data.icon) + '</span>' : '';
       var showSpark = !autoCompact && hasSpark;
@@ -393,12 +441,12 @@
           series: [{
             type: 'line', smooth: true, symbol: 'none',
             data: data.sparkline,
-            lineStyle: { color: c.accent, width: 1.6 },
+            lineStyle: { color: data.sparkColor || c.accent, width: 1.6 },
             areaStyle: {
               color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
                 colorStops: [
-                  { offset: 0, color: withAlpha(c.accent, 0.33) },
-                  { offset: 1, color: withAlpha(c.accent, 0) },
+                  { offset: 0, color: withAlpha(data.sparkColor || c.accent, 0.33) },
+                  { offset: 1, color: withAlpha(data.sparkColor || c.accent, 0) },
                 ] },
             },
           }],
@@ -420,6 +468,7 @@
           ro.observe(spark);
         }
       }
+      _applyCommon(el, data);
     }
     render();
     var handle = {
@@ -791,6 +840,7 @@
           '</div>';
       }).join('');
       el.innerHTML = headerHTML(data.title, data.subtitle) + '<div class="mw-lb__list">' + list + '</div>';
+      _applyCommon(el, data);
     }
     render();
     var handle = {
@@ -811,7 +861,12 @@
     var data = Object.assign({
       title: '', subtitle: '', live: false,
       columns: [], rows: [], headerGroups: null, fixedLayout: false,
+      maxRows: null, striped: false,
     }, config || {});
+    // maxRows — limit displayed rows
+    if (data.maxRows && data.rows.length > data.maxRows) {
+      data.rows = data.rows.slice(0, data.maxRows);
+    }
 
     function alignCls(align) {
       if (align === 'right')  return ' class="mw-table__right"';
@@ -821,6 +876,7 @@
 
     function render() {
       el.classList.add('mw-card');
+      if (data.striped) el.classList.add('mw-table--striped');
       var rightEl = data.live
         ? '<span class="mw-badge mw-badge--muted"><span class="mw-live-dot" style="margin:0 0.25rem 0 0"></span>LIVE</span>'
         : '';
@@ -858,6 +914,7 @@
       el.innerHTML = headerHTML(data.title, data.subtitle, rightEl) +
         '<div class="mw-table__wrap"><table class="mw-table"' + tableStyle + '>' +
         colgroup + theadHtml + '<tbody>' + trs + '</tbody></table></div>';
+      _applyCommon(el, data);
     }
     render();
     var handle = {
@@ -1227,6 +1284,7 @@
         '<div class="mw-hero__value">' + (data.valueHTML ? data.value : escapeHTML(data.value)) + '</div>' +
         (data.tagline ? '<div class="mw-hero__tagline">' + escapeHTML(data.tagline) + '</div>' : '') +
         statsHTML;
+      _applyCommon(el, data);
     }
 
     render();
@@ -1379,6 +1437,7 @@
         ro = new ResizeObserver(function() { if (chart) chart.resize(); });
         ro.observe(chartEl);
       }
+      _applyCommon(el, data);
     }
 
     render();
@@ -1483,6 +1542,7 @@
       }).join('');
       el.innerHTML = headerHTML(data.title, data.subtitle) +
         '<div class="mw-timeline">' + items + '</div>';
+      _applyCommon(el, data);
     }
     render();
     var handle = {
@@ -1518,6 +1578,7 @@
       }).join('');
       el.innerHTML = headerHTML(data.title, data.subtitle) +
         '<div class="mw-status" style="grid-template-columns: repeat(' + data.columns + ', minmax(0, 1fr));">' + items + '</div>';
+      _applyCommon(el, data);
     }
     render();
     var handle = {
@@ -1567,6 +1628,7 @@
         (data.label ? '<div class="mw-countdown__label">' + escapeHTML(data.label) + '</div>' : '') +
         body +
         (data.context ? '<div class="mw-countdown__context">' + escapeHTML(data.context) + '</div>' : '');
+      _applyCommon(el, data);
     }
     render();
     if (timer) clearInterval(timer);
@@ -1617,6 +1679,7 @@
         '</div>' +
         '<div class="mw-mstack__main-lbl">' + escapeHTML(main.label || '') + '</div>' +
         (subItems ? '<div class="mw-mstack__sub-row">' + subItems + '</div>' : '');
+      _applyCommon(el, data);
     }
     render();
     var handle = {
@@ -1653,6 +1716,7 @@
       }).join('');
       el.innerHTML = headerHTML(data.title, data.subtitle) +
         '<div class="mw-inbox">' + items + '</div>';
+      _applyCommon(el, data);
     }
     render();
     var handle = {
@@ -1711,6 +1775,7 @@
           '</div>' +
         '</div>' +
         deltaHTML;
+      _applyCommon(el, data);
     }
     render();
     var handle = {
@@ -1885,6 +1950,7 @@
           '<div class="mw-evcal__row mw-evcal__row--head">' + headRow + '</div>' +
           '<div class="mw-evcal__row">' + cells + '</div>' +
         '</div>' + listHTML;
+      _applyCommon(el, data);
     }
     render();
     var handle = {
@@ -1977,6 +2043,7 @@
         '</div>' +
         metaHTML +
         '<div class="mw-stepper__track">' + steps + '</div>';
+      _applyCommon(el, data);
     }
     render();
     var handle = {
@@ -2078,6 +2145,7 @@
           tilesHTML +
         '</div>' +
         legendHTML;
+      _applyCommon(el, data);
     }
     render();
     var handle = {
@@ -2227,6 +2295,7 @@
           'style="grid-template-columns:' + leftCol + 'repeat(' + data.periods.length + ',minmax(36px,1fr))">' +
           headerCells + rows +
         '</div>';
+      _applyCommon(el, data);
     }
     render();
     var handle = {
@@ -2334,6 +2403,7 @@
           ros.push(ro);
         }
       });
+      _applyCommon(el, data);
     }
     render();
     var handle = {
@@ -2391,6 +2461,7 @@
       }).join('');
       el.innerHTML = headerHTML(data.title, data.subtitle) +
         '<div class="mw-goal__body">' + rows + '</div>';
+      _applyCommon(el, data);
     }
     render();
     var handle = {
@@ -2421,6 +2492,7 @@
           (data.meta ? '<span class="mw-page-head__mono">' + escapeHTML(data.meta) + '</span>' : '') +
         '</div>' +
         (data.subtitle ? '<div class="mw-page-head__meta"><span>' + _valOrEsc(data.subtitle) + '</span></div>' : '');
+      _applyCommon(el, data);
     }
     render();
     var handle = { el: el, type: 'page-header', refresh: render,
@@ -2447,6 +2519,7 @@
           (data.title ? '<h2 class="mw-section-head__title">' + escapeHTML(data.title) + '</h2>' : '') +
         '</div>' +
         (data.tag ? '<div class="mw-section-head__tag">' + escapeHTML(data.tag) + '</div>' : '');
+      _applyCommon(el, data);
     }
     render();
     var handle = { el: el, type: 'section-head', refresh: render,
@@ -2507,6 +2580,7 @@
           data.action.onClick(e);
         });
       }
+      _applyCommon(el, data);
     }
     render();
     var handle = {
@@ -2730,6 +2804,7 @@
       var existingContent = bodyEl ? bodyEl.innerHTML : '';
 
       el.innerHTML = header + '<div class="mw-slide__body">' + existingContent + '</div>' + footer;
+      _applyCommon(el, data);
     }
     render();
 
@@ -2799,6 +2874,7 @@
           '<div class="mw-cover__body">' + title + subtitle + '</div>' +
           '<div class="mw-cover__footer"><div class="mw-cover__rule"></div>' + meta + '</div>';
       }
+      _applyCommon(el, data);
     }
     render();
 
@@ -2867,6 +2943,7 @@
         '</div>' +
         (bulletsHTML ? '<ul class="mw-insight__bullets">' + bulletsHTML + '</ul>' : '') +
         highlightHTML;
+      _applyCommon(el, data);
     }
     render();
 
@@ -2904,6 +2981,7 @@
         (data.title ? '<div class="mw-defcard__title">' + escapeHTML(data.title) + '</div>' : '') +
         (data.subtitle ? '<div class="mw-defcard__sub">' + escapeHTML(data.subtitle) + '</div>' : '') +
         rows;
+      _applyCommon(el, data);
     }
     render();
 
@@ -2966,6 +3044,7 @@
       el.innerHTML =
         '<div class="mw-sharebar" style="height:' + Number(data.height) + 'px">' + bars + '</div>' +
         legend;
+      _applyCommon(el, data);
     }
     render();
 
@@ -2995,6 +3074,7 @@
           '<span class="mw-rag__dot"></span>' +
           '<span class="mw-rag__lbl">' + escapeHTML(data.label) + '</span>' +
         '</span>';
+      _applyCommon(el, data);
     }
     render();
 
