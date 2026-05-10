@@ -27,8 +27,30 @@ const root = join(__dir, '..');
 const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf-8'));
 const VERSION = pkg.version;
 
-// Replace __VERSION__ placeholder in source files with actual version
-function injectVersion(txt) { return txt.replace(/__VERSION__/g, VERSION); }
+// ── Auto-count widgets & themes from actual source code ──
+const magingJS = readFileSync(join(root, 'dist/maging.js'), 'utf-8');
+const magingLanding = readFileSync(join(root, 'dist/maging-landing.js'), 'utf-8');
+const magingNews = readFileSync(join(root, 'dist/maging-news.js'), 'utf-8');
+const magingPitch = readFileSync(join(root, 'dist/maging-pitch.js'), 'utf-8');
+const magingWeekly = readFileSync(join(root, 'dist/maging-weekly.js'), 'utf-8');
+
+// Theme count: from Maging.themes array
+const themeMatch = magingJS.match(/themes:\s*\[([\s\S]*?)\]/);
+const THEME_COUNT = themeMatch ? themeMatch[1].split(',').filter(s => s.trim().startsWith("'")).length : '?';
+
+// Widget counts: count M.widgetName = function assignments
+const coreWidgets = (magingJS.match(/^\s+\w+:\s+\w+,?\s*$/gm) || []).length; // approximate from api object
+const CARDNEWS_WIDGET_COUNT = (magingNews.match(/M\.\w+\s*=\s*\w+/g) || []).filter(m => !m.includes('newsDeck') && !m.includes('_pageBuilders')).length;
+const PITCH_WIDGET_COUNT = (magingPitch.match(/M\.\w+\s*=\s*function/g) || []).length;
+
+// Replace all placeholders
+function injectVersion(txt) {
+  return txt
+    .replace(/__VERSION__/g, VERSION)
+    .replace(/__THEME_COUNT__/g, String(THEME_COUNT))
+    .replace(/__CARDNEWS_WIDGET_COUNT__/g, String(CARDNEWS_WIDGET_COUNT))
+    .replace(/__PITCH_WIDGET_COUNT__/g, String(PITCH_WIDGET_COUNT));
+}
 
 const core = injectVersion(readFileSync(join(root, 'llms/core.txt'), 'utf-8'));
 const dashboard = injectVersion(readFileSync(join(root, 'llms/dashboard.txt'), 'utf-8'));

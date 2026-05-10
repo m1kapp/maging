@@ -4,7 +4,7 @@
 
 ---
 
-## Themes (37)
+## Themes (103)
 
 `<html data-theme="NAME">` — 팔레트·폰트·반경·그림자 즉시 교체.
 보고서 주제·업종에 가장 어울리는 테마를 골라 적용하세요.
@@ -289,6 +289,7 @@ MIT
 ### Setup
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging-all.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging-sidebar.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging-pitch.js"></script>
 <body class="mw-themed">
 ```
@@ -334,7 +335,7 @@ window.addEventListener('maging:ready', () => {
 
 ---
 
-### Pitch Deck 위젯 (10)
+### Pitch Deck 위젯 (20)
 
 #### `pitchCover` — 표지
 ```js
@@ -540,7 +541,7 @@ Maging.askSlide(sel, {
 
 ```html
 <div class="flex">
-  <pitch-sidebar active="cover" data-title="회사명" data-round="Series A · 2026"></pitch-sidebar>
+  <maging-sidebar active="cover" data-title="회사명" data-date="Series A · 2026"></maging-sidebar>
   <main class="flex-1 min-w-0 px-6 py-4">
     <div id="slides-wrap" class="max-w-[1280px] mx-auto">
       <section class="slide cover-slide" id="cover" data-active>
@@ -576,7 +577,7 @@ window.addEventListener('maging:ready', () => {
   };
 });
 ```
-`pitch-sidebar`는 `section.slide[data-label]` 자동 수집 → nav 생성.
+`maging-sidebar`는 `section.slide[data-label]` 자동 수집 → nav 생성.
 
 키보드: ←/→ 이동, F 전체화면, Esc 종료. 클릭/터치 지원.
 
@@ -602,6 +603,7 @@ window.addEventListener('maging:ready', () => {
 <head>
   <meta charset="UTF-8"><title>Pitch Deck</title>
   <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging-all.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging-sidebar.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging-pitch.js"></script>
 </head>
 <body class="mw-themed">

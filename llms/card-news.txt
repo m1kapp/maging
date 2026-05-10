@@ -26,7 +26,7 @@
 
 ---
 
-### 카드 위젯 (11)
+### 카드 위젯 (__CARDNEWS_WIDGET_COUNT__)
 
 #### `coverCard` — 표지 (첫 장, 후킹)
 ```js

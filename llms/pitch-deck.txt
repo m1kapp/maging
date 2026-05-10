@@ -54,7 +54,7 @@ window.addEventListener('maging:ready', () => {
 
 ---
 
-### Pitch Deck 위젯 (10)
+### Pitch Deck 위젯 (__PITCH_WIDGET_COUNT__)
 
 #### `pitchCover` — 표지
 ```js

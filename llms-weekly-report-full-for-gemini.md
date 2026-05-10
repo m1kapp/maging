@@ -4,7 +4,7 @@
 
 ---
 
-## Themes (37)
+## Themes (103)
 
 `<html data-theme="NAME">` — 팔레트·폰트·반경·그림자 즉시 교체.
 보고서 주제·업종에 가장 어울리는 테마를 골라 적용하세요.
@@ -429,7 +429,7 @@ Maging.activityTable('#tbl', {
 
 ```html
 <div class="flex">
-  <weekly-sidebar active="cover" data-title="SaaS 주간보고" data-date="2026.04.27"></weekly-sidebar>
+  <maging-sidebar active="cover" data-title="SaaS 주간보고" data-date="2026.04.27"></maging-sidebar>
   <main class="flex-1 min-w-0 px-6 py-4" style="word-break:keep-all">
     <div id="slides-wrap" class="max-w-[1240px] mx-auto">
       <section class="slide cover-slide" id="cover" data-active></section>
@@ -446,7 +446,7 @@ window.addEventListener('maging:ready', () => {
   });
 });
 ```
-`weekly-sidebar`는 `section.slide[data-label]` 자동 수집 → nav 생성. 단일 페이지는 sidebar 불필요.
+`maging-sidebar`는 `section.slide[data-label]` 자동 수집 → nav 생성. 단일 페이지는 sidebar 불필요.
 
 ---
 
