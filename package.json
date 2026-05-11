@@ -30,6 +30,7 @@
   "scripts": {
     "predev": "lsof -ti:3456 | xargs kill -9 2>/dev/null; true",
     "dev": "next dev --port 3456",
+    "prebuild": "node scripts/build-llms.mjs",
     "build": "next build",
     "start": "next start",
     "build:llms": "node scripts/build-llms.mjs",
