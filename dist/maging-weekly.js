@@ -73,11 +73,9 @@
   .wk-slides > *:not([data-active]) { display: none !important; }
   .wk-slides > [data-active] { display: flex !important; flex-direction: column; }
   .wk-slides > .mw-slide { flex: none !important; width: 1240px !important; min-width: 1240px !important; aspect-ratio: 297/210 !important; transform: scale(var(--slide-scale,1)); transform-origin: center center; border-radius: var(--mw-radius); box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.06); overflow: hidden; }
-  .wk-slides .mw-slide__body { overflow: hidden; display: flex; flex-direction: column; padding: var(--mw-space-3) var(--mw-space-5) var(--mw-space-4); min-height: 0; }
-
   /* Thumbnails — selector-based overrides for cloned content */
   .wk-thumb-content .mw-slide, .wk-thumb-content .mw-cover { box-shadow: none; border: none; border-radius: 0; }
-  .wk-thumb-content .mw-slide__body { overflow: hidden; }
+  .wk-thumb-content [data-role=body] { overflow: hidden !important; }
   .wk-thumb-content .cover-slide > .mw-cover { width: 100%; height: 100%; min-height: 0; border: none; }
 
   /* Presenter mode */
@@ -105,20 +103,20 @@
     slides.forEach((s, i) => {
       s.classList.add('mw-slide');
       if (s.classList.contains('cover-slide')) return;
-      if (s.querySelector('.mw-slide__body')) return; // already wrapped
+      if (s.querySelector('[data-role=body]')) return; // already wrapped by weeklyPage
       const label = s.dataset.label || '';
       const bu    = s.dataset.bu || '';
       const team  = s.dataset.team || '';
       const content = s.innerHTML;
-      const headerLeft = label ? '<span class="mw-slide__label">' + label + '</span>' : '';
-      const headerRight = (bu || team) ? '<div class="mw-slide__header-right">' +
-        (bu ? '<span class="mw-slide__bu">' + bu + '</span>' : '') +
-        (team ? '<span class="mw-slide__team">' + team + '</span>' : '') + '</div>' : '';
+      const headerLeft = label ? '<span class="text-sm font-semibold text-[var(--mw-text)]">' + label + '</span>' : '';
+      const headerRight = (bu || team) ? '<div class="flex items-center gap-2">' +
+        (bu ? '<span class="text-xs text-[var(--mw-text-muted)] font-mono">' + bu + '</span>' : '') +
+        (team ? '<span class="text-xs text-[var(--mw-text-muted)] font-mono">' + team + '</span>' : '') + '</div>' : '';
       const header = (headerLeft || headerRight) ?
-        '<div class="mw-slide__header"><div>' + headerLeft + '</div>' + headerRight + '</div>' : '';
-      const pageNum = '<span class="mw-slide__page">' + (i + 1) + ' / ' + slides.length + '</span>';
-      const footer = '<div class="mw-slide__footer">' + pageNum + '</div>';
-      s.innerHTML = header + '<div class="mw-slide__body">' + content + '</div>' + footer;
+        '<div data-role="header" class="flex items-center justify-between px-5 py-3 border-b border-[var(--mw-border)] shrink-0 gap-3"><div>' + headerLeft + '</div>' + headerRight + '</div>' : '';
+      const pageNum = '<span data-role="pagenum" class="tabular-nums">' + (i + 1) + ' / ' + slides.length + '</span>';
+      const footer = '<div data-role="footer" class="shrink-0 px-5 py-2 text-right text-xs text-[var(--mw-text-muted)]">' + pageNum + '</div>';
+      s.innerHTML = header + '<div data-role="body" class="flex-1 flex flex-col overflow-hidden min-h-0 px-5 py-3 pb-4">' + content + '</div>' + footer;
     });
     const indEl      = document.getElementById('deck-ind');
     const slidesWrap = document.getElementById('slides-wrap');
@@ -487,27 +485,26 @@
       if (s.bu) sec.dataset.bu = s.bu;
       if (s.team) sec.dataset.team = s.team;
 
-      // Pre-build slide structure (header + body + footer) so MOUNT doesn't depend on initDeck timing
+      // Pre-build slide structure — all Tailwind, no BEM
       if (!s.cover) {
         const label = s.label || '';
         const bu = s.bu || '';
         const team = s.team || '';
-        const headerLeft = label ? '<span class="mw-slide__label">' + label + '</span>' : '';
-        const headerRight = (bu || team) ? '<div class="mw-slide__header-right">' +
-          (bu ? '<span class="mw-slide__bu">' + bu + '</span>' : '') +
-          (team ? '<span class="mw-slide__team">' + team + '</span>' : '') + '</div>' : '';
+        const headerLeft = label ? '<span class="text-sm font-semibold text-[var(--mw-text)]">' + label + '</span>' : '';
+        const headerRight = (bu || team) ? '<div class="flex items-center gap-2">' +
+          (bu ? '<span class="text-xs text-[var(--mw-text-muted)] font-mono">' + bu + '</span>' : '') +
+          (team ? '<span class="text-xs text-[var(--mw-text-muted)] font-mono">' + team + '</span>' : '') + '</div>' : '';
         const header = (headerLeft || headerRight) ?
-          '<div class="mw-slide__header"><div>' + headerLeft + '</div>' + headerRight + '</div>' : '';
-        const pageNum = '<span class="mw-slide__page">' + (i + 1) + ' / ' + slides.length + '</span>';
-        const footer = '<div class="mw-slide__footer">' + pageNum + '</div>';
-        sec.innerHTML = header + '<div class="mw-slide__body"></div>' + footer;
+          '<div data-role="header" class="flex items-center justify-between px-5 py-3 border-b border-[var(--mw-border)] shrink-0 gap-3"><div>' + headerLeft + '</div>' + headerRight + '</div>' : '';
+        const pageNum = '<span data-role="pagenum" class="tabular-nums">' + (i + 1) + ' / ' + slides.length + '</span>';
+        const footer = '<div data-role="footer" class="shrink-0 px-5 py-2 text-right text-xs text-[var(--mw-text-muted)]">' + pageNum + '</div>';
+        sec.innerHTML = header + '<div data-role="body" class="flex-1 flex flex-col overflow-hidden min-h-0 px-5 py-3 pb-4"></div>' + footer;
       }
 
       slideArea.appendChild(sec);
 
       const widgets = s.widgets || [];
-      // Capture body reference NOW (before any timing issues)
-      const body = sec.querySelector('.mw-slide__body') || sec;
+      const body = sec.querySelector('[data-role=body]') || sec;
       MOUNT[s.id] = () => {
         if (_mountedOnce[s.id]) return;
         _mountedOnce[s.id] = true;
@@ -746,7 +743,7 @@
       // Auto-paginate: split overflowing slides
       var sa = container.querySelector('.wk-slides');
       [...sa.querySelectorAll('section.slide:not(.cover-slide)')].forEach(function(sec) {
-        var body = sec.querySelector('.mw-slide__body');
+        var body = sec.querySelector('[data-role=body]');
         if (!body || body.scrollHeight <= body.clientHeight) return;
 
         var widgets = [...body.children];
@@ -764,10 +761,11 @@
         if (sec.dataset.label) cont.dataset.label = sec.dataset.label;
         if (sec.dataset.bu) cont.dataset.bu = sec.dataset.bu;
         if (sec.dataset.team) cont.dataset.team = sec.dataset.team;
-        var hdr = sec.querySelector('.mw-slide__header');
-        var ftr = sec.querySelector('.mw-slide__footer');
+        var hdr = sec.querySelector('[data-role=header]');
+        var ftr = sec.querySelector('[data-role=footer]');
         var contBody = document.createElement('div');
-        contBody.className = 'mw-slide__body';
+        contBody.setAttribute('data-role', 'body');
+        contBody.className = 'flex-1 flex flex-col overflow-hidden min-h-0 px-5 py-3 pb-4';
         if (hdr) cont.appendChild(hdr.cloneNode(true));
         cont.appendChild(contBody);
         if (ftr) cont.appendChild(ftr.cloneNode(true));
@@ -783,7 +781,7 @@
       var allFinal = [...sa.children];
       var total = allFinal.length;
       allFinal.forEach(function(sec, i) {
-        var pg = sec.querySelector('.mw-slide__page');
+        var pg = sec.querySelector('[data-role=pagenum]');
         if (pg) pg.textContent = (i + 1) + ' / ' + total;
       });
       // Update toolbar indicator
