@@ -48,8 +48,63 @@
   .scroll-table .mw-card > .mw-card__head { display: none; }
 
   .row-unit { color: var(--mw-text-muted); font-size: 0.85em; font-weight: 400; margin-left: 4px; }
-  .cover-slide { padding: 0; }
-  .cover-slide > .mw-cover { width: 100%; height: 100%; aspect-ratio: auto; min-height: auto; border: none; border-radius: 0; box-shadow: none; }
+  .cover-slide { padding: 0; border: none !important; overflow: hidden; }
+  .cover-slide > .mw-cover { width: 100%; height: 100%; aspect-ratio: auto; min-height: auto; border: none; border-radius: inherit; box-shadow: none; margin: 0; }
+
+  /* Cover slide — Replit-inspired: left-aligned, bold title, four-corner meta */
+  .cover-slide > .mw-cover--classic {
+    background: linear-gradient(180deg, var(--mw-bg) 60%, color-mix(in srgb, var(--mw-accent) 8%, var(--mw-bg)) 100%);
+    padding: 3.2cqw 4.5cqw;
+    gap: 0;
+    justify-content: space-between;
+  }
+  .cover-slide > .mw-cover--classic .mw-cover__header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+  }
+  .cover-slide > .mw-cover--classic .mw-cover__kicker {
+    font-size: clamp(9px, 0.85cqw, 11px);
+    letter-spacing: 0.14em;
+    font-family: var(--mw-mono-font);
+    color: var(--mw-text-muted);
+    opacity: 0.7;
+  }
+  .cover-slide > .mw-cover--classic .mw-cover__brand {
+    font-size: clamp(9px, 0.85cqw, 11px);
+    font-family: var(--mw-mono-font);
+    color: var(--mw-text-muted);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    text-align: right;
+    opacity: 0.7;
+  }
+  .cover-slide > .mw-cover--classic .mw-cover__body {
+    display: flex; flex-direction: column; gap: 1cqw;
+    padding: 0;
+  }
+  .cover-slide > .mw-cover--classic .mw-cover__title {
+    font-size: clamp(36px, 7cqw, 92px);
+    letter-spacing: -0.045em;
+    line-height: 1.02;
+    font-weight: 800;
+  }
+  .cover-slide > .mw-cover--classic .mw-cover__subtitle {
+    font-size: clamp(12px, 1.2cqw, 15px);
+    color: var(--mw-text-muted);
+    max-width: 55%;
+    line-height: 1.55;
+    opacity: 0.65;
+  }
+  .cover-slide > .mw-cover--classic .mw-cover__footer {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-top: none; padding-top: 0; margin-top: 0;
+  }
+  .cover-slide > .mw-cover--classic .mw-cover__rule { display: none; }
+  .cover-slide > .mw-cover--classic .mw-cover__meta {
+    font-size: clamp(9px, 0.85cqw, 11px);
+    font-family: var(--mw-mono-font);
+    color: var(--mw-text-muted);
+    opacity: 0.7;
+  }
 
   .rag-row { display: flex; flex-wrap: wrap; gap: var(--mw-space-2); margin-top: var(--mw-space-3); }
 
@@ -71,11 +126,139 @@
   #cv-pre { flex: 1; min-height: 0; overflow: auto; scrollbar-width: thin; background: var(--mw-surface-2); border: 1px solid var(--mw-border); border-radius: var(--mw-radius); padding: 20px 24px; font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace; font-size: 12.5px; line-height: 1.75; color: var(--mw-text); tab-size: 2; white-space: pre; word-break: normal; }
   .wrn-bar__btn.code-active { background: var(--mw-surface-2); color: var(--mw-text); }
 
+  /* Weekly viewer layout */
+  body:has(.wrs--thumbs) { overflow: hidden; height: 100vh; margin: 0; background: color-mix(in srgb, var(--mw-bg) 75%, #808080); }
+  body:has(.wrs--thumbs) > main { height: 100vh; overflow: hidden; }
+  body:has(.wrs--thumbs) .mw-theme-fab { display: none !important; }
+  body:has(.wrs--thumbs) .wrn-bar { display: none !important; }
+
+  /* Title bar */
+  .weekly-titlebar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 16px; flex-shrink: 0; font-family: var(--mw-font);
+    background: var(--mw-surface); border-bottom: 1px solid var(--mw-border);
+  }
+  .weekly-titlebar__left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .weekly-titlebar__title { font-size: 13px; font-weight: 600; color: var(--mw-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .weekly-titlebar__date { font-size: 11px; color: var(--mw-text-muted); white-space: nowrap; }
+  .weekly-titlebar__page { font-size: 11px; color: var(--mw-text-muted); font-variant-numeric: tabular-nums; flex-shrink: 0; }
+  .weekly-titlebar__right { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+  .weekly-titlebar__btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 10px; font-size: 11px; font-weight: 500;
+    color: var(--mw-text-muted); background: transparent;
+    border: none; border-radius: calc(var(--mw-radius) * 0.6);
+    cursor: pointer; font-family: var(--mw-font);
+    transition: background 0.12s, color 0.12s;
+  }
+  .weekly-titlebar__btn:hover { background: var(--mw-surface-2); color: var(--mw-text); }
+  .weekly-titlebar__btn--active { background: color-mix(in srgb, var(--mw-accent) 10%, transparent); color: var(--mw-accent); }
+  .weekly-titlebar__btn svg { width: 13px; height: 13px; }
+  .weekly-titlebar__btn--play { background: var(--mw-accent); color: #fff; padding: 4px 12px; border-radius: 999px; }
+  .weekly-titlebar__btn--play:hover { opacity: 0.88; background: var(--mw-accent); color: #fff; }
+  body.presenter-mode .weekly-titlebar { display: none !important; }
+
+  /* Code dialog */
+  .weekly-code-overlay {
+    display: none; position: fixed; inset: 0; z-index: 10000;
+    background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+    align-items: center; justify-content: center; padding: 32px;
+  }
+  .weekly-code-overlay.is-open { display: flex; }
+  .weekly-code-dialog {
+    background: var(--mw-surface); border: 1px solid var(--mw-border);
+    border-radius: var(--mw-radius); box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+    width: 100%; max-width: 800px; max-height: 80vh;
+    display: flex; flex-direction: column; font-family: var(--mw-font);
+  }
+  .weekly-code-dialog__header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px; border-bottom: 1px solid var(--mw-border); flex-shrink: 0;
+  }
+  .weekly-code-dialog__title { font-size: 13px; font-weight: 600; color: var(--mw-text); }
+  .weekly-code-dialog__actions { display: flex; gap: 6px; }
+  .weekly-code-dialog__btn {
+    padding: 4px 12px; font-size: 11px; font-weight: 500;
+    border: 1px solid var(--mw-border); border-radius: calc(var(--mw-radius) * 0.6);
+    background: var(--mw-surface); color: var(--mw-text); cursor: pointer;
+    font-family: var(--mw-font); transition: background 0.12s;
+  }
+  .weekly-code-dialog__btn:hover { background: var(--mw-surface-2); }
+  .weekly-code-dialog__btn--accent { background: var(--mw-accent); color: #fff; border-color: transparent; }
+  .weekly-code-dialog__btn--accent:hover { opacity: 0.88; background: var(--mw-accent); }
+  .weekly-code-dialog__body {
+    flex: 1; min-height: 0; overflow: auto; scrollbar-width: thin;
+    padding: 16px; background: var(--mw-surface-2);
+  }
+  .weekly-code-dialog__pre {
+    margin: 0; font-family: var(--mw-mono-font); font-size: 12px;
+    line-height: 1.7; color: var(--mw-text); white-space: pre; tab-size: 2;
+  }
+
+  /* Theme carousel */
+  .weekly-themes {
+    flex-shrink: 0; overflow: hidden;
+    background: var(--mw-surface); border-bottom: 1px solid var(--mw-border);
+    max-height: 0; padding: 0; transition: max-height 0.25s ease, padding 0.25s ease;
+  }
+  .weekly-themes.is-open { max-height: 80px; padding: 8px 0; }
+  .weekly-themes__track {
+    display: flex; gap: 8px; padding: 0 16px;
+    overflow-x: auto; scroll-snap-type: x mandatory;
+    scrollbar-width: none; -ms-overflow-style: none;
+  }
+  .weekly-themes__track::-webkit-scrollbar { display: none; }
+  .weekly-themes__item {
+    flex-shrink: 0; width: 72px; scroll-snap-align: start;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    cursor: pointer; padding: 4px; border-radius: calc(var(--mw-radius) * 0.6);
+    border: 2px solid transparent; transition: border-color 0.15s;
+  }
+  .weekly-themes__item:hover { border-color: color-mix(in srgb, var(--mw-accent) 30%, transparent); }
+  .weekly-themes__item--active { border-color: var(--mw-accent); }
+  .weekly-themes__swatch {
+    width: 64px; height: 36px; border-radius: 4px;
+    border: 1px solid rgba(0,0,0,0.08);
+    display: flex; align-items: flex-end; justify-content: center; gap: 2px; padding: 4px;
+    position: relative; overflow: hidden;
+  }
+  .weekly-themes__bar { width: 8px; border-radius: 2px; }
+  .weekly-themes__name { font-size: 9px; color: var(--mw-text-muted); font-family: var(--mw-font); white-space: nowrap; text-transform: capitalize; }
+  body.presenter-mode .weekly-themes { display: none !important; }
+  .weekly-slide-area { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .weekly-slide-area > *:not([data-active]) { display: none !important; }
+  .weekly-slide-area > [data-active] { display: flex !important; flex-direction: column; }
+  .weekly-slide-area > .mw-slide {
+    flex: none !important;
+    width: 1240px !important; min-width: 1240px !important;
+    aspect-ratio: 297 / 210 !important;
+    transform: scale(var(--slide-scale, 1));
+    transform-origin: center center;
+    border-radius: var(--mw-radius);
+    box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.06), 0 16px 64px rgba(0,0,0,.04);
+    overflow: hidden;
+  }
+  .weekly-slide-area .mw-slide .mw-slide__body {
+    overflow: hidden;
+    display: flex; flex-direction: column; gap: var(--mw-space-3);
+    padding: var(--mw-space-3) var(--mw-space-5) var(--mw-space-4);
+    min-height: 0;
+  }
+  .weekly-slide-area .mw-slide .mw-slide__body > .mw-page-head { margin-bottom: calc(-1 * var(--mw-space-1)); }
+  .weekly-slide-area .mw-slide .mw-slide__body > .mw-section-head { margin-top: var(--mw-space-1); }
+  /* Thumbnail — cloned slides at miniature scale */
+  .wrs__thumb-content .mw-slide, .wrs__thumb-content .mw-cover { box-shadow: none; border: none; border-radius: 0; }
+  .wrs__thumb-content .mw-slide__body { overflow: hidden; }
+  .wrs__thumb-content .cover-slide > .mw-cover { width: 100%; height: 100%; min-height: 0; border: none; }
+
   body.presenter-mode { overflow: hidden; background: #000; }
-  body.presenter-mode .mw-site-nav { display: none !important; }
-  body.presenter-mode .wrs { display: none !important; }
-  body.presenter-mode main { padding: 0 !important; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; }
-  body.presenter-mode .mw-slide { border: none; border-radius: 0; transform-origin: center center; }
+  body.presenter-mode .mw-site-nav,
+  body.presenter-mode .wrs--thumbs,
+  body.presenter-mode .weekly-titlebar,
+  body.presenter-mode .weekly-themes { display: none !important; }
+  body.presenter-mode main { padding: 0 !important; width: 100vw; height: 100vh; overflow: hidden; }
+  body.presenter-mode .weekly-slide-area { position: fixed; inset: 0; display: flex !important; width: 100vw; height: 100vh; align-items: center; justify-content: center; z-index: 9999; background: #000; }
+  body.presenter-mode .mw-slide { border: none; border-radius: 0; box-shadow: none !important; }
 
   /* Sidebar styles provided by maging-sidebar.js */
 `;
@@ -88,14 +271,14 @@
     const SLIDE_IDS  = slides.map(s => s.id);
     const mounted    = {};
 
-    // Auto-apply A4 slide wrapper
+    // Auto-apply A4 slide wrapper (skip if already wrapped by weeklyPage builder)
     slides.forEach((s, i) => {
       s.classList.add('mw-slide');
-      if (s.classList.contains('cover-slide')) return; // cover: aspect-ratio만, header/footer 없음
+      if (s.classList.contains('cover-slide')) return;
+      if (s.querySelector('.mw-slide__body')) return; // already wrapped
       const label = s.dataset.label || '';
       const bu    = s.dataset.bu || '';
       const team  = s.dataset.team || '';
-      // wrap existing content in body
       const content = s.innerHTML;
       const headerLeft = label ? '<span class="mw-slide__label">' + label + '</span>' : '';
       const headerRight = (bu || team) ? '<div class="mw-slide__header-right">' +
@@ -121,7 +304,7 @@
       const target = slides.find(s => s.id === id);
       if (!target) return;
       slides.forEach(s => s.toggleAttribute('data-active', s === target));
-      history.replaceState(null, '', '#' + id);
+      if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
       if (!mounted[id]) { mounted[id] = true; MOUNT[id]?.(); }
       if (codeViewOpen) openCodeView();
       scope.querySelectorAll('.wrs__link[data-nav]').forEach(a => {
@@ -130,10 +313,19 @@
       scope.querySelectorAll('.wrs__page-dot[data-nav]').forEach(d => {
         d.classList.toggle('wrs__page-dot--active', d.dataset.nav === id);
       });
+      // Update thumbnails
+      scope.querySelectorAll('.wrs__thumb[data-nav]').forEach(t => {
+        t.classList.toggle('wrs__thumb--active', t.dataset.nav === id);
+      });
+      var activeThumb = scope.querySelector('.wrs__thumb--active');
+      if (activeThumb) activeThumb.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       const head = scope.querySelector('.wrs__head');
       if (head) head.classList.toggle('wrs__head--active', id === 'cover');
       const idx = SLIDE_IDS.indexOf(id);
       if (indEl)   { indEl.innerHTML = (idx + 1) + ' <span class="wrn-bar__sep">/</span> ' + slides.length; }
+      // Update toolbar indicator
+      var wtInd = scope.querySelector('#weekly-ind');
+      if (wtInd) { wtInd.textContent = (idx + 1) + ' / ' + slides.length; }
       // Refresh only the active slide's charts (not all — hidden ones get 0 size)
       setTimeout(() => {
         if (typeof Maging !== 'undefined' && Maging.refreshAll) {
@@ -211,7 +403,7 @@
 
     document.addEventListener('click', (e) => {
       if (e.target.closest('#deck-fs')) { toggleFullscreen(); return; }
-      const nav = e.target.closest('maging-sidebar [data-nav]');
+      const nav = e.target.closest('.wrs [data-nav], maging-sidebar [data-nav]');
       if (nav) { e.preventDefault(); activateById(nav.dataset.nav); }
     });
 
@@ -400,44 +592,395 @@
     const M = window.Maging;
     const slides = cfg.slides || [];
     const container = document.createElement('main');
-    container.style.cssText = 'display:flex;min-height:100vh;';
+    container.style.cssText = 'display:flex;flex-direction:column;height:100vh;overflow:hidden;';
 
-    // Sidebar — plain HTML
     const sTitle = cfg.sidebarTitle || cfg.title || '';
     const sDate = cfg.sidebarDate || cfg.date || '';
+
+    // Title bar (full width, top)
+    const titlebar = document.createElement('div');
+    titlebar.className = 'weekly-titlebar';
+    titlebar.innerHTML =
+      '<div class="weekly-titlebar__left">' +
+        '<span class="weekly-titlebar__title">' + sTitle + '</span>' +
+        (sDate ? '<span class="weekly-titlebar__date">' + sDate + '</span>' : '') +
+        '<span class="weekly-titlebar__page" id="weekly-ind">1 / ' + slides.length + '</span>' +
+      '</div>' +
+      '<div class="weekly-titlebar__right">' +
+        '<button class="weekly-titlebar__btn" id="wtb-theme" type="button">' +
+          '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2"/></svg>테마</button>' +
+        '<button class="weekly-titlebar__btn" id="wtb-code" type="button">' +
+          '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 3L1 8l4 5M11 3l4 5-4 5"/></svg>코드</button>' +
+        '<button class="weekly-titlebar__btn" id="wtb-export" type="button">' +
+          '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 10v3h10v-3M8 2v8M5 5l3-3 3 3"/></svg>내보내기</button>' +
+        '<button class="weekly-titlebar__btn weekly-titlebar__btn--play" id="wtb-present" type="button">' +
+          '<svg viewBox="0 0 16 16" fill="none"><path d="M4 3l9 5-9 5V3z" fill="currentColor"/></svg>발표</button>' +
+      '</div>';
+    container.appendChild(titlebar);
+
+    // Content row (sidebar + slide area)
+    const contentRow = document.createElement('div');
+    contentRow.style.cssText = 'display:flex;flex:1;min-height:0;overflow:hidden;';
+
+    // Sidebar — thumbnails only (no header)
     const sidebarWrap = document.createElement('div');
     sidebarWrap.style.cssText = 'flex-shrink:0;align-self:stretch;display:flex;';
-    sidebarWrap.innerHTML = _buildSidebarHTML(sTitle, sDate, slides);
-    container.appendChild(sidebarWrap);
+    const thumbsHTML = slides.map((s, i) =>
+      '<div class="wrs__thumb' + (i === 0 ? ' wrs__thumb--active' : '') + '" data-nav="' + s.id + '">' +
+        '<span class="wrs__thumb-num">' + (i + 1) + '</span>' +
+        '<div class="wrs__thumb-frame"><div class="wrs__thumb-content" data-thumb-id="' + s.id + '"></div></div>' +
+      '</div>'
+    ).join('');
+    sidebarWrap.innerHTML = '<aside class="wrs wrs--thumbs">' +
+      '<div class="wrs__thumb-list">' + thumbsHTML + '</div>' +
+    '</aside>';
+    contentRow.appendChild(sidebarWrap);
 
+    // Slide area
     const slideArea = document.createElement('div');
-    slideArea.style.cssText = 'flex:1;min-width:0;';
-    container.appendChild(slideArea);
+    slideArea.className = 'weekly-slide-area';
+    contentRow.appendChild(slideArea);
 
+    // Theme carousel (between title bar and content, hidden by default)
+    const themePanel = document.createElement('div');
+    themePanel.className = 'weekly-themes';
+    themePanel.id = 'weekly-themes';
+    container.appendChild(themePanel);
+
+    container.appendChild(contentRow);
+
+    const _mountedOnce = {};
     const MOUNT = {};
-    slides.forEach(s => {
+    slides.forEach((s, i) => {
       const sec = document.createElement('section');
       sec.className = 'slide' + (s.cover ? ' cover-slide' : '');
       sec.id = s.id;
       if (s.label) sec.dataset.label = s.label;
       if (s.bu) sec.dataset.bu = s.bu;
       if (s.team) sec.dataset.team = s.team;
+
+      // Pre-build slide structure (header + body + footer) so MOUNT doesn't depend on initDeck timing
+      if (!s.cover) {
+        const label = s.label || '';
+        const bu = s.bu || '';
+        const team = s.team || '';
+        const headerLeft = label ? '<span class="mw-slide__label">' + label + '</span>' : '';
+        const headerRight = (bu || team) ? '<div class="mw-slide__header-right">' +
+          (bu ? '<span class="mw-slide__bu">' + bu + '</span>' : '') +
+          (team ? '<span class="mw-slide__team">' + team + '</span>' : '') + '</div>' : '';
+        const header = (headerLeft || headerRight) ?
+          '<div class="mw-slide__header"><div>' + headerLeft + '</div>' + headerRight + '</div>' : '';
+        const pageNum = '<span class="mw-slide__page">' + (i + 1) + ' / ' + slides.length + '</span>';
+        const footer = '<div class="mw-slide__footer">' + pageNum + '</div>';
+        sec.innerHTML = header + '<div class="mw-slide__body"></div>' + footer;
+      }
+
       slideArea.appendChild(sec);
 
       const widgets = s.widgets || [];
+      // Capture body reference NOW (before any timing issues)
+      const body = sec.querySelector('.mw-slide__body') || sec;
       MOUNT[s.id] = () => {
+        if (_mountedOnce[s.id]) return;
+        _mountedOnce[s.id] = true;
+        let kpiRow = null;
         widgets.forEach(w => {
           const fn = M[w.type];
           if (!fn) { console.warn('[maging.page/weekly] Unknown widget: ' + w.type); return; }
           const wCfg = {};
           for (const k in w) { if (k !== 'type') wCfg[k] = w[k]; }
-          fn(sec, wCfg);
+          if (w.type === 'kpiCard') {
+            // Group consecutive kpiCards into a grid row
+            if (!kpiRow) {
+              kpiRow = document.createElement('div');
+              kpiRow.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:var(--mw-space-3);';
+              body.appendChild(kpiRow);
+            }
+            const wrap = document.createElement('div');
+            kpiRow.appendChild(wrap);
+            fn(wrap, wCfg);
+          } else {
+            kpiRow = null;
+            const wrap = document.createElement('div');
+            body.appendChild(wrap);
+            fn(wrap, wCfg);
+          }
         });
       };
     });
 
     document.body.appendChild(container);
-    setTimeout(() => initDeck(MOUNT, container), 0);
+    // Initialize deck synchronously — setTimeout causes React strict mode race
+    initDeck(MOUNT, container);
+
+    // Post-process: accent color on last word of cover title
+    function applyCoverAccent() {
+      var ct = container.querySelector('.cover-slide .mw-cover__title');
+      if (!ct || ct.querySelector('[data-accent]')) return; // already applied
+      var words = ct.textContent.split(' ');
+      if (words.length > 1) {
+        var last = words.pop();
+        ct.innerHTML = words.join(' ') + ' <span data-accent style="color:var(--mw-accent)">' + last + '</span>';
+      } else {
+        ct.innerHTML = '<span data-accent style="color:var(--mw-accent)">' + words[0] + '</span>';
+      }
+    }
+    applyCoverAccent();
+    // Re-apply after any Maging refresh (theme change etc.)
+    var origRefresh = window.Maging?.refreshAll;
+    if (origRefresh) {
+      window.Maging.refreshAll = function() {
+        origRefresh.call(window.Maging);
+        setTimeout(applyCoverAccent, 50);
+      };
+    }
+
+    // Code dialog
+    var codeOverlay = document.createElement('div');
+    codeOverlay.className = 'weekly-code-overlay';
+    codeOverlay.innerHTML =
+      '<div class="weekly-code-dialog">' +
+        '<div class="weekly-code-dialog__header">' +
+          '<span class="weekly-code-dialog__title" id="wcd-title"></span>' +
+          '<div class="weekly-code-dialog__actions">' +
+            '<button class="weekly-code-dialog__btn" id="wcd-copy">복사</button>' +
+            '<button class="weekly-code-dialog__btn weekly-code-dialog__btn--accent" id="wcd-download">↓ 다운로드</button>' +
+            '<button class="weekly-code-dialog__btn" id="wcd-close">닫기</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="weekly-code-dialog__body"><pre class="weekly-code-dialog__pre" id="wcd-code"></pre></div>' +
+      '</div>';
+    document.body.appendChild(codeOverlay);
+
+    // Wire title bar buttons
+    var wtbCode = container.querySelector('#wtb-code');
+    var wtbTheme = container.querySelector('#wtb-theme');
+    var wtbExport = container.querySelector('#wtb-export');
+    var wtbPresent = container.querySelector('#wtb-present');
+    var themePanelEl = container.querySelector('#weekly-themes');
+
+    // Code dialog handlers
+    function openCodeDialog() {
+      var theme = document.documentElement.getAttribute('data-theme') || 'flow';
+      var ver = M.version || '0.1.25';
+      var cdn = 'https://cdn.jsdelivr.net/npm/@m1kapp/maging@' + ver + '/dist';
+      // Serialize config (strip functions)
+      var safeCfg = JSON.stringify(cfg, function(k, v) {
+        return typeof v === 'function' ? undefined : v;
+      }, 2);
+      var html = [
+        '<!DOCTYPE html>',
+        '<html lang="ko" data-theme="' + theme + '">',
+        '<head>',
+        '  <meta charset="UTF-8">',
+        '  <meta name="viewport" content="width=device-width, initial-scale=1.0">',
+        '  <title>' + (cfg.sidebarTitle || 'maging') + '</title>',
+        '  <script src="' + cdn + '/maging-all.js"><\/script>',
+        '</head>',
+        '<body>',
+        '<script>',
+        '  window.addEventListener("maging:ready", function () {',
+        '    Maging.page(' + safeCfg.split('\n').map(function(l, i) {
+          return i === 0 ? l : '    ' + l;
+        }).join('\n') + ');',
+        '  });',
+        '<\/script>',
+        '</body>',
+        '</html>'
+      ].join('\n');
+      var chars = html.length;
+      var tokens = Math.ceil(chars / 3.5); // rough estimate
+      codeOverlay.querySelector('#wcd-title').textContent = sTitle + ' — ' + chars.toLocaleString() + '자 · ~' + tokens.toLocaleString() + ' tokens';
+      codeOverlay.querySelector('#wcd-code').textContent = html;
+      codeOverlay.classList.add('is-open');
+    }
+    if (wtbCode) wtbCode.addEventListener('click', openCodeDialog);
+    codeOverlay.querySelector('#wcd-close').addEventListener('click', function() { codeOverlay.classList.remove('is-open'); });
+    codeOverlay.querySelector('#wcd-copy').addEventListener('click', function() {
+      var code = codeOverlay.querySelector('#wcd-code').textContent;
+      navigator.clipboard.writeText(code).then(function() {
+        var btn = codeOverlay.querySelector('#wcd-copy');
+        btn.textContent = '복사됨!';
+        setTimeout(function() { btn.textContent = '복사'; }, 1500);
+      });
+    });
+    codeOverlay.querySelector('#wcd-download').addEventListener('click', function() {
+      var code = codeOverlay.querySelector('#wcd-code').textContent;
+      var blob = new Blob([code], { type: 'text/html;charset=utf-8' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = (cfg.sidebarTitle || 'maging-slide') + '.html';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+    codeOverlay.addEventListener('click', function(e) {
+      if (e.target === codeOverlay) codeOverlay.classList.remove('is-open');
+    });
+
+    // Build theme carousel — read real themes from FAB panel or CSS
+    var _themeCache = null;
+    function buildThemeCarousel() {
+      var current = document.documentElement.getAttribute('data-theme') || 'flow';
+      // Read theme colors from CSS rules directly (no DOM mutation — instant)
+      if (!_themeCache) {
+        _themeCache = [];
+        var seen = {};
+        for (var i = 0; i < document.styleSheets.length; i++) {
+          try {
+            var rules = document.styleSheets[i].cssRules || [];
+            for (var j = 0; j < rules.length; j++) {
+              var r = rules[j];
+              if (r.selectorText) {
+                var m = r.selectorText.match(/\[data-theme="([^"]+)"\]/);
+                if (m && !seen[m[1]]) {
+                  seen[m[1]] = true;
+                  var st = r.style;
+                  var accent = st.getPropertyValue('--mw-accent').trim();
+                  if (accent) _themeCache.push({ name: m[1], bg: st.getPropertyValue('--mw-bg').trim() || '#fff', accent: accent, text: st.getPropertyValue('--mw-text').trim() || '#000' });
+                }
+              }
+            }
+          } catch(e) {}
+        }
+      }
+      var themeColors = _themeCache;
+      // Build HTML
+      var track = '<div class="weekly-themes__track">';
+      themeColors.forEach(function(c) {
+        var isActive = c.name === current;
+        track += '<div class="weekly-themes__item' + (isActive ? ' weekly-themes__item--active' : '') + '" data-theme-pick="' + c.name + '">' +
+          '<div class="weekly-themes__swatch" style="background:' + c.bg + '">' +
+            '<div class="weekly-themes__bar" style="background:' + c.accent + ';height:55%"></div>' +
+            '<div class="weekly-themes__bar" style="background:' + c.text + ';height:35%;opacity:0.2"></div>' +
+            '<div class="weekly-themes__bar" style="background:' + c.accent + ';height:75%;opacity:0.5"></div>' +
+          '</div>' +
+          '<span class="weekly-themes__name">' + c.name + '</span>' +
+        '</div>';
+      });
+      track += '</div>';
+      themePanelEl.innerHTML = track;
+    }
+
+    if (wtbTheme) wtbTheme.addEventListener('click', function() {
+      var isOpen = themePanelEl.classList.toggle('is-open');
+      wtbTheme.classList.toggle('weekly-titlebar__btn--active', isOpen);
+      if (isOpen && !themePanelEl.querySelector('.weekly-themes__item')) buildThemeCarousel();
+      // Recalc slide scale after carousel animation
+      setTimeout(function() { window.dispatchEvent(new Event('resize')); }, 300);
+    });
+
+    // Theme selection
+    themePanelEl.addEventListener('click', function(e) {
+      var item = e.target.closest('[data-theme-pick]');
+      if (!item) return;
+      var theme = item.dataset.themePick;
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('maging-theme', theme);
+      themePanelEl.querySelectorAll('.weekly-themes__item').forEach(function(el) {
+        el.classList.toggle('weekly-themes__item--active', el.dataset.themePick === theme);
+      });
+      // Refresh charts
+      if (window.Maging?.refreshAll) setTimeout(function() { window.Maging.refreshAll(); }, 100);
+    });
+
+    if (wtbExport) wtbExport.addEventListener('click', function() {
+      // Show FAB temporarily for export
+      var fab = document.querySelector('.mw-theme-fab');
+      if (fab) { fab.style.display = 'flex'; var btn = fab.querySelector('.mw-theme-fab__export-btn, [class*=export] button'); if (btn) btn.click(); }
+    });
+
+    if (wtbPresent) wtbPresent.addEventListener('click', function() {
+      document.body.classList.toggle('presenter-mode');
+      if (window._magingScaleSlides) {
+        var s = [...container.querySelectorAll('section.slide')];
+        window._magingScaleSlides(s);
+      }
+      setTimeout(function() { window.dispatchEvent(new Event('resize')); }, 50);
+    });
+    // Populate thumbnails after widgets mount
+    setTimeout(() => {
+      if (!container.isConnected) return;
+      // Mount all slides eagerly
+      var allSlideEls = container.querySelectorAll('.weekly-slide-area > *');
+      allSlideEls.forEach(function(sec) { if (MOUNT[sec.id]) MOUNT[sec.id](); });
+
+      // Auto-paginate: split overflowing slides
+      var sa = container.querySelector('.weekly-slide-area');
+      [...sa.querySelectorAll('section.slide:not(.cover-slide)')].forEach(function(sec) {
+        var body = sec.querySelector('.mw-slide__body');
+        if (!body || body.scrollHeight <= body.clientHeight) return;
+
+        var widgets = [...body.children];
+        var bodyH = body.clientHeight;
+        var splitIdx = -1;
+        for (var i = 0; i < widgets.length; i++) {
+          if (widgets[i].offsetTop + widgets[i].offsetHeight > bodyH) { splitIdx = i; break; }
+        }
+        if (splitIdx <= 0) return;
+
+        // Create continuation slide
+        var cont = document.createElement('section');
+        cont.className = sec.className;
+        cont.id = sec.id + '-cont';
+        if (sec.dataset.label) cont.dataset.label = sec.dataset.label;
+        if (sec.dataset.bu) cont.dataset.bu = sec.dataset.bu;
+        if (sec.dataset.team) cont.dataset.team = sec.dataset.team;
+        var hdr = sec.querySelector('.mw-slide__header');
+        var ftr = sec.querySelector('.mw-slide__footer');
+        var contBody = document.createElement('div');
+        contBody.className = 'mw-slide__body';
+        if (hdr) cont.appendChild(hdr.cloneNode(true));
+        cont.appendChild(contBody);
+        if (ftr) cont.appendChild(ftr.cloneNode(true));
+        cont.classList.add('mw-slide');
+
+        // Move overflow widgets
+        for (var j = splitIdx; j < widgets.length; j++) contBody.appendChild(widgets[j]);
+
+        sec.after(cont);
+      });
+
+      // Re-number all slides
+      var allFinal = [...sa.children];
+      var total = allFinal.length;
+      allFinal.forEach(function(sec, i) {
+        var pg = sec.querySelector('.mw-slide__page');
+        if (pg) pg.textContent = (i + 1) + ' / ' + total;
+      });
+      // Update toolbar indicator
+      var wtInd = container.querySelector('#weekly-ind');
+      if (wtInd) {
+        var activeIdx = allFinal.findIndex(function(s) { return s.hasAttribute('data-active'); });
+        wtInd.textContent = (activeIdx + 1) + ' / ' + total;
+      }
+
+      // Rebuild thumbnails to include paginated slides
+      var thumbList = container.querySelector('.wrs__thumb-list');
+      var finalSlides = [...sa.children];
+      if (thumbList) {
+        thumbList.innerHTML = finalSlides.map(function(sec, i) {
+          var isActive = sec.hasAttribute('data-active');
+          return '<div class="wrs__thumb' + (isActive ? ' wrs__thumb--active' : '') + '" data-nav="' + sec.id + '">' +
+            '<span class="wrs__thumb-num">' + (i + 1) + '</span>' +
+            '<div class="wrs__thumb-frame"><div class="wrs__thumb-content" data-thumb-id="' + sec.id + '"></div></div>' +
+          '</div>';
+        }).join('');
+      }
+      // Populate thumbnail clones
+      finalSlides.forEach(function(sec) {
+        var thumb = container.querySelector('[data-thumb-id="' + sec.id + '"]');
+        if (!thumb) return;
+        var frame = thumb.parentElement;
+        var frameW = frame.offsetWidth || 176;
+        thumb.style.transform = 'scale(' + (frameW / 1240).toFixed(4) + ')';
+        var clone = sec.cloneNode(true);
+        clone.removeAttribute('id');
+        clone.removeAttribute('data-active');
+        clone.style.cssText = 'display:flex;flex-direction:column;width:1240px;min-width:1240px;margin:0;transform:none;';
+        thumb.innerHTML = '';
+        thumb.appendChild(clone);
+      });
+    }, 500);
 
     return M._pageResult(container, cfg, 'weekly');
   }

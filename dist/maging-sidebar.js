@@ -46,6 +46,18 @@
   .wrs__page-dot--active { background: var(--mw-accent); border-color: var(--mw-accent); opacity: 1; }
   .wrs__lbl  { flex: 1; }
 
+  /* === Thumbnail sidebar === */
+  .wrs--thumbs { width: 220px; min-height: 100%; padding: 14px 8px 24px; background: var(--mw-bg); border-right: 1px solid var(--mw-border); font-family: var(--mw-font); overflow-y: auto; box-sizing: border-box; box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.06); scrollbar-width: thin; display: flex; flex-direction: column; }
+  .wrs--thumbs .wrs__head { padding: 6px 8px 12px; margin-bottom: 4px; }
+  .wrs--thumbs .wrs__thumb-list { display: flex; flex-direction: column; gap: 10px; padding: 4px 2px 4px 0; overflow-y: auto; flex: 1; min-height: 0; }
+  .wrs__thumb { display: flex; align-items: flex-start; gap: 4px; cursor: pointer; flex-shrink: 0; }
+  .wrs__thumb-num { font-size: 10px; color: var(--mw-text-muted); min-width: 16px; text-align: right; padding-top: 3px; font-variant-numeric: tabular-nums; flex-shrink: 0; line-height: 1; }
+  .wrs__thumb-frame { flex: 1; aspect-ratio: 297/210; overflow: hidden; border: 2px solid color-mix(in srgb, var(--mw-border) 60%, transparent); border-radius: 3px; background: var(--mw-surface); position: relative; transition: border-color 150ms, box-shadow 150ms; }
+  .wrs__thumb:hover .wrs__thumb-frame { border-color: color-mix(in srgb, var(--mw-accent) 40%, var(--mw-border)); }
+  .wrs__thumb--active .wrs__thumb-frame { border-color: var(--mw-accent); box-shadow: 0 0 0 1px var(--mw-accent); }
+  .wrs__thumb-content { width: 1240px; height: calc(1240px * 210 / 297); transform-origin: top left; pointer-events: none; position: absolute; top: 0; left: 0; overflow: hidden; background: var(--mw-bg); }
+  body.presenter-mode .wrs--thumbs { display: none !important; }
+
   /* Slide connected to sidebar — override maging.css defaults */
   maging-sidebar ~ main .mw-slide { border: 1px solid color-mix(in srgb, var(--mw-border) 40%, transparent); border-left: none; border-radius: 0; box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.06); }
 `;
@@ -138,13 +150,41 @@
   // ── Shared slide scaling (used by maging-pitch.js and maging-weekly.js) ──
   window._magingScaleSlides = function(slides) {
     const SLIDE_W = 1240, SLIDE_H = SLIDE_W * (210 / 297);
-    const flexEl = document.querySelector('body > .flex');
+
+    // Presenter mode — scale each slide to fill viewport
     if (document.body.classList.contains('presenter-mode')) {
+      var flexEl = document.querySelector('body > .flex');
       if (flexEl) { flexEl.style.transform = ''; flexEl.style.marginBottom = ''; flexEl.style.marginTop = ''; }
-      const s = Math.min(innerWidth / SLIDE_W, innerHeight / SLIDE_H);
-      slides.forEach(function(el) { el.style.setProperty('--slide-scale', s.toFixed(4)); el.style.marginBottom = '0'; el.style.marginRight = '0'; });
+      var s = Math.min(innerWidth / SLIDE_W, innerHeight / SLIDE_H);
+      var mx = -(SLIDE_W * (1 - s)) / 2;
+      var my = -(SLIDE_H * (1 - s)) / 2;
+      slides.forEach(function(el) { el.style.setProperty('--slide-scale', s.toFixed(4)); el.style.margin = my.toFixed(1) + 'px ' + mx.toFixed(1) + 'px'; });
       return;
     }
+
+    // Weekly mode — scale slide to fill .weekly-slide-area
+    var slideArea = document.querySelector('.weekly-slide-area');
+    if (slideArea) {
+      var areaW = slideArea.clientWidth;
+      var areaH = slideArea.clientHeight;
+      var fitW = (areaW - 24) / SLIDE_W;   // 12px margin each side
+      var fitH = (areaH - 48) / SLIDE_H;   // 48px for bottom bar
+      var s = Math.min(fitW, fitH, 1);
+      if (s < 0.1) s = 1;
+      // Margin compensation: after transform:scale, the element still occupies
+      // its original layout size. Negative margins shrink the layout box to
+      // match the visual size, so flex centering works correctly.
+      var mx = -(SLIDE_W * (1 - s)) / 2;
+      var my = -(SLIDE_H * (1 - s)) / 2;
+      slides.forEach(function(el) {
+        el.style.setProperty('--slide-scale', s.toFixed(4));
+        el.style.margin = my.toFixed(1) + 'px ' + mx.toFixed(1) + 'px';
+      });
+      return;
+    }
+
+    // Pitch mode — scale body > .flex container
+    var flexEl = document.querySelector('body > .flex');
     slides.forEach(function(el) { el.style.setProperty('--slide-scale', '1'); el.style.marginBottom = '0'; el.style.marginRight = '0'; });
     if (!flexEl) return;
     var sidebar = document.querySelector('maging-sidebar .wrs');

@@ -903,7 +903,7 @@
       const t = slides.find(s => s.id === id);
       if (!t) return;
       slides.forEach(s => s.toggleAttribute('data-active', s === t));
-      history.replaceState(null, '', '#' + id);
+      if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
       if (!mounted[id]) { mounted[id] = true; MOUNT[id]?.(); }
       // Update sidebar within scope
       scope.querySelectorAll('maging-sidebar .wrs__link, [data-nav].wrs__link').forEach(a => a.classList.toggle('wrs__link--active', a.dataset.nav === id));

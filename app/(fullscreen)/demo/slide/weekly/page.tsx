@@ -303,6 +303,16 @@ const config = {
           bullets: ['로그인 30일 이상 없음 3개사 — 즉시 컨택 필요', '갱신 60일 내 도래 4개사 — 리뷰 미진행'],
           highlight: '4월 말까지 7개사 EBR 완료 필수 — 담당: 조윤경 책임',
         },
+      ],
+    },
+
+    /* ═══ Customer Insight 2 ═══ */
+    {
+      id: 'customer-insight-2',
+      label: 'KPI 2. 핵심고객 관계관리',
+      bu: 'SaaS B/U',
+      team: 'CX팀',
+      widgets: [
         {
           type: 'insightCard',
           icon: '↑',
