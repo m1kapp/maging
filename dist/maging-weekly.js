@@ -240,12 +240,11 @@
   }
   .weekly-slide-area .mw-slide .mw-slide__body {
     overflow: hidden;
-    display: flex; flex-direction: column; gap: var(--mw-space-3);
+    display: flex; flex-direction: column;
     padding: var(--mw-space-3) var(--mw-space-5) var(--mw-space-4);
     min-height: 0;
   }
-  .weekly-slide-area .mw-slide .mw-slide__body > .mw-page-head { margin-bottom: calc(-1 * var(--mw-space-1)); }
-  .weekly-slide-area .mw-slide .mw-slide__body > .mw-section-head { margin-top: var(--mw-space-2); margin-bottom: calc(-1 * var(--mw-space-2)); }
+  /* spacing is handled inline by MOUNT — see widget loop */
   /* Thumbnail — cloned slides at miniature scale */
   .wrs__thumb-content .mw-slide, .wrs__thumb-content .mw-cover { box-shadow: none; border: none; border-radius: 0; }
   .wrs__thumb-content .mw-slide__body { overflow: hidden; }
@@ -684,16 +683,23 @@
         if (_mountedOnce[s.id]) return;
         _mountedOnce[s.id] = true;
         let kpiRow = null;
-        widgets.forEach(w => {
+        let prevType = null;
+        widgets.forEach((w, wi) => {
           const fn = M[w.type];
           if (!fn) { console.warn('[maging.page/weekly] Unknown widget: ' + w.type); return; }
           const wCfg = {};
           for (const k in w) { if (k !== 'type') wCfg[k] = w[k]; }
+
+          // Spacing logic — inline, no CSS selectors needed
+          let mt = wi === 0 ? '0' : '12px';                              // default
+          if (w.type === 'sectionHead' && prevType === 'pageHeader') mt = '4px';   // title → subtitle: tight
+          else if (w.type === 'sectionHead') mt = '16px';                          // section break: roomy
+          if (prevType === 'sectionHead') mt = '6px';                              // subtitle → content: snug
+
           if (w.type === 'kpiCard') {
-            // Group consecutive kpiCards into a grid row
             if (!kpiRow) {
               kpiRow = document.createElement('div');
-              kpiRow.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:var(--mw-space-3);';
+              kpiRow.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:var(--mw-space-3);margin-top:' + mt;
               body.appendChild(kpiRow);
             }
             const wrap = document.createElement('div');
@@ -702,9 +708,11 @@
           } else {
             kpiRow = null;
             const wrap = document.createElement('div');
+            wrap.style.marginTop = mt;
             body.appendChild(wrap);
             fn(wrap, wCfg);
           }
+          prevType = w.type;
         });
       };
     });
