@@ -342,25 +342,18 @@ const config = {
       ],
     },
 
-    /* ═══ Feedback ═══ */
+    /* ═══ Feedback — NPS ═══ */
     {
-      id: 'feedback',
+      id: 'feedback-nps',
       label: 'KPI 3. 고객 피드백 프로세스',
       bu: 'SaaS B/U',
       team: 'CX팀',
       widgets: [
-        { type: 'pageHeader', title: 'NPS · CSAT 측정 체계', meta: '기준일 2026.04.27(월)' },
+        { type: 'pageHeader', title: 'NPS · 순수 추천 지수', meta: '기준일 2026.04.27(월)' },
         { type: 'kpiCard', label: '1Q NPS 추천 비율 · 업계 우수 ≥70%', value: '54<span class="mw-unit">%</span>', valueHTML: true, delta: -16, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '1Q NPS 중립자', value: '24<span class="mw-unit">%</span>', valueHTML: true },
         { type: 'kpiCard', label: '1Q NPS 비추천자', value: '22<span class="mw-unit">%</span>', valueHTML: true },
-        { type: 'kpiCard', label: '4월 CSAT 현재 · 목표 1.8', value: '1.66<span class="mw-unit"> / 2.0</span>', valueHTML: true, delta: 0, deltaGoodWhen: 'positive' },
-        { type: 'sectionHead', index: '01', kicker: 'NPS', title: '순수 추천 지수 (분기)' },
-        {
-          type: 'defCard',
-          title: '2026년 1분기 NPS 분포',
-          subtitle: '유료 사용자 대상 분기별 form 발송',
-          rows: [],
-        },
+        { type: 'sectionHead', index: '01', kicker: 'NPS DISTRIBUTION', title: '1분기 NPS 분포' },
         {
           type: 'shareBar',
           segments: [
@@ -382,17 +375,19 @@ const config = {
       ],
     },
 
-    /* ═══ Feedback 2 ═══ */
+    /* ═══ Feedback — CSAT ═══ */
     {
-      id: 'feedback-2',
+      id: 'feedback-csat',
       label: 'KPI 3. 고객 피드백 프로세스',
       bu: 'SaaS B/U',
       team: 'CX팀',
       widgets: [
-        { type: 'sectionHead', index: '02', kicker: 'CSAT', title: '응대 만족도 (상시)' },
+        { type: 'pageHeader', title: 'CSAT · 응대 만족도', meta: '기준일 2026.04.27(월)' },
+        { type: 'kpiCard', label: '4월 CSAT 현재 · 목표 1.8', value: '1.66<span class="mw-unit"> / 2.0</span>', valueHTML: true, delta: 0, deltaGoodWhen: 'positive' },
+        { type: 'sectionHead', index: '02', kicker: 'CSAT BY PERSON', title: '담당자별 응대 만족도' },
         {
           type: 'activityTable',
-          title: 'CSAT 담당자별 응대 만족도',
+          title: 'CSAT 담당자별 점수',
           subtitle: '4월 현재 · 만점 2.0 / 목표 1.8',
           columns: [
             { key: 'who', label: '담당자', align: 'left' },
@@ -416,6 +411,16 @@ const config = {
             { key: '담당', value: 'CX 전체' },
           ],
         },
+      ],
+    },
+
+    /* ═══ Feedback — Top Issues ═══ */
+    {
+      id: 'feedback-issues',
+      label: 'KPI 3. 고객 피드백 프로세스',
+      bu: 'SaaS B/U',
+      team: 'CX팀',
+      widgets: [
         { type: 'sectionHead', index: '03', kicker: 'TOP ISSUES', title: '최우선 해결 과제 — 전 구간 공통 반복' },
         {
           type: 'insightCard',

@@ -177,12 +177,14 @@ window.addEventListener('maging:ready', function () {
 5. **delta:** 목표 대비 또는 전월/전년 대비 %.
 6. **마지막은 alertBanner** — `type='info'` 1-2문장 요약.
 7. **Anti-AI:** hover glow 금지 · 균일 3등분 grid 금지 · shadow tint 금지.
-8. **슬라이드 밀도 가이드라인:**
+8. **슬라이드 밀도 — 반드시 지켜라:**
    - KPI 카드: 한 줄에 최대 **4개**.
-   - 권장 구성: `pageHeader + KPI 2~4개 + sectionHead + 테이블 또는 차트 1개 + alertBanner`.
-   - **넘치면 자동 분할됨** — 시스템이 A4 영역을 초과하는 위젯을 자동으로 다음 슬라이드로 이동시킨다. 단, 의도적으로 1장에 맞추는 것이 더 좋은 결과를 낸다.
+   - 1장 최대 구성: `pageHeader + KPI 3~4개 + sectionHead + 테이블/차트 1개 + alertBanner` (총 위젯 7~8개).
+   - **insightCard는 1장에 최대 2개.** 3개 이상이면 반드시 다음 슬라이드로 분리.
+   - **defCard + shareBar + defCard 조합**은 1장을 차지한다. KPI와 함께 넣지 마라.
    - 차트 + 테이블 동시 배치 금지. 하나만 선택.
-   - 내용이 많으면 슬라이드를 **분리**하라 (예: 같은 label로 2장).
+   - **내용이 많으면 같은 label로 슬라이드를 분리하라.** 예: `{id:'feedback-nps', label:'KPI 3. 피드백'}` + `{id:'feedback-csat', label:'KPI 3. 피드백'}`. 사이드바에서 같은 KPI 아래 dot으로 표시된다.
+   - **넘치면 자동 분할됨** — 시스템이 A4 영역을 초과하는 위젯을 다음 슬라이드로 이동시키지만, 의도적으로 분리하는 것이 훨씬 깔끔하다.
 9. **커버 슬라이드:** `style: 'classic'` 사용. kicker에 리포트 유형+날짜, title에 보고서 이름. 타이틀 마지막 단어에 테마 accent 색상이 자동 적용된다.
 
 ---
