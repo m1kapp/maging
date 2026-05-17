@@ -91,6 +91,7 @@ const config = {
       team: '컨설팅 & CSM팀',
       widgets: [
         { type: 'pageHeader', title: '월별 매출 현황', meta: '기준일 2026.04.27(월)' },
+        { type: 'sectionHead', title: '주요 지표' },
         { type: 'kpiCard', label: '3월 신규 매출 · 목표 1.42억원', value: fmtBillion(71941000), valueHTML: true, delta: (71941000 / 142000000 * 100) - 100, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '1Q 신규 매출 · 목표 4.16억원', value: fmtBillion(281316000), valueHTML: true, delta: (281316000 / 416000000 * 100) - 100, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '상반기 신규 매출 · 목표 11.7억원', value: fmtBillion(281316000), valueHTML: true, delta: (281316000 / 1170000000 * 100) - 100, deltaGoodWhen: 'positive' },
@@ -146,6 +147,7 @@ const config = {
       team: '컨설팅 & CSM팀',
       widgets: [
         { type: 'pageHeader', title: '신규상품 라인업 매출 현황', meta: '기준일 2026.04.27(월)' },
+        { type: 'sectionHead', title: '주요 지표' },
         { type: 'kpiCard', label: 'Q1 신규상품 매출 · 목표 1.6억', value: '1.23<span class="mw-unit"> 억원</span>', valueHTML: true, delta: -23.1, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '4월 파이프라인', value: '0.48<span class="mw-unit"> 억원</span>', valueHTML: true, delta: 12.4, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '활성 신규상품 고객', value: '34<span class="mw-unit">개사</span>', valueHTML: true, delta: 6.2, deltaGoodWhen: 'positive' },
@@ -190,6 +192,7 @@ const config = {
       team: '컨설팅 & CSM팀',
       widgets: [
         { type: 'pageHeader', title: '고객 교육 프로그램 현황', meta: '기준일 2026.04.27(월)' },
+        { type: 'sectionHead', title: '주요 지표' },
         { type: 'kpiCard', label: '4월 교육 세션수 · 목표 12회', value: '9<span class="mw-unit">회</span>', valueHTML: true, delta: -25, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '누적 참여 고객사 · 4월 기준', value: '128<span class="mw-unit">개사</span>', valueHTML: true, delta: 14.3, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '교육 만족도 · 5점 만점', value: '4.3<span class="mw-unit"> / 5.0</span>', valueHTML: true, delta: 1.2, deltaGoodWhen: 'positive' },
@@ -232,6 +235,7 @@ const config = {
       team: 'CX팀',
       widgets: [
         { type: 'pageHeader', title: '월별 해지 및 순증감 현황', meta: '기준일 2026.04.27(월)' },
+        { type: 'sectionHead', title: '주요 지표' },
         { type: 'kpiCard', label: '3월 해지율 · 전년 동월 3.3%', value: '2.9<span class="mw-unit">%</span>', valueHTML: true, delta: -3.4, deltaGoodWhen: 'negative' },
         { type: 'kpiCard', label: '3월 해지비율 · 신규 92 < 해지 135', value: '146<span class="mw-unit">%</span>', valueHTML: true, delta: -10, deltaGoodWhen: 'negative' },
         { type: 'kpiCard', label: '3월 유료 기업 수 · 2월 4,621 → 3월', value: '4,592<span class="mw-unit">개</span>', valueHTML: true, delta: -0.6, deltaGoodWhen: 'positive' },
@@ -280,6 +284,7 @@ const config = {
       team: 'CX팀',
       widgets: [
         { type: 'pageHeader', title: '핵심고객 현황 및 인사이트', meta: '기준일 2026.04.27(월)' },
+        { type: 'sectionHead', title: '주요 지표' },
         { type: 'kpiCard', label: '관리 대상 핵심고객', value: '42<span class="mw-unit">개사</span>', valueHTML: true, delta: 2, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '평균 월정액 ARR', value: '28<span class="mw-unit">만원</span>', valueHTML: true, delta: 3.7, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '이탈위험 고객 (EBR 미진행)', value: '7<span class="mw-unit">개사</span>', valueHTML: true, delta: 2, deltaGoodWhen: 'negative' },
@@ -350,6 +355,7 @@ const config = {
       team: 'CX팀',
       widgets: [
         { type: 'pageHeader', title: 'NPS · 순수 추천 지수', meta: '기준일 2026.04.27(월)' },
+        { type: 'sectionHead', title: '주요 지표' },
         { type: 'kpiCard', label: '1Q NPS 추천 비율 · 업계 우수 ≥70%', value: '54<span class="mw-unit">%</span>', valueHTML: true, delta: -16, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '1Q NPS 중립자', value: '24<span class="mw-unit">%</span>', valueHTML: true },
         { type: 'kpiCard', label: '1Q NPS 비추천자', value: '22<span class="mw-unit">%</span>', valueHTML: true },
@@ -383,6 +389,7 @@ const config = {
       team: 'CX팀',
       widgets: [
         { type: 'pageHeader', title: 'CSAT · 응대 만족도', meta: '기준일 2026.04.27(월)' },
+        { type: 'sectionHead', title: '주요 지표' },
         { type: 'kpiCard', label: '4월 CSAT 현재 · 목표 1.8', value: '1.66<span class="mw-unit"> / 2.0</span>', valueHTML: true, delta: 0, deltaGoodWhen: 'positive' },
         { type: 'sectionHead', index: '02', kicker: 'CSAT BY PERSON', title: '담당자별 응대 만족도' },
         {
@@ -464,6 +471,7 @@ const config = {
       team: 'AX & 플랫폼팀',
       widgets: [
         { type: 'pageHeader', title: '개발 진행 현황', meta: '기준일 2026.04.27(월)' },
+        { type: 'sectionHead', title: '주요 지표' },
         { type: 'kpiCard', label: '이번 주 배포 건수', value: '3<span class="mw-unit">건</span>', valueHTML: true, delta: 0, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '4월 완료 피처 누적', value: '18<span class="mw-unit">개</span>', valueHTML: true, delta: 12.5, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: 'API 가용성 (4월)', value: '99.2<span class="mw-unit">%</span>', valueHTML: true, delta: -0.1, deltaGoodWhen: 'positive' },
@@ -515,6 +523,7 @@ const config = {
       team: 'AX & 플랫폼팀',
       widgets: [
         { type: 'pageHeader', title: 'AI 기능 배포 및 자동화 현황', meta: '기준일 2026.04.27(월)' },
+        { type: 'sectionHead', title: '주요 지표' },
         { type: 'kpiCard', label: '배포 완료 AI 기능', value: '7<span class="mw-unit">개</span>', valueHTML: true, delta: 0, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '자동화 절감 업무시간 (4월)', value: '1,240<span class="mw-unit">시간</span>', valueHTML: true, delta: 18.2, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: 'AI 기능 활성 사용률', value: '31<span class="mw-unit">%</span>', valueHTML: true, delta: 4.1, deltaGoodWhen: 'positive' },
@@ -604,6 +613,7 @@ const config = {
       team: '컨설팅팀',
       widgets: [
         { type: 'pageHeader', title: '엔터프라이즈 수주 실적 요약', meta: '기준일 2026.04.27(월)' },
+        { type: 'sectionHead', title: '주요 지표' },
         { type: 'kpiCard', label: 'Q1 수주 총액 · 목표 8억', value: '6.2<span class="mw-unit"> 억원</span>', valueHTML: true, delta: -22.5, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '4월 클로징 목표', value: '2.1<span class="mw-unit"> 억원</span>', valueHTML: true, delta: 0, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '활성 파이프라인 건수', value: '14<span class="mw-unit">건</span>', valueHTML: true, delta: 7.7, deltaGoodWhen: 'positive' },

@@ -245,7 +245,7 @@
     min-height: 0;
   }
   .weekly-slide-area .mw-slide .mw-slide__body > .mw-page-head { margin-bottom: calc(-1 * var(--mw-space-1)); }
-  .weekly-slide-area .mw-slide .mw-slide__body > .mw-section-head { margin-top: var(--mw-space-1); }
+  .weekly-slide-area .mw-slide .mw-slide__body > .mw-section-head { margin-top: var(--mw-space-2); margin-bottom: calc(-1 * var(--mw-space-2)); }
   /* Thumbnail — cloned slides at miniature scale */
   .wrs__thumb-content .mw-slide, .wrs__thumb-content .mw-cover { box-shadow: none; border: none; border-radius: 0; }
   .wrs__thumb-content .mw-slide__body { overflow: hidden; }
