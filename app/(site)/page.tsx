@@ -85,6 +85,10 @@ const config = {
         { href: '/demo/landing/startup', icon: '◐', kicker: '랜딩페이지 · SaaS', title: 'SaaS 도구 랜딩', desc: 'Hero·Steps·Features·Pricing·FAQ' },
         { href: '/demo/dashboard/finance', icon: '▦', kicker: '대시보드 · 투자', title: '투자 포트폴리오', desc: '자산배분·수익률·보유종목' },
         { href: '/demo/slide/strategy', icon: '▤', kicker: '슬라이드 · 전략', title: '내부 전략 발표', desc: 'SWOT·로드맵·플라이휠' },
+        { href: '/demo/slide/proposal', icon: '▤', kicker: '슬라이드 · 제안', title: '프로젝트 제안서', desc: 'AI CS 자동화 도입 제안' },
+        { href: '/demo/slide/ecommerce', icon: '▤', kicker: '슬라이드 · 이커머스', title: '이커머스 주간보고', desc: '매출·트래픽·재고·CS 운영' },
+        { href: '/demo/landing/edtech', icon: '◐', kicker: '랜딩페이지 · 교육', title: '기업교육 플랫폼', desc: '게이미피케이션·후기·가격' },
+        { href: '/demo/landing/campaign', icon: '◐', kicker: '랜딩페이지 · 이벤트', title: 'Launch Week', desc: '카운트다운·일정·얼리버드' },
       ],
     },
 
