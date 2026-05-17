@@ -281,7 +281,6 @@ const config = {
         { type: 'kpiCard', label: '관리 대상 핵심고객', value: '42<span class="mw-unit">개사</span>', valueHTML: true, delta: 2, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '평균 월정액 ARR', value: '28<span class="mw-unit">만원</span>', valueHTML: true, delta: 3.7, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '이탈위험 고객 (EBR 미진행)', value: '7<span class="mw-unit">개사</span>', valueHTML: true, delta: 2, deltaGoodWhen: 'negative' },
-        { type: 'sectionHead', index: '01', kicker: 'KEY INSIGHTS', title: '핵심 고객 인사이트' },
         {
           type: 'insightCard',
           icon: '★',
