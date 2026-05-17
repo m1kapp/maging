@@ -18,24 +18,25 @@
   // ── 1. CSS injection ───────────────────────────────────────────────────────
   const _style = document.createElement('style');
   _style.textContent = `
+  /* === Selector-based rules only — everything else is Tailwind on JS elements === */
+
+  /* Slide visibility */
   .slide { display: none; }
   .slide[data-active] { display: flex; flex-direction: column; }
 
+  /* maging widget overrides (used by monthlyTable, can't be Tailwind) */
   .table-block { display: flex; flex-direction: column; gap: var(--mw-space-2); }
   .table-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0 var(--mw-space-1); margin-bottom: var(--mw-space-3); }
   .table-toolbar__title { font-size: var(--mw-text-base); font-weight: 600; color: var(--mw-text); }
-  .table-toolbar__sub   { font-size: var(--mw-text-sm); color: var(--mw-text-muted); margin-left: var(--mw-space-2); }
-
+  .table-toolbar__sub { font-size: var(--mw-text-sm); color: var(--mw-text-muted); margin-left: var(--mw-space-2); }
   .unit-toggle { display: inline-flex; gap: 1px; padding: 2px; background: var(--mw-surface-2); border: 1px solid var(--mw-border); border-radius: var(--mw-radius); }
   .unit-toggle button { padding: 3px 9px; font-size: var(--mw-text-xs); font-weight: 500; color: var(--mw-text-muted); background: transparent; border: 0; cursor: pointer; border-radius: calc(var(--mw-radius) - 2px); font-variant-numeric: tabular-nums; }
   .toggle-prefix { display: inline-flex; align-items: center; padding: 3px 6px; color: var(--mw-text-muted); user-select: none; }
   .toggle-prefix svg { display: block; flex-shrink: 0; opacity: 0.75; }
   .unit-toggle button:hover { color: var(--mw-text); }
   .unit-toggle button.active { background: var(--mw-surface); color: var(--mw-text); box-shadow: var(--mw-shadow); }
-
   .view-host { height: 340px; }
   .view-host > .mw-card { height: 100%; display: flex; flex-direction: column; overflow: hidden; }
-
   .scroll-table.mw-card { padding: 0; overflow: hidden; }
   .scroll-table .mw-table__wrap { flex: 1; min-height: 0; overflow: hidden; }
   .scroll-table .mw-table { width: 100%; height: 100%; font-size: var(--mw-text-xs); border-collapse: separate; border-spacing: 0; table-layout: fixed; }
@@ -46,220 +47,50 @@
   .scroll-table .mw-table td strong { font-weight: 600; letter-spacing: -0.01em; }
   .scroll-table .mw-table tbody tr:last-child td { background: var(--mw-surface-2); }
   .scroll-table .mw-card > .mw-card__head { display: none; }
-
   .row-unit { color: var(--mw-text-muted); font-size: 0.85em; font-weight: 400; margin-left: 4px; }
+  .rag-row { display: flex; flex-wrap: wrap; gap: var(--mw-space-2); margin-top: var(--mw-space-3); }
+  .wrn-bar { position: fixed; left: 50%; transform: translateX(-50%); bottom: 20px; width: max-content; display: inline-flex; align-items: center; gap: 4px; padding: 0.38rem 0.65rem; background: var(--mw-surface); border: 1px solid var(--mw-border); border-radius: 999px; box-shadow: 0 8px 24px -6px rgba(0,0,0,.28), 0 2px 6px -2px rgba(0,0,0,.12); font-size: 0.78rem; font-variant-numeric: tabular-nums; color: var(--mw-text); font-family: var(--mw-font); z-index: 50; }
+
+  /* Cover slide — selector-based (can't be Tailwind because targets maging widget output) */
   .cover-slide { padding: 0; border: none !important; overflow: hidden; }
   .cover-slide > .mw-cover { width: 100%; height: 100%; aspect-ratio: auto; min-height: auto; border: none; border-radius: inherit; box-shadow: none; margin: 0; }
-
-  /* Cover slide — Replit-inspired: left-aligned, bold title, four-corner meta */
-  .cover-slide > .mw-cover--classic {
-    background: linear-gradient(180deg, var(--mw-bg) 60%, color-mix(in srgb, var(--mw-accent) 8%, var(--mw-bg)) 100%);
-    padding: 3.2cqw 4.5cqw;
-    gap: 0;
-    justify-content: space-between;
-  }
-  .cover-slide > .mw-cover--classic .mw-cover__header {
-    display: flex; justify-content: space-between; align-items: flex-start;
-  }
-  .cover-slide > .mw-cover--classic .mw-cover__kicker {
-    font-size: clamp(9px, 0.85cqw, 11px);
-    letter-spacing: 0.14em;
-    font-family: var(--mw-mono-font);
-    color: var(--mw-text-muted);
-    opacity: 0.7;
-  }
-  .cover-slide > .mw-cover--classic .mw-cover__brand {
-    font-size: clamp(9px, 0.85cqw, 11px);
-    font-family: var(--mw-mono-font);
-    color: var(--mw-text-muted);
-    font-weight: 400;
-    letter-spacing: 0.02em;
-    text-align: right;
-    opacity: 0.7;
-  }
-  .cover-slide > .mw-cover--classic .mw-cover__body {
-    display: flex; flex-direction: column; gap: 1cqw;
-    padding: 0;
-  }
-  .cover-slide > .mw-cover--classic .mw-cover__title {
-    font-size: clamp(36px, 7cqw, 92px);
-    letter-spacing: -0.045em;
-    line-height: 1.02;
-    font-weight: 800;
-  }
-  .cover-slide > .mw-cover--classic .mw-cover__subtitle {
-    font-size: clamp(12px, 1.2cqw, 15px);
-    color: var(--mw-text-muted);
-    max-width: 55%;
-    line-height: 1.55;
-    opacity: 0.65;
-  }
-  .cover-slide > .mw-cover--classic .mw-cover__footer {
-    display: flex; justify-content: space-between; align-items: flex-end;
-    border-top: none; padding-top: 0; margin-top: 0;
-  }
+  .cover-slide > .mw-cover--classic { background: linear-gradient(180deg, var(--mw-bg) 60%, color-mix(in srgb, var(--mw-accent) 8%, var(--mw-bg)) 100%); padding: 3.2cqw 4.5cqw; gap: 0; justify-content: space-between; }
+  .cover-slide > .mw-cover--classic .mw-cover__header { display: flex; justify-content: space-between; align-items: flex-start; }
+  .cover-slide > .mw-cover--classic .mw-cover__kicker { font-size: clamp(9px, 0.85cqw, 11px); letter-spacing: 0.14em; font-family: var(--mw-mono-font); color: var(--mw-text-muted); opacity: 0.7; }
+  .cover-slide > .mw-cover--classic .mw-cover__brand { font-size: clamp(9px, 0.85cqw, 11px); font-family: var(--mw-mono-font); color: var(--mw-text-muted); font-weight: 400; letter-spacing: 0.02em; text-align: right; opacity: 0.7; }
+  .cover-slide > .mw-cover--classic .mw-cover__body { display: flex; flex-direction: column; gap: 1cqw; padding: 0; }
+  .cover-slide > .mw-cover--classic .mw-cover__title { font-size: clamp(36px, 7cqw, 92px); letter-spacing: -0.045em; line-height: 1.02; font-weight: 800; }
+  .cover-slide > .mw-cover--classic .mw-cover__subtitle { font-size: clamp(12px, 1.2cqw, 15px); color: var(--mw-text-muted); max-width: 55%; line-height: 1.55; opacity: 0.65; }
+  .cover-slide > .mw-cover--classic .mw-cover__footer { display: flex; justify-content: space-between; align-items: flex-end; border-top: none; padding-top: 0; margin-top: 0; }
   .cover-slide > .mw-cover--classic .mw-cover__rule { display: none; }
-  .cover-slide > .mw-cover--classic .mw-cover__meta {
-    font-size: clamp(9px, 0.85cqw, 11px);
-    font-family: var(--mw-mono-font);
-    color: var(--mw-text-muted);
-    opacity: 0.7;
-  }
+  .cover-slide > .mw-cover--classic .mw-cover__meta { font-size: clamp(9px, 0.85cqw, 11px); font-family: var(--mw-mono-font); color: var(--mw-text-muted); opacity: 0.7; }
 
-  .rag-row { display: flex; flex-wrap: wrap; gap: var(--mw-space-2); margin-top: var(--mw-space-3); }
+  /* Body layout — viewer context */
+  body:has(.wk-viewer) { overflow: hidden; height: 100vh; margin: 0; background: color-mix(in srgb, var(--mw-bg) 75%, #808080); }
+  body:has(.wk-viewer) .mw-theme-fab, body:has(.wk-viewer) .wrn-bar { display: none !important; }
 
-  .wrn-bar { position: fixed; left: 50%; transform: translateX(-50%); bottom: 20px; width: max-content; display: inline-flex; align-items: center; gap: 4px; padding: 0.38rem 0.65rem; background: var(--mw-surface); border: 1px solid var(--mw-border); border-radius: 999px; box-shadow: 0 8px 24px -6px rgba(0,0,0,.28), 0 2px 6px -2px rgba(0,0,0,.12); font-size: 0.78rem; font-variant-numeric: tabular-nums; color: var(--mw-text); font-family: var(--mw-font); transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s; z-index: 50; }
-  .wrn-bar:hover { transform: translateX(-50%) translateY(-1px); box-shadow: 0 12px 32px -6px rgba(0,0,0,.32), 0 4px 10px -2px rgba(0,0,0,.14); border-color: var(--mw-accent); }
-  .wrn-bar__indicator { font-weight: 500; padding: 0 4px; letter-spacing: -0.01em; }
-  .wrn-bar__sep { color: var(--mw-text-muted); margin: 0 1px; }
-  .wrn-bar__divider { width: 1px; height: 14px; background: var(--mw-border); margin: 0 2px; flex-shrink: 0; }
-  .wrn-bar__btn { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: transparent; border: 0; border-radius: 50%; color: var(--mw-text-muted); cursor: pointer; transition: background 0.15s, color 0.15s; }
-  .wrn-bar__btn:hover { background: var(--mw-surface-2); color: var(--mw-text); }
+  /* Slide area — attribute selectors */
+  .wk-slides > *:not([data-active]) { display: none !important; }
+  .wk-slides > [data-active] { display: flex !important; flex-direction: column; }
+  .wk-slides > .mw-slide { flex: none !important; width: 1240px !important; min-width: 1240px !important; aspect-ratio: 297/210 !important; transform: scale(var(--slide-scale,1)); transform-origin: center center; border-radius: var(--mw-radius); box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.06); overflow: hidden; }
+  .wk-slides .mw-slide__body { overflow: hidden; display: flex; flex-direction: column; padding: var(--mw-space-3) var(--mw-space-5) var(--mw-space-4); min-height: 0; }
 
-  #code-view { display: none; flex-direction: column; height: calc(100vh - 64px); padding: 0 4px; }
-  #cv-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 2px 12px; border-bottom: 1px solid var(--mw-border); margin-bottom: 12px; }
-  #cv-title { font-size: 12px; color: var(--mw-text-muted); font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace; letter-spacing: 0.01em; }
-  .cv-btn { padding: 5px 14px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid var(--mw-border); border-radius: var(--mw-radius); background: var(--mw-surface); color: var(--mw-text); transition: background 0.15s; font-family: var(--mw-font); }
-  .cv-btn:hover { background: var(--mw-surface-2); }
-  .cv-btn--accent { background: var(--mw-accent); color: #fff; border-color: transparent; }
-  .cv-btn--accent:hover { opacity: 0.88; background: var(--mw-accent); }
-  #cv-pre { flex: 1; min-height: 0; overflow: auto; scrollbar-width: thin; background: var(--mw-surface-2); border: 1px solid var(--mw-border); border-radius: var(--mw-radius); padding: 20px 24px; font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace; font-size: 12.5px; line-height: 1.75; color: var(--mw-text); tab-size: 2; white-space: pre; word-break: normal; }
-  .wrn-bar__btn.code-active { background: var(--mw-surface-2); color: var(--mw-text); }
+  /* Thumbnails — selector-based overrides for cloned content */
+  .wk-thumb-content .mw-slide, .wk-thumb-content .mw-cover { box-shadow: none; border: none; border-radius: 0; }
+  .wk-thumb-content .mw-slide__body { overflow: hidden; }
+  .wk-thumb-content .cover-slide > .mw-cover { width: 100%; height: 100%; min-height: 0; border: none; }
 
-  /* Weekly viewer layout */
-  body:has(.wrs--thumbs) { overflow: hidden; height: 100vh; margin: 0; background: color-mix(in srgb, var(--mw-bg) 75%, #808080); }
-  body:has(.wrs--thumbs) > main { height: 100vh; overflow: hidden; }
-  body:has(.wrs--thumbs) .mw-theme-fab { display: none !important; }
-  body:has(.wrs--thumbs) .wrn-bar { display: none !important; }
-
-  /* Title bar */
-  .weekly-titlebar {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 8px 16px; flex-shrink: 0; font-family: var(--mw-font);
-    background: var(--mw-surface); border-bottom: 1px solid var(--mw-border);
-  }
-  .weekly-titlebar__left { display: flex; align-items: center; gap: 10px; min-width: 0; }
-  .weekly-titlebar__title { font-size: 13px; font-weight: 600; color: var(--mw-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .weekly-titlebar__date { font-size: 11px; color: var(--mw-text-muted); white-space: nowrap; }
-  .weekly-titlebar__page { font-size: 11px; color: var(--mw-text-muted); font-variant-numeric: tabular-nums; flex-shrink: 0; }
-  .weekly-titlebar__right { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-  .weekly-titlebar__btn {
-    display: inline-flex; align-items: center; gap: 4px;
-    padding: 4px 10px; font-size: 11px; font-weight: 500;
-    color: var(--mw-text-muted); background: transparent;
-    border: none; border-radius: calc(var(--mw-radius) * 0.6);
-    cursor: pointer; font-family: var(--mw-font);
-    transition: background 0.12s, color 0.12s;
-  }
-  .weekly-titlebar__btn:hover { background: var(--mw-surface-2); color: var(--mw-text); }
-  .weekly-titlebar__btn--active { background: color-mix(in srgb, var(--mw-accent) 10%, transparent); color: var(--mw-accent); }
-  .weekly-titlebar__btn svg { width: 13px; height: 13px; }
-  .weekly-titlebar__btn--play { background: var(--mw-accent); color: #fff; padding: 4px 12px; border-radius: 999px; }
-  .weekly-titlebar__btn--play:hover { opacity: 0.88; background: var(--mw-accent); color: #fff; }
-  body.presenter-mode .weekly-titlebar { display: none !important; }
-
-  /* Code dialog */
-  .weekly-code-overlay {
-    display: none; position: fixed; inset: 0; z-index: 10000;
-    background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
-    align-items: center; justify-content: center; padding: 32px;
-  }
-  .weekly-code-overlay.is-open { display: flex; }
-  .weekly-code-dialog {
-    background: var(--mw-surface); border: 1px solid var(--mw-border);
-    border-radius: var(--mw-radius); box-shadow: 0 24px 64px rgba(0,0,0,0.2);
-    width: 100%; max-width: 800px; max-height: 80vh;
-    display: flex; flex-direction: column; font-family: var(--mw-font);
-  }
-  .weekly-code-dialog__header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 16px; border-bottom: 1px solid var(--mw-border); flex-shrink: 0;
-  }
-  .weekly-code-dialog__title { font-size: 13px; font-weight: 600; color: var(--mw-text); }
-  .weekly-code-dialog__actions { display: flex; gap: 6px; }
-  .weekly-code-dialog__btn {
-    padding: 4px 12px; font-size: 11px; font-weight: 500;
-    border: 1px solid var(--mw-border); border-radius: calc(var(--mw-radius) * 0.6);
-    background: var(--mw-surface); color: var(--mw-text); cursor: pointer;
-    font-family: var(--mw-font); transition: background 0.12s;
-  }
-  .weekly-code-dialog__btn:hover { background: var(--mw-surface-2); }
-  .weekly-code-dialog__btn--accent { background: var(--mw-accent); color: #fff; border-color: transparent; }
-  .weekly-code-dialog__btn--accent:hover { opacity: 0.88; background: var(--mw-accent); }
-  .weekly-code-dialog__body {
-    flex: 1; min-height: 0; overflow: auto; scrollbar-width: thin;
-    padding: 16px; background: var(--mw-surface-2);
-  }
-  .weekly-code-dialog__pre {
-    margin: 0; font-family: var(--mw-mono-font); font-size: 12px;
-    line-height: 1.7; color: var(--mw-text); white-space: pre; tab-size: 2;
-  }
-
-  /* Theme carousel */
-  .weekly-themes {
-    flex-shrink: 0; overflow: hidden;
-    background: var(--mw-surface); border-bottom: 1px solid var(--mw-border);
-    max-height: 0; padding: 0; transition: max-height 0.25s ease, padding 0.25s ease;
-  }
-  .weekly-themes.is-open { max-height: 80px; padding: 8px 0; }
-  .weekly-themes__track {
-    display: flex; gap: 8px; padding: 0 16px;
-    overflow-x: auto; scroll-snap-type: x mandatory;
-    scrollbar-width: none; -ms-overflow-style: none;
-  }
-  .weekly-themes__track::-webkit-scrollbar { display: none; }
-  .weekly-themes__item {
-    flex-shrink: 0; width: 72px; scroll-snap-align: start;
-    display: flex; flex-direction: column; align-items: center; gap: 4px;
-    cursor: pointer; padding: 4px; border-radius: calc(var(--mw-radius) * 0.6);
-    border: 2px solid transparent; transition: border-color 0.15s;
-  }
-  .weekly-themes__item:hover { border-color: color-mix(in srgb, var(--mw-accent) 30%, transparent); }
-  .weekly-themes__item--active { border-color: var(--mw-accent); }
-  .weekly-themes__swatch {
-    width: 64px; height: 36px; border-radius: 4px;
-    border: 1px solid rgba(0,0,0,0.08);
-    display: flex; align-items: flex-end; justify-content: center; gap: 2px; padding: 4px;
-    position: relative; overflow: hidden;
-  }
-  .weekly-themes__bar { width: 8px; border-radius: 2px; }
-  .weekly-themes__name { font-size: 9px; color: var(--mw-text-muted); font-family: var(--mw-font); white-space: nowrap; text-transform: capitalize; }
-  body.presenter-mode .weekly-themes { display: none !important; }
-  .weekly-slide-area { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-  .weekly-slide-area > *:not([data-active]) { display: none !important; }
-  .weekly-slide-area > [data-active] { display: flex !important; flex-direction: column; }
-  .weekly-slide-area > .mw-slide {
-    flex: none !important;
-    width: 1240px !important; min-width: 1240px !important;
-    aspect-ratio: 297 / 210 !important;
-    transform: scale(var(--slide-scale, 1));
-    transform-origin: center center;
-    border-radius: var(--mw-radius);
-    box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.06), 0 16px 64px rgba(0,0,0,.04);
-    overflow: hidden;
-  }
-  .weekly-slide-area .mw-slide .mw-slide__body {
-    overflow: hidden;
-    display: flex; flex-direction: column;
-    padding: var(--mw-space-3) var(--mw-space-5) var(--mw-space-4);
-    min-height: 0;
-  }
-  /* spacing is handled inline by MOUNT — see widget loop */
-  /* Thumbnail — cloned slides at miniature scale */
-  .wrs__thumb-content .mw-slide, .wrs__thumb-content .mw-cover { box-shadow: none; border: none; border-radius: 0; }
-  .wrs__thumb-content .mw-slide__body { overflow: hidden; }
-  .wrs__thumb-content .cover-slide > .mw-cover { width: 100%; height: 100%; min-height: 0; border: none; }
-
+  /* Presenter mode */
   body.presenter-mode { overflow: hidden; background: #000; }
-  body.presenter-mode .mw-site-nav,
-  body.presenter-mode .wrs--thumbs,
-  body.presenter-mode .weekly-titlebar,
-  body.presenter-mode .weekly-themes { display: none !important; }
+  body.presenter-mode .mw-site-nav, body.presenter-mode .wk-sidebar, body.presenter-mode .wk-titlebar, body.presenter-mode .wk-themes { display: none !important; }
   body.presenter-mode main { padding: 0 !important; width: 100vw; height: 100vh; overflow: hidden; }
-  body.presenter-mode .weekly-slide-area { position: fixed; inset: 0; display: flex !important; width: 100vw; height: 100vh; align-items: center; justify-content: center; z-index: 9999; background: #000; }
+  body.presenter-mode .wk-slides { position: fixed; inset: 0; display: flex !important; width: 100vw; height: 100vh; align-items: center; justify-content: center; z-index: 9999; background: #000; }
   body.presenter-mode .mw-slide { border: none; border-radius: 0; box-shadow: none !important; }
 
-  /* Sidebar styles provided by maging-sidebar.js */
+  /* Theme carousel transition (can't do max-height animation in Tailwind) */
+  .wk-themes { max-height: 0; transition: max-height 0.25s ease, padding 0.25s ease; }
+  .wk-themes.is-open { max-height: 80px; padding: 8px 0; }
+  .wk-themes-track::-webkit-scrollbar { display: none; }
 `;
   document.head.appendChild(_style);
 
@@ -314,9 +145,9 @@
       });
       // Update thumbnails
       scope.querySelectorAll('.wrs__thumb[data-nav]').forEach(t => {
-        t.classList.toggle('wrs__thumb--active', t.dataset.nav === id);
+        t.classList.toggle('wk-thumb--active', t.dataset.nav === id);
       });
-      var activeThumb = scope.querySelector('.wrs__thumb--active');
+      var activeThumb = scope.querySelector('.wk-thumb--active');
       if (activeThumb) activeThumb.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       const head = scope.querySelector('.wrs__head');
       if (head) head.classList.toggle('wrs__head--active', id === 'cover');
@@ -591,59 +422,57 @@
     const M = window.Maging;
     const slides = cfg.slides || [];
     const container = document.createElement('main');
-    container.style.cssText = 'display:flex;flex-direction:column;height:100vh;overflow:hidden;';
+    container.className = 'wk-viewer flex flex-col h-screen overflow-hidden';
 
     const sTitle = cfg.sidebarTitle || cfg.title || '';
     const sDate = cfg.sidebarDate || cfg.date || '';
 
-    // Title bar (full width, top)
+    // Title bar (full width, top) — Tailwind classes
+    var _btn = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-medium text-[var(--mw-text-muted)] bg-transparent border-none rounded cursor-pointer hover:bg-[var(--mw-surface-2)] hover:text-[var(--mw-text)] transition-colors [&_svg]:w-3.5 [&_svg]:h-3.5';
+    var _btnAccent = 'inline-flex items-center gap-1 px-3 py-1 text-[11px] font-medium text-white bg-[var(--mw-accent)] border-none rounded-full cursor-pointer hover:opacity-90 [&_svg]:w-3.5 [&_svg]:h-3.5';
     const titlebar = document.createElement('div');
-    titlebar.className = 'weekly-titlebar';
+    titlebar.className = 'wk-titlebar flex items-center justify-between px-4 py-2 shrink-0 bg-[var(--mw-surface)] border-b border-[var(--mw-border)]';
     titlebar.innerHTML =
-      '<div class="weekly-titlebar__left">' +
-        '<span class="weekly-titlebar__title">' + sTitle + '</span>' +
-        (sDate ? '<span class="weekly-titlebar__date">' + sDate + '</span>' : '') +
-        '<span class="weekly-titlebar__page" id="weekly-ind">1 / ' + slides.length + '</span>' +
+      '<div class="flex items-center gap-2.5 min-w-0">' +
+        '<span class="text-[13px] font-semibold text-[var(--mw-text)] truncate">' + sTitle + '</span>' +
+        (sDate ? '<span class="text-[11px] text-[var(--mw-text-muted)] whitespace-nowrap">' + sDate + '</span>' : '') +
+        '<span class="text-[11px] text-[var(--mw-text-muted)] tabular-nums shrink-0" id="weekly-ind">1 / ' + slides.length + '</span>' +
       '</div>' +
-      '<div class="weekly-titlebar__right">' +
-        '<button class="weekly-titlebar__btn" id="wtb-theme" type="button">' +
-          '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2"/></svg>테마</button>' +
-        '<button class="weekly-titlebar__btn" id="wtb-code" type="button">' +
-          '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 3L1 8l4 5M11 3l4 5-4 5"/></svg>코드</button>' +
-        '<button class="weekly-titlebar__btn" id="wtb-export" type="button">' +
-          '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 10v3h10v-3M8 2v8M5 5l3-3 3 3"/></svg>내보내기</button>' +
-        '<button class="weekly-titlebar__btn weekly-titlebar__btn--play" id="wtb-present" type="button">' +
-          '<svg viewBox="0 0 16 16" fill="none"><path d="M4 3l9 5-9 5V3z" fill="currentColor"/></svg>발표</button>' +
+      '<div class="flex items-center gap-1 shrink-0">' +
+        '<button class="' + _btn + '" id="wtb-theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2"/></svg>테마</button>' +
+        '<button class="' + _btn + '" id="wtb-code"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 3L1 8l4 5M11 3l4 5-4 5"/></svg>코드</button>' +
+        '<button class="' + _btn + '" id="wtb-export"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 10v3h10v-3M8 2v8M5 5l3-3 3 3"/></svg>내보내기</button>' +
+        '<button class="' + _btnAccent + '" id="wtb-present"><svg viewBox="0 0 16 16" fill="none"><path d="M4 3l9 5-9 5V3z" fill="currentColor"/></svg>발표</button>' +
       '</div>';
     container.appendChild(titlebar);
 
     // Content row (sidebar + slide area)
     const contentRow = document.createElement('div');
-    contentRow.style.cssText = 'display:flex;flex:1;min-height:0;overflow:hidden;';
+    contentRow.className = 'flex flex-1 min-h-0 overflow-hidden';
 
     // Sidebar — thumbnails only (no header)
     const sidebarWrap = document.createElement('div');
-    sidebarWrap.style.cssText = 'flex-shrink:0;align-self:stretch;display:flex;';
+    sidebarWrap.className = 'shrink-0 self-stretch flex';
     const thumbsHTML = slides.map((s, i) =>
-      '<div class="wrs__thumb' + (i === 0 ? ' wrs__thumb--active' : '') + '" data-nav="' + s.id + '">' +
-        '<span class="wrs__thumb-num">' + (i + 1) + '</span>' +
-        '<div class="wrs__thumb-frame"><div class="wrs__thumb-content" data-thumb-id="' + s.id + '"></div></div>' +
+      '<div class="wrs__thumb' + (i === 0 ? ' wk-thumb--active' : '') + '" data-nav="' + s.id + '">' +
+        '<span class="wk-thumb-num">' + (i + 1) + '</span>' +
+        '<div class="wk-thumb-frame"><div class="wk-thumb-content" data-thumb-id="' + s.id + '"></div></div>' +
       '</div>'
     ).join('');
-    sidebarWrap.innerHTML = '<aside class="wrs wrs--thumbs">' +
+    sidebarWrap.innerHTML = '<aside class="wk-sidebar wrs wrs--thumbs">' +
       '<div class="wrs__thumb-list">' + thumbsHTML + '</div>' +
     '</aside>';
     contentRow.appendChild(sidebarWrap);
 
     // Slide area
     const slideArea = document.createElement('div');
-    slideArea.className = 'weekly-slide-area';
+    slideArea.className = 'wk-slides flex-1 min-w-0 flex items-center justify-center overflow-hidden';
     contentRow.appendChild(slideArea);
 
     // Theme carousel (between title bar and content, hidden by default)
     const themePanel = document.createElement('div');
-    themePanel.className = 'weekly-themes';
-    themePanel.id = 'weekly-themes';
+    themePanel.className = 'wk-themes shrink-0 overflow-hidden bg-[var(--mw-surface)] border-b border-[var(--mw-border)] p-0';
+    themePanel.id = 'wk-themes';
     container.appendChild(themePanel);
 
     container.appendChild(contentRow);
@@ -744,19 +573,21 @@
     }
 
     // Code dialog
+    var _dlgBtn = 'px-3 py-1 text-[11px] font-medium border border-[var(--mw-border)] rounded bg-[var(--mw-surface)] text-[var(--mw-text)] cursor-pointer hover:bg-[var(--mw-surface-2)] transition-colors';
+    var _dlgBtnAcc = 'px-3 py-1 text-[11px] font-medium border-none rounded bg-[var(--mw-accent)] text-white cursor-pointer hover:opacity-90';
     var codeOverlay = document.createElement('div');
-    codeOverlay.className = 'weekly-code-overlay';
+    codeOverlay.className = 'hidden fixed inset-0 z-[10000] bg-black/50 backdrop-blur-sm items-center justify-center p-8';
     codeOverlay.innerHTML =
-      '<div class="weekly-code-dialog">' +
-        '<div class="weekly-code-dialog__header">' +
-          '<span class="weekly-code-dialog__title" id="wcd-title"></span>' +
-          '<div class="weekly-code-dialog__actions">' +
-            '<button class="weekly-code-dialog__btn" id="wcd-copy">복사</button>' +
-            '<button class="weekly-code-dialog__btn weekly-code-dialog__btn--accent" id="wcd-download">↓ 다운로드</button>' +
-            '<button class="weekly-code-dialog__btn" id="wcd-close">닫기</button>' +
+      '<div class="bg-[var(--mw-surface)] border border-[var(--mw-border)] rounded-lg shadow-2xl w-full max-w-[800px] max-h-[80vh] flex flex-col">' +
+        '<div class="flex items-center justify-between px-4 py-3 border-b border-[var(--mw-border)] shrink-0">' +
+          '<span class="text-[13px] font-semibold text-[var(--mw-text)]" id="wcd-title"></span>' +
+          '<div class="flex gap-1.5">' +
+            '<button class="' + _dlgBtn + '" id="wcd-copy">복사</button>' +
+            '<button class="' + _dlgBtnAcc + '" id="wcd-download">↓ 다운로드</button>' +
+            '<button class="' + _dlgBtn + '" id="wcd-close">닫기</button>' +
           '</div>' +
         '</div>' +
-        '<div class="weekly-code-dialog__body"><pre class="weekly-code-dialog__pre" id="wcd-code"></pre></div>' +
+        '<div class="flex-1 min-h-0 overflow-auto p-4 bg-[var(--mw-surface-2)]"><pre class="m-0 font-mono text-xs leading-relaxed text-[var(--mw-text)] whitespace-pre" id="wcd-code" style="tab-size:2"></pre></div>' +
       '</div>';
     document.body.appendChild(codeOverlay);
 
@@ -765,7 +596,7 @@
     var wtbTheme = container.querySelector('#wtb-theme');
     var wtbExport = container.querySelector('#wtb-export');
     var wtbPresent = container.querySelector('#wtb-present');
-    var themePanelEl = container.querySelector('#weekly-themes');
+    var themePanelEl = container.querySelector('#wk-themes');
 
     // Code dialog handlers
     function openCodeDialog() {
@@ -800,10 +631,10 @@
       var tokens = Math.ceil(chars / 3.5); // rough estimate
       codeOverlay.querySelector('#wcd-title').textContent = sTitle + ' — ' + chars.toLocaleString() + '자 · ~' + tokens.toLocaleString() + ' tokens';
       codeOverlay.querySelector('#wcd-code').textContent = html;
-      codeOverlay.classList.add('is-open');
+      codeOverlay.classList.remove('hidden'); codeOverlay.classList.add('flex');
     }
     if (wtbCode) wtbCode.addEventListener('click', openCodeDialog);
-    codeOverlay.querySelector('#wcd-close').addEventListener('click', function() { codeOverlay.classList.remove('is-open'); });
+    codeOverlay.querySelector('#wcd-close').addEventListener('click', function() { codeOverlay.classList.add('hidden'); codeOverlay.classList.remove('flex'); });
     codeOverlay.querySelector('#wcd-copy').addEventListener('click', function() {
       var code = codeOverlay.querySelector('#wcd-code').textContent;
       navigator.clipboard.writeText(code).then(function() {
@@ -822,7 +653,7 @@
       URL.revokeObjectURL(a.href);
     });
     codeOverlay.addEventListener('click', function(e) {
-      if (e.target === codeOverlay) codeOverlay.classList.remove('is-open');
+      if (e.target === codeOverlay) codeOverlay.classList.add('hidden'); codeOverlay.classList.remove('flex');
     });
 
     // Build theme carousel — read real themes from FAB panel or CSS
@@ -853,16 +684,16 @@
       }
       var themeColors = _themeCache;
       // Build HTML
-      var track = '<div class="weekly-themes__track">';
+      var track = '<div class="wk-themes__track">';
       themeColors.forEach(function(c) {
         var isActive = c.name === current;
-        track += '<div class="weekly-themes__item' + (isActive ? ' weekly-themes__item--active' : '') + '" data-theme-pick="' + c.name + '">' +
-          '<div class="weekly-themes__swatch" style="background:' + c.bg + '">' +
-            '<div class="weekly-themes__bar" style="background:' + c.accent + ';height:55%"></div>' +
-            '<div class="weekly-themes__bar" style="background:' + c.text + ';height:35%;opacity:0.2"></div>' +
-            '<div class="weekly-themes__bar" style="background:' + c.accent + ';height:75%;opacity:0.5"></div>' +
+        track += '<div class="wk-themes__item' + (isActive ? ' wk-themes__item--active' : '') + '" data-theme-pick="' + c.name + '">' +
+          '<div class="wk-themes__swatch" style="background:' + c.bg + '">' +
+            '<div class="wk-themes__bar" style="background:' + c.accent + ';height:55%"></div>' +
+            '<div class="wk-themes__bar" style="background:' + c.text + ';height:35%;opacity:0.2"></div>' +
+            '<div class="wk-themes__bar" style="background:' + c.accent + ';height:75%;opacity:0.5"></div>' +
           '</div>' +
-          '<span class="weekly-themes__name">' + c.name + '</span>' +
+          '<span class="wk-themes__name">' + c.name + '</span>' +
         '</div>';
       });
       track += '</div>';
@@ -872,7 +703,7 @@
     if (wtbTheme) wtbTheme.addEventListener('click', function() {
       var isOpen = themePanelEl.classList.toggle('is-open');
       wtbTheme.classList.toggle('weekly-titlebar__btn--active', isOpen);
-      if (isOpen && !themePanelEl.querySelector('.weekly-themes__item')) buildThemeCarousel();
+      if (isOpen && !themePanelEl.querySelector('.wk-themes__item')) buildThemeCarousel();
       // Recalc slide scale after carousel animation
       setTimeout(function() { window.dispatchEvent(new Event('resize')); }, 300);
     });
@@ -884,8 +715,8 @@
       var theme = item.dataset.themePick;
       document.documentElement.setAttribute('data-theme', theme);
       localStorage.setItem('maging-theme', theme);
-      themePanelEl.querySelectorAll('.weekly-themes__item').forEach(function(el) {
-        el.classList.toggle('weekly-themes__item--active', el.dataset.themePick === theme);
+      themePanelEl.querySelectorAll('.wk-themes__item').forEach(function(el) {
+        el.classList.toggle('wk-themes__item--active', el.dataset.themePick === theme);
       });
       // Refresh charts
       if (window.Maging?.refreshAll) setTimeout(function() { window.Maging.refreshAll(); }, 100);
@@ -909,11 +740,11 @@
     setTimeout(() => {
       if (!container.isConnected) return;
       // Mount all slides eagerly
-      var allSlideEls = container.querySelectorAll('.weekly-slide-area > *');
+      var allSlideEls = container.querySelectorAll('.wk-slides > *');
       allSlideEls.forEach(function(sec) { if (MOUNT[sec.id]) MOUNT[sec.id](); });
 
       // Auto-paginate: split overflowing slides
-      var sa = container.querySelector('.weekly-slide-area');
+      var sa = container.querySelector('.wk-slides');
       [...sa.querySelectorAll('section.slide:not(.cover-slide)')].forEach(function(sec) {
         var body = sec.querySelector('.mw-slide__body');
         if (!body || body.scrollHeight <= body.clientHeight) return;
@@ -968,9 +799,9 @@
       if (thumbList) {
         thumbList.innerHTML = finalSlides.map(function(sec, i) {
           var isActive = sec.hasAttribute('data-active');
-          return '<div class="wrs__thumb' + (isActive ? ' wrs__thumb--active' : '') + '" data-nav="' + sec.id + '">' +
-            '<span class="wrs__thumb-num">' + (i + 1) + '</span>' +
-            '<div class="wrs__thumb-frame"><div class="wrs__thumb-content" data-thumb-id="' + sec.id + '"></div></div>' +
+          return '<div class="wrs__thumb' + (isActive ? ' wk-thumb--active' : '') + '" data-nav="' + sec.id + '">' +
+            '<span class="wk-thumb-num">' + (i + 1) + '</span>' +
+            '<div class="wk-thumb-frame"><div class="wk-thumb-content" data-thumb-id="' + sec.id + '"></div></div>' +
           '</div>';
         }).join('');
       }

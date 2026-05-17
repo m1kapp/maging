@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap"
           rel="stylesheet"
         />
-        <script defer src="/dist/maging-all.js" data-base="/dist/" data-no-tailwind />
+        <script defer src="/dist/maging-all.js" data-base="/dist/" />
       </head>
       <body className="mw-themed">
         {children}

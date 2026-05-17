@@ -49,13 +49,13 @@
   /* === Thumbnail sidebar === */
   .wrs--thumbs { width: 220px; min-height: 100%; padding: 14px 8px 24px; background: var(--mw-bg); border-right: 1px solid var(--mw-border); font-family: var(--mw-font); overflow-y: auto; box-sizing: border-box; box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.06); scrollbar-width: thin; display: flex; flex-direction: column; }
   .wrs--thumbs .wrs__head { padding: 6px 8px 12px; margin-bottom: 4px; }
-  .wrs--thumbs .wrs__thumb-list { display: flex; flex-direction: column; gap: 10px; padding: 4px 2px 4px 0; overflow-y: auto; flex: 1; min-height: 0; }
+  .wrs--thumbs .wk-thumb-list { display: flex; flex-direction: column; gap: 10px; padding: 4px 2px 4px 0; overflow-y: auto; flex: 1; min-height: 0; }
   .wrs__thumb { display: flex; align-items: flex-start; gap: 4px; cursor: pointer; flex-shrink: 0; }
-  .wrs__thumb-num { font-size: 10px; color: var(--mw-text-muted); min-width: 16px; text-align: right; padding-top: 3px; font-variant-numeric: tabular-nums; flex-shrink: 0; line-height: 1; }
-  .wrs__thumb-frame { flex: 1; aspect-ratio: 297/210; overflow: hidden; border: 2px solid color-mix(in srgb, var(--mw-border) 60%, transparent); border-radius: 3px; background: var(--mw-surface); position: relative; transition: border-color 150ms, box-shadow 150ms; }
-  .wrs__thumb:hover .wrs__thumb-frame { border-color: color-mix(in srgb, var(--mw-accent) 40%, var(--mw-border)); }
-  .wrs__thumb--active .wrs__thumb-frame { border-color: var(--mw-accent); box-shadow: 0 0 0 1px var(--mw-accent); }
-  .wrs__thumb-content { width: 1240px; height: calc(1240px * 210 / 297); transform-origin: top left; pointer-events: none; position: absolute; top: 0; left: 0; overflow: hidden; background: var(--mw-bg); }
+  .wk-thumb-num { font-size: 10px; color: var(--mw-text-muted); min-width: 16px; text-align: right; padding-top: 3px; font-variant-numeric: tabular-nums; flex-shrink: 0; line-height: 1; }
+  .wk-thumb-frame { flex: 1; aspect-ratio: 297/210; overflow: hidden; border: 2px solid color-mix(in srgb, var(--mw-border) 60%, transparent); border-radius: 3px; background: var(--mw-surface); position: relative; transition: border-color 150ms, box-shadow 150ms; }
+  .wrs__thumb:hover .wk-thumb-frame { border-color: color-mix(in srgb, var(--mw-accent) 40%, var(--mw-border)); }
+  .wk-thumb--active .wk-thumb-frame { border-color: var(--mw-accent); box-shadow: 0 0 0 1px var(--mw-accent); }
+  .wk-thumb-content { width: 1240px; height: calc(1240px * 210 / 297); transform-origin: top left; pointer-events: none; position: absolute; top: 0; left: 0; overflow: hidden; background: var(--mw-bg); }
   body.presenter-mode .wrs--thumbs { display: none !important; }
 
   /* Slide connected to sidebar — override maging.css defaults */
@@ -162,8 +162,8 @@
       return;
     }
 
-    // Weekly mode — scale slide to fill .weekly-slide-area
-    var slideArea = document.querySelector('.weekly-slide-area');
+    // Weekly mode — scale slide to fill .wk-slides
+    var slideArea = document.querySelector('.wk-slides');
     if (slideArea) {
       var areaW = slideArea.clientWidth;
       var areaH = slideArea.clientHeight;
