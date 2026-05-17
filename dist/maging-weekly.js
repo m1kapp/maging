@@ -24,32 +24,20 @@
   .slide { display: none; }
   .slide[data-active] { display: flex; flex-direction: column; }
 
-  /* maging widget overrides (used by monthlyTable, can't be Tailwind) */
-  .table-block { display: flex; flex-direction: column; gap: var(--mw-space-2); }
-  .table-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0 var(--mw-space-1); margin-bottom: var(--mw-space-3); }
-  .table-toolbar__title { font-size: var(--mw-text-base); font-weight: 600; color: var(--mw-text); }
-  .table-toolbar__sub { font-size: var(--mw-text-sm); color: var(--mw-text-muted); margin-left: var(--mw-space-2); }
-  .unit-toggle { display: inline-flex; gap: 1px; padding: 2px; background: var(--mw-surface-2); border: 1px solid var(--mw-border); border-radius: var(--mw-radius); }
-  .unit-toggle button { padding: 3px 9px; font-size: var(--mw-text-xs); font-weight: 500; color: var(--mw-text-muted); background: transparent; border: 0; cursor: pointer; border-radius: calc(var(--mw-radius) - 2px); font-variant-numeric: tabular-nums; }
-  .toggle-prefix { display: inline-flex; align-items: center; padding: 3px 6px; color: var(--mw-text-muted); user-select: none; }
-  .toggle-prefix svg { display: block; flex-shrink: 0; opacity: 0.75; }
-  .unit-toggle button:hover { color: var(--mw-text); }
-  .unit-toggle button.active { background: var(--mw-surface); color: var(--mw-text); box-shadow: var(--mw-shadow); }
-  .view-host { height: 340px; }
-  .view-host > .mw-card { height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+  /* maging.js activityTable output overrides (can't be Tailwind — targets external widget DOM) */
   .scroll-table.mw-card { padding: 0; overflow: hidden; }
   .scroll-table .mw-table__wrap { flex: 1; min-height: 0; overflow: hidden; }
   .scroll-table .mw-table { width: 100%; height: 100%; font-size: var(--mw-text-xs); border-collapse: separate; border-spacing: 0; table-layout: fixed; }
   .scroll-table .mw-table th, .scroll-table .mw-table td { padding: var(--mw-space-3-5) var(--mw-space-2); font-variant-numeric: tabular-nums; background: var(--mw-surface); text-align: right; overflow: hidden; text-overflow: ellipsis; }
   .scroll-table .mw-table th:first-child, .scroll-table .mw-table td:first-child { text-align: left; }
   .scroll-table .mw-table th { font-weight: 500; color: var(--mw-text-muted); letter-spacing: 0.01em; }
-  .scroll-table .mw-table td { font-weight: 400; letter-spacing: -0.005em; }
-  .scroll-table .mw-table td strong { font-weight: 600; letter-spacing: -0.01em; }
+  .scroll-table .mw-table td { font-weight: 400; }
+  .scroll-table .mw-table td strong { font-weight: 600; }
   .scroll-table .mw-table tbody tr:last-child td { background: var(--mw-surface-2); }
   .scroll-table .mw-card > .mw-card__head { display: none; }
+  .scroll-table > .mw-card { height: 100%; display: flex; flex-direction: column; overflow: hidden; }
   .row-unit { color: var(--mw-text-muted); font-size: 0.85em; font-weight: 400; margin-left: 4px; }
   .rag-row { display: flex; flex-wrap: wrap; gap: var(--mw-space-2); margin-top: var(--mw-space-3); }
-  .wrn-bar { position: fixed; left: 50%; transform: translateX(-50%); bottom: 20px; width: max-content; display: inline-flex; align-items: center; gap: 4px; padding: 0.38rem 0.65rem; background: var(--mw-surface); border: 1px solid var(--mw-border); border-radius: 999px; box-shadow: 0 8px 24px -6px rgba(0,0,0,.28), 0 2px 6px -2px rgba(0,0,0,.12); font-size: 0.78rem; font-variant-numeric: tabular-nums; color: var(--mw-text); font-family: var(--mw-font); z-index: 50; }
 
   /* Cover slide — selector-based (can't be Tailwind because targets maging widget output) */
   .cover-slide { padding: 0; border: none !important; overflow: hidden; }
@@ -324,29 +312,33 @@
       ];
     }
 
-    // Toolbar HTML
-    const vtHtml = viewToggle ? `<div class="unit-toggle" id="${id}-vt">
-      <span class="toggle-prefix">${SVG_EYE}</span>
-      <button data-view="table" class="${curView==='table'?'active':''}">table</button>
-      <button data-view="line" class="${curView==='line'?'active':''}">line</button>
-      <button data-view="bar" class="${curView==='bar'?'active':''}">bar</button>
+    // Toolbar HTML — Tailwind
+    var _tgl = 'inline-flex gap-px p-0.5 bg-[var(--mw-surface-2)] border border-[var(--mw-border)] rounded-[var(--mw-radius)]';
+    var _tglBtn = 'px-2 py-0.5 text-[var(--mw-text-xs)] font-medium text-[var(--mw-text-muted)] bg-transparent border-0 cursor-pointer rounded tabular-nums hover:text-[var(--mw-text)]';
+    var _tglActive = _tglBtn + ' !bg-[var(--mw-surface)] !text-[var(--mw-text)] shadow-sm';
+    var _tglPre = 'inline-flex items-center px-1.5 text-[var(--mw-text-muted)] select-none [&_svg]:block [&_svg]:shrink-0 [&_svg]:opacity-75';
+    const vtHtml = viewToggle ? `<div class="${_tgl}" id="${id}-vt">
+      <span class="${_tglPre}">${SVG_EYE}</span>
+      <button data-view="table" class="${curView==='table'?_tglActive:_tglBtn}">table</button>
+      <button data-view="line" class="${curView==='line'?_tglActive:_tglBtn}">line</button>
+      <button data-view="bar" class="${curView==='bar'?_tglActive:_tglBtn}">bar</button>
     </div>` : '';
-    const utHtml = unitToggle ? `<div class="unit-toggle" id="${id}-ut">
-      <span class="toggle-prefix">${SVG_RULER}</span>
-      <button data-unit="원" class="${curUnit==='원'?'active':''}">원</button>
-      <button data-unit="만원" class="${curUnit==='만원'?'active':''}">만원</button>
-      <button data-unit="억원" class="${curUnit==='억원'?'active':''}">억원</button>
+    const utHtml = unitToggle ? `<div class="${_tgl}" id="${id}-ut">
+      <span class="${_tglPre}">${SVG_RULER}</span>
+      <button data-unit="원" class="${curUnit==='원'?_tglActive:_tglBtn}">원</button>
+      <button data-unit="만원" class="${curUnit==='만원'?_tglActive:_tglBtn}">만원</button>
+      <button data-unit="억원" class="${curUnit==='억원'?_tglActive:_tglBtn}">억원</button>
     </div>` : '';
 
     container.innerHTML = `
-      <div class="table-toolbar">
+      <div class="flex items-center justify-between px-1 mb-3">
         <div>
-          <span class="table-toolbar__title">${title}</span>
-          ${sub ? `<span class="table-toolbar__sub">${sub}</span>` : ''}
+          <span class="text-base font-semibold text-[var(--mw-text)]">${title}</span>
+          ${sub ? `<span class="text-sm text-[var(--mw-text-muted)] ml-2">${sub}</span>` : ''}
         </div>
-        <div style="display:flex;gap:8px;align-items:center;">${vtHtml}${utHtml}</div>
+        <div class="flex gap-2 items-center">${vtHtml}${utHtml}</div>
       </div>
-      <div class="view-host scroll-table" id="${id}-host"></div>`;
+      <div class="h-[340px] scroll-table" id="${id}-host"></div>`;
 
     const host = container.querySelector('#' + id + '-host');
 
@@ -365,11 +357,16 @@
     }
     render();
 
+    function _syncToggle(wrap, activeBtn) {
+      wrap.querySelectorAll('button').forEach(function(b) {
+        b.className = b === activeBtn ? _tglActive : _tglBtn;
+      });
+    }
     if (viewToggle) {
       container.querySelector('#' + id + '-vt').addEventListener('click', e => {
         const btn = e.target.closest('button[data-view]'); if (!btn) return;
         curView = btn.dataset.view;
-        container.querySelectorAll('#' + id + '-vt button').forEach(b => b.classList.toggle('active', b === btn));
+        _syncToggle(container.querySelector('#' + id + '-vt'), btn);
         render();
       });
     }
@@ -377,7 +374,7 @@
       container.querySelector('#' + id + '-ut').addEventListener('click', e => {
         const btn = e.target.closest('button[data-unit]'); if (!btn) return;
         curUnit = btn.dataset.unit;
-        container.querySelectorAll('#' + id + '-ut button').forEach(b => b.classList.toggle('active', b === btn));
+        _syncToggle(container.querySelector('#' + id + '-ut'), btn);
         render();
       });
     }
