@@ -95,7 +95,6 @@ const config = {
         { type: 'kpiCard', label: '1Q 신규 매출 · 목표 4.16억원', value: fmtBillion(281316000), valueHTML: true, delta: (281316000 / 416000000 * 100) - 100, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '상반기 신규 매출 · 목표 11.7억원', value: fmtBillion(281316000), valueHTML: true, delta: (281316000 / 1170000000 * 100) - 100, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '2026 누적 신규 매출 · 목표 30억원', value: fmtBillion(322000000), valueHTML: true, delta: (322000000 / 3000000000 * 100) - 100, deltaGoodWhen: 'positive' },
-        { type: 'sectionHead', index: '01', kicker: 'MONTHLY', title: '월별 목표 · 실적' },
         {
           type: 'monthlyTable',
           title: '2026년 목표 매출',
@@ -150,9 +149,9 @@ const config = {
         { type: 'kpiCard', label: '4월 파이프라인', value: '0.48<span class="mw-unit"> 억원</span>', valueHTML: true, delta: 12.4, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '활성 신규상품 고객', value: '34<span class="mw-unit">개사</span>', valueHTML: true, delta: 6.2, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '월 평균 계약 단가', value: '361<span class="mw-unit">만원</span>', valueHTML: true, delta: 3.1, deltaGoodWhen: 'positive' },
-        { type: 'sectionHead', index: '01', kicker: 'PRODUCT REVENUE', title: '신규상품별 매출 현황' },
         {
           type: 'activityTable',
+          title: '신규상품별 매출 현황',
           columns: [
             { key: 'product', label: '상품명', align: 'left' },
             { key: 'type', label: '유형', align: 'left' },
@@ -193,9 +192,9 @@ const config = {
         { type: 'kpiCard', label: '4월 교육 세션수 · 목표 12회', value: '9<span class="mw-unit">회</span>', valueHTML: true, delta: -25, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '누적 참여 고객사 · 4월 기준', value: '128<span class="mw-unit">개사</span>', valueHTML: true, delta: 14.3, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '교육 만족도 · 5점 만점', value: '4.3<span class="mw-unit"> / 5.0</span>', valueHTML: true, delta: 1.2, deltaGoodWhen: 'positive' },
-        { type: 'sectionHead', index: '01', kicker: 'EDUCATION LOG', title: '4월 교육 세션 현황' },
         {
           type: 'activityTable',
+          title: '4월 교육 세션 현황',
           columns: [
             { key: 'date', label: '일자', align: 'left' },
             { key: 'topic', label: '과정명', align: 'left' },
@@ -235,10 +234,9 @@ const config = {
         { type: 'kpiCard', label: '3월 해지율 · 전년 동월 3.3%', value: '2.9<span class="mw-unit">%</span>', valueHTML: true, delta: -3.4, deltaGoodWhen: 'negative' },
         { type: 'kpiCard', label: '3월 해지비율 · 신규 92 < 해지 135', value: '146<span class="mw-unit">%</span>', valueHTML: true, delta: -10, deltaGoodWhen: 'negative' },
         { type: 'kpiCard', label: '3월 유료 기업 수 · 2월 4,621 → 3월', value: '4,592<span class="mw-unit">개</span>', valueHTML: true, delta: -0.6, deltaGoodWhen: 'positive' },
-        { type: 'sectionHead', index: '01', kicker: 'CHURN & GROWTH', title: '월별 해지·신규 추이' },
         {
           type: 'activityTable',
-          title: '2026년 월별 현황',
+          title: '2026년 월별 해지·신규 추이',
           subtitle: '해지·신규·유료전체 추이',
           columns: retentionCols,
           rows: toRetentionRows(data2026),
@@ -353,7 +351,6 @@ const config = {
         { type: 'kpiCard', label: '1Q NPS 추천 비율 · 업계 우수 ≥70%', value: '54<span class="mw-unit">%</span>', valueHTML: true, delta: -16, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '1Q NPS 중립자', value: '24<span class="mw-unit">%</span>', valueHTML: true },
         { type: 'kpiCard', label: '1Q NPS 비추천자', value: '22<span class="mw-unit">%</span>', valueHTML: true },
-        { type: 'sectionHead', index: '01', kicker: 'NPS DISTRIBUTION', title: '1분기 NPS 분포' },
         {
           type: 'shareBar',
           segments: [
@@ -467,7 +464,6 @@ const config = {
         { type: 'kpiCard', label: '이번 주 배포 건수', value: '3<span class="mw-unit">건</span>', valueHTML: true, delta: 0, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '4월 완료 피처 누적', value: '18<span class="mw-unit">개</span>', valueHTML: true, delta: 12.5, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: 'API 가용성 (4월)', value: '99.2<span class="mw-unit">%</span>', valueHTML: true, delta: -0.1, deltaGoodWhen: 'positive' },
-        { type: 'sectionHead', index: '01', kicker: 'SPRINT STATUS', title: '4월 4주차 스프린트 현황' },
         {
           type: 'ragChip',
           items: [
@@ -518,7 +514,6 @@ const config = {
         { type: 'kpiCard', label: '배포 완료 AI 기능', value: '7<span class="mw-unit">개</span>', valueHTML: true, delta: 0, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: '자동화 절감 업무시간 (4월)', value: '1,240<span class="mw-unit">시간</span>', valueHTML: true, delta: 18.2, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: 'AI 기능 활성 사용률', value: '31<span class="mw-unit">%</span>', valueHTML: true, delta: 4.1, deltaGoodWhen: 'positive' },
-        { type: 'sectionHead', index: '01', kicker: 'AI ROADMAP', title: 'AI 기능 개발 로드맵' },
         {
           type: 'ragChip',
           items: [
@@ -575,7 +570,6 @@ const config = {
         { type: 'kpiCard', label: 'Q1 신규 · 목표 4.16억원', value: fmtBillion(q1New), valueHTML: true, delta: -32.4, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: 'Q1 기고객', value: fmtBillion(q1Exist), valueHTML: true, delta: 2.1, deltaGoodWhen: 'positive' },
         { type: 'kpiCard', label: 'Q1 추가/업셀 + Add-On', value: fmtBillion(q1Upsell + q1Addon), valueHTML: true, delta: -5.8, deltaGoodWhen: 'positive' },
-        { type: 'sectionHead', index: '01', kicker: 'Q1 BREAKDOWN', title: 'Q1 매출 구성 비율' },
         {
           type: 'shareBar',
           segments: [
@@ -626,9 +620,9 @@ const config = {
       team: '컨설팅팀',
       widgets: [
         { type: 'pageHeader', title: '엔터프라이즈 수주 파이프라인', meta: '기준일 2026.04.27(월)' },
-        { type: 'sectionHead', index: '01', kicker: 'PIPELINE', title: '고객사별 진행 현황' },
         {
           type: 'activityTable',
+          title: '고객사별 수주 파이프라인',
           columns: [
             { key: 'company', label: '고객사', align: 'left' },
             { key: 'industry', label: '업종', align: 'left' },

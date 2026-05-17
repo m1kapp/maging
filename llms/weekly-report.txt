@@ -171,6 +171,7 @@ window.addEventListener('maging:ready', function () {
 1. **1페이지 = 1 KPI 1주제.**
    - 슬라이드 헤더(`label` + `bu` + `team`)에 이미 KPI명·팀이 표시됨.
    - `pageHeader`에는 **제목(title) + 날짜(meta)만**. 헤더 내용을 중복하지 마라.
+   - **`sectionHead`는 1장에 2개 이상 섹션이 있을 때만 사용.** 단일 섹션 슬라이드에서는 테이블/차트의 자체 title로 충분하다. `pageHeader → KPI → sectionHead → table` 패턴은 금지 — `pageHeader → KPI → table(title 포함)` 으로.
 2. `<html data-theme="…">` — theme 선택. `<body>` 태그 불필요.
 3. **단위 필수** — 명/건/개/원/% 모두. 금액은 `Maging.fmt.krw`.
 4. **KPI label에 목표 포함** — `'3월 신규 · 목표 1.42억원'`.
