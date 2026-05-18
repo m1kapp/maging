@@ -2669,7 +2669,7 @@
       var slides = document.querySelectorAll('.news-card, .cn-slide, [data-slide]');
       if (slides.length > 1) return { type: 'cardnews', elements: slides };
       // Only main slides — exclude sidebar thumbnail clones
-      var slideArea = document.querySelector('.wk-slides');
+      var slideArea = document.querySelector('[data-slide-area]') || document.querySelector('.wk-slides');
       var pages = slideArea
         ? slideArea.querySelectorAll('.slide')
         : document.querySelectorAll('.slide, .mw-a4-page, .a4-page');
@@ -2692,6 +2692,21 @@
           setTimeout(step, delay || 200);
         }
         step();
+      });
+    }
+
+    // Ensure cover title has accent color (same logic as viewer.ts applyCoverAccent)
+    function ensureCoverAccent(slides) {
+      slides.forEach(function (s) {
+        var ct = s.querySelector('.mw-cover__title');
+        if (!ct || ct.querySelector('[data-accent]')) return;
+        var words = ct.textContent.split(' ');
+        if (words.length > 1) {
+          var last = words.pop();
+          ct.innerHTML = words.join(' ') + ' <span data-accent style="color:var(--mw-accent)">' + last + '</span>';
+        } else {
+          ct.innerHTML = '<span data-accent style="color:var(--mw-accent)">' + words[0] + '</span>';
+        }
       });
     }
 
@@ -2868,6 +2883,7 @@
 
         mountSlides(pdfSlides).then(function () {
           document.body.dataset.mwPrinting = '';
+          ensureCoverAccent(pdfSlides);
           window.dispatchEvent(new Event('resize'));
 
           var pageW = 1058;
@@ -2900,12 +2916,27 @@
           };
         });
 
+        // Backup slideArea styles for restore
+        var slideArea = slides[0].parentElement;
+        var slideAreaCss = slideArea ? slideArea.style.cssText : '';
+
         mountSlides(slides).then(function () {
+          ensureCoverAccent(slides);
+          // Fix slide dimensions for container query resolution
+          if (slideArea) {
+            slideArea.style.width = '1240px';
+            slideArea.style.display = 'block';
+            slideArea.style.overflow = 'visible';
+          }
           slides.forEach(function (s) {
             s.setAttribute('data-active', '');
             s.style.setProperty('--slide-scale', '1');
             s.style.transform = 'none';
             s.style.margin = '0';
+            s.style.width = '1240px';
+            s.style.minWidth = '1240px';
+            s.style.display = 'flex';
+            s.style.flexDirection = 'column';
           });
 
           return new Promise(function (r) { setTimeout(r, 500); });
@@ -2918,8 +2949,9 @@
           var slideH = (sampleSlide.offsetHeight / 96) * pad;
 
           // Swap fonts to PowerPoint defaults BEFORE measuring
-          var PPTX_BODY = "'Apple SD Gothic Neo', 'Malgun Gothic', Calibri, sans-serif";
-          var PPTX_MONO = "Consolas, 'Courier New', monospace";
+          var PPTX_SANS = "'Malgun Gothic', Arial, sans-serif";
+          var PPTX_SERIF = "Batang, Georgia, serif";
+          var PPTX_MONO = "'Courier New', Consolas, monospace";
           var styleBackups = [];
 
           slides.forEach(function (s) {
@@ -2932,9 +2964,10 @@
               // Resolve colors for dom-to-pptx
               el.style.color = cs.color;
               var bgImg = cs.backgroundImage;
-              if (bgImg && bgImg.indexOf('linear-gradient') === 0) {
-                el.style.cssText += ';background:none !important;';
-                el.style.backgroundImage = bgImg;
+              if (bgImg && bgImg.indexOf('gradient') >= 0) {
+                // Flatten gradient to solid bg color for PPTX compatibility
+                el.style.cssText += ';background:none !important;background-image:none !important;';
+                el.style.backgroundColor = cs.backgroundColor;
               } else if (bgImg && bgImg !== 'none') {
                 var fc = bgImg.match(/rgb[a]?\([^)]+\)/);
                 el.style.background = 'none';
@@ -2944,25 +2977,51 @@
               }
               el.style.borderColor = cs.borderColor;
               // Swap fonts
-              if (cs.fontFamily.indexOf('monospace') > -1 || cs.fontFamily.indexOf('JetBrains') > -1 || cs.fontFamily.indexOf('Consolas') > -1) {
+              var ff = cs.fontFamily;
+              if (ff.indexOf('monospace') > -1 || ff.indexOf('JetBrains') > -1 || ff.indexOf('Consolas') > -1) {
                 el.style.fontFamily = PPTX_MONO;
+              } else if (ff.indexOf('Hahmlet') > -1 || ff.indexOf('Playfair') > -1 || ff.indexOf('Georgia') > -1 || ff.indexOf('Times') > -1 || (ff.indexOf('serif') > -1 && ff.indexOf('sans-serif') === -1)) {
+                el.style.fontFamily = PPTX_SERIF;
               } else {
-                el.style.fontFamily = PPTX_BODY;
+                el.style.fontFamily = PPTX_SANS;
               }
               styleBackups.push({ el: el, cssText: origCssText });
             }
           });
 
-          // Nudge large text slightly wider (headings wrap tighter in PPT)
+          // Prevent mid-word breaks
           slides.forEach(function (s) {
-            s.querySelectorAll('h1, h2, h3, [data-role="title"], .mw-slide__label, [data-role="label"], [data-role="value"]').forEach(function (el) {
-              el.style.letterSpacing = '0.03em';
-              el.style.paddingRight = (parseFloat(getComputedStyle(el).paddingRight) + 4) + 'px';
+            s.style.wordBreak = 'keep-all';
+            s.style.overflowWrap = 'break-word';
+            s.querySelectorAll('[data-role="header"], [data-role="header"] *, [data-role="footer"], [data-role="footer"] *').forEach(function (el) {
+              el.style.whiteSpace = 'nowrap';
+              el.style.overflow = 'visible';
+            });
+            s.querySelectorAll('h1, h2, h3, [data-role="title"], [data-role="headline"], [data-role="label"], [data-role="value"], [data-role="company"]').forEach(function (el) {
+              el.style.letterSpacing = '0.02em';
+              el.style.wordBreak = 'keep-all';
             });
           });
 
-          // Wait for font swap to reflow layout
-          return new Promise(function (r) { setTimeout(r, 200); }).then(function () {
+          // Wait for font swap to reflow, THEN resolve cqw/clamp → px
+          return new Promise(function (r) { setTimeout(r, 300); }).then(function () {
+            slides.forEach(function (s) {
+              if (!s.style.width) s.style.width = s.offsetWidth + 'px';
+              var els = s.querySelectorAll('*');
+              for (var j = 0; j < els.length; j++) {
+                var el2 = els[j];
+                var cs2 = getComputedStyle(el2);
+                el2.style.fontSize = cs2.fontSize;
+                el2.style.lineHeight = cs2.lineHeight;
+                el2.style.padding = cs2.padding;
+                el2.style.margin = cs2.margin;
+                if (cs2.gap && cs2.gap !== 'normal') el2.style.gap = cs2.gap;
+                el2.style.borderRadius = cs2.borderRadius;
+              }
+            });
+            // Wait for px resolve to settle
+            return new Promise(function (r) { setTimeout(r, 200); });
+          }).then(function () {
             return domToPptx.exportToPptx(slides, {
               fileName: baseName + '.pptx',
               width: slideW,
@@ -2970,18 +3029,8 @@
               autoEmbedFonts: false,
             });
           }).then(function () {
-            // ── Full restore ──
-            // 1. Restore all inline styles (color, bg, font, letterSpacing, padding)
-            styleBackups.forEach(function (b) { b.el.style.cssText = b.cssText; });
-            // 2. Restore slide state (active, scale, transform, margin)
-            slideBackups.forEach(function (b) {
-              if (!b.hadActive) b.el.removeAttribute('data-active');
-              b.el.style.setProperty('--slide-scale', b.scale || '');
-              b.el.style.transform = b.transform || '';
-              b.el.style.margin = b.margin || '';
-            });
-            // 3. Re-scale slides to fit viewer
-            if (window._magingScaleSlides) window._magingScaleSlides(slides);
+            // Full page reload — DOM mutations too deep to restore cleanly
+            window.location.reload();
           });
         }).then(function () {
           finishExport();

@@ -13,12 +13,13 @@ const config = {
       id: 'cover',
       cover: true,
       widgets: [{
-        type: 'pitchCover',
-        company: 'maging',
-        tagline: 'AI 답변을, 쓸 수 있는 결과물로',
-        logo: '◆',
-        subtitle: 'Series A · 2026',
-        style: 'bold',
+        type: 'sectionCover',
+        style: 'classic',
+        kicker: 'SERIES A · 2026',
+        title: 'maging',
+        subtitle: 'AI 답변을, 쓸 수 있는 결과물로',
+        brand: 'm1k.app',
+        meta: 'Confidential',
       }],
     },
     {
@@ -26,14 +27,14 @@ const config = {
       label: 'Problem',
       widgets: [{
         type: 'problemSlide',
-        headline: '기업의 78%가 보고서·대시보드 제작에 주당 8시간 이상 소비합니다',
+        headline: '기업의 **78%**가 보고서·대시보드 제작에 주당 **8시간** 이상 소비합니다',
         points: [
           { icon: '⏱️', title: '반복 개발', desc: '같은 차트·테이블을 매 보고서마다 처음부터 코딩. 개발자 리소스의 30%가 시각화에 소진됩니다.' },
           { icon: '🎨', title: '디자인 파편화', desc: '팀마다 다른 UI 라이브러리, 다른 색상, 다른 레이아웃. 브랜드 일관성 부재.' },
           { icon: '💸', title: '과도한 BI 비용', desc: 'Tableau/PowerBI 라이선스만 연 $50K+. 커스터마이징에 추가 개발 비용.' },
           { icon: '🔄', title: '유지보수 지옥', desc: '데이터 구조 변경 시 수십 개 차트를 수동 업데이트. 기술 부채 누적.' },
         ],
-        highlight: '연간 개발자 1인당 320시간이 반복적 시각화 작업에 낭비됩니다',
+        highlight: '연간 개발자 1인당 **320시간**이 반복적 시각화 작업에 낭비됩니다',
       }],
     },
     {
@@ -41,7 +42,7 @@ const config = {
       label: 'Solution',
       widgets: [{
         type: 'solutionSlide',
-        headline: '프롬프트 한 줄 → 엔터프라이즈급 결과물 즉시 생성',
+        headline: '프롬프트 **한 줄** → 엔터프라이즈급 결과물 **즉시 생성**',
         before: {
           label: 'Before',
           items: ['2주 개발 사이클', '디자이너 + 개발자 협업 필수', 'BI 도구 라이선스 $50K/yr', '테마 변경 = 전체 리빌드'],
@@ -83,7 +84,7 @@ const config = {
       label: 'Business Model',
       widgets: [{
         type: 'bizModelSlide',
-        headline: '수익 모델 — Land & Expand',
+        headline: '수익 모델 — **Land & Expand**',
         tiers: [
           { name: 'Open Source', price: '$0', features: ['CDN 무제한', '37개 위젯', '15개 기본 테마', '커뮤니티 지원'] },
           { name: 'Pro', price: '$29', period: '/월', features: ['105개 브랜드 테마', 'PPTX/PDF 내보내기', 'LLM 프롬프트 최적화', '우선 기술 지원'], popular: true },
@@ -110,7 +111,7 @@ const config = {
       label: 'Competition',
       widgets: [{
         type: 'competitorMatrix',
-        headline: '포지셔닝 — AI 네이티브 × 엔터프라이즈 품질',
+        headline: '포지셔닝 — **AI 네이티브** × **엔터프라이즈** 품질',
         axisX: { label: '커스터마이징 유연성', low: '고정 템플릿', high: '완전 유연' },
         axisY: { label: '생성 속도', low: '수동 개발 (수주)', high: 'AI 즉시 생성' },
         players: [

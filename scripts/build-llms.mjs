@@ -18,7 +18,7 @@
  *   llms.md  = llms-dashboard-full.md (backward compat)
  */
 
-import { readFileSync, writeFileSync, readdirSync, unlinkSync } from 'fs';
+import { readFileSync, writeFileSync, readdirSync, unlinkSync, mkdirSync, cpSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -81,6 +81,16 @@ for (const [mode, modeTxt] of Object.entries(modes)) {
 // backward compat
 const defaultFull = readFileSync(join(llmsDir, 'llms-dashboard-full.md'), 'utf-8');
 writeFileSync(join(llmsDir, 'llms.md'), defaultFull);
+
+// Copy to public/llms/ for Next.js static serving
+const publicLlms = join(root, 'public/llms');
+mkdirSync(publicLlms, { recursive: true });
+for (const f of readdirSync(publicLlms).filter(f => f.endsWith('.md'))) {
+  unlinkSync(join(publicLlms, f));
+}
+for (const f of readdirSync(llmsDir).filter(f => f.endsWith('.md'))) {
+  cpSync(join(llmsDir, f), join(publicLlms, f));
+}
 
 console.log('');
 for (const { name, chars } of generated) {

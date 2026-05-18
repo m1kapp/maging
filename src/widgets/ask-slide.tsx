@@ -1,4 +1,5 @@
 import { h } from '../h';
+import { accentMark } from './utils';
 
 interface Fund { pct: number; label: string; }
 interface Contact { email?: string; website?: string; }
@@ -12,7 +13,7 @@ interface AskSlideProps {
 export function AskSlide({ headline = '', useOfFunds = [], milestones = [], contact }: AskSlideProps) {
   return (
     <div className="flex flex-col items-center justify-center flex-1 min-h-0 text-center p-[5cqw] px-[5cqw] box-border">
-      <div className="text-[clamp(24px,3cqw,40px)] font-extrabold text-[var(--mw-text)] tracking-[-0.03em] mb-10">{headline}</div>
+      <div className="text-[clamp(24px,3cqw,40px)] font-extrabold text-[var(--mw-text)] tracking-[-0.03em] mb-10" dangerouslySetInnerHTML={{ __html: accentMark(headline) }}></div>
       {useOfFunds.length > 0 && (
         <div className="flex gap-[1.8cqw] mb-9">
           {useOfFunds.map(f =>

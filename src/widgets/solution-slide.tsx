@@ -1,4 +1,5 @@
 import { h } from '../h';
+import { accentMark } from './utils';
 
 interface SolutionSlideProps {
   headline?: string;
@@ -37,7 +38,7 @@ export function SolutionSlide({ headline = '', before, after, features }: Soluti
 
   return (
     <div className="flex flex-col flex-1 min-h-0 p-[4cqw] px-[5cqw] box-border">
-      <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] leading-[1.25] mb-[2.5cqw] tracking-[-0.02em]">{headline}</div>
+      <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] leading-[1.25] mb-[2.5cqw] tracking-[-0.02em]" dangerouslySetInnerHTML={{ __html: accentMark(headline) }}></div>
       {body}
     </div>
   );

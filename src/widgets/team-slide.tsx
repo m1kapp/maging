@@ -1,4 +1,5 @@
 import { h } from '../h';
+import { accentMark } from './utils';
 
 interface Member { name: string; role: string; exp?: string; }
 interface Advisor { name: string; role: string; }
@@ -11,7 +12,7 @@ interface TeamSlideProps {
 export function TeamSlide({ headline = '팀', members = [], advisors = [] }: TeamSlideProps) {
   return (
     <div data-widget="team" className="flex flex-col flex-1 min-h-0 p-[4cqw] px-[5cqw] box-border">
-      <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] mb-[2.5cqw] tracking-[-0.02em]">{headline}</div>
+      <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] mb-[2.5cqw] tracking-[-0.02em]" dangerouslySetInnerHTML={{ __html: accentMark(headline) }}></div>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-[1.8cqw] my-auto">
         {members.map(m =>
           <div className="p-[2.5cqw] bg-[var(--mw-surface)] border border-[var(--mw-border)] rounded-[var(--mw-radius)]">

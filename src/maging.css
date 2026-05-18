@@ -4094,7 +4094,7 @@
   margin: 0;
 }
 .mw-cover__subtitle {
-  font-size: clamp(12px, 1.3cqw, 16px);
+  font-size: clamp(16px, 2.4cqw, 28px);
   color: var(--mw-text-muted);
   line-height: var(--mw-leading-snug);
 }
@@ -4260,10 +4260,13 @@
    ======================================================== */
 
 /* Pre-print: make all slides visible while still on screen */
+[data-mw-printing] [data-sidebar], [data-mw-printing] [data-titlebar], [data-mw-printing] #wk-panel,
 [data-mw-printing] maging-nav, [data-mw-printing] maging-footer, [data-mw-printing] maging-sidebar,
 [data-mw-printing] .mw-theme-fab, [data-mw-printing] .mw-site-nav, [data-mw-printing] .mw-site-footer,
-[data-mw-printing] #code-view, [data-mw-printing] [id^="deck-"], [data-mw-printing] .cv-btn { display: none !important; }
-[data-mw-printing] .flex { display: block !important; }
+[data-mw-printing] #code-view, [data-mw-printing] [id^="deck-"], [data-mw-printing] .cv-btn,
+[data-mw-printing] .wk-thumb-list { display: none !important; }
+[data-mw-printing] [data-viewer] { display: block !important; height: auto !important; overflow: visible !important; }
+[data-mw-printing] [data-slide-area] { display: block !important; width: 100% !important; height: auto !important; overflow: visible !important; }
 [data-mw-printing] main { padding: 0 !important; margin: 0 !important; max-width: none !important; }
 [data-mw-printing] .slide {
   display: flex !important; opacity: 1 !important; visibility: visible !important;
@@ -4272,29 +4275,38 @@
 }
 
 @media print {
+  [data-sidebar], [data-titlebar], #wk-panel, .wk-thumb-list,
   maging-nav, maging-footer, maging-sidebar,
   .mw-theme-fab, .mw-site-nav, .mw-site-footer,
   #code-view, [id^="deck-"], .cv-btn,
   nav, footer, .news-nav { display: none !important; }
 
-  body { background: white !important; margin: 0 !important; padding: 0 !important; }
-  .flex { display: block !important; }
-  main { padding: 0 !important; margin: 0 !important; max-width: none !important; width: 100% !important; }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+  body { background: white !important; margin: 0 !important; padding: 0 !important; overflow: visible !important; height: auto !important; }
+  [data-viewer] { display: block !important; height: auto !important; overflow: visible !important; }
+  [data-viewer] [data-titlebar] { display: none !important; }
+  [data-viewer] #wk-panel { display: none !important; }
+  [data-viewer] .wk-sidebar, [data-viewer] .wrs--thumbs { display: none !important; }
+  [data-slide-area] { display: block !important; width: 100% !important; height: auto !important; overflow: visible !important; background: transparent !important; }
+  main { padding: 0 !important; margin: 0 !important; max-width: none !important; width: 100% !important; display: block !important; height: auto !important; overflow: visible !important; }
+  main > * { display: block !important; height: auto !important; overflow: visible !important; }
 
   .slide {
     page-break-after: always; break-after: page;
     page-break-inside: avoid; break-inside: avoid;
-    display: flex !important; opacity: 1 !important; visibility: visible !important;
+    display: flex !important; flex-direction: column !important;
+    opacity: 1 !important; visibility: visible !important;
     position: relative !important;
-    margin: 0 !important; box-shadow: none !important; border: none !important;
+    margin: 0 !important; box-shadow: none !important; border: none !important; border-radius: 0 !important;
     overflow: hidden !important;
     box-sizing: border-box !important;
-    /* Reset to fit page */
     width: 100% !important; min-width: 0 !important;
     height: 100vh !important; aspect-ratio: auto !important;
-    scale: 1 !important;
+    scale: 1 !important; transform: none !important;
+    container-type: inline-size !important;
   }
   .slide:last-child { page-break-after: auto; break-after: auto; }
+  .slide.hidden { display: flex !important; }
 
   .news-card {
     page-break-after: always; break-after: page;

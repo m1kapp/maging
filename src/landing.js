@@ -619,7 +619,7 @@
       sizes: ['short', 'full'],
       defaultOutput: 'dashboard',
       defaultSize: 'full',
-      promptBaseUrl: '/',
+      promptBaseUrl: '/llms/',
       requests: {},
       handshakes: {},
       previews: {}

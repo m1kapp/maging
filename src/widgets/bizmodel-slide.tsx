@@ -1,4 +1,5 @@
 import { h } from '../h';
+import { accentMark } from './utils';
 
 interface Tier {
   name: string;
@@ -16,8 +17,8 @@ interface BizModelSlideProps {
 export function BizModelSlide({ headline = '', tiers = [], note = '' }: BizModelSlideProps) {
   return (
     <div data-widget="bizmodel" className="flex flex-col flex-1 min-h-0 p-[4cqw] px-[5cqw] box-border">
-      {headline && <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] mb-[2cqw] tracking-[-0.02em]">{headline}</div>}
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-[1.5cqw] my-auto">
+      {headline && <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] mb-[2cqw] tracking-[-0.02em]" dangerouslySetInnerHTML={{ __html: accentMark(headline) }}></div>}
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-[1.5cqw] my-auto items-stretch">
         {tiers.map(t =>
           <div className="p-[2.5cqw] bg-[var(--mw-surface)] border border-[var(--mw-border)] rounded-[var(--mw-radius)] flex flex-col"
             {...(t.popular ? { 'data-popular': true } : {})}>

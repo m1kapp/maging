@@ -1,5 +1,6 @@
 import { h } from '../h';
 import { calloutHTML } from './callout';
+import { accentMark } from './utils';
 
 interface Step { label?: string; title: string; desc?: string; accent?: boolean; }
 interface ChainFlowProps {
@@ -12,7 +13,7 @@ interface ChainFlowProps {
 export function ChainFlow({ headline = '', steps = [], footer = '', callout = '' }: ChainFlowProps) {
   return (
     <div data-widget="chain" className="flex flex-col flex-1 min-h-0 p-[4cqw] px-[5cqw] box-border">
-      {headline && <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] mb-[2.5cqw] tracking-[-0.02em]">{headline}</div>}
+      {headline && <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] mb-[2.5cqw] tracking-[-0.02em]" dangerouslySetInnerHTML={{ __html: accentMark(headline) }}></div>}
       <div className="flex items-stretch my-auto">
         {steps.map((s, i) => {
           const arrow = i < steps.length - 1

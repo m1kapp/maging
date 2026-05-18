@@ -1,4 +1,5 @@
 import { h } from '../h';
+import { accentMark } from './utils';
 
 interface Milestone {
   date: string;
@@ -15,7 +16,7 @@ interface TimelineSlideProps {
 export function TimelineSlide({ headline = '', milestones = [] }: TimelineSlideProps) {
   return (
     <div data-widget="timeline" className="flex flex-col justify-center items-center flex-1 min-h-0 p-[6cqw] box-border gap-[3cqw]">
-      {headline && <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] tracking-[-0.02em] self-start">{headline}</div>}
+      {headline && <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] tracking-[-0.02em] self-start" dangerouslySetInnerHTML={{ __html: accentMark(headline) }}></div>}
       <div className="w-full">
         {/* Dot row */}
         <div className="flex items-center relative">

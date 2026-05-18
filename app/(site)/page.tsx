@@ -37,7 +37,7 @@ const config = {
       sizes: ['short', 'full'],
       defaultOutput: 'dashboard',
       defaultSize: 'full',
-      promptBaseUrl: '/',
+      promptBaseUrl: '/llms/',
       requests: {
         'dashboard': '3월 매출 CSV 기반으로 경영진 리뷰용 대시보드 만들어줘',
         'weekly-report': 'SaaS팀 4월 4주차 주간보고 만들어줘. 영업·CS·개발·AX 4개 팀',

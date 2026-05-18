@@ -1,4 +1,5 @@
 import { h } from '../h';
+import { accentMark } from './utils';
 
 interface RingData { value: string; label: string; }
 interface MarketSlideProps {
@@ -13,7 +14,7 @@ interface MarketSlideProps {
 export function MarketSlide({ headline = '', tam, sam, som, insight = '', sources = [] }: MarketSlideProps) {
   return (
     <div data-widget="market" className="flex flex-col flex-1 min-h-0 p-[4cqw] px-[5cqw] box-border">
-      {headline && <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] mb-5 tracking-[-0.02em]">{headline}</div>}
+      {headline && <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] mb-5 tracking-[-0.02em]" dangerouslySetInnerHTML={{ __html: accentMark(headline) }}></div>}
       <div className="flex items-center justify-center min-h-[300px] relative my-auto">
         <div data-ring="tam" className="flex flex-col items-center justify-center rounded-full absolute w-[420px] h-[420px]">
           <div className="text-[clamp(16px,2cqw,26px)] font-extrabold text-[var(--mw-text)] tracking-[-0.02em]">{tam.value}</div>

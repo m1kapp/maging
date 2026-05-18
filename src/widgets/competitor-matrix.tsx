@@ -1,4 +1,5 @@
 import { h } from '../h';
+import { accentMark } from './utils';
 
 interface Player { name: string; x: number; y: number; highlight?: boolean; }
 interface Axis { low?: string; high?: string; }
@@ -12,7 +13,7 @@ interface CompetitorMatrixProps {
 export function CompetitorMatrix({ headline = '', axisX = {}, axisY = {}, players = [] }: CompetitorMatrixProps) {
   return (
     <div data-widget="competitor" className="flex flex-col flex-1 min-h-0 p-[4cqw] px-[5cqw] box-border">
-      {headline && <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] mb-5 tracking-[-0.02em]">{headline}</div>}
+      {headline && <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] mb-5 tracking-[-0.02em]" dangerouslySetInnerHTML={{ __html: accentMark(headline) }}></div>}
       <div className="relative min-h-[300px] border-l-2 border-b-2 border-[var(--mw-border)] overflow-visible my-auto mx-6 ml-9">
         <div data-role="midline-x" className="absolute top-1/2 left-0 right-0"></div>
         <div data-role="midline-y" className="absolute left-1/2 top-0 bottom-0"></div>
