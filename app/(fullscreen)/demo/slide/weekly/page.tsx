@@ -65,7 +65,6 @@ const fmtBillion = (v: number) => (v / 1e8).toFixed(2) + '<span class="mw-unit">
 /* ── config ──────────────────────────────────── */
 
 const config = {
-  mode: 'weekly',
   sidebarTitle: 'SaaS 주간보고',
   sidebarDate: '2026.04.27 · 4월 4주차',  slides: [
     /* ═══ Cover ═══ */

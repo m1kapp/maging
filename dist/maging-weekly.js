@@ -25,17 +25,17 @@
   .slide[data-active] { display: flex; flex-direction: column; }
 
   /* maging.js activityTable output overrides (can't be Tailwind — targets external widget DOM) */
-  .scroll-table.mw-card { padding: 0; overflow: hidden; }
-  .scroll-table .mw-table__wrap { flex: 1; min-height: 0; overflow: hidden; }
-  .scroll-table .mw-table { width: 100%; height: 100%; font-size: var(--mw-text-xs); border-collapse: separate; border-spacing: 0; table-layout: fixed; }
-  .scroll-table .mw-table th, .scroll-table .mw-table td { padding: var(--mw-space-3-5) var(--mw-space-2); font-variant-numeric: tabular-nums; background: var(--mw-surface); text-align: right; overflow: hidden; text-overflow: ellipsis; }
-  .scroll-table .mw-table th:first-child, .scroll-table .mw-table td:first-child { text-align: left; }
-  .scroll-table .mw-table th { font-weight: 500; color: var(--mw-text-muted); letter-spacing: 0.01em; }
-  .scroll-table .mw-table td { font-weight: 400; }
-  .scroll-table .mw-table td strong { font-weight: 600; }
-  .scroll-table .mw-table tbody tr:last-child td { background: var(--mw-surface-2); }
-  .scroll-table .mw-card > .mw-card__head { display: none; }
-  .scroll-table > .mw-card { height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+  .scroll-table[data-mw-card] { padding: 0; overflow: hidden; }
+  .scroll-table [data-mw-list] { flex: 1; min-height: 0; overflow: hidden; }
+  .scroll-table table { width: 100%; height: 100%; font-size: var(--mw-text-xs); border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+  .scroll-table table th, .scroll-table table td { padding: var(--mw-space-3-5) var(--mw-space-2); font-variant-numeric: tabular-nums; background: var(--mw-surface); text-align: right; overflow: hidden; text-overflow: ellipsis; }
+  .scroll-table table th:first-child, .scroll-table table td:first-child { text-align: left; }
+  .scroll-table table th { font-weight: 500; color: var(--mw-text-muted); letter-spacing: 0.01em; }
+  .scroll-table table td { font-weight: 400; }
+  .scroll-table table td strong { font-weight: 600; }
+  .scroll-table table tbody tr:last-child td { background: var(--mw-surface-2); }
+  .scroll-table [data-mw-card] > [data-role=header] { display: none; }
+  .scroll-table > [data-mw-card] { height: 100%; display: flex; flex-direction: column; overflow: hidden; }
   .row-unit { color: var(--mw-text-muted); font-size: 0.85em; font-weight: 400; margin-left: 4px; }
   .rag-row { display: flex; flex-wrap: wrap; gap: var(--mw-space-2); margin-top: var(--mw-space-3); }
 
@@ -68,15 +68,23 @@
 
   /* Presenter mode */
   body.presenter-mode { overflow: hidden; background: #000; }
-  body.presenter-mode .mw-site-nav, body.presenter-mode .wk-sidebar, body.presenter-mode .wk-titlebar, body.presenter-mode .wk-themes { display: none !important; }
+  body.presenter-mode .mw-site-nav, body.presenter-mode .wk-sidebar, body.presenter-mode .wk-titlebar, body.presenter-mode .wk-panel { display: none !important; }
   body.presenter-mode main { padding: 0 !important; width: 100vw; height: 100vh; overflow: hidden; }
   body.presenter-mode .wk-slides { position: fixed; inset: 0; display: flex !important; width: 100vw; height: 100vh; align-items: center; justify-content: center; z-index: 9999; background: #000; }
   body.presenter-mode .mw-slide { border: none; border-radius: 0; box-shadow: none !important; }
 
   /* Theme carousel transition (can't do max-height animation in Tailwind) */
-  .wk-themes { max-height: 0; transition: max-height 0.25s ease, padding 0.25s ease; }
-  .wk-themes.is-open { max-height: 80px; padding: 8px 0; }
-  .wk-themes-track::-webkit-scrollbar { display: none; }
+  .wk-panel { max-height: 0; transition: max-height 0.3s ease, border-color 0.3s; overflow: hidden; border-color: transparent; }
+  .wk-panel.is-open { max-height: 180px; border-color: var(--mw-border); }
+  .wk-themes__track { display: flex; gap: 8px; padding: 0 16px; overflow-x: auto; scroll-behavior: smooth; }
+  .wk-themes__track::-webkit-scrollbar { display: none; }
+  .wk-themes__item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; flex-shrink: 0; min-width: 48px; }
+  .wk-themes__swatch { width: 40px; height: 28px; border-radius: 4px; border: 1.5px solid var(--mw-border); display: flex; gap: 2px; padding: 3px; overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s; }
+  .wk-themes__item:hover .wk-themes__swatch { border-color: var(--mw-accent); }
+  .wk-themes__item--active .wk-themes__swatch { border-color: var(--mw-accent); box-shadow: 0 0 0 1px var(--mw-accent); }
+  .wk-themes__bar { flex: 1; border-radius: 1px; }
+  .wk-themes__name { font-size: 9px; color: var(--mw-text-muted); white-space: nowrap; max-width: 52px; overflow: hidden; text-overflow: ellipsis; }
+  .wk-themes__item--active .wk-themes__name { color: var(--mw-accent); font-weight: 600; }
 `;
   document.head.appendChild(_style);
 
@@ -101,10 +109,10 @@
         (bu ? '<span class="text-xs text-[var(--mw-text-muted)] font-mono">' + bu + '</span>' : '') +
         (team ? '<span class="text-xs text-[var(--mw-text-muted)] font-mono">' + team + '</span>' : '') + '</div>' : '';
       const header = (headerLeft || headerRight) ?
-        '<div data-role="header" class="flex items-center justify-between px-5 py-3 border-b border-[var(--mw-border)] shrink-0 gap-3"><div>' + headerLeft + '</div>' + headerRight + '</div>' : '';
+        '<div data-role="header" class="flex items-center justify-between px-4 py-2 border-b border-[var(--mw-border)] shrink-0 gap-2"><div>' + headerLeft + '</div>' + headerRight + '</div>' : '';
       const pageNum = '<span data-role="pagenum" class="tabular-nums">' + (i + 1) + ' / ' + slides.length + '</span>';
-      const footer = '<div data-role="footer" class="shrink-0 px-5 py-2 text-right text-xs text-[var(--mw-text-muted)]">' + pageNum + '</div>';
-      s.innerHTML = header + '<div data-role="body" class="flex-1 flex flex-col overflow-hidden min-h-0 px-5 py-3 pb-4">' + content + '</div>' + footer;
+      const footer = '<div data-role="footer" class="shrink-0 px-4 py-1.5 text-right text-xs text-[var(--mw-text-muted)]">' + pageNum + '</div>';
+      s.innerHTML = header + '<div data-role="body" class="flex-1 flex flex-col overflow-hidden min-h-0 px-4 py-2 pb-3">' + content + '</div>' + footer;
     });
     const indEl      = document.getElementById('deck-ind');
     const slidesWrap = document.getElementById('slides-wrap');
@@ -142,15 +150,13 @@
       // Update toolbar indicator
       var wtInd = scope.querySelector('#weekly-ind');
       if (wtInd) { wtInd.textContent = (idx + 1) + ' / ' + slides.length; }
-      // Refresh only the active slide's charts (not all — hidden ones get 0 size)
-      setTimeout(() => {
-        if (typeof Maging !== 'undefined' && Maging.refreshAll) {
-          target.querySelectorAll('.mw-chart__body').forEach(c => {
-            var inst = typeof echarts !== 'undefined' && echarts.getInstanceByDom(c);
-            if (inst) inst.resize();
-          });
-        }
-      }, 50);
+      // Refresh active slide's charts via ResizeObserver (fires after layout)
+      if (typeof echarts !== 'undefined') {
+        target.querySelectorAll('[data-mw-chart]').forEach(c => {
+          var inst = echarts.getInstanceByDom(c);
+          if (inst) inst.resize();
+        });
+      }
     }
 
     function activateOffset(offset) {
@@ -163,13 +169,12 @@
     function toggleFullscreen() {
       const isOn = document.body.classList.toggle('presenter-mode');
       localStorage.setItem('weeklyPresenter', isOn ? '1' : '0');
-      scaleSlide();
-      setTimeout(() => window.dispatchEvent(new Event('resize')), 50);
+      // ResizeObserver on .wk-slides will auto-trigger scaleSlide
     }
 
-    window.addEventListener('resize', scaleSlide);
     if (localStorage.getItem('weeklyPresenter') === '1') { document.body.classList.add('presenter-mode'); }
-    scaleSlide();
+    // ResizeObserver handles initial layout + window resize + panel toggle — no rAF hack needed
+    new ResizeObserver(function() { scaleSlide(); }).observe(document.querySelector('.wk-slides') || container);
 
     function dedent(src) {
       const lines = src.split('\n');
@@ -422,8 +427,9 @@
     const sTitle = cfg.sidebarTitle || cfg.title || '';
     const sDate = cfg.sidebarDate || cfg.date || '';
 
-    // Title bar (full width, top) — Tailwind classes
+    // Title bar (full width, top)
     var _btn = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-medium text-[var(--mw-text-muted)] bg-transparent border-none rounded cursor-pointer hover:bg-[var(--mw-surface-2)] hover:text-[var(--mw-text)] transition-colors [&_svg]:w-3.5 [&_svg]:h-3.5';
+    var _btnActive = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-medium text-[var(--mw-accent)] bg-[color-mix(in_srgb,var(--mw-accent)_8%,transparent)] border-none rounded cursor-pointer transition-colors [&_svg]:w-3.5 [&_svg]:h-3.5';
     var _btnAccent = 'inline-flex items-center gap-1 px-3 py-1 text-[11px] font-medium text-white bg-[var(--mw-accent)] border-none rounded-full cursor-pointer hover:opacity-90 [&_svg]:w-3.5 [&_svg]:h-3.5';
     const titlebar = document.createElement('div');
     titlebar.className = 'wk-titlebar flex items-center justify-between px-4 py-2 shrink-0 bg-[var(--mw-surface)] border-b border-[var(--mw-border)]';
@@ -434,18 +440,63 @@
         '<span class="text-[11px] text-[var(--mw-text-muted)] tabular-nums shrink-0" id="weekly-ind">1 / ' + slides.length + '</span>' +
       '</div>' +
       '<div class="flex items-center gap-1 shrink-0">' +
-        '<button class="' + _btn + '" id="wtb-theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2"/></svg>테마</button>' +
-        '<button class="' + _btn + '" id="wtb-code"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 3L1 8l4 5M11 3l4 5-4 5"/></svg>코드</button>' +
-        '<button class="' + _btn + '" id="wtb-export"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 10v3h10v-3M8 2v8M5 5l3-3 3 3"/></svg>내보내기</button>' +
+        '<button class="' + _btn + '" id="wtb-theme" data-panel="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2"/></svg>테마</button>' +
+        '<button class="' + _btn + '" id="wtb-code" data-panel="code"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 3L1 8l4 5M11 3l4 5-4 5"/></svg>코드</button>' +
+        '<button class="' + _btn + '" id="wtb-export" data-panel="export"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 10v3h10v-3M8 2v8M5 5l3-3 3 3"/></svg>내보내기</button>' +
         '<button class="' + _btnAccent + '" id="wtb-present"><svg viewBox="0 0 16 16" fill="none"><path d="M4 3l9 5-9 5V3z" fill="currentColor"/></svg>발표</button>' +
       '</div>';
     container.appendChild(titlebar);
+
+    // Unified panel area (slides down below titlebar)
+    var panelWrap = document.createElement('div');
+    panelWrap.className = 'wk-panel shrink-0 overflow-hidden bg-[var(--mw-surface)] border-b border-[var(--mw-border)]';
+    panelWrap.id = 'wk-panel';
+
+    // Theme panel content
+    var themePanelContent = '<div data-panel-content="theme" class="hidden" style="padding:8px 0">' +
+      '<div id="wk-themes-track"></div></div>';
+
+    // Code panel content
+    var codePanelContent = '<div data-panel-content="code" class="hidden" style="padding:8px 16px">' +
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">' +
+        '<span style="font-size:11px;color:var(--mw-text-muted)">HTML 코드</span>' +
+        '<button id="wk-code-copy" style="font-size:11px;padding:3px 10px;border:1px solid var(--mw-border);border-radius:4px;background:var(--mw-surface-2);color:var(--mw-text);cursor:pointer;font-family:var(--mw-font)">복사</button>' +
+      '</div>' +
+      '<pre id="wk-code-pre" style="font-size:10px;line-height:1.5;color:var(--mw-text-muted);font-family:var(--mw-mono-font);max-height:120px;overflow-y:auto;margin:0;white-space:pre-wrap;word-break:break-all;background:var(--mw-surface-2);padding:8px;border-radius:4px"></pre>' +
+    '</div>';
+
+    // Export panel content — same tile style as theme carousel
+    var exportPanelContent = '<div data-panel-content="export" class="hidden" style="padding:8px 0">' +
+      '<div class="wk-themes__track">' +
+        '<div class="wk-themes__item" data-export="html">' +
+          '<div class="wk-themes__swatch" style="background:var(--mw-surface-2);align-items:center;justify-content:center">' +
+            '<svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="var(--mw-accent)" stroke-width="1.3"><path d="M4 6l-2 2 2 2"/><path d="M12 6l2 2-2 2"/><path d="M9 3l-2 10"/></svg>' +
+          '</div>' +
+          '<span class="wk-themes__name">HTML</span>' +
+        '</div>' +
+        '<div class="wk-themes__item" data-export="pdf">' +
+          '<div class="wk-themes__swatch" style="background:var(--mw-surface-2);align-items:center;justify-content:center">' +
+            '<svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="var(--mw-danger)" stroke-width="1.3"><path d="M4 2v12h8V6l-4-4H4z"/><path d="M8 2v4h4"/></svg>' +
+          '</div>' +
+          '<span class="wk-themes__name">PDF</span>' +
+        '</div>' +
+        '<div class="wk-themes__item" data-export="pptx">' +
+          '<div class="wk-themes__swatch" style="background:var(--mw-surface-2);align-items:center;justify-content:center">' +
+            '<svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="var(--mw-warning)" stroke-width="1.3"><path d="M2 3h12v10H2z"/><circle cx="8" cy="8" r="2.5"/></svg>' +
+          '</div>' +
+          '<span class="wk-themes__name">PPTX</span>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+    panelWrap.innerHTML = themePanelContent + codePanelContent + exportPanelContent;
+    container.appendChild(panelWrap);
 
     // Content row (sidebar + slide area)
     const contentRow = document.createElement('div');
     contentRow.className = 'flex flex-1 min-h-0 overflow-hidden';
 
-    // Sidebar — thumbnails only (no header)
+    // Sidebar — thumbnails only
     const sidebarWrap = document.createElement('div');
     sidebarWrap.className = 'shrink-0 self-stretch flex';
     const thumbsHTML = slides.map((s, i) =>
@@ -455,7 +506,7 @@
       '</div>'
     ).join('');
     sidebarWrap.innerHTML = '<aside class="wk-sidebar wrs wrs--thumbs">' +
-      '<div class="wrs__thumb-list">' + thumbsHTML + '</div>' +
+      '<div class="wk-thumb-list">' + thumbsHTML + '</div>' +
     '</aside>';
     contentRow.appendChild(sidebarWrap);
 
@@ -463,12 +514,6 @@
     const slideArea = document.createElement('div');
     slideArea.className = 'wk-slides flex-1 min-w-0 flex items-center justify-center overflow-hidden';
     contentRow.appendChild(slideArea);
-
-    // Theme carousel (between title bar and content, hidden by default)
-    const themePanel = document.createElement('div');
-    themePanel.className = 'wk-themes shrink-0 overflow-hidden bg-[var(--mw-surface)] border-b border-[var(--mw-border)] p-0';
-    themePanel.id = 'wk-themes';
-    container.appendChild(themePanel);
 
     container.appendChild(contentRow);
 
@@ -492,10 +537,10 @@
           (bu ? '<span class="text-xs text-[var(--mw-text-muted)] font-mono">' + bu + '</span>' : '') +
           (team ? '<span class="text-xs text-[var(--mw-text-muted)] font-mono">' + team + '</span>' : '') + '</div>' : '';
         const header = (headerLeft || headerRight) ?
-          '<div data-role="header" class="flex items-center justify-between px-5 py-3 border-b border-[var(--mw-border)] shrink-0 gap-3"><div>' + headerLeft + '</div>' + headerRight + '</div>' : '';
+          '<div data-role="header" class="flex items-center justify-between px-4 py-2 border-b border-[var(--mw-border)] shrink-0 gap-2"><div>' + headerLeft + '</div>' + headerRight + '</div>' : '';
         const pageNum = '<span data-role="pagenum" class="tabular-nums">' + (i + 1) + ' / ' + slides.length + '</span>';
-        const footer = '<div data-role="footer" class="shrink-0 px-5 py-2 text-right text-xs text-[var(--mw-text-muted)]">' + pageNum + '</div>';
-        sec.innerHTML = header + '<div data-role="body" class="flex-1 flex flex-col overflow-hidden min-h-0 px-5 py-3 pb-4"></div>' + footer;
+        const footer = '<div data-role="footer" class="shrink-0 px-4 py-1.5 text-right text-xs text-[var(--mw-text-muted)]">' + pageNum + '</div>';
+        sec.innerHTML = header + '<div data-role="body" class="flex-1 flex flex-col overflow-hidden min-h-0 px-4 py-2 pb-3"></div>' + footer;
       }
 
       slideArea.appendChild(sec);
@@ -514,15 +559,15 @@
           for (const k in w) { if (k !== 'type') wCfg[k] = w[k]; }
 
           // Spacing logic — inline, no CSS selectors needed
-          let mt = wi === 0 ? '0' : '12px';                              // default
-          if (w.type === 'sectionHead' && prevType === 'pageHeader') mt = '4px';   // title → subtitle: tight
-          else if (w.type === 'sectionHead') mt = '16px';                          // section break: roomy
-          if (prevType === 'sectionHead') mt = '6px';                              // subtitle → content: snug
+          let mt = wi === 0 ? '0' : '8px';                               // default gap
+          if (w.type === 'sectionHead' && prevType === 'pageHeader') mt = '2px';   // title → subtitle: tight
+          else if (w.type === 'sectionHead') mt = '14px';                          // section break: roomy
+          if (prevType === 'sectionHead') mt = '4px';                              // subtitle → content: snug
 
           if (w.type === 'kpiCard') {
             if (!kpiRow) {
               kpiRow = document.createElement('div');
-              kpiRow.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:var(--mw-space-3);margin-top:' + mt;
+              kpiRow.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:var(--mw-space-2);margin-top:' + mt;
               body.appendChild(kpiRow);
             }
             const wrap = document.createElement('div');
@@ -546,7 +591,9 @@
 
     // Post-process: accent color on last word of cover title
     function applyCoverAccent() {
-      var ct = container.querySelector('.cover-slide .mw-cover__title');
+      // Target main slide area only (not sidebar thumbnail clones)
+      var scope = container.querySelector('.wk-slides') || container;
+      var ct = scope.querySelector('.cover-slide .mw-cover__title');
       if (!ct || ct.querySelector('[data-accent]')) return; // already applied
       var words = ct.textContent.split(' ');
       if (words.length > 1) {
@@ -562,99 +609,52 @@
     if (origRefresh) {
       window.Maging.refreshAll = function() {
         origRefresh.call(window.Maging);
-        setTimeout(applyCoverAccent, 50);
+        applyCoverAccent();
       };
     }
 
-    // Code dialog
-    var _dlgBtn = 'px-3 py-1 text-[11px] font-medium border border-[var(--mw-border)] rounded bg-[var(--mw-surface)] text-[var(--mw-text)] cursor-pointer hover:bg-[var(--mw-surface-2)] transition-colors';
-    var _dlgBtnAcc = 'px-3 py-1 text-[11px] font-medium border-none rounded bg-[var(--mw-accent)] text-white cursor-pointer hover:opacity-90';
-    var codeOverlay = document.createElement('div');
-    codeOverlay.className = 'hidden fixed inset-0 z-[10000] bg-black/50 backdrop-blur-sm items-center justify-center p-8';
-    codeOverlay.innerHTML =
-      '<div class="bg-[var(--mw-surface)] border border-[var(--mw-border)] rounded-lg shadow-2xl w-full max-w-[800px] max-h-[80vh] flex flex-col">' +
-        '<div class="flex items-center justify-between px-4 py-3 border-b border-[var(--mw-border)] shrink-0">' +
-          '<span class="text-[13px] font-semibold text-[var(--mw-text)]" id="wcd-title"></span>' +
-          '<div class="flex gap-1.5">' +
-            '<button class="' + _dlgBtn + '" id="wcd-copy">복사</button>' +
-            '<button class="' + _dlgBtnAcc + '" id="wcd-download">↓ 다운로드</button>' +
-            '<button class="' + _dlgBtn + '" id="wcd-close">닫기</button>' +
-          '</div>' +
-        '</div>' +
-        '<div class="flex-1 min-h-0 overflow-auto p-4 bg-[var(--mw-surface-2)]"><pre class="m-0 font-mono text-xs leading-relaxed text-[var(--mw-text)] whitespace-pre" id="wcd-code" style="tab-size:2"></pre></div>' +
-      '</div>';
-    document.body.appendChild(codeOverlay);
+    // (code overlay removed — code preview is now in the unified panel)
 
-    // Wire title bar buttons
-    var wtbCode = container.querySelector('#wtb-code');
-    var wtbTheme = container.querySelector('#wtb-theme');
-    var wtbExport = container.querySelector('#wtb-export');
+    // Wire title bar — unified panel system
     var wtbPresent = container.querySelector('#wtb-present');
-    var themePanelEl = container.querySelector('#wk-themes');
+    var panelEl = container.querySelector('#wk-panel');
+    var panelBtns = container.querySelectorAll('[data-panel]');
+    var activePanel = null;
 
-    // Code dialog handlers
-    function openCodeDialog() {
-      var theme = document.documentElement.getAttribute('data-theme') || 'flow';
-      var ver = M.version || '0.1.25';
-      var cdn = 'https://cdn.jsdelivr.net/npm/@m1kapp/maging@' + ver + '/dist';
-      // Serialize config (strip functions)
-      var safeCfg = JSON.stringify(cfg, function(k, v) {
-        return typeof v === 'function' ? undefined : v;
-      }, 2);
-      var html = [
-        '<!DOCTYPE html>',
-        '<html lang="ko" data-theme="' + theme + '">',
-        '<head>',
-        '  <meta charset="UTF-8">',
-        '  <meta name="viewport" content="width=device-width, initial-scale=1.0">',
-        '  <title>' + (cfg.sidebarTitle || 'maging') + '</title>',
-        '  <script src="' + cdn + '/maging-all.js"><\/script>',
-        '</head>',
-        '<body>',
-        '<script>',
-        '  window.addEventListener("maging:ready", function () {',
-        '    Maging.page(' + safeCfg.split('\n').map(function(l, i) {
-          return i === 0 ? l : '    ' + l;
-        }).join('\n') + ');',
-        '  });',
-        '<\/script>',
-        '</body>',
-        '</html>'
-      ].join('\n');
-      var chars = html.length;
-      var tokens = Math.ceil(chars / 3.5); // rough estimate
-      codeOverlay.querySelector('#wcd-title').textContent = sTitle + ' — ' + chars.toLocaleString() + '자 · ~' + tokens.toLocaleString() + ' tokens';
-      codeOverlay.querySelector('#wcd-code').textContent = html;
-      codeOverlay.classList.remove('hidden'); codeOverlay.classList.add('flex');
+    function togglePanel(name) {
+      if (activePanel === name) {
+        // Close
+        panelEl.classList.remove('is-open');
+        panelBtns.forEach(function(b) { b.className = _btn; });
+        panelEl.querySelectorAll('[data-panel-content]').forEach(function(p) { p.classList.add('hidden'); });
+        activePanel = null;
+      } else {
+        // Open / switch
+        panelEl.querySelectorAll('[data-panel-content]').forEach(function(p) {
+          if (p.dataset.panelContent === name) { p.classList.remove('hidden'); p.style.display = ''; }
+          else p.classList.add('hidden');
+        });
+        panelBtns.forEach(function(b) {
+          b.className = b.dataset.panel === name ? _btnActive : _btn;
+        });
+        if (name === 'theme') ensureThemeCarousel();
+        if (name === 'code') generateCodePreview();
+        panelEl.classList.add('is-open');
+        activePanel = name;
+      }
+      // ResizeObserver on .wk-slides auto-handles rescale after panel open/close
     }
-    if (wtbCode) wtbCode.addEventListener('click', openCodeDialog);
-    codeOverlay.querySelector('#wcd-close').addEventListener('click', function() { codeOverlay.classList.add('hidden'); codeOverlay.classList.remove('flex'); });
-    codeOverlay.querySelector('#wcd-copy').addEventListener('click', function() {
-      var code = codeOverlay.querySelector('#wcd-code').textContent;
-      navigator.clipboard.writeText(code).then(function() {
-        var btn = codeOverlay.querySelector('#wcd-copy');
-        btn.textContent = '복사됨!';
-        setTimeout(function() { btn.textContent = '복사'; }, 1500);
-      });
-    });
-    codeOverlay.querySelector('#wcd-download').addEventListener('click', function() {
-      var code = codeOverlay.querySelector('#wcd-code').textContent;
-      var blob = new Blob([code], { type: 'text/html;charset=utf-8' });
-      var a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = (cfg.sidebarTitle || 'maging-slide') + '.html';
-      a.click();
-      URL.revokeObjectURL(a.href);
-    });
-    codeOverlay.addEventListener('click', function(e) {
-      if (e.target === codeOverlay) codeOverlay.classList.add('hidden'); codeOverlay.classList.remove('flex');
+
+    panelBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() { togglePanel(btn.dataset.panel); });
     });
 
-    // Build theme carousel — read real themes from FAB panel or CSS
+    // ── Theme carousel ──
     var _themeCache = null;
-    function buildThemeCarousel() {
+    var themeTrackEl = container.querySelector('#wk-themes-track');
+    function ensureThemeCarousel() {
+      if (themeTrackEl.querySelector('.wk-themes__item')) return;
       var current = document.documentElement.getAttribute('data-theme') || 'flow';
-      // Read theme colors from CSS rules directly (no DOM mutation — instant)
       if (!_themeCache) {
         _themeCache = [];
         var seen = {};
@@ -676,10 +676,8 @@
           } catch(e) {}
         }
       }
-      var themeColors = _themeCache;
-      // Build HTML
       var track = '<div class="wk-themes__track">';
-      themeColors.forEach(function(c) {
+      _themeCache.forEach(function(c) {
         var isActive = c.name === current;
         track += '<div class="wk-themes__item' + (isActive ? ' wk-themes__item--active' : '') + '" data-theme-pick="' + c.name + '">' +
           '<div class="wk-themes__swatch" style="background:' + c.bg + '">' +
@@ -691,35 +689,59 @@
         '</div>';
       });
       track += '</div>';
-      themePanelEl.innerHTML = track;
+      themeTrackEl.innerHTML = track;
     }
-
-    if (wtbTheme) wtbTheme.addEventListener('click', function() {
-      var isOpen = themePanelEl.classList.toggle('is-open');
-      wtbTheme.classList.toggle('weekly-titlebar__btn--active', isOpen);
-      if (isOpen && !themePanelEl.querySelector('.wk-themes__item')) buildThemeCarousel();
-      // Recalc slide scale after carousel animation
-      setTimeout(function() { window.dispatchEvent(new Event('resize')); }, 300);
-    });
-
     // Theme selection
-    themePanelEl.addEventListener('click', function(e) {
+    themeTrackEl.addEventListener('click', function(e) {
       var item = e.target.closest('[data-theme-pick]');
       if (!item) return;
       var theme = item.dataset.themePick;
       document.documentElement.setAttribute('data-theme', theme);
       localStorage.setItem('maging-theme', theme);
-      themePanelEl.querySelectorAll('.wk-themes__item').forEach(function(el) {
+      themeTrackEl.querySelectorAll('.wk-themes__item').forEach(function(el) {
         el.classList.toggle('wk-themes__item--active', el.dataset.themePick === theme);
       });
-      // Refresh charts
-      if (window.Maging?.refreshAll) setTimeout(function() { window.Maging.refreshAll(); }, 100);
+      if (window.Maging?.refreshAll) window.Maging.refreshAll();
     });
 
-    if (wtbExport) wtbExport.addEventListener('click', function() {
-      // Show FAB temporarily for export
-      var fab = document.querySelector('.mw-theme-fab');
-      if (fab) { fab.style.display = 'flex'; var btn = fab.querySelector('.mw-theme-fab__export-btn, [class*=export] button'); if (btn) btn.click(); }
+    // ── Code preview (inline panel) ──
+    function generateCodePreview() {
+      var theme = document.documentElement.getAttribute('data-theme') || 'flow';
+      var ver = M.version || '0.1.25';
+      var cdn = 'https://cdn.jsdelivr.net/npm/@m1kapp/maging@' + ver + '/dist';
+      var safeCfg = JSON.stringify(cfg, function(k, v) { return typeof v === 'function' ? undefined : v; }, 2);
+      var html = '<!DOCTYPE html>\n<html lang="ko" data-theme="' + theme + '">\n<head>\n  <meta charset="UTF-8">\n  <title>' + (cfg.sidebarTitle || 'maging') + '</title>\n  <script src="' + cdn + '/maging-all.js"><\/script>\n</head>\n<body>\n<script>\nwindow.addEventListener("maging:ready", function () {\n  Maging.page(' + safeCfg + ');\n});\n<\/script>\n</body>\n</html>';
+      var pre = container.querySelector('#wk-code-pre');
+      if (pre) pre.textContent = html;
+    }
+    var codeCopyBtn = container.querySelector('#wk-code-copy');
+    if (codeCopyBtn) codeCopyBtn.addEventListener('click', function() {
+      var code = container.querySelector('#wk-code-pre')?.textContent;
+      if (code) navigator.clipboard.writeText(code).then(function() {
+        codeCopyBtn.textContent = '복사됨!';
+        setTimeout(function() { codeCopyBtn.textContent = '복사'; }, 1500);
+      });
+    });
+
+    // ── Export buttons ──
+    panelEl.querySelectorAll('[data-export]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var format = btn.dataset.export;
+        var pageResult = container._pageResult;
+        if (pageResult && pageResult.exportAs) {
+          pageResult.exportAs(format);
+        } else {
+          // Fallback: FAB export
+          var fab = document.querySelector('.mw-theme-fab');
+          if (fab) {
+            var exportWrap = fab.querySelector('.mw-theme-fab__export-wrap');
+            if (exportWrap) {
+              var menuBtn = exportWrap.querySelector('[data-format="' + format + '"]');
+              if (menuBtn) menuBtn.click();
+            }
+          }
+        }
+      });
     });
 
     if (wtbPresent) wtbPresent.addEventListener('click', function() {
@@ -728,10 +750,11 @@
         var s = [...container.querySelectorAll('section.slide')];
         window._magingScaleSlides(s);
       }
-      setTimeout(function() { window.dispatchEvent(new Event('resize')); }, 50);
+      // ResizeObserver handles rescale
     });
-    // Populate thumbnails after widgets mount
-    setTimeout(() => {
+    // Populate thumbnails after widgets mount — wait for first layout
+    var _thumbRo = new ResizeObserver(function() {
+      _thumbRo.disconnect(); // run once
       if (!container.isConnected) return;
       // Mount all slides eagerly
       var allSlideEls = container.querySelectorAll('.wk-slides > *');
@@ -762,7 +785,7 @@
         var ftr = sec.querySelector('[data-role=footer]');
         var contBody = document.createElement('div');
         contBody.setAttribute('data-role', 'body');
-        contBody.className = 'flex-1 flex flex-col overflow-hidden min-h-0 px-5 py-3 pb-4';
+        contBody.className = 'flex-1 flex flex-col overflow-hidden min-h-0 px-4 py-2 pb-3';
         if (hdr) cont.appendChild(hdr.cloneNode(true));
         cont.appendChild(contBody);
         if (ftr) cont.appendChild(ftr.cloneNode(true));
@@ -789,7 +812,7 @@
       }
 
       // Rebuild thumbnails to include paginated slides
-      var thumbList = container.querySelector('.wrs__thumb-list');
+      var thumbList = container.querySelector('.wk-thumb-list');
       var finalSlides = [...sa.children];
       if (thumbList) {
         thumbList.innerHTML = finalSlides.map(function(sec, i) {
@@ -814,9 +837,12 @@
         thumb.innerHTML = '';
         thumb.appendChild(clone);
       });
-    }, 500);
+    });
+    _thumbRo.observe(container.querySelector('.wk-slides') || container);
 
-    return M._pageResult(container, cfg, 'weekly');
+    var result = M._pageResult(container, cfg, 'slide');
+    container._pageResult = result;
+    return result;
   }
 
   // Expose Maging.deck() + Maging.monthlyTable()
@@ -826,6 +852,8 @@
     window.Maging.monthlyTable = monthlyTable;
     window.Maging._pageBuilders = window.Maging._pageBuilders || {};
     window.Maging._pageBuilders.weekly = weeklyPage;
+    window.Maging._pageBuilders.slide = weeklyPage;
+    window.Maging._pageBuilders.pitch = weeklyPage;
   }
   // — maging:ready 이벤트: maging-all.js 환경 + DECK_MOUNT 자동 실행
   window.addEventListener('maging:ready', () => {
@@ -834,6 +862,8 @@
       window.Maging.monthlyTable = monthlyTable;
       window.Maging._pageBuilders = window.Maging._pageBuilders || {};
       window.Maging._pageBuilders.weekly = weeklyPage;
+      window.Maging._pageBuilders.slide = weeklyPage;
+      window.Maging._pageBuilders.pitch = weeklyPage;
     }
     if (window.DECK_MOUNT) initDeck(window.DECK_MOUNT);
   });

@@ -1030,14 +1030,20 @@
   // ── 5. Expose & auto-init ──────────────────────────────────────────────────
   if (window.Maging) {
     registerWidgets(window.Maging);
-    window.Maging._pageBuilders = window.Maging._pageBuilders || {};
-    window.Maging._pageBuilders.pitch = pitchPage;
+    // pitch 빌더는 weekly 뷰어가 담당 (_pageBuilders.pitch = weeklyPage in maging-weekly.js)
+    // fallback: weekly.js 없이 단독 사용 시에만 자체 빌더
+    if (!window.Maging._pageBuilders?.pitch) {
+      window.Maging._pageBuilders = window.Maging._pageBuilders || {};
+      window.Maging._pageBuilders.pitch = pitchPage;
+    }
   }
   window.addEventListener('maging:ready', () => {
     if (window.Maging) {
       registerWidgets(window.Maging);
-      window.Maging._pageBuilders = window.Maging._pageBuilders || {};
-      window.Maging._pageBuilders.pitch = pitchPage;
+      if (!window.Maging._pageBuilders?.pitch) {
+        window.Maging._pageBuilders = window.Maging._pageBuilders || {};
+        window.Maging._pageBuilders.pitch = pitchPage;
+      }
     }
     // Use setTimeout(0) to ensure inline script's maging:ready handler
     // (which sets DECK_MOUNT) has run first — critical when maging:ready

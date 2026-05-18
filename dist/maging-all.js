@@ -109,6 +109,9 @@
       return loadScript(BASE + 'maging.js');
     })
     .then(function () {
+      return loadScript(BASE + 'maging-charts.js');
+    })
+    .then(function () {
       _readyDetail = { version: VERSION, base: BASE };
       emit('ready', _readyDetail);
     })

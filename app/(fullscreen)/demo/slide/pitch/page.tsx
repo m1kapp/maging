@@ -7,7 +7,6 @@ export const metadata: Metadata = {
 };
 
 const config = {
-  mode: 'pitch',
   sidebarTitle: 'maging',
   sidebarDate: 'Series A · 2026',  slides: [
     {
@@ -173,5 +172,5 @@ const config = {
 };
 
 export default function PitchDeckPage() {
-  return <MagingPage config={config} fullscreen scripts={['/dist/maging-sidebar.js', '/dist/maging-pitch.js']} />;
+  return <MagingPage config={config} fullscreen scripts={['/dist/maging-sidebar.js', '/dist/maging-weekly.js', '/dist/maging-pitch.js']} />;
 }

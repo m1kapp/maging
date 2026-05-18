@@ -177,7 +177,7 @@
     display: flex;
     flex-direction: column;
   }
-  .mw-news-data__widget > .mw-card {
+  .mw-news-data__widget > [data-mw-card] {
     flex: 1;
     min-height: 0;
   }

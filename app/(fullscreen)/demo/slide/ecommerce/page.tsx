@@ -7,7 +7,6 @@ export const metadata: Metadata = {
 };
 
 const config = {
-  mode: 'weekly',
   sidebarTitle: '이커머스 주간보고',
   sidebarDate: '2026.04.27 · 4월 4주차',  slides: [
     {

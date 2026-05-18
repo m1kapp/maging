@@ -167,9 +167,9 @@
     if (slideArea) {
       var areaW = slideArea.clientWidth;
       var areaH = slideArea.clientHeight;
-      var fitW = (areaW - 24) / SLIDE_W;   // 12px margin each side
-      var fitH = (areaH - 48) / SLIDE_H;   // 48px for bottom bar
-      var s = Math.min(fitW, fitH, 1);
+      var fitW = (areaW - 16) / SLIDE_W;   // 8px margin each side
+      var fitH = (areaH - 16) / SLIDE_H;   // 8px top/bottom
+      var s = Math.min(fitW, fitH, 1);      // cap at 1x — never zoom beyond native
       if (s < 0.1) s = 1;
       // Margin compensation: after transform:scale, the element still occupies
       // its original layout size. Negative margins shrink the layout box to

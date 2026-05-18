@@ -7,7 +7,6 @@ export const metadata: Metadata = {
 };
 
 const config = {
-  mode: 'pitch',
   sidebarTitle: 'AI 활용 전략',
   sidebarDate: 'Strategy · 2026.05',  slides: [
     {
@@ -316,5 +315,5 @@ const config = {
 };
 
 export default function StrategyPage() {
-  return <MagingPage config={config} fullscreen scripts={['/dist/maging-sidebar.js', '/dist/maging-pitch.js']} />;
+  return <MagingPage config={config} fullscreen scripts={['/dist/maging-sidebar.js', '/dist/maging-weekly.js', '/dist/maging-pitch.js']} />;
 }

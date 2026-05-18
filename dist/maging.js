@@ -16,6 +16,191 @@
   function EC() { return (typeof echarts !== 'undefined') ? echarts : null; }
 
   // ==========================================================
+  // Tailwind class-string constants (BEM → Tailwind)
+  // Theme vars are wrapped in arbitrary-value syntax: [var(--mw-*)]
+  // ==========================================================
+
+  // ── Shared primitives ──
+  // Card base — maging.css [data-mw-card] handles: bg, border, radius, shadow, padding, transition, container-query.
+  // _card is intentionally empty; applyCard() sets data-mw-card for CSS targeting.
+  var _card = '';
+  // data-mw-card: 코어 CSS hover/transition. Tailwind _card로 base 스타일 적용.
+  function applyCard(el) { el.className += ' ' + _card; el.dataset.mwCard = ''; }
+  var _unit = 'text-[0.65em] font-normal text-[var(--mw-text-muted)] ml-[0.1em]';
+  var _muted = 'text-[var(--mw-text-muted)]';
+  var _header = 'flex items-start justify-between gap-2 mb-4 flex-wrap';
+  var _headerTitle = 'text-[length:var(--mw-text-base)] font-semibold text-[var(--mw-text)] m-0';
+  var _headerSub = 'text-[length:var(--mw-text-sm)] text-[var(--mw-text-muted)] mt-[var(--mw-space-0-5)] tracking-[0.005em]';
+
+  // ── Badge ──
+  var _badge = 'inline-flex items-center gap-[var(--mw-space-1)] px-[var(--mw-space-2)] py-[var(--mw-space-0-5)] rounded-full text-[length:var(--mw-text-xs)] font-medium border font-[family-name:var(--mw-font)] leading-[var(--mw-leading-snug)]';
+  var _badgeSuccess = _badge + ' text-[var(--mw-success)] border-[var(--mw-success)] bg-[color-mix(in_srgb,var(--mw-success)_12%,transparent)]';
+  var _badgeWarning = _badge + ' text-[var(--mw-warning)] border-[var(--mw-warning)] bg-[color-mix(in_srgb,var(--mw-warning)_12%,transparent)]';
+  var _badgeDanger = _badge + ' text-[var(--mw-danger)] border-[var(--mw-danger)] bg-[color-mix(in_srgb,var(--mw-danger)_12%,transparent)]';
+  var _badgeMuted = _badge + ' text-[var(--mw-text-muted)] border-[var(--mw-border)] bg-[var(--mw-surface-2)]';
+
+  // ── Progress bar ──
+  var _progress = 'bg-[var(--mw-surface-2)] rounded-full overflow-hidden h-[6px]';
+  var _progressFill = 'h-full bg-[var(--mw-accent)] rounded-full transition-[width] duration-400 ease-out';
+
+  // ── Avatar ──
+  var _avatar = 'w-8 h-8 inline-flex items-center justify-center text-[length:var(--mw-text-sm)] font-semibold bg-[var(--mw-surface-2)] text-[var(--mw-text)] rounded-[var(--mw-radius)] shrink-0';
+  var _avatarTop = 'w-8 h-8 inline-flex items-center justify-center text-[length:var(--mw-text-sm)] font-semibold bg-[var(--mw-accent)] text-white rounded-full shrink-0';
+
+  // ── Live dot ──
+  var _liveDot = 'inline-block w-[6px] h-[6px] bg-[var(--mw-success)] rounded-full align-middle animate-[mw-pulse_2s_infinite]';
+
+  // ── KPI Card ──
+  var _kpiLabel = 'text-[length:var(--mw-text-sm)] text-[var(--mw-text-muted)] tracking-[0.01em]';
+  var _kpiRow = 'flex items-baseline justify-between gap-2 mt-2';
+  var _kpiValue = 'text-[length:var(--mw-text-xl)] font-semibold font-[family-name:var(--mw-display-font)] leading-[var(--mw-leading-tight)] tracking-[-0.01em] [font-variant-numeric:tabular-nums]';
+  var _kpiDelta = 'text-[length:var(--mw-text-sm)] font-medium whitespace-nowrap';
+  var _kpiSpark = 'mt-3 h-9';
+
+  // ── Stat Card (compact KPI) ──
+  var _stat = 'p-[var(--mw-space-2-5)_var(--mw-space-3)]';
+  var _statLabel = 'flex items-center gap-2 text-[length:var(--mw-text-xs)] text-[var(--mw-text-muted)]';
+  var _statIcon = 'text-[length:var(--mw-text-md)] text-[var(--mw-text-muted)]';
+  var _statRow = 'flex items-baseline justify-between mt-1 gap-2';
+  var _statValue = 'text-[length:var(--mw-text-lg)] font-semibold font-[family-name:var(--mw-display-font)] leading-[var(--mw-leading-tight)] tracking-[-0.01em] [font-variant-numeric:tabular-nums]';
+  var _statDelta = 'text-[length:var(--mw-text-xs)] font-medium whitespace-nowrap';
+
+  // ── Hero Tile ──
+  var _hero = 'p-[var(--mw-space-6)] min-h-[200px] flex flex-col';
+  var _heroTop = 'flex items-center justify-between gap-2';
+  var _heroLabel = 'text-[length:var(--mw-text-sm)] text-[var(--mw-text-muted)] uppercase tracking-[0.05em]';
+  var _heroIcon = 'text-[length:var(--mw-text-lg)] text-[var(--mw-text-muted)]';
+  var _heroValue = 'text-[length:var(--mw-text-3xl)] font-bold font-[family-name:var(--mw-display-font)] text-[var(--mw-text)] leading-none mt-2 tracking-[-0.02em]';
+  var _heroRow = 'mt-[var(--mw-space-1-5)]';
+  var _heroDelta = 'text-[length:var(--mw-text-sm)] font-medium';
+  var _heroSpark = 'flex-1 min-h-[44px] mt-3';
+  var _heroContext = 'text-[length:var(--mw-text-xs)] text-[var(--mw-text-muted)] mt-2';
+
+  // ── Ring Progress ──
+  var _ringContext = 'text-center text-[length:var(--mw-text-sm)] text-[var(--mw-text-muted)] mt-[var(--mw-space-1)]';
+
+  // ── Chart body ──
+  var _chartBody = 'w-full';
+
+  // ── Leaderboard ──
+  var _lbList = 'flex flex-col gap-[var(--mw-space-3-5)]';
+  var _lbItem = 'flex items-center gap-3';
+  var _lbBody = 'flex-1 min-w-0';
+  var _lbTop = 'flex items-baseline justify-between gap-2';
+  var _lbName = 'text-[length:var(--mw-text-base)] font-medium overflow-hidden text-ellipsis whitespace-nowrap';
+  var _lbMeta = 'text-[length:var(--mw-text-sm)] text-[var(--mw-text-muted)] whitespace-nowrap';
+  var _lbProgress = 'mt-[var(--mw-space-1-5)]';
+
+  // ── Timeline ──
+  var _timeline = 'flex flex-col';
+  var _tlItem = 'flex gap-[var(--mw-space-3-5)]';
+  var _tlItemNotLast = _tlItem + ' pb-[var(--mw-space-3-5)]';
+  var _tlMarker = 'flex flex-col items-center shrink-0 pt-[5px]';
+  var _tlDot = 'w-2 h-2 rounded-full bg-[var(--mw-border)] border-2 border-[var(--mw-surface)] outline-1 outline-[var(--mw-border)] shrink-0';
+  var _tlLine = 'w-0.5 flex-1 bg-[var(--mw-border)] mt-2 min-h-2';
+  var _tlBody = 'flex-1 min-w-0';
+  var _tlTime = 'text-[length:var(--mw-text-xs)] text-[var(--mw-text-muted)] font-[family-name:var(--mw-mono-font)]';
+  var _tlText = 'text-[length:var(--mw-text-base)] text-[var(--mw-text)] mt-[var(--mw-space-0-5)]';
+
+  // ── Status Grid ──
+  var _statusGrid = 'grid gap-[var(--mw-space-2-5)]';
+  var _statusItem = 'flex items-center gap-2 p-[var(--mw-space-2)_var(--mw-space-2-5)] bg-[var(--mw-surface-2)] rounded-[calc(var(--mw-radius)*0.7)] text-[length:var(--mw-text-sm)] min-w-0';
+  var _statusDot = 'w-2 h-2 rounded-full shrink-0';
+  var _statusLabel = 'text-[var(--mw-text)] flex-1 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap';
+  var _statusValue = 'text-[length:var(--mw-text-xs)] text-[var(--mw-text-muted)] font-[family-name:var(--mw-mono-font)] shrink-0';
+
+  // ── Countdown ──
+  var _cdLabel = 'text-[length:var(--mw-text-base)] text-[var(--mw-text-muted)] mb-[var(--mw-space-1)]';
+  var _cdBody = 'flex gap-5 items-baseline my-[var(--mw-space-2)_0_var(--mw-space-3)]';
+  var _cdUnit = 'flex flex-col';
+  var _cdNum = 'text-[length:var(--mw-text-2xl)] font-bold font-[family-name:var(--mw-display-font)] leading-none text-[var(--mw-text)] tracking-[-0.02em] [font-variant-numeric:tabular-nums]';
+  var _cdLbl = 'text-[length:var(--mw-text-xs)] text-[var(--mw-text-muted)] font-[family-name:var(--mw-mono-font)] uppercase tracking-[0.08em] mt-[var(--mw-space-1)]';
+  var _cdContext = 'text-[length:var(--mw-text-sm)] text-[var(--mw-text-muted)] mt-[var(--mw-space-1)]';
+
+  // ── Metric Stack ──
+  var _mstack = 'p-5';
+  var _mstackTitle = 'text-[length:var(--mw-text-xs)] text-[var(--mw-text-muted)] mb-[var(--mw-space-0-5)]';
+  var _mstackMainRow = 'flex items-baseline justify-between gap-2 mt-[var(--mw-space-0-5)]';
+  var _mstackMainVal = 'text-[length:var(--mw-text-xl)] font-bold font-[family-name:var(--mw-display-font)] text-[var(--mw-text)] leading-none tracking-[-0.02em] [font-variant-numeric:tabular-nums]';
+  var _mstackDelta = 'text-[length:var(--mw-text-sm)] font-medium whitespace-nowrap';
+  var _mstackMainLbl = 'text-[length:var(--mw-text-sm)] text-[var(--mw-text-muted)] mt-[var(--mw-space-1)]';
+  var _mstackSubRow = 'grid grid-cols-2 gap-x-3 gap-y-[var(--mw-space-1-5)] mt-[var(--mw-space-2-5)] pt-2 border-t border-[var(--mw-border)]';
+  var _mstackSubVal = 'text-[length:var(--mw-text-md)] font-semibold font-[family-name:var(--mw-display-font)] text-[var(--mw-text)] leading-[var(--mw-leading-tight)]';
+  var _mstackSubLbl = 'text-[length:var(--mw-text-xs)] text-[var(--mw-text-muted)] mt-[var(--mw-space-0-5)]';
+
+  // ── Inbox Preview ──
+  var _inbox = 'flex flex-col';
+  var _inboxItem = 'flex items-center gap-[var(--mw-space-2-5)] py-2 border-b border-dashed border-[var(--mw-border)]';
+  var _inboxItemLast = 'flex items-center gap-[var(--mw-space-2-5)] py-2 border-b-0';
+  var _inboxIcon = 'w-[26px] h-[26px] flex items-center justify-center rounded-full bg-[var(--mw-surface-2)] text-[var(--mw-text-muted)] text-[length:var(--mw-text-base)] shrink-0';
+  var _inboxBody = 'flex-1 min-w-0';
+  var _inboxText = 'text-[length:var(--mw-text-base)] text-[var(--mw-text)] overflow-hidden text-ellipsis whitespace-nowrap';
+  var _inboxTime = 'text-[length:var(--mw-text-xs)] text-[var(--mw-text-muted)] font-[family-name:var(--mw-mono-font)] whitespace-nowrap shrink-0';
+
+  // ── Compare Card ──
+  var _compareRow = 'flex items-center justify-between gap-4 mt-2';
+  var _compareSide = 'flex-1 min-w-0';
+  var _compareLbl = 'text-[length:var(--mw-text-xs)] text-[var(--mw-text-muted)]';
+  var _compareVal = 'text-[length:var(--mw-text-xl)] font-bold font-[family-name:var(--mw-display-font)] text-[var(--mw-text)] leading-[var(--mw-leading-tight)] mt-[var(--mw-space-1)] tracking-[-0.01em] [font-variant-numeric:tabular-nums]';
+  var _compareSep = 'text-[length:var(--mw-text-lg)] text-[var(--mw-text-muted)] shrink-0';
+  var _compareDelta = 'mt-[var(--mw-space-3-5)] text-[length:var(--mw-text-base)] font-medium';
+  var _compareDeltaLbl = 'text-[var(--mw-text-muted)] font-normal ml-[var(--mw-space-1)]';
+
+  // ── Activity Table ──
+  var _tableWrap = 'w-full overflow-x-auto';
+  var _table = 'w-full border-collapse text-[length:var(--mw-text-base)] font-[family-name:var(--mw-font)]';
+  var _tableTh = 'text-[length:var(--mw-text-sm)] font-normal text-[var(--mw-text-muted)] text-left p-2 border-b border-[var(--mw-border)]';
+  var _tableTd = 'p-[var(--mw-space-2-5)_var(--mw-space-2)] border-b border-[var(--mw-border)] text-[var(--mw-text)]';
+  var _tableRight = 'text-right [font-variant-numeric:tabular-nums]';
+
+  // ── Page Header ──
+  var _pageHead = '';
+  var _pageHeadKicker = 'text-[length:var(--mw-text-xs)] text-[var(--mw-text-muted)] uppercase tracking-[0.08em] font-medium font-[family-name:var(--mw-mono-font)]';
+  var _pageHeadTitle = 'text-[length:var(--mw-text-xl)] font-bold text-[var(--mw-text)] tracking-[-0.015em] leading-[var(--mw-leading-tight)] mt-[var(--mw-space-1)]';
+  var _pageHeadMeta = 'text-[length:var(--mw-text-sm)] text-[var(--mw-text-muted)] mt-[var(--mw-space-1-5)]';
+
+  // ── Section Head ──
+  var _secHeadKicker = 'text-[length:var(--mw-text-xs)] text-[var(--mw-text-muted)] uppercase tracking-[0.06em] font-medium';
+  var _secHeadTitle = 'text-[length:var(--mw-text-lg)] font-semibold text-[var(--mw-text)] tracking-[-0.01em] mt-[var(--mw-space-0-5)]';
+
+  // ── Alert Banner ──
+  var _alertBanner = 'flex items-start gap-[var(--mw-space-2-5)] p-[var(--mw-space-3)_var(--mw-space-4)] rounded-[var(--mw-radius)] text-[length:var(--mw-text-sm)] leading-[var(--mw-leading-snug)]';
+
+  // ── RAG Chip ──
+  var _rag = 'inline-flex items-center gap-[var(--mw-space-1-5)] py-[3px] px-[10px] rounded-full text-[length:var(--mw-text-xs)] font-medium bg-[var(--mw-surface-2)] text-[var(--mw-text)] leading-[var(--mw-leading-snug)] tracking-[0.005em]';
+  var _ragDot = 'w-[6px] h-[6px] rounded-full shrink-0 bg-[var(--mw-text-muted)]';
+  var _ragLbl = '[font-variant-numeric:tabular-nums]';
+
+  // ── Share Bar ──
+  var _sharebar = 'flex rounded-[var(--mw-radius)] overflow-hidden [font-variant-numeric:tabular-nums]';
+  var _sharebarSeg = 'flex items-center justify-center text-white font-semibold text-[length:var(--mw-text-sm)] tracking-[-0.01em] whitespace-nowrap overflow-hidden leading-none';
+  var _sharebarLegend = 'flex flex-wrap gap-4 mt-2';
+  var _sharebarLegItem = 'inline-flex items-center gap-[6px] text-[length:var(--mw-text-xs)] text-[var(--mw-text)]';
+  var _sharebarLegDot = 'w-2 h-2 rounded-full bg-[var(--mw-text-muted)] shrink-0';
+  var _sharebarLegSub = 'text-[var(--mw-text-muted)] ml-1';
+
+  // ── Insight Card ──
+  var _insight = 'border-l-[3px] border-l-[var(--mw-insight-bar,var(--mw-border))] p-4 flex flex-col gap-3';
+  var _insightHead = 'flex items-center gap-2 flex-wrap';
+  var _insightIcon = 'text-[1.1rem] leading-none';
+  var _insightTitle = 'text-[length:var(--mw-text-md)] font-semibold text-[var(--mw-text)] tracking-[-0.005em] flex-1 min-w-0';
+  var _insightMeta = 'text-[length:var(--mw-text-xs)] text-[var(--mw-text-muted)] font-medium [font-variant-numeric:tabular-nums]';
+  var _insightTag = 'text-[10px] py-[2px] px-2 rounded-full bg-[var(--mw-surface-2)] text-[var(--mw-text-muted)] font-medium tracking-[0.02em]';
+  var _insightBullets = 'list-none m-0 p-0 flex flex-col gap-[var(--mw-space-1-5)]';
+  var _insightBullet = 'text-[length:var(--mw-text-sm)] text-[var(--mw-text)] leading-[var(--mw-leading-snug)] pl-3 relative';
+  var _insightHighlight = 'flex items-start gap-2 mt-[var(--mw-space-1)] p-[var(--mw-space-2-5)_var(--mw-space-3)] rounded-[var(--mw-radius)] bg-[var(--mw-surface-2)] text-[length:var(--mw-text-xs)] text-[var(--mw-text)] leading-[var(--mw-leading-snug)]';
+  var _insightHlIcon = 'text-[0.95rem] leading-none shrink-0';
+
+  // ── Def Card ──
+  // (uses inline styles primarily, minimal BEM)
+
+  // ── Sparkline List ──
+  // (uses inline styles + _kpiDelta pattern)
+
+  // ── Goal Grid ──
+  // (uses _progress + inline styles)
+
+  // ==========================================================
   // Helpers
   // ==========================================================
   function q(sel) {
@@ -129,9 +314,9 @@
     title = toStr(title); subtitle = toStr(subtitle);
     if (!title && !subtitle && !rightHTML) return '';
     var left = '';
-    if (title)    left += '<h3 class="mw-header__title">' + escapeHTML(title) + '</h3>';
-    if (subtitle) left += '<div class="mw-header__subtitle">' + escapeHTML(subtitle) + '</div>';
-    return '<div class="mw-header"><div>' + left + '</div>' + (rightHTML || '') + '</div>';
+    if (title)    left += '<h3 class="' + _headerTitle + '">' + escapeHTML(title) + '</h3>';
+    if (subtitle) left += '<div class="' + _headerSub + '">' + escapeHTML(subtitle) + '</div>';
+    return '<div class="' + _header + '"><div>' + left + '</div>' + (rightHTML || '') + '</div>';
   }
 
   // ==========================================================
@@ -157,7 +342,7 @@
     // badge — top-right tag (LIVE, NEW, Q2, etc.)
     if (data.badge) {
       var bdg = document.createElement('div');
-      bdg.className = 'mw-badge--floating';
+      bdg.dataset.role = 'badge';
       bdg.textContent = data.badge;
       bdg.style.cssText = 'position:absolute;top:0.5rem;right:0.5rem;font-size:0.6rem;font-weight:600;font-family:var(--mw-mono-font);padding:0.15rem 0.45rem;border-radius:999px;background:color-mix(in srgb,var(--mw-accent) 12%,transparent);color:var(--mw-accent);letter-spacing:0.03em;text-transform:uppercase;z-index:2;';
       el.style.position = el.style.position || 'relative';
@@ -166,7 +351,7 @@
     // note — bottom footnote text
     if (data.note) {
       var nt = document.createElement('div');
-      nt.className = 'mw-note';
+      nt.dataset.role = 'note';
       nt.textContent = data.note;
       nt.style.cssText = 'font-size:0.65rem;color:var(--mw-text-muted);margin-top:0.625rem;padding-top:0.5rem;border-top:1px dashed var(--mw-border);font-family:var(--mw-font);';
       el.appendChild(nt);
@@ -174,7 +359,7 @@
     // html — inject custom HTML at the bottom of the widget
     if (data.html) {
       var wrap = document.createElement('div');
-      wrap.className = 'mw-custom-html';
+      wrap.dataset.role = 'custom-html';
       wrap.innerHTML = data.html;
       el.appendChild(wrap);
     }
@@ -280,7 +465,7 @@
   // ==========================================================
   // Formatters
   // ==========================================================
-  var U = '<span class="mw-unit">';
+  var U = '<span class="' + _unit + '">';
   var UE = '</span>';
   var fmt = {
     krw: function (n) {
@@ -333,14 +518,14 @@
     var ro = null;
 
     function render() {
-      el.classList.add('mw-card');
+      applyCard(el);
       el.style.minHeight = data.height + 'px';
       var extra = extraHTMLFn ? extraHTMLFn(data) : '';
       el.innerHTML = headerHTML(data.title, data.subtitle) +
-        '<div class="mw-chart__body"></div>' +
+        '<div data-mw-chart data-role="chart-body" class="' + _chartBody + '"></div>' +
         extra;
       if (!EC()) return;
-      var body = el.querySelector('.mw-chart__body');
+      var body = el.querySelector('[data-mw-chart]');
       if (chart) chart.dispose();
       chart = EC().init(body, null, { renderer: 'svg' });
       var c = getColors();
@@ -403,11 +588,11 @@
 
     function render() {
       var c = getColors();
-      el.classList.add('mw-card', 'mw-kpi');
+      applyCard(el);
+      el.dataset.mwCq = 'kpi';
       // Auto-compact: if no sparkline, use compact to avoid wasted vertical space
       var hasSpark = data.sparkline && data.sparkline.length;
       var autoCompact = data.compact || !hasSpark;
-      el.classList.toggle('mw-kpi--compact', !!autoCompact);
       var deltaHTML = '';
       if (data.delta != null && !isNaN(data.delta)) {
         var goodWhenNeg = data.deltaGoodWhen === 'negative';
@@ -416,24 +601,24 @@
         var abs = Math.abs(Number(data.delta));
         var prec = abs > 0 && abs < 1 ? 2 : 1;
         var suffix = data.deltaSuffix || '%';
-        deltaHTML = '<div class="mw-kpi__delta mw-kpi__delta--' + (good ? 'good' : 'bad') + '">' +
+        deltaHTML = '<div data-role="delta" class="' + _kpiDelta + (good ? ' text-[var(--mw-success)]' : ' text-[var(--mw-danger)]') + '">' +
           arrow + ' ' + abs.toFixed(prec) + suffix + '</div>';
       }
-      var iconHTML = data.icon ? '<span class="mw-kpi__icon">' + escapeHTML(data.icon) + '</span>' : '';
+      var iconHTML = data.icon ? '<span class="text-[length:var(--mw-text-lg)] text-[var(--mw-text-muted)]">' + escapeHTML(data.icon) + '</span>' : '';
       var showSpark = !autoCompact && hasSpark;
       el.innerHTML =
-        '<div class="mw-kpi__label">' + iconHTML + '<span>' + escapeHTML(data.label) + '</span></div>' +
-        '<div class="mw-kpi__row">' +
-          '<div class="mw-kpi__value">' + (data.valueHTML || (typeof data.value === 'string' && data.value.indexOf('<') >= 0) ? data.value : escapeHTML(data.value)) + '</div>' +
+        '<div data-role="label" class="' + _kpiLabel + '">' + iconHTML + '<span>' + escapeHTML(data.label) + '</span></div>' +
+        '<div data-role="row" class="' + _kpiRow + '">' +
+          '<div data-role="value" class="' + _kpiValue + '" data-mw-val>' + (data.valueHTML || (typeof data.value === 'string' && data.value.indexOf('<') >= 0) ? data.value : escapeHTML(data.value)) + '</div>' +
           deltaHTML +
         '</div>' +
-        (showSpark ? '<div class="mw-kpi__spark"></div>' +
-          (data.sparkLabel ? '<div class="mw-kpi__spark-label">' + escapeHTML(data.sparkLabel) + '</div>' : '')
+        (showSpark ? '<div data-role="spark" class="' + _kpiSpark + '" data-mw-spark></div>' +
+          (data.sparkLabel ? '<div data-role="spark-label">' + escapeHTML(data.sparkLabel) + '</div>' : '')
          : '');
       if (chart) { chart.dispose(); chart = null; }
       if (ro) { ro.disconnect(); ro = null; }
       if (EC() && showSpark) {
-        var spark = el.querySelector('.mw-kpi__spark');
+        var spark = el.querySelector('[data-mw-spark]');
         var sparkOpt = {
           grid: { top: 2, right: 2, bottom: 2, left: 2 },
           xAxis: { type: 'category', show: false, data: data.sparkline.map(function (_, i) { return i; }) },
@@ -484,331 +669,6 @@
     };
     return register(handle);
   }
-
-  // ==========================================================
-  // Widget: Line Chart
-  // ==========================================================
-  function lineChart(el, config) {
-    return _chartBase(el, config, {
-      categories: [], series: [],
-      stack: false, area: true,
-      yFormatter: null,
-      yMin: null, yMax: null,
-    }, 'line-chart', function (data, c, palette) {
-      var series = data.series.map(function (s, i) {
-        var col = s.color || palette[i % palette.length];
-        return {
-          name: s.name,
-          type: 'line',
-          stack: data.stack ? 'total' : undefined,
-          smooth: 0.3,
-          symbol: 'circle',
-          symbolSize: 3,
-          showSymbol: false,
-          emphasis: { disabled: true },
-          data: s.data,
-          lineStyle: { color: col, width: 1.5 },
-          itemStyle: { color: col, borderColor: c.surface, borderWidth: 1 },
-          connectNulls: true,
-          areaStyle: data.area ? {
-            color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
-              colorStops: [
-                { offset: 0, color: withAlpha(col, 0.33) },
-                { offset: 1, color: withAlpha(col, 0.03) },
-              ] },
-          } : undefined,
-        };
-      });
-      return {
-        textStyle: { fontFamily: c.font, color: c.text },
-        grid: { top: data.series.length > 1 ? 32 : 14, right: 16, bottom: 28, left: 52 },
-        legend: data.series.length > 1 ? {
-          top: 0, right: 0,
-          textStyle: { color: c.muted, fontFamily: c.font, fontSize: 11 },
-          icon: 'circle', itemWidth: 6, itemHeight: 6, itemGap: 14,
-          data: data.series.map(function (s) { return s.name; }),
-        } : { show: false },
-        tooltip: Object.assign({ trigger: 'axis', axisPointer: { type: 'line', lineStyle: { color: c.border, type: 'dashed' } } }, baseTooltip(c),
-          data.yFormatter ? { valueFormatter: function(v) { return v == null ? '-' : data.yFormatter(v); } } : { valueFormatter: function(v) { return v == null ? '-' : v; } }),
-        xAxis: {
-          type: 'category',
-          data: data.categories,
-          axisLine: { lineStyle: { color: c.border, width: 1 } },
-          axisTick: { show: false },
-          axisLabel: { color: c.muted, fontSize: 11, fontFamily: c.font, margin: 10 },
-        },
-        yAxis: {
-          type: 'value',
-          min: data.yMin != null ? data.yMin : undefined,
-          max: data.yMax != null ? data.yMax : undefined,
-          axisLine: { show: false },
-          axisTick: { show: false },
-          axisLabel: Object.assign({ color: c.muted, fontSize: 10, fontFamily: c.mono, margin: 8 },
-            data.yFormatter ? { formatter: plainFmt(data.yFormatter) } : {}),
-          splitLine: { lineStyle: { color: c.border, type: [4, 4], opacity: 0.6 } },
-        },
-        series: series,
-      };
-    });
-  }
-
-  // ==========================================================
-  // Widget: Bar Chart (horizontal by default)
-  // ==========================================================
-  function barChart(el, config) {
-    return _chartBase(el, config, {
-      items: [], horizontal: true,
-      categories: [], series: [], stack: false,
-      yFormatter: null, showLabels: true,
-    }, 'bar-chart', function (data, c, palette) {
-      // ── Multi-series mode (categories + series, vertical, optional stack) ──
-      if (data.series && data.series.length > 0) {
-        var multi = data.series.map(function (s, i) {
-          var col = s.color || palette[i % palette.length];
-          return {
-            name: s.name,
-            type: 'bar',
-            stack: data.stack ? 'total' : undefined,
-            data: s.data,
-            barWidth: data.stack ? '54%' : undefined,
-            itemStyle: {
-              color: col,
-              borderRadius: data.stack ? 0 : [3, 3, 0, 0],
-            },
-            emphasis: { disabled: true },
-          };
-        });
-        return {
-          textStyle: { fontFamily: c.font, color: c.text },
-          grid: { top: data.series.length > 1 ? 32 : 14, right: 16, bottom: 28, left: 52 },
-          legend: data.series.length > 1 ? {
-            top: 0, right: 0,
-            textStyle: { color: c.muted, fontFamily: c.font, fontSize: 11 },
-            icon: 'circle', itemWidth: 6, itemHeight: 6, itemGap: 14,
-            data: data.series.map(function (s) { return s.name; }),
-          } : { show: false },
-          tooltip: Object.assign({ trigger: 'axis', axisPointer: { type: 'shadow' } },
-            baseTooltip(c), data.yFormatter ? { valueFormatter: data.yFormatter } : {}),
-          xAxis: {
-            type: 'category', data: data.categories,
-            axisLine: { lineStyle: { color: c.border, width: 1 } }, axisTick: { show: false },
-            axisLabel: { color: c.muted, fontSize: 11, fontFamily: c.font, margin: 10 },
-          },
-          yAxis: {
-            type: 'value',
-            axisLine: { show: false }, axisTick: { show: false },
-            axisLabel: Object.assign(
-              { color: c.muted, fontSize: 10, fontFamily: c.mono, margin: 8 },
-              data.yFormatter ? { formatter: plainFmt(data.yFormatter) } : {}
-            ),
-            splitLine: { lineStyle: { color: c.border, type: [4, 4], opacity: 0.6 } },
-          },
-          series: multi,
-        };
-      }
-      // ── Single-series mode (items, horizontal/vertical) ──
-      var labels = data.items.map(function (i) { return i.label; });
-      var values = data.items.map(function (i) { return i.value; });
-      var tipFmt = data.yFormatter || undefined;
-      if (data.horizontal) {
-        return {
-          textStyle: { fontFamily: c.font, color: c.text },
-          grid: { top: 8, right: data.showLabels ? 72 : 14, bottom: 8, left: 8, containLabel: true },
-          tooltip: Object.assign({ trigger: 'axis', axisPointer: { type: 'shadow' } },
-            baseTooltip(c), tipFmt ? { valueFormatter: tipFmt } : {}),
-          xAxis: { type: 'value', show: false },
-          yAxis: {
-            type: 'category',
-            data: labels.slice().reverse(),
-            axisLine: { show: false }, axisTick: { show: false },
-            axisLabel: { color: c.text, fontFamily: c.font, fontSize: 12, margin: 10 },
-          },
-          series: [{
-            type: 'bar',
-            data: (function () {
-              var rev = values.slice().reverse();
-              var pal = buildPalette(c, rev.length);
-              return rev.map(function (v, i) {
-                return { value: v, itemStyle: { color: pal[rev.length - 1 - i], borderRadius: [0, 4, 4, 0] } };
-              });
-            })(),
-            barWidth: '58%',
-            label: data.showLabels ? {
-              show: true, position: 'right',
-              color: c.muted, fontFamily: c.font, fontSize: 11,
-              formatter: function (p) { return tipFmt ? stripHTML(tipFmt(p.value)) : safeNum(p.value); },
-            } : { show: false },
-          }],
-        };
-      }
-      return {
-        textStyle: { fontFamily: c.font, color: c.text },
-        grid: { top: 14, right: 14, bottom: 28, left: 54 },
-        tooltip: Object.assign({ trigger: 'axis', axisPointer: { type: 'shadow' } },
-          baseTooltip(c), tipFmt ? { valueFormatter: tipFmt } : {}),
-        xAxis: {
-          type: 'category', data: labels,
-          axisLine: { lineStyle: { color: c.border, width: 1 } }, axisTick: { show: false },
-          axisLabel: { color: c.muted, fontSize: 11, fontFamily: c.font, margin: 10 },
-        },
-        yAxis: {
-          type: 'value',
-          axisLine: { show: false }, axisTick: { show: false },
-          axisLabel: Object.assign({ color: c.muted, fontSize: 10, fontFamily: c.mono, margin: 8 }, tipFmt ? { formatter: plainFmt(tipFmt) } : {}),
-          splitLine: { lineStyle: { color: c.border, type: [4, 4], opacity: 0.6 } },
-        },
-        series: [{
-          type: 'bar', barWidth: '50%',
-          data: values.map(function (v, i) {
-            var pal = buildPalette(c, values.length);
-            return { value: v, itemStyle: { color: pal[i], borderRadius: [4, 4, 0, 0] } };
-          }),
-        }],
-      };
-    });
-  }
-
-  // ==========================================================
-  // Widget: Funnel (ECharts trapezoid — single hue + conversion labels)
-  // ==========================================================
-  function funnelChart(el, config) {
-    return _chartBase(el, config, {
-      stages: [], valueSuffix: '',
-    }, 'funnel-chart', function (data, c) {
-      var stages = data.stages || [];
-      return {
-        textStyle: { fontFamily: c.font },
-        tooltip: Object.assign({}, baseTooltip(c), {
-          formatter: function (p) { return escapeHTML(p.name) + ': ' + safeNum(p.value) + (data.valueSuffix || ''); }
-        }),
-        series: [{
-          type: 'funnel',
-          left: 80, right: 80, top: 6, bottom: 6,
-          min: 0, sort: 'descending', gap: 3,
-          label: {
-            show: true, position: 'right',
-            fontFamily: c.font, fontSize: 11, color: c.muted,
-            formatter: function (p) {
-              var i = -1;
-              for (var k = 0; k < stages.length; k++) { if (stages[k].label === p.name) { i = k; break; } }
-              var line = escapeHTML(p.name) + '  ' + safeNum(p.value) + (data.valueSuffix || '');
-              if (i > 0) {
-                var prev = stages[i - 1].value;
-                var rate = prev > 0 ? (p.value / prev * 100).toFixed(1) : '0.0';
-                line += '  (' + rate + '%)';
-              }
-              return line;
-            },
-          },
-          labelLine: { show: true, length: 12, lineStyle: { color: c.border } },
-          itemStyle: { borderColor: c.surface, borderWidth: 1 },
-          data: stages.map(function (s, i) {
-            var opacity = stages.length > 1 ? (1 - i * 0.5 / (stages.length - 1)) : 1;
-            return {
-              name: s.label, value: s.value,
-              itemStyle: { color: c.accent, opacity: opacity },
-            };
-          }),
-        }],
-      };
-    });
-  }
-
-  // ==========================================================
-  // Widget: Donut
-  // ==========================================================
-  function donutChart(el, config) {
-    return _chartBase(el, config, {
-      slices: [],
-      centerLabel: '합계', centerValue: null,
-    }, 'donut-chart', function (data, c, palette, size) {
-      // Auto-group: if >5 slices, merge smallest into "기타"
-      if (data.slices.length > 5) {
-        var sorted = data.slices.slice().sort(function (a, b) { return (b.value || 0) - (a.value || 0); });
-        var top = sorted.slice(0, 4);
-        var rest = sorted.slice(4);
-        var restSum = rest.reduce(function (s, x) { return s + (x.value || 0); }, 0);
-        data.slices = top.concat([{ label: '기타', value: restSum }]);
-      }
-      var total = data.slices.reduce(function (s, x) { return s + (x.value || 0); }, 0);
-      // Auto-normalize: if slices look like percentages but don't sum to 100, fix them
-      if (total > 0 && total !== 100 && data.slices.every(function(s) { return s.value <= 100; }) && total > 80 && total < 120) {
-        var factor = 100 / total;
-        data.slices.forEach(function(s) { s.value = Math.round(s.value * factor * 10) / 10; });
-        total = 100;
-      }
-      var centerVal = data.centerValue != null ? String(data.centerValue).replace(/<[^>]*>/g, '') : safeNum(total);
-      var w = size.width || 300;
-      var h = size.height || 200;
-      var narrow = w < 320;
-      var legendFmt = function (name) {
-        var s = data.slices.find(function (x) { return x.label === name; });
-        if (!s) return name;
-        var pct = total > 0 ? (s.value / total * 100).toFixed(0) : 0;
-        return name + '  ' + pct + '%';
-      };
-      var legend, pieCenter, pieRadius;
-      if (narrow) {
-        // Vertical layout: chart top, legend bottom (wrap, no scroll)
-        var legendH = Math.ceil(data.slices.length / 2) * 20 + 8;
-        var chartH = h - legendH - 10;
-        var r = Math.min(w, chartH) * 0.38;
-        pieCenter = ['50%', chartH / 2];
-        pieRadius = [r * 0.68, r];
-        legend = {
-          orient: 'horizontal', bottom: 0, left: 'center',
-          textStyle: { color: c.muted, fontFamily: c.font, fontSize: 10 },
-          icon: 'circle', itemWidth: 6, itemHeight: 6, itemGap: 8,
-          formatter: legendFmt,
-        };
-      } else {
-        // Horizontal layout: chart left, legend right
-        var dim = Math.min(w, h);
-        var legendW = 110;
-        var chartW = w - legendW;
-        var cx = Math.max(chartW / 2, dim * 0.35);
-        var outerR = Math.min(dim * 0.42, chartW * 0.45);
-        pieCenter = [cx, '50%'];
-        pieRadius = [outerR * 0.68, outerR];
-        legend = {
-          orient: 'vertical', right: 12, top: 'middle',
-          textStyle: { color: c.muted, fontFamily: c.font, fontSize: 11 },
-          icon: 'circle', itemWidth: 6, itemHeight: 6, itemGap: 10,
-          type: 'scroll', formatter: legendFmt,
-        };
-      }
-      return {
-        textStyle: { fontFamily: c.font },
-        tooltip: baseTooltip(c),
-        legend: legend,
-        series: [{
-          type: 'pie',
-          radius: pieRadius,
-          center: pieCenter,
-          avoidLabelOverlap: false,
-          label: {
-            show: true, position: 'center',
-            formatter: '{n|' + centerVal + '}\n{l|' + data.centerLabel + '}',
-            rich: {
-              n: { fontSize: 18, fontWeight: 600, color: c.text, lineHeight: 22, fontFamily: c.font },
-              l: { fontSize: 11, color: c.muted, fontFamily: c.font },
-            },
-          },
-          labelLine: { show: false },
-          data: (function () {
-            var pal = buildPalette(c, data.slices.length);
-            return data.slices.map(function (s, i) {
-              return {
-                name: s.label, value: s.value,
-                itemStyle: { color: s.color || pal[i], borderColor: c.surface, borderWidth: 2 },
-              };
-            });
-          })(),
-        }],
-      };
-    });
-  }
-
   // ==========================================================
   // Widget: Leaderboard (HTML, no chart)
   // ==========================================================
@@ -818,7 +678,7 @@
     var data = Object.assign({ title: '', subtitle: '', items: [] }, config || {});
 
     function render() {
-      el.classList.add('mw-card');
+      applyCard(el);
       var c = getColors();
       var pal = buildPalette(c, (data.items || []).length);
       var list = (data.items || []).slice(0, 100).map(function (it, i) {
@@ -826,20 +686,20 @@
         var meta = it.meta != null ? it.meta : (it.percent + '%');
         var barColor = it.color || pal[i % pal.length];
         return '' +
-          '<div class="mw-lb__item">' +
-            '<div class="mw-avatar ' + (i === 0 ? 'mw-avatar--top' : '') + '" style="background:' + barColor + '">' + escapeHTML(initial) + '</div>' +
-            '<div class="mw-lb__body">' +
-              '<div class="mw-lb__top">' +
-                '<div class="mw-lb__name">' + escapeHTML(it.name || '') + '</div>' +
-                '<div class="mw-lb__meta">' + escapeHTML(meta) + '</div>' +
+          '<div data-role="item" class="' + _lbItem + '">' +
+            '<div class="' + (i === 0 ? _avatarTop : _avatar) + '" style="background:' + barColor + '">' + escapeHTML(initial) + '</div>' +
+            '<div data-role="body" class="' + _lbBody + '">' +
+              '<div data-role="top" class="' + _lbTop + '">' +
+                '<div data-role="name" class="' + _lbName + '">' + escapeHTML(it.name || '') + '</div>' +
+                '<div data-role="meta" class="' + _lbMeta + '">' + escapeHTML(meta) + '</div>' +
               '</div>' +
-              '<div class="mw-progress mw-lb__progress">' +
-                '<div class="mw-progress__fill" style="width:' + (it.percent || 0) + '%;background:' + barColor + '"></div>' +
+              '<div data-role="progress" class="' + _progress + ' ' + _lbProgress + '">' +
+                '<div class="' + _progressFill + '" style="width:' + (it.percent || 0) + '%;background:' + barColor + '"></div>' +
               '</div>' +
             '</div>' +
           '</div>';
       }).join('');
-      el.innerHTML = headerHTML(data.title, data.subtitle) + '<div class="mw-lb__list">' + list + '</div>';
+      el.innerHTML = headerHTML(data.title, data.subtitle) + '<div data-mw-list data-role="list" class="' + _lbList + '">' + list + '</div>';
       _applyCommon(el, data);
     }
     render();
@@ -869,16 +729,15 @@
     }
 
     function alignCls(align) {
-      if (align === 'right')  return ' class="mw-table__right"';
-      if (align === 'center') return ' class="mw-table__center"';
+      if (align === 'right')  return ' class="' + _tableRight + '"';
+      if (align === 'center') return ' class="text-center"';
       return '';
     }
 
     function render() {
-      el.classList.add('mw-card');
-      if (data.striped) el.classList.add('mw-table--striped');
+      applyCard(el);
       var rightEl = data.live
-        ? '<span class="mw-badge mw-badge--muted"><span class="mw-live-dot" style="margin:0 0.25rem 0 0"></span>LIVE</span>'
+        ? '<span class="' + _badgeMuted + '"><span class="' + _liveDot + '" style="margin:0 0.25rem 0 0"></span>LIVE</span>'
         : '';
       var colgroup = '';
       if (data.columns.some(function (c) { return c.width; })) {
@@ -887,32 +746,35 @@
         }).join('') + '</colgroup>';
       }
       var ths = data.columns.map(function (col) {
-        return '<th' + alignCls(col.align) + '>' + escapeHTML(col.label) + '</th>';
+        return '<th' + alignCls(col.align) + ' class="' + _tableTh + (col.align === 'right' ? ' ' + _tableRight : '') + '">' + escapeHTML(col.label) + '</th>';
       }).join('');
       var theadHtml;
       if (data.headerGroups && data.headerGroups.length) {
         var groupRow = data.headerGroups.map(function (g) {
-          var cls = (g.align === 'right' ? 'mw-table__right ' : g.align === 'center' ? 'mw-table__center ' : '') + 'mw-table__group';
+          var cls = (g.align === 'right' ? _tableRight + ' ' : g.align === 'center' ? 'text-center ' : '') + 'font-medium text-[length:var(--mw-text-xs)] text-[var(--mw-text-muted)] border-b border-[var(--mw-border)] p-2';
           return '<th class="' + cls + '" colspan="' + (g.span || 1) + '">' + escapeHTML(g.label) + '</th>';
         }).join('');
-        theadHtml = '<thead><tr class="mw-table__group-row">' + groupRow + '</tr><tr>' + ths + '</tr></thead>';
+        theadHtml = '<thead><tr>' + groupRow + '</tr><tr>' + ths + '</tr></thead>';
       } else {
         theadHtml = '<thead><tr>' + ths + '</tr></thead>';
       }
-      var trs = (data.rows || []).slice(0, 100).map(function (row) {
+      var allRows = (data.rows || []).slice(0, 100);
+      var trs = allRows.map(function (row, ri) {
         var tds = data.columns.map(function (col) {
           var v = row[col.key];
           var content;
           if (typeof col.render === 'function') {
             try { content = col.render(v, row); } catch (e) { content = v == null ? '' : _valOrEsc(String(v)); }
           } else content = v == null ? '' : _valOrEsc(String(v));
-          return '<td' + alignCls(col.align) + '>' + content + '</td>';
+          var tdCls = _tableTd + (col.align === 'right' ? ' ' + _tableRight : '');
+          if (ri === allRows.length - 1) tdCls += ' border-b-0';
+          return '<td class="' + tdCls + '">' + content + '</td>';
         }).join('');
-        return '<tr>' + tds + '</tr>';
+        return '<tr class="hover:bg-[var(--mw-surface-2)]">' + tds + '</tr>';
       }).join('');
       var tableStyle = data.fixedLayout ? ' style="table-layout:fixed"' : '';
       el.innerHTML = headerHTML(data.title, data.subtitle, rightEl) +
-        '<div class="mw-table__wrap"><table class="mw-table"' + tableStyle + '>' +
+        '<div data-mw-list data-role="table-wrap" class="' + _tableWrap + '"><table data-role="table" class="' + _table + '"' + tableStyle + '>' +
         colgroup + theadHtml + '<tbody>' + trs + '</tbody></table></div>';
       _applyCommon(el, data);
     }
@@ -925,334 +787,6 @@
     };
     return register(handle);
   }
-
-  // ==========================================================
-  // Widget: Heatmap Chart (day × hour, calendar grid, etc.)
-  // ==========================================================
-  function heatmapChart(el, config) {
-    return _chartBase(el, config, {
-      xAxis: [], yAxis: [],
-      values: null, matrix: null,
-      max: null,
-      tooltipFormatter: null,
-    }, 'heatmap-chart', function (data, c) {
-      var flat;
-      if (data.matrix) {
-        flat = [];
-        data.matrix.forEach(function (row, yi) {
-          row.forEach(function (v, xi) { flat.push([xi, yi, v]); });
-        });
-      } else {
-        flat = data.values || [];
-      }
-      var maxVal = data.max != null ? data.max : flat.reduce(function (m, v) {
-        return Math.max(m, v[2] || 0);
-      }, 1);
-      return {
-        textStyle: { fontFamily: c.font, color: c.text },
-        grid: { top: 14, right: 18, bottom: 22, left: 48 },
-        tooltip: Object.assign({
-          position: 'top',
-          formatter: data.tooltipFormatter || function (p) {
-            var vf = data.valueFormatter || safeNum;
-            return (data.yAxis[p.value[1]] || '') + ' · ' + (data.xAxis[p.value[0]] || '') +
-              ' = <b>' + vf(p.value[2]) + (data.valueSuffix || '') + '</b>';
-          }
-        }, baseTooltip(c)),
-        xAxis: {
-          type: 'category', data: data.xAxis,
-          splitArea: { show: false },
-          axisLine: { show: false }, axisTick: { show: false },
-          axisLabel: { color: c.muted, fontSize: 10, interval: 1 },
-        },
-        yAxis: {
-          type: 'category', data: data.yAxis,
-          splitArea: { show: false },
-          axisLine: { show: false }, axisTick: { show: false },
-          axisLabel: { color: c.muted, fontSize: 11 },
-        },
-        visualMap: {
-          min: 0, max: maxVal, calculable: false, show: false,
-          inRange: { color: [c.surface2, c.accent] }
-        },
-        series: [{
-          type: 'heatmap', data: flat,
-          label: { show: false },
-          itemStyle: { borderColor: c.surface, borderWidth: 2, borderRadius: 2 },
-          emphasis: { itemStyle: { borderColor: c.text, borderWidth: 1 } }
-        }]
-      };
-    });
-  }
-
-  // ==========================================================
-  // Widget: Gauge Chart
-  // ==========================================================
-  function gaugeChart(el, config) {
-    return _chartBase(el, config, {
-      label: '', value: 0, max: 100, unit: '%',
-      thresholds: null,
-    }, 'gauge-chart', function (data, c, _palette, size) {
-      var ratio = data.max > 0 ? Math.min(1, Math.max(0, data.value / data.max)) : 0;
-      var gaugeColor = c.accent;
-      if (data.thresholds) {
-        for (var i = 0; i < data.thresholds.length; i++) {
-          if (ratio <= data.thresholds[i][0]) {
-            var key = data.thresholds[i][1];
-            gaugeColor = key === 'good'    ? c.success :
-                         key === 'warning' ? c.warning :
-                         key === 'danger'  ? c.danger  : c.accent;
-            break;
-          }
-        }
-      }
-      // Size-aware rendering — gauge needs different proportions at different heights.
-      var h = (size && size.height) || 260;
-      var w = (size && size.width)  || 320;
-      var minDim = Math.min(w, h * 2);
-      var compact = h < 200;
-      var fmtVal = typeof data.valueFormatter === 'function' ? stripHTML(data.valueFormatter(data.value))
-        : (data.unit || '') === '원' ? fmt.krwPlain(data.value)
-        : safeNum(data.value) + (data.unit || '');
-      var valueText = fmtVal;
-      var textLen = valueText.length;
-      var sizeByContainer = minDim * 0.12;
-      var sizeByText = textLen > 3 ? sizeByContainer * (3.2 / textLen) : sizeByContainer;
-      var valueFontSize = Math.round(Math.max(14, Math.min(36, Math.min(sizeByContainer, sizeByText * 1.3))));
-      var titleFontSize = Math.round(Math.max(9, Math.min(14, minDim * 0.045)));
-      var ringWidth = Math.max(6, Math.round(minDim * 0.035));
-      var radius = compact ? '80%' : '92%';
-      var centerY = compact ? '58%' : '62%';
-      return {
-        textStyle: { fontFamily: c.font },
-        series: [{
-          type: 'gauge',
-          radius: radius,
-          center: ['50%', centerY],
-          startAngle: 210, endAngle: -30,
-          min: 0, max: data.max,
-          splitNumber: 5,
-          progress: { show: true, width: ringWidth, itemStyle: { color: gaugeColor } },
-          axisLine: { lineStyle: { width: ringWidth, color: [[1, c.surface2]] } },
-          pointer: { show: false },
-          axisTick: { show: false },
-          splitLine: { show: false },
-          axisLabel: { show: !compact, distance: -18, color: c.muted, fontSize: 9, fontFamily: c.font },
-          anchor: { show: false },
-          title: {
-            show: !!data.label && !compact,
-            offsetCenter: [0, '34%'],
-            color: c.muted, fontSize: titleFontSize, fontFamily: c.font,
-          },
-          detail: {
-            valueAnimation: true,
-            offsetCenter: [0, compact ? '10%' : '-2%'],
-            color: c.text, fontSize: valueFontSize, fontWeight: 'bold', fontFamily: c.font,
-            formatter: function () { return fmtVal; },
-          },
-          data: [{ value: data.value, name: data.label }]
-        }]
-      };
-    });
-  }
-
-  // ==========================================================
-  // Widget: Radar Chart
-  // ==========================================================
-  function radarChart(el, config) {
-    return _chartBase(el, config, {
-      indicators: [], series: [],
-    }, 'radar-chart', function (data, c, palette) {
-      return {
-        textStyle: { fontFamily: c.font, color: c.text },
-        tooltip: baseTooltip(c),
-        legend: data.series.length > 1 ? {
-          bottom: 0, left: 'center',
-          textStyle: { color: c.muted, fontFamily: c.font, fontSize: 11 },
-          icon: 'circle', itemWidth: 6, itemHeight: 6, itemGap: 14,
-        } : { show: false },
-        radar: {
-          indicator: data.indicators,
-          center: ['50%', '48%'],
-          radius: '60%',
-          axisName: { color: c.muted, fontSize: 10, fontFamily: c.font },
-          splitLine: { lineStyle: { color: c.border, type: [4, 4], opacity: 0.5 } },
-          splitArea: { show: false },
-          axisLine: { lineStyle: { color: c.border, opacity: 0.5 } },
-        },
-        series: [{
-          type: 'radar',
-          data: data.series.map(function (s, i) {
-            var col = s.color || palette[i % palette.length];
-            return {
-              name: s.name,
-              value: s.data,
-              areaStyle: { color: withAlpha(col, 0.13) },
-              lineStyle: { color: col, width: 1.5 },
-              itemStyle: { color: col },
-              symbolSize: 3,
-            };
-          }),
-        }]
-      };
-    });
-  }
-
-  // ==========================================================
-  // Widget: Treemap Chart
-  // ==========================================================
-  function treemapChart(el, config) {
-    return _chartBase(el, config, {
-      items: [], valueFormatter: null,
-    }, 'treemap-chart', function (data, c) {
-      var palette = buildPalette(c, (data.items || []).length);
-      var radiusN = parseInt(c.radius) || 0;
-      return {
-        textStyle: { fontFamily: c.font },
-        tooltip: Object.assign({
-          formatter: function (p) {
-            var v = data.valueFormatter ? data.valueFormatter(p.value) : safeNum(p.value);
-            return '<b>' + p.name + '</b>: ' + v;
-          }
-        }, baseTooltip(c)),
-        series: [{
-          type: 'treemap',
-          roam: false, nodeClick: false,
-          breadcrumb: { show: false },
-          width: '100%', height: '100%',
-          label: {
-            show: true,
-            formatter: '{b}',
-            color: '#fff',
-            fontFamily: c.font,
-            fontSize: 11, fontWeight: 500,
-            overflow: 'truncate',
-          },
-          upperLabel: { show: false },
-          itemStyle: { borderColor: c.surface, borderWidth: 2, gapWidth: 2 },
-          levels: [{
-            colorMappingBy: 'index',
-            color: palette,
-            itemStyle: { borderRadius: radiusN },
-          }],
-          data: data.items.map(function (it) { return { name: it.name, value: it.value }; }),
-        }]
-      };
-    });
-  }
-
-  // ==========================================================
-  // Widget: Scatter Chart (with optional bubble size)
-  // ==========================================================
-  function scatterChart(el, config) {
-    return _chartBase(el, config, {
-      points: [], series: null,
-      xLabel: '', yLabel: '',
-      showLabels: true,
-    }, 'scatter-chart', function (data, c, palette) {
-      function mkSeries(name, points, color) {
-        return {
-          name: name,
-          type: 'scatter',
-          data: points.map(function (p) {
-            return [p.x, p.y, p.label || '', p.size || 14];
-          }),
-          symbolSize: function (val) { return val[3] || 14; },
-          itemStyle: { color: color, opacity: 0.78, borderColor: c.surface, borderWidth: 1 },
-          emphasis: { itemStyle: { opacity: 1, borderColor: c.text } },
-          label: data.showLabels ? {
-            show: true, position: 'top',
-            color: c.muted, fontFamily: c.font, fontSize: 10,
-            formatter: function (p) { return p.data[2]; },
-          } : { show: false },
-        };
-      }
-      var series;
-      if (data.series && data.series.length) {
-        series = data.series.map(function (s, i) {
-          return mkSeries(s.name, s.points, s.color || palette[i % palette.length]);
-        });
-      } else {
-        series = [mkSeries('', data.points, c.accent)];
-      }
-      return {
-        textStyle: { fontFamily: c.font, color: c.text },
-        grid: { top: 20, right: 20, bottom: 50, left: 62 },
-        tooltip: Object.assign({
-          trigger: 'item',
-          formatter: function (p) {
-            var label = p.data[2] ? '<b>' + escapeHTML(p.data[2]) + '</b><br>' : '';
-            return label + (data.xLabel || 'X') + ': ' + safeNum(p.data[0]) + '<br>' +
-                   (data.yLabel || 'Y') + ': ' + safeNum(p.data[1]);
-          },
-        }, baseTooltip(c)),
-        legend: data.series && data.series.length > 1 ? {
-          top: 0, right: 0,
-          textStyle: { color: c.muted, fontFamily: c.font, fontSize: 11 },
-          icon: 'circle', itemWidth: 6, itemHeight: 6, itemGap: 14,
-        } : { show: false },
-        xAxis: {
-          type: 'value',
-          name: data.xLabel, nameLocation: 'middle', nameGap: 28,
-          nameTextStyle: { color: c.muted, fontSize: 11 },
-          axisLine: { lineStyle: { color: c.border } },
-          axisTick: { show: false },
-          axisLabel: { color: c.muted, fontSize: 11 },
-          splitLine: { lineStyle: { color: c.border, type: 'dashed' } },
-        },
-        yAxis: {
-          type: 'value',
-          name: data.yLabel, nameLocation: 'middle', nameGap: 44,
-          nameTextStyle: { color: c.muted, fontSize: 11 },
-          axisLine: { show: false }, axisTick: { show: false },
-          axisLabel: { color: c.muted, fontSize: 11 },
-          splitLine: { lineStyle: { color: c.border, type: 'dashed' } },
-        },
-        series: series,
-      };
-    });
-  }
-
-  // ==========================================================
-  // Widget: Sankey Chart (flow diagram)
-  // ==========================================================
-  function sankeyChart(el, config) {
-    return _chartBase(el, config, {
-      nodes: [], links: [],
-      valueFormatter: null,
-    }, 'sankey-chart', function (data, c) {
-      var palette = buildPalette(c, data.nodes.length);
-      return {
-        textStyle: { fontFamily: c.font, color: c.text },
-        tooltip: Object.assign({
-          trigger: 'item',
-          formatter: function (p) {
-            if (p.dataType === 'edge') {
-              var v = data.valueFormatter ? data.valueFormatter(p.value) : safeNum(p.value);
-              return p.data.source + ' → ' + p.data.target + ': <b>' + v + '</b>';
-            }
-            return '<b>' + p.name + '</b>';
-          }
-        }, baseTooltip(c)),
-        series: [{
-          type: 'sankey',
-          left: '4%', right: '12%', top: 10, bottom: 10,
-          data: data.nodes.map(function (n, i) {
-            return {
-              name: n.name,
-              itemStyle: { color: n.color || palette[i % palette.length] }
-            };
-          }),
-          links: data.links,
-          lineStyle: { color: 'gradient', curveness: 0.5, opacity: 0.42 },
-          label: { color: c.text, fontFamily: c.font, fontSize: 11 },
-          emphasis: { focus: 'adjacency', lineStyle: { opacity: 0.7 } },
-          nodeGap: 10, nodeWidth: 12,
-        }]
-      };
-    });
-  }
-
   // ==========================================================
   // Widget: Hero Tile (iOS weather-widget style)
   // ==========================================================
@@ -1265,24 +799,25 @@
     _autoValueHTML(data);
 
     function render() {
-      el.classList.add('mw-card', 'mw-hero');
+      applyCard(el); el.className += ' ' + _hero;
+      el.dataset.mwCq = 'hero';
       var statsHTML = '';
       if (data.stats && data.stats.length) {
-        statsHTML = '<div class="mw-hero__divider"></div><div class="mw-hero__stats">';
+        statsHTML = '<div class="border-t border-[var(--mw-border)] mt-4 pt-3"></div><div class="flex items-baseline gap-4 flex-wrap">';
         data.stats.forEach(function(s, i) {
-          if (i > 0) statsHTML += '<div class="mw-hero__stat-sep"></div>';
+          if (i > 0) statsHTML += '<div class="text-[var(--mw-border)] select-none">·</div>';
           statsHTML +=
-            '<div class="mw-hero__stat">' +
-              '<div class="mw-hero__stat-label">' + escapeHTML(s.label) + '</div>' +
-              '<div class="mw-hero__stat-value">' + _valOrEsc(s.value) + '</div>' +
+            '<div>' +
+              '<div class="text-[length:var(--mw-text-xs)] text-[var(--mw-text-muted)]">' + escapeHTML(s.label) + '</div>' +
+              '<div class="text-[length:var(--mw-text-base)] font-semibold text-[var(--mw-text)] mt-0.5">' + _valOrEsc(s.value) + '</div>' +
             '</div>';
         });
         statsHTML += '</div>';
       }
       el.innerHTML =
-        '<div class="mw-hero__kicker">' + escapeHTML(data.kicker) + '</div>' +
-        '<div class="mw-hero__value">' + (data.valueHTML ? data.value : escapeHTML(data.value)) + '</div>' +
-        (data.tagline ? '<div class="mw-hero__tagline">' + escapeHTML(data.tagline) + '</div>' : '') +
+        '<div data-role="kicker" class="' + _heroLabel + '">' + escapeHTML(data.kicker) + '</div>' +
+        '<div data-role="value" data-mw-val class="' + _heroValue + '">' + (data.valueHTML ? data.value : escapeHTML(data.value)) + '</div>' +
+        (data.tagline ? '<div data-role="tagline" class="' + _heroContext + '">' + escapeHTML(data.tagline) + '</div>' : '') +
         statsHTML;
       _applyCommon(el, data);
     }
@@ -1296,224 +831,6 @@
     };
     return register(handle);
   }
-
-  // ==========================================================
-  // Widget: Metric Chart — hero number + labeled mini chart
-  // ==========================================================
-  function metricChart(el, config) {
-    el = q(el);
-    if (!el) return null;
-    var data = Object.assign({
-      label: '', value: '', icon: '', context: '', unit: '',
-      delta: null, deltaGoodWhen: 'positive',
-      categories: [], series: [], target: null, yFormatter: null,
-    }, config || {});
-    // Auto-derive: series[0].data → value, delta
-    var seriesData = data.series && data.series[0] && data.series[0].data;
-    _autoDerive(data, {
-      arr: seriesData,
-      valueFmt: typeof data.yFormatter === 'function' ? data.yFormatter : null,
-    });
-    _autoValueHTML(data);
-    var chart = null;
-    var ro = null;
-
-    function fmt(v) {
-      return typeof data.yFormatter === 'function' ? data.yFormatter(v) : v;
-    }
-
-    function render() {
-      var c = getColors();
-      el.classList.add('mw-card', 'mw-mchrt');
-      var deltaHTML = '';
-      if (data.delta != null && !isNaN(data.delta)) {
-        var goodWhenNeg = data.deltaGoodWhen === 'negative';
-        var good = goodWhenNeg ? data.delta < 0 : data.delta > 0;
-        var arrow = data.delta >= 0 ? '▲' : '▼';
-        deltaHTML = '<span class="mw-mchrt__delta mw-mchrt__delta--' + (good ? 'good' : 'bad') + '">' +
-          arrow + ' ' + Math.abs(Number(data.delta)).toFixed(1) + '%</span>';
-      }
-      var legendHTML = '';
-      if (data.series && data.series.length) {
-        legendHTML = '<div class="mw-mchrt__legend">';
-        if (data.series[0]) legendHTML += '<span class="mw-mchrt__leg mw-mchrt__leg--a">' + escapeHTML(data.series[0].name || '이번달') + '</span>';
-        if (data.series[1]) legendHTML += '<span class="mw-mchrt__leg mw-mchrt__leg--b">' + escapeHTML(data.series[1].name || '지난달') + '</span>';
-        legendHTML += '</div>';
-      }
-      el.innerHTML =
-        (data.icon ? '<div class="mw-mchrt__watermark">' + escapeHTML(data.icon) + '</div>' : '') +
-        '<div class="mw-mchrt__head">' +
-          '<div class="mw-mchrt__top">' +
-            '<div class="mw-mchrt__label-group">' +
-              (data.icon ? '<span class="mw-mchrt__icon">' + escapeHTML(data.icon) + '</span>' : '') +
-              '<span class="mw-mchrt__label">' + escapeHTML(data.label) + '</span>' +
-            '</div>' +
-            legendHTML +
-          '</div>' +
-          '<div class="mw-mchrt__value">' + (data.valueHTML || (typeof data.value === 'string' && data.value.indexOf('<') >= 0) ? data.value : escapeHTML(data.value)) + '</div>' +
-          '<div class="mw-mchrt__meta">' +
-            (deltaHTML || '') +
-            (data.context ? '<span class="mw-mchrt__context">' + escapeHTML(data.context) + '</span>' : '') +
-          '</div>' +
-        '</div>' +
-        '<div class="mw-mchrt__chart"></div>';
-
-      if (chart) { chart.dispose(); chart = null; }
-      if (ro) { ro.disconnect(); ro = null; }
-      if (!EC() || !data.series || !data.series.length || !data.categories || !data.categories.length) return;
-
-      var chartEl = el.querySelector('.mw-mchrt__chart');
-      chart = EC().init(chartEl, null, { renderer: 'svg' });
-      var series = [];
-
-      if (data.series[1] && data.series[1].data) {
-        series.push({
-          type: 'line', smooth: 0.4, symbol: 'none', z: 1,
-          name: data.series[1].name || '지난달',
-          data: data.series[1].data,
-          lineStyle: { color: c.muted, width: 1.5, type: 'dashed' },
-        });
-      }
-
-      var cur = data.series[0] || { data: [], name: '' };
-      var lastIdx = (cur.data || []).length - 1;
-      series.push({
-        type: 'line', smooth: 0.4, symbol: 'none', z: 2,
-        name: cur.name || '이번달',
-        data: cur.data,
-        lineStyle: { color: c.accent, width: 2.5 },
-        areaStyle: {
-          color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
-            colorStops: [
-              { offset: 0, color: withAlpha(c.accent, 0.27) },
-              { offset: 1, color: withAlpha(c.accent, 0.02) },
-            ] },
-        },
-        markPoint: lastIdx >= 0 ? {
-          symbol: 'circle', symbolSize: 7,
-          data: [{ coord: [lastIdx, cur.data[lastIdx]] }],
-          itemStyle: { color: c.accent, borderColor: c.surface, borderWidth: 2 },
-          label: { show: false },
-        } : undefined,
-        markLine: data.target != null ? {
-          silent: true, symbol: 'none', z: 5,
-          lineStyle: { color: c.accent, type: 'dashed', width: 1.5, opacity: 0.45 },
-          label: {
-            show: true, position: 'insideEndTop',
-            fontSize: 10, fontWeight: 600, color: c.accent, opacity: 0.75,
-            formatter: '목표',
-          },
-          data: [{ yAxis: data.target }],
-        } : undefined,
-      });
-
-      chart.setOption({
-        grid: { top: 16, right: 56, bottom: 32, left: 20 },
-        tooltip: Object.assign(baseTooltip(c), {
-          trigger: 'axis',
-          formatter: function(params) {
-            var html = '<div style="font-weight:600;margin-bottom:4px">' + escapeHTML(params[0].axisValueLabel) + '</div>';
-            params.forEach(function(p) { html += '<div>' + p.marker + ' ' + fmt(p.value) + '</div>'; });
-            return html;
-          },
-        }),
-        xAxis: {
-          type: 'category', data: data.categories, boundaryGap: false,
-          axisLabel: { fontSize: 10, color: c.muted, margin: 10 },
-          axisTick: { show: false },
-          axisLine: { lineStyle: { color: c.border } },
-        },
-        yAxis: {
-          type: 'value', position: 'right', splitNumber: 3,
-          scale: true,
-          axisLabel: { fontSize: 9, color: c.muted, formatter: function(v) { return fmt(v); }, margin: 8 },
-          splitLine: { lineStyle: { color: c.border, type: 'dashed', opacity: 0.4 } },
-          axisTick: { show: false }, axisLine: { show: false },
-        },
-        series: series,
-      });
-
-      if (typeof ResizeObserver !== 'undefined') {
-        ro = new ResizeObserver(function() { if (chart) chart.resize(); });
-        ro.observe(chartEl);
-      }
-      _applyCommon(el, data);
-    }
-
-    render();
-    var handle = {
-      el: el, type: 'metric-chart',
-      refresh: render,
-      update: function(newData) { data = Object.assign(data, newData || {}); render(); },
-      destroy: function() {
-        if (ro) ro.disconnect();
-        if (chart) chart.dispose();
-        el.innerHTML = '';
-        registry.delete(handle);
-      },
-    };
-    return register(handle);
-  }
-
-  // ==========================================================
-  // Widget: Ring Progress (full circular progress with center value)
-  // ==========================================================
-  function ringProgress(el, config) {
-    return _chartBase(el, config, {
-      value: 0, max: 100, unit: '%',
-      label: '', context: '',
-      thresholds: null,
-    }, 'ring-progress', function (data, c) {
-      var fmtVal = typeof data.valueFormatter === 'function' ? data.valueFormatter(data.value)
-        : (data.unit || '') === '원' ? fmt.krwPlain(data.value)
-        : safeNum(data.value) + (data.unit || '');
-      var ratio = data.max > 0 ? Math.min(1, Math.max(0, data.value / data.max)) : 0;
-      var ringColor = c.accent;
-      if (data.thresholds) {
-        for (var i = 0; i < data.thresholds.length; i++) {
-          if (ratio <= data.thresholds[i][0]) {
-            var key = data.thresholds[i][1];
-            ringColor = key === 'good'    ? c.success :
-                         key === 'warning' ? c.warning :
-                         key === 'danger'  ? c.danger  : c.accent;
-            break;
-          }
-        }
-      }
-      return {
-        textStyle: { fontFamily: c.font },
-        series: [{
-          type: 'gauge',
-          radius: '92%',
-          center: ['50%', '52%'],
-          startAngle: 90, endAngle: -270,
-          min: 0, max: data.max,
-          progress: { show: true, width: 14, roundCap: true, itemStyle: { color: ringColor } },
-          axisLine: { roundCap: true, lineStyle: { width: 14, color: [[1, c.surface2]] } },
-          pointer: { show: false },
-          axisTick: { show: false },
-          splitLine: { show: false },
-          axisLabel: { show: false },
-          anchor: { show: false },
-          title: {
-            show: !!data.label,
-            offsetCenter: [0, '26%'],
-            color: c.muted, fontSize: 11, fontFamily: c.font,
-          },
-          detail: {
-            valueAnimation: true,
-            offsetCenter: [0, '-4%'],
-            color: c.text, fontSize: 30, fontWeight: 700, fontFamily: c.font,
-            formatter: function () { return fmtVal; },
-          },
-          data: [{ value: data.value, name: data.label }],
-        }],
-      };
-    }, function (data) {
-      return data.context ? '<div class="mw-ring__context">' + escapeHTML(data.context) + '</div>' : '';
-    });
-  }
-
   // ==========================================================
   // Widget: Timeline / Activity Feed (vertical dots + text)
   // ==========================================================
@@ -1526,22 +843,25 @@
     }, config || {});
 
     function render() {
-      el.classList.add('mw-card');
-      var items = (data.items || []).slice(0, 100).map(function (it) {
-        var dotCls = 'mw-timeline__dot' + (it.type ? ' mw-timeline__dot--' + it.type : '');
-        return '<div class="mw-timeline__item">' +
-          '<div class="mw-timeline__marker">' +
-            '<div class="' + dotCls + '"></div>' +
-            '<div class="mw-timeline__line"></div>' +
+      applyCard(el);
+      var allItems = (data.items || []).slice(0, 100);
+      var items = allItems.map(function (it, idx) {
+        var dotColorMap = { success: 'var(--mw-success)', warning: 'var(--mw-warning)', danger: 'var(--mw-danger)', info: 'var(--mw-text-muted)' };
+        var dotStyle = it.type && dotColorMap[it.type] ? ' style="background:' + dotColorMap[it.type] + ';outline-color:color-mix(in srgb,' + dotColorMap[it.type] + ' 30%,var(--mw-border))"' : '';
+        var isLast = idx === allItems.length - 1;
+        return '<div data-role="item" class="' + (isLast ? _tlItem : _tlItemNotLast) + '">' +
+          '<div data-role="marker" class="' + _tlMarker + '">' +
+            '<div data-role="dot" class="' + _tlDot + '"' + dotStyle + '></div>' +
+            (isLast ? '' : '<div data-role="line" class="' + _tlLine + '"></div>') +
           '</div>' +
-          '<div class="mw-timeline__body">' +
-            '<div class="mw-timeline__time">' + escapeHTML(it.time || '') + '</div>' +
-            '<div class="mw-timeline__text">' + (it.html || escapeHTML(it.text || '')) + '</div>' +
+          '<div data-role="body" class="' + _tlBody + '">' +
+            '<div data-role="time" class="' + _tlTime + '">' + escapeHTML(it.time || '') + '</div>' +
+            '<div data-role="text" class="' + _tlText + '">' + (it.html || escapeHTML(it.text || '')) + '</div>' +
           '</div>' +
         '</div>';
       }).join('');
       el.innerHTML = headerHTML(data.title, data.subtitle) +
-        '<div class="mw-timeline">' + items + '</div>';
+        '<div data-mw-list data-role="timeline" class="' + _timeline + '">' + items + '</div>';
       _applyCommon(el, data);
     }
     render();
@@ -1567,17 +887,18 @@
     }, config || {});
 
     function render() {
-      el.classList.add('mw-card');
+      applyCard(el);
+      var dotColorMap = { ok: 'var(--mw-success)', warning: 'var(--mw-warning)', danger: 'var(--mw-danger)', info: 'var(--mw-text-muted)' };
       var items = (data.items || []).slice(0, 100).map(function (it) {
-        var statusCls = 'mw-status__dot--' + (it.status || 'ok');
-        return '<div class="mw-status__item">' +
-          '<span class="mw-status__dot ' + statusCls + '"></span>' +
-          '<span class="mw-status__label">' + escapeHTML(it.label) + '</span>' +
-          (it.value ? '<span class="mw-status__value">' + _valOrEsc(String(it.value)) + '</span>' : '') +
+        var dotBg = dotColorMap[it.status || 'ok'] || dotColorMap.ok;
+        return '<div data-role="item" class="' + _statusItem + '">' +
+          '<span data-role="dot" class="' + _statusDot + '" style="background:' + dotBg + '"></span>' +
+          '<span data-role="label" class="' + _statusLabel + '">' + escapeHTML(it.label) + '</span>' +
+          (it.value ? '<span data-role="value" class="' + _statusValue + '">' + _valOrEsc(String(it.value)) + '</span>' : '') +
         '</div>';
       }).join('');
       el.innerHTML = headerHTML(data.title, data.subtitle) +
-        '<div class="mw-status" style="grid-template-columns: repeat(' + data.columns + ', minmax(0, 1fr));">' + items + '</div>';
+        '<div data-role="grid" class="' + _statusGrid + '" style="grid-template-columns: repeat(' + data.columns + ', minmax(0, 1fr));">' + items + '</div>';
       _applyCommon(el, data);
     }
     render();
@@ -1614,20 +935,21 @@
     }
 
     function render() {
-      el.classList.add('mw-card', 'mw-countdown');
+      applyCard(el);
+      el.dataset.mwCq = 'countdown';
       var parts = getParts();
       var body = '';
       if (parts) {
-        body = '<div class="mw-countdown__body">' +
-          '<div class="mw-countdown__unit"><span class="mw-countdown__num">' + parts.days + '</span><span class="mw-countdown__lbl">days</span></div>' +
-          '<div class="mw-countdown__unit"><span class="mw-countdown__num">' + String(parts.hours).padStart(2, '0') + '</span><span class="mw-countdown__lbl">hrs</span></div>' +
-          '<div class="mw-countdown__unit"><span class="mw-countdown__num">' + String(parts.mins).padStart(2, '0') + '</span><span class="mw-countdown__lbl">min</span></div>' +
+        body = '<div data-role="body" class="' + _cdBody + '">' +
+          '<div data-role="unit" class="' + _cdUnit + '"><span data-role="num" data-mw-val class="' + _cdNum + '">' + parts.days + '</span><span data-role="lbl" class="' + _cdLbl + '">days</span></div>' +
+          '<div data-role="unit" class="' + _cdUnit + '"><span data-role="num" data-mw-val class="' + _cdNum + '">' + String(parts.hours).padStart(2, '0') + '</span><span data-role="lbl" class="' + _cdLbl + '">hrs</span></div>' +
+          '<div data-role="unit" class="' + _cdUnit + '"><span data-role="num" data-mw-val class="' + _cdNum + '">' + String(parts.mins).padStart(2, '0') + '</span><span data-role="lbl" class="' + _cdLbl + '">min</span></div>' +
         '</div>';
       }
       el.innerHTML = headerHTML(data.title, data.subtitle) +
-        (data.label ? '<div class="mw-countdown__label">' + escapeHTML(data.label) + '</div>' : '') +
+        (data.label ? '<div data-role="label" class="' + _cdLabel + '">' + escapeHTML(data.label) + '</div>' : '') +
         body +
-        (data.context ? '<div class="mw-countdown__context">' + escapeHTML(data.context) + '</div>' : '');
+        (data.context ? '<div data-role="context" class="' + _cdContext + '">' + escapeHTML(data.context) + '</div>' : '');
       _applyCommon(el, data);
     }
     render();
@@ -1656,29 +978,30 @@
     }, config || {});
 
     function render() {
-      el.classList.add('mw-card', 'mw-mstack');
+      applyCard(el); el.className += ' ' + _mstack;
+      el.dataset.mwCq = 'mstack';
       var main = data.main || {};
       var mainDelta = '';
       if (main.delta != null && !isNaN(main.delta)) {
         var goodWhenNeg = main.deltaGoodWhen === 'negative';
         var good = goodWhenNeg ? main.delta < 0 : main.delta > 0;
-        mainDelta = '<span class="mw-mstack__delta mw-mstack__delta--' + (good ? 'good' : 'bad') + '">' +
+        mainDelta = '<span data-role="delta" class="' + _mstackDelta + (good ? ' text-[var(--mw-success)]' : ' text-[var(--mw-danger)]') + '">' +
           (main.delta >= 0 ? '▲' : '▼') + ' ' + Math.abs(Number(main.delta)).toFixed(1) + '%</span>';
       }
       var subItems = data.items.map(function (it) {
-        return '<div class="mw-mstack__sub">' +
-          '<div class="mw-mstack__sub-val">' + _valOrEsc(it.value) + '</div>' +
-          '<div class="mw-mstack__sub-lbl">' + escapeHTML(it.label) + '</div>' +
+        return '<div>' +
+          '<div data-role="sub-value" class="' + _mstackSubVal + '">' + _valOrEsc(it.value) + '</div>' +
+          '<div data-role="sub-label" class="' + _mstackSubLbl + '">' + escapeHTML(it.label) + '</div>' +
         '</div>';
       }).join('');
       el.innerHTML =
-        (data.title ? '<div class="mw-mstack__title">' + escapeHTML(data.title) + '</div>' : '') +
-        '<div class="mw-mstack__main-row">' +
-          '<div class="mw-mstack__main-val">' + _valOrEsc(main.value) + '</div>' +
+        (data.title ? '<div data-role="title" class="' + _mstackTitle + '">' + escapeHTML(data.title) + '</div>' : '') +
+        '<div data-role="main-row" class="' + _mstackMainRow + '">' +
+          '<div data-role="value" data-mw-val class="' + _mstackMainVal + '">' + _valOrEsc(main.value) + '</div>' +
           mainDelta +
         '</div>' +
-        '<div class="mw-mstack__main-lbl">' + escapeHTML(main.label || '') + '</div>' +
-        (subItems ? '<div class="mw-mstack__sub-row">' + subItems + '</div>' : '');
+        '<div data-role="main-label" class="' + _mstackMainLbl + '">' + escapeHTML(main.label || '') + '</div>' +
+        (subItems ? '<div data-role="sub-row" class="' + _mstackSubRow + '">' + subItems + '</div>' : '');
       _applyCommon(el, data);
     }
     render();
@@ -1703,19 +1026,28 @@
     }, config || {});
 
     function render() {
-      el.classList.add('mw-card');
-      var items = (data.items || []).slice(0, 100).map(function (it) {
-        var iconCls = 'mw-inbox__icon' + (it.type ? ' mw-inbox__icon--' + it.type : '');
-        return '<div class="mw-inbox__item">' +
-          '<div class="' + iconCls + '">' + (it.icon || '•') + '</div>' +
-          '<div class="mw-inbox__body">' +
-            '<div class="mw-inbox__text">' + (it.html || escapeHTML(it.text || '')) + '</div>' +
+      applyCard(el);
+      var iconColorMap = { success: '--mw-success', warning: '--mw-warning', danger: '--mw-danger', info: '--mw-accent' };
+      var allItems = (data.items || []).slice(0, 100);
+      var items = allItems.map(function (it, idx) {
+        var iconExtra = '';
+        if (it.type && iconColorMap[it.type]) {
+          var cv = iconColorMap[it.type];
+          iconExtra = ' style="color:var(' + cv + ');background:color-mix(in srgb,var(' + cv + ') 15%,transparent)"';
+        }
+        var isLast = idx === allItems.length - 1;
+        var isFirst = idx === 0;
+        var itemCls = _inboxItem + (isLast ? ' border-b-0 pb-0' : '') + (isFirst ? ' pt-0' : '');
+        return '<div data-role="item" class="' + itemCls + '">' +
+          '<div data-role="icon" class="' + _inboxIcon + '"' + iconExtra + '>' + (it.icon || '•') + '</div>' +
+          '<div data-role="body" class="' + _inboxBody + '">' +
+            '<div data-role="text" class="' + _inboxText + '">' + (it.html || escapeHTML(it.text || '')) + '</div>' +
           '</div>' +
-          '<div class="mw-inbox__time">' + escapeHTML(it.time || '') + '</div>' +
+          '<div data-role="time" class="' + _inboxTime + '">' + escapeHTML(it.time || '') + '</div>' +
         '</div>';
       }).join('');
       el.innerHTML = headerHTML(data.title, data.subtitle) +
-        '<div class="mw-inbox">' + items + '</div>';
+        '<div data-mw-list data-role="inbox" class="' + _inbox + '">' + items + '</div>';
       _applyCommon(el, data);
     }
     render();
@@ -1749,7 +1081,8 @@
     }
 
     function render() {
-      el.classList.add('mw-card', 'mw-compare');
+      applyCard(el);
+      el.dataset.mwCq = 'compare';
       var deltaHTML = '';
       if (data.delta != null) {
         var isNum = typeof data.delta === 'number';
@@ -1757,21 +1090,21 @@
         var good = isNum ? (goodWhenNeg ? data.delta < 0 : data.delta > 0) : true;
         var arrow = isNum ? (data.delta >= 0 ? '▲' : '▼') : '→';
         var deltaStr = isNum ? Math.abs(data.delta).toFixed(1) + '%' : escapeHTML(String(data.delta));
-        deltaHTML = '<div class="mw-compare__delta mw-compare__delta--' + (good ? 'good' : 'bad') + '">' +
+        deltaHTML = '<div data-role="delta" class="' + _compareDelta + (good ? ' text-[var(--mw-success)]' : ' text-[var(--mw-danger)]') + '">' +
           arrow + ' ' + deltaStr +
-          (data.deltaLabel ? ' <span class="mw-compare__delta-lbl">' + escapeHTML(data.deltaLabel) + '</span>' : '') +
+          (data.deltaLabel ? ' <span data-role="delta-label" class="' + _compareDeltaLbl + '">' + escapeHTML(data.deltaLabel) + '</span>' : '') +
         '</div>';
       }
       el.innerHTML = headerHTML(data.title, data.subtitle) +
-        '<div class="mw-compare__row">' +
-          '<div class="mw-compare__side">' +
-            '<div class="mw-compare__lbl">' + escapeHTML(data.left.label || '') + '</div>' +
-            '<div class="mw-compare__val">' + _valOrEsc(data.left.value) + '</div>' +
+        '<div data-role="row" class="' + _compareRow + '">' +
+          '<div data-role="side" class="' + _compareSide + '">' +
+            '<div data-role="label" class="' + _compareLbl + '">' + escapeHTML(data.left.label || '') + '</div>' +
+            '<div data-role="value" data-mw-val class="' + _compareVal + '">' + _valOrEsc(data.left.value) + '</div>' +
           '</div>' +
-          '<div class="mw-compare__sep">→</div>' +
-          '<div class="mw-compare__side mw-compare__side--current">' +
-            '<div class="mw-compare__lbl">' + escapeHTML(data.right.label || '') + '</div>' +
-            '<div class="mw-compare__val">' + _valOrEsc(data.right.value) + '</div>' +
+          '<div data-role="sep" class="' + _compareSep + '">→</div>' +
+          '<div data-role="side" class="' + _compareSide + '">' +
+            '<div data-role="label" class="' + _compareLbl + '">' + escapeHTML(data.right.label || '') + '</div>' +
+            '<div data-role="value" data-mw-val class="' + _compareVal + ' font-bold">' + _valOrEsc(data.right.value) + '</div>' +
           '</div>' +
         '</div>' +
         deltaHTML;
@@ -1786,58 +1119,6 @@
     };
     return register(handle);
   }
-
-  // ==========================================================
-  // Widget: Calendar Heatmap (GitHub contribution-style)
-  // ==========================================================
-  function calendarHeatmap(el, config) {
-    var now = new Date();
-    return _chartBase(el, config, {
-      year: now.getFullYear(),
-      range: null,
-      values: [],
-      max: null,
-      height: 180,
-      cellSize: 14,
-      tooltipFormatter: null,
-      valueSuffix: '',
-    }, 'calendar-heatmap', function (data, c) {
-      var range = data.range || String(data.year);
-      var maxVal = data.max != null ? data.max : (data.values || []).reduce(function (m, v) {
-        return Math.max(m, (v && v[1]) || 0);
-      }, 1);
-      return {
-        textStyle: { fontFamily: c.font, color: c.text },
-        tooltip: Object.assign({
-          formatter: data.tooltipFormatter || function (p) {
-            var vf = data.valueFormatter || safeNum;
-            return p.value[0] + ' · <b>' + vf(p.value[1] || 0) + (data.valueSuffix || '') + '</b>';
-          }
-        }, baseTooltip(c)),
-        visualMap: {
-          min: 0, max: maxVal, show: false,
-          inRange: { color: [c.surface2, c.accent] },
-        },
-        calendar: {
-          top: 24, left: 34, right: 8, bottom: 12,
-          range: range,
-          cellSize: Array.isArray(data.cellSize) ? data.cellSize : ['auto', data.cellSize],
-          itemStyle: { borderColor: c.surface, borderWidth: 2, color: c.surface2 },
-          splitLine: { show: false },
-          yearLabel: { show: false },
-          monthLabel: { color: c.muted, fontSize: 10, fontFamily: c.font },
-          dayLabel: { color: c.muted, fontSize: 10, fontFamily: c.font, firstDay: 1,
-            nameMap: ['S', 'M', 'T', 'W', 'T', 'F', 'S'] },
-        },
-        series: [{
-          type: 'heatmap',
-          coordinateSystem: 'calendar',
-          data: data.values,
-        }]
-      };
-    });
-  }
-
   // ==========================================================
   // Widget: Event Calendar (month grid with dot/badge markers)
   // ==========================================================
@@ -1859,7 +1140,8 @@
     }, config || {});
 
     function render() {
-      el.classList.add('mw-card', 'mw-evcal');
+      el.classList.add('mw-evcal');
+      applyCard(el);
       var year = data.year, month = data.month;
       var daysInMonth = new Date(year, month, 0).getDate();
       var firstDay = new Date(year, month - 1, 1).getDay();
@@ -1977,7 +1259,8 @@
     }, config || {});
 
     function render() {
-      el.classList.add('mw-card', 'mw-stepper');
+      el.classList.add('mw-stepper');
+      applyCard(el);
 
       var statusHTML = '';
       if (data.status) {
@@ -2056,258 +1339,6 @@
   }
 
   // ==========================================================
-  // Widget: Map Chart (hex tile map — Korea by default)
-  // No GeoJSON dependency. Provinces laid out in a hex-ish grid.
-  // ==========================================================
-  var KOREA_TILES = [
-    // 17 광역자치단체 — geographically-aware compact hex grid (6 cols × 6 rows)
-    // { code, name, row, col }
-    { code: 'GW', name: '강원',     row: 0, col: 3 },
-    { code: 'IC', name: '인천',     row: 1, col: 0 },
-    { code: 'GG', name: '경기',     row: 1, col: 1 },
-    { code: 'SE', name: '서울',     row: 1, col: 2 },
-    { code: 'CN', name: '충남',     row: 2, col: 1 },
-    { code: 'SJ', name: '세종',     row: 2, col: 2 },
-    { code: 'CB', name: '충북',     row: 2, col: 3 },
-    { code: 'JB', name: '전북',     row: 3, col: 1 },
-    { code: 'DJ', name: '대전',     row: 3, col: 2 },
-    { code: 'GB', name: '경북',     row: 3, col: 3 },
-    { code: 'DG', name: '대구',     row: 3, col: 4 },
-    { code: 'GJ', name: '광주',     row: 4, col: 0 },
-    { code: 'JN', name: '전남',     row: 4, col: 1 },
-    { code: 'GN', name: '경남',     row: 4, col: 3 },
-    { code: 'US', name: '울산',     row: 4, col: 4 },
-    { code: 'BS', name: '부산',     row: 4, col: 5 },
-    { code: 'JJ', name: '제주',     row: 5, col: 0 },
-  ];
-
-  function mapChart(el, config) {
-    el = q(el);
-    if (!el) return null;
-    var data = Object.assign({
-      title: '', subtitle: '',
-      tiles: KOREA_TILES,
-      items: [],            // [{ region: '서울', value: 1250000000 }]
-      valueFormatter: null, // fn(v) => string
-      height: 320,
-    }, config || {});
-
-    function render() {
-      el.classList.add('mw-card', 'mw-mapchart');
-      var c = getColors();
-      var byName = {};
-      (data.items || []).forEach(function (it) { byName[it.region] = it.value; });
-      var values = (data.items || []).map(function (it) { return it.value || 0; });
-      var max = values.length ? Math.max.apply(null, values) : 1;
-      var min = values.length ? Math.min.apply(null, values) : 0;
-      var range = (max - min) || 1;
-
-      var maxRow = 0, maxCol = 0;
-      data.tiles.forEach(function (t) {
-        if (t.row > maxRow) maxRow = t.row;
-        if (t.col > maxCol) maxCol = t.col;
-      });
-      var rows = maxRow + 1;
-      var cols = maxCol + 1;
-
-      var tilesHTML = data.tiles.map(function (t) {
-        var v = byName[t.name];
-        var hasVal = v != null;
-        var ratio = hasVal ? (v - min) / range : 0;
-        var alpha = hasVal ? Math.max(0.18, 0.18 + ratio * 0.82) : 0;
-        var bg = hasVal
-          ? 'color-mix(in srgb, var(--mw-accent) ' + Math.round(alpha * 100) + '%, var(--mw-surface))'
-          : 'var(--mw-surface-2)';
-        var fg = hasVal && ratio > 0.55 ? '#fff' : 'var(--mw-text)';
-        var formatted = hasVal
-          ? (data.valueFormatter ? data.valueFormatter(v) : safeNum(v))
-          : '—';
-        return '<div class="mw-mapchart__tile" ' +
-          'style="grid-row:' + (t.row + 1) + ';grid-column:' + (t.col + 1) +
-          ';background:' + bg + ';color:' + fg + '" ' +
-          'title="' + escapeHTML(t.name) + ': ' + escapeHTML(formatted) + '">' +
-            '<div class="mw-mapchart__name">' + escapeHTML(t.name) + '</div>' +
-            '<div class="mw-mapchart__val">' + escapeHTML(formatted) + '</div>' +
-          '</div>';
-      }).join('');
-
-      // Legend
-      var legendHTML =
-        '<div class="mw-mapchart__legend">' +
-          '<span class="mw-mapchart__legend-lbl">' + escapeHTML(data.valueFormatter ? data.valueFormatter(min) : safeNum(min)) + '</span>' +
-          '<span class="mw-mapchart__legend-bar"></span>' +
-          '<span class="mw-mapchart__legend-lbl">' + escapeHTML(data.valueFormatter ? data.valueFormatter(max) : safeNum(max)) + '</span>' +
-        '</div>';
-
-      el.innerHTML = headerHTML(data.title, data.subtitle) +
-        '<div class="mw-mapchart__grid" ' +
-          'style="grid-template-rows:repeat(' + rows + ',1fr);grid-template-columns:repeat(' + cols + ',1fr);height:' + data.height + 'px">' +
-          tilesHTML +
-        '</div>' +
-        legendHTML;
-      _applyCommon(el, data);
-    }
-    render();
-    var handle = {
-      el: el, type: 'map-chart',
-      refresh: render,
-      update: function (newData) { data = Object.assign(data, newData || {}); render(); },
-      destroy: function () { el.innerHTML = ''; registry.delete(handle); },
-    };
-    return register(handle);
-  }
-
-  // ==========================================================
-  // Widget: Waterfall Chart — start → gains/losses → total
-  // items: [{ label, value, type?: 'start'|'gain'|'loss'|'total' }]
-  // type auto-detected from sign if omitted (>=0 gain, <0 loss).
-  // First item defaults to 'start', last labeled '합계/Total' to 'total'.
-  // ==========================================================
-  function waterfallChart(el, config) {
-    return _chartBase(el, config, {
-      items: [],
-      valueFormatter: null,
-      gainColor: null, lossColor: null, totalColor: null,
-    }, 'waterfall-chart', function (data, c) {
-      var items = data.items || [];
-      var helper = [], gain = [], loss = [], total = [];
-      var cum = 0;
-      items.forEach(function (it, i) {
-        var t = it.type;
-        if (!t) {
-          if (i === 0) t = 'start';
-          else if (i === items.length - 1) t = 'total';
-          else t = it.value >= 0 ? 'gain' : 'loss';
-        }
-        if (t === 'start' || t === 'total') {
-          helper.push(0);
-          gain.push(0); loss.push(0);
-          total.push(it.value);
-          cum = it.value;
-        } else if (t === 'gain') {
-          helper.push(cum);
-          gain.push(it.value); loss.push(0); total.push(0);
-          cum += it.value;
-        } else { // loss
-          var amt = Math.abs(it.value);
-          helper.push(cum - amt);
-          gain.push(0); loss.push(amt); total.push(0);
-          cum -= amt;
-        }
-      });
-      var fmt = data.valueFormatter || safeNum;
-      var gainCol = data.gainColor || c.success;
-      var lossCol = data.lossColor || c.danger;
-      var totCol = data.totalColor || c.accent;
-      return {
-        textStyle: { fontFamily: c.font, color: c.text },
-        grid: { top: 14, right: 14, bottom: 28, left: 60 },
-        tooltip: Object.assign({ trigger: 'axis', axisPointer: { type: 'shadow' } }, baseTooltip(c), {
-          formatter: function (params) {
-            var idx = params[0].dataIndex;
-            var it = items[idx];
-            if (!it) return '';
-            var sign = it.value > 0 ? '+' : '';
-            return '<div style="font-weight:600;margin-bottom:4px">' + escapeHTML(it.label) + '</div>' +
-              '<div>' + sign + fmt(it.value) + '</div>';
-          },
-        }),
-        xAxis: {
-          type: 'category', data: items.map(function (i) { return i.label; }),
-          axisLine: { lineStyle: { color: c.border } }, axisTick: { show: false },
-          axisLabel: { color: c.muted, fontSize: 11, interval: 0 },
-        },
-        yAxis: {
-          type: 'value',
-          axisLine: { show: false }, axisTick: { show: false },
-          axisLabel: { color: c.muted, fontSize: 11, formatter: plainFmt(fmt) },
-          splitLine: { lineStyle: { color: c.border, type: 'dashed' } },
-        },
-        series: [
-          { name: '_helper', type: 'bar', stack: 'total', silent: true,
-            itemStyle: { color: 'transparent' }, data: helper },
-          { name: '증가', type: 'bar', stack: 'total',
-            itemStyle: { color: gainCol, borderRadius: [3, 3, 0, 0] }, data: gain,
-            label: { show: true, position: 'top', color: gainCol, fontSize: 10,
-                     formatter: function (p) { return p.value ? '+' + stripHTML(fmt(p.value)) : ''; } } },
-          { name: '감소', type: 'bar', stack: 'total',
-            itemStyle: { color: lossCol, borderRadius: [3, 3, 0, 0] }, data: loss,
-            label: { show: true, position: 'top', color: lossCol, fontSize: 10,
-                     formatter: function (p) { return p.value ? '−' + stripHTML(fmt(p.value)) : ''; } } },
-          { name: '합계', type: 'bar', stack: 'total',
-            itemStyle: { color: totCol, borderRadius: [3, 3, 0, 0] }, data: total,
-            label: { show: true, position: 'top', color: c.text, fontWeight: 600, fontSize: 11,
-                     formatter: function (p) { return p.value ? stripHTML(fmt(p.value)) : ''; } } },
-        ],
-      };
-    });
-  }
-
-  // ==========================================================
-  // Widget: Cohort Matrix — retention grid (Mixpanel-style)
-  // cohorts: row labels  ·  periods: column labels
-  // data: 2D array of percent values (0-100), null = no data
-  // sizes: optional cohort size column (e.g. signup count)
-  // ==========================================================
-  function cohortMatrix(el, config) {
-    el = q(el);
-    if (!el) return null;
-    var data = Object.assign({
-      title: '', subtitle: '',
-      cohorts: [], periods: [], data: [], sizes: null,
-      cohortLabel: '코호트', sizeLabel: '규모',
-      valueFormatter: function (v) { return v != null ? v.toFixed(0) + '%' : '—'; },
-    }, config || {});
-
-    function render() {
-      el.classList.add('mw-card', 'mw-cohort');
-      var headerCells = '<div class="mw-cohort__th mw-cohort__th--label">' + escapeHTML(data.cohortLabel) + '</div>';
-      if (data.sizes) headerCells += '<div class="mw-cohort__th mw-cohort__th--size">' + escapeHTML(data.sizeLabel) + '</div>';
-      data.periods.forEach(function (p) {
-        headerCells += '<div class="mw-cohort__th">' + escapeHTML(p) + '</div>';
-      });
-
-      var rows = data.cohorts.map(function (cohort, ri) {
-        var cells = '<div class="mw-cohort__row-label">' + escapeHTML(cohort) + '</div>';
-        if (data.sizes) {
-          var sz = data.sizes[ri];
-          cells += '<div class="mw-cohort__size">' + escapeHTML(safeNum(sz)) + '</div>';
-        }
-        var values = data.data[ri] || [];
-        data.periods.forEach(function (_, ci) {
-          var v = values[ci];
-          var ratio = v == null ? 0 : Math.max(0, Math.min(1, v / 100));
-          var alpha = v == null ? 0 : Math.max(0.08, ratio);
-          var bg = v == null
-            ? 'transparent'
-            : 'color-mix(in srgb, var(--mw-accent) ' + Math.round(alpha * 100) + '%, var(--mw-surface))';
-          var fg = v == null ? 'var(--mw-text-muted)' : (ratio > 0.55 ? '#fff' : 'var(--mw-text)');
-          cells += '<div class="mw-cohort__cell" style="background:' + bg + ';color:' + fg + '">' +
-            escapeHTML(data.valueFormatter(v)) + '</div>';
-        });
-        return cells;
-      }).join('');
-
-      var leftCol = '88px ' + (data.sizes ? '64px ' : '');
-      var totalCols = (data.sizes ? 2 : 1) + data.periods.length;
-      el.innerHTML = headerHTML(data.title, data.subtitle) +
-        '<div class="mw-cohort__grid" ' +
-          'style="grid-template-columns:' + leftCol + 'repeat(' + data.periods.length + ',minmax(36px,1fr))">' +
-          headerCells + rows +
-        '</div>';
-      _applyCommon(el, data);
-    }
-    render();
-    var handle = {
-      el: el, type: 'cohort-matrix',
-      refresh: render,
-      update: function (newData) { data = Object.assign(data, newData || {}); render(); },
-      destroy: function () { el.innerHTML = ''; registry.delete(handle); },
-    };
-    return register(handle);
-  }
-
-  // ==========================================================
   // Widget: Sparkline List — compact label + value + delta + mini spark row list
   // items: [{ label, value, delta?, sparkline, deltaGoodWhen? }]
   // ==========================================================
@@ -2335,7 +1366,7 @@
 
     function render() {
       cleanup();
-      el.classList.add('mw-card', 'mw-sparklist');
+      applyCard(el);
       var c = getColors();
       var rows = data.items.map(function (it, i) {
         var deltaHTML = '';
@@ -2343,26 +1374,26 @@
           var goodWhenNeg = it.deltaGoodWhen === 'negative';
           var good = goodWhenNeg ? it.delta < 0 : it.delta > 0;
           var arrow = it.delta >= 0 ? '▲' : '▼';
-          deltaHTML = '<span class="mw-sparklist__delta mw-sparklist__delta--' + (good ? 'good' : 'bad') + '">' +
+          deltaHTML = '<span class="' + _kpiDelta + (good ? ' text-[var(--mw-success)]' : ' text-[var(--mw-danger)]') + '">' +
             arrow + ' ' + Math.abs(Number(it.delta)).toFixed(1) + '%</span>';
         }
-        return '<div class="mw-sparklist__row">' +
-          '<div class="mw-sparklist__info">' +
-            '<div class="mw-sparklist__label">' + escapeHTML(it.label || '') + '</div>' +
-            '<div class="mw-sparklist__meta">' +
-              '<span class="mw-sparklist__value">' + _valOrEsc(it.value) + '</span>' +
+        return '<div data-role="row" class="flex items-center gap-3 py-[var(--mw-space-2)] border-b border-dashed border-[var(--mw-border)] last:border-b-0">' +
+          '<div data-role="info" class="flex-1 min-w-0">' +
+            '<div data-role="label" class="text-[length:var(--mw-text-sm)] text-[var(--mw-text)] overflow-hidden text-ellipsis whitespace-nowrap">' + escapeHTML(it.label || '') + '</div>' +
+            '<div class="flex items-baseline gap-2 mt-0.5">' +
+              '<span data-role="value" class="text-[length:var(--mw-text-base)] font-semibold text-[var(--mw-text)] [font-variant-numeric:tabular-nums]">' + _valOrEsc(it.value) + '</span>' +
               deltaHTML +
             '</div>' +
           '</div>' +
-          '<div class="mw-sparklist__spark" data-idx="' + i + '"></div>' +
+          '<div data-role="spark" class="w-[80px] h-[28px] shrink-0" data-idx="' + i + '"></div>' +
         '</div>';
       }).join('');
       el.innerHTML = headerHTML(data.title, data.subtitle) +
-        '<div class="mw-sparklist__body">' + rows + '</div>';
+        '<div data-role="body" class="flex flex-col">' + rows + '</div>';
       if (!EC()) return;
       data.items.forEach(function (it, i) {
         if (!it.sparkline || !it.sparkline.length) return;
-        var spark = el.querySelector('.mw-sparklist__spark[data-idx="' + i + '"]');
+        var spark = el.querySelector('[data-role="spark"][data-idx="' + i + '"]');
         if (!spark) return;
         var col = c.accent;
         if (it.delta != null) {
@@ -2437,30 +1468,32 @@
     }
 
     function render() {
-      el.classList.add('mw-card', 'mw-goal');
+      applyCard(el);
+      var goalColorMap = { good: 'var(--mw-success)', warning: 'var(--mw-warning)', danger: 'var(--mw-danger)' };
       var rows = data.items.map(function (it) {
         var ratio = it.max > 0 ? Math.max(0, it.value / it.max) : 0;
         var pct = Math.round(ratio * 100);
         var color = colorFor(ratio);
+        var fillBg = goalColorMap[color] || 'var(--mw-accent)';
         var unit = it.unit ? escapeHTML(it.unit) : '';
-        var sublabel = it.sublabel ? '<span class="mw-goal__sub">' + escapeHTML(it.sublabel) + '</span>' : '';
-        return '<div class="mw-goal__row">' +
-          '<div class="mw-goal__head">' +
-            '<div class="mw-goal__label">' + escapeHTML(it.label) + sublabel + '</div>' +
-            '<div class="mw-goal__stat">' +
-              '<span class="mw-goal__val">' + _valOrEsc(String(data.valueFormatter(it.value))) + unit + '</span>' +
-              '<span class="mw-goal__divider">/</span>' +
-              '<span class="mw-goal__max">' + escapeHTML(data.valueFormatter(it.max)) + unit + '</span>' +
-              '<span class="mw-goal__pct mw-goal__pct--' + color + '">' + pct + '%</span>' +
+        var sublabel = it.sublabel ? '<span class="text-[var(--mw-text-muted)] ml-1 font-normal">' + escapeHTML(it.sublabel) + '</span>' : '';
+        return '<div class="mb-[var(--mw-space-3)]">' +
+          '<div class="flex items-baseline justify-between gap-2 mb-[var(--mw-space-1)]">' +
+            '<div class="text-[length:var(--mw-text-sm)] font-medium text-[var(--mw-text)]">' + escapeHTML(it.label) + sublabel + '</div>' +
+            '<div class="text-[length:var(--mw-text-xs)] text-[var(--mw-text-muted)] [font-variant-numeric:tabular-nums] shrink-0 flex items-baseline gap-0.5">' +
+              '<span class="font-semibold text-[var(--mw-text)]">' + _valOrEsc(String(data.valueFormatter(it.value))) + unit + '</span>' +
+              '<span>/</span>' +
+              '<span>' + escapeHTML(data.valueFormatter(it.max)) + unit + '</span>' +
+              '<span class="font-semibold ml-1" style="color:' + fillBg + '">' + pct + '%</span>' +
             '</div>' +
           '</div>' +
-          '<div class="mw-goal__bar">' +
-            '<div class="mw-goal__fill mw-goal__fill--' + color + '" style="width:' + Math.min(pct, 100) + '%"></div>' +
+          '<div class="' + _progress + '">' +
+            '<div class="' + _progressFill + '" style="width:' + Math.min(pct, 100) + '%;background:' + fillBg + '"></div>' +
           '</div>' +
         '</div>';
       }).join('');
       el.innerHTML = headerHTML(data.title, data.subtitle) +
-        '<div class="mw-goal__body">' + rows + '</div>';
+        '<div>' + rows + '</div>';
       _applyCommon(el, data);
     }
     render();
@@ -2484,14 +1517,14 @@
     // Coerce all text fields — LLMs sometimes pass arrays/objects
     ['kicker','title','subtitle','meta'].forEach(function(k) { data[k] = toStr(data[k]); });
     function render() {
-      el.classList.add('mw-page-head');
+      // page-head (no card)
       el.innerHTML =
-        (data.kicker ? '<div class="mw-page-head__kicker"><span class="mw-page-head__dot"></span>' + escapeHTML(data.kicker) + '</div>' : '') +
-        '<div class="mw-page-head__row">' +
-          '<h1 class="mw-page-head__title">' + escapeHTML(data.title) + '</h1>' +
-          (data.meta ? '<span class="mw-page-head__mono">' + escapeHTML(data.meta) + '</span>' : '') +
+        (data.kicker ? '<div class="' + _pageHeadKicker + ' flex items-center gap-[var(--mw-space-1-5)]"><span class="inline-block w-[6px] h-[6px] rounded-full bg-[var(--mw-accent)]"></span>' + escapeHTML(data.kicker) + '</div>' : '') +
+        '<div class="flex items-baseline gap-3 flex-wrap">' +
+          '<h1 class="' + _pageHeadTitle + '">' + escapeHTML(data.title) + '</h1>' +
+          (data.meta ? '<span class="text-[length:var(--mw-text-xs)] text-[var(--mw-text-muted)] font-[family-name:var(--mw-mono-font)] tracking-[0.02em]">' + escapeHTML(data.meta) + '</span>' : '') +
         '</div>' +
-        (data.subtitle ? '<div class="mw-page-head__meta"><span>' + _valOrEsc(data.subtitle) + '</span></div>' : '');
+        (data.subtitle ? '<div class="' + _pageHeadMeta + '"><span>' + _valOrEsc(data.subtitle) + '</span></div>' : '');
       _applyCommon(el, data);
     }
     render();
@@ -2511,14 +1544,14 @@
     var data = Object.assign({ index: '', kicker: '', title: '', tag: '' }, config || {});
     ['index','kicker','title','tag'].forEach(function(k) { data[k] = toStr(data[k]); });
     function render() {
-      el.classList.add('mw-section-head');
+      // section-head (no card)
       var kickerText = data.index ? (data.index + ' · ' + data.kicker) : data.kicker;
       el.innerHTML =
-        '<div class="mw-section-head__left">' +
-          (kickerText ? '<div class="mw-section-head__kicker">' + escapeHTML(kickerText) + '</div>' : '') +
-          (data.title ? '<h2 class="mw-section-head__title">' + escapeHTML(data.title) + '</h2>' : '') +
+        '<div class="flex-1 min-w-0">' +
+          (kickerText ? '<div class="' + _secHeadKicker + '">' + escapeHTML(kickerText) + '</div>' : '') +
+          (data.title ? '<h2 class="' + _secHeadTitle + '">' + escapeHTML(data.title) + '</h2>' : '') +
         '</div>' +
-        (data.tag ? '<div class="mw-section-head__tag">' + escapeHTML(data.tag) + '</div>' : '');
+        (data.tag ? '<div class="text-[length:var(--mw-text-xs)] text-[var(--mw-text-muted)] font-[family-name:var(--mw-mono-font)] shrink-0">' + escapeHTML(data.tag) + '</div>' : '');
       _applyCommon(el, data);
     }
     render();
@@ -2547,25 +1580,24 @@
     var icons = { info: 'ⓘ', warning: '▲', danger: '⚠', success: '✓' };
 
     function render() {
-      // Preserve existing classes (e.g. Tailwind utilities like mb-6)
-      ['info', 'warning', 'danger', 'success'].forEach(function (t) {
-        el.classList.remove('mw-alert--' + t);
-      });
-      el.classList.add('mw-alert');
-      el.classList.add('mw-alert--' + data.type);
+      var colorMap = { info: 'var(--mw-accent)', warning: 'var(--mw-warning)', danger: 'var(--mw-danger)', success: 'var(--mw-success)' };
+      var col = colorMap[data.type] || colorMap.info;
+      el.className += ' ' + _alertBanner;
+      el.style.background = 'color-mix(in srgb, ' + col + ' 10%, var(--mw-surface))';
+      el.style.borderLeft = '3px solid ' + col;
       var icon = data.icon != null ? data.icon : (icons[data.type] || 'ⓘ');
       var msgRaw = data.message || '';
-      var msgHTML = msgRaw ? '<span class="mw-alert__msg">' + (typeof msgRaw === 'string' && msgRaw.indexOf('<') >= 0 ? msgRaw : escapeHTML(msgRaw)) + '</span>' : '';
+      var msgHTML = msgRaw ? '<span class="text-[var(--mw-text-muted)]">' + (typeof msgRaw === 'string' && msgRaw.indexOf('<') >= 0 ? msgRaw : escapeHTML(msgRaw)) + '</span>' : '';
       var actionHTML = '';
       if (data.action) {
         var href = data.action.href ? ' href="' + escapeHTML(data.action.href) + '"' : ' href="#"';
-        actionHTML = '<a class="mw-alert__action"' + href + ' data-alert-action>' + escapeHTML(data.action.label) + ' →</a>';
+        actionHTML = '<a class="font-medium whitespace-nowrap ml-auto"' + href + ' style="color:' + col + '" data-alert-action>' + escapeHTML(data.action.label) + ' →</a>';
       }
-      var dismissHTML = data.dismissable ? '<button class="mw-alert__dismiss" data-alert-dismiss aria-label="닫기">×</button>' : '';
+      var dismissHTML = data.dismissable ? '<button class="ml-2 bg-transparent border-none cursor-pointer text-[var(--mw-text-muted)] text-lg leading-none" data-alert-dismiss aria-label="닫기">×</button>' : '';
       el.innerHTML =
-        '<span class="mw-alert__icon">' + escapeHTML(icon) + '</span>' +
-        '<div class="mw-alert__body">' +
-          '<span class="mw-alert__title">' + escapeHTML(data.title) + '</span>' +
+        '<span class="text-[1.1rem] leading-none shrink-0">' + escapeHTML(icon) + '</span>' +
+        '<div class="flex-1 min-w-0 flex flex-col gap-0.5">' +
+          '<span class="font-semibold text-[var(--mw-text)]">' + escapeHTML(data.title) + '</span>' +
           msgHTML +
         '</div>' +
         actionHTML + dismissHTML;
@@ -2590,110 +1622,6 @@
       destroy: function () { el.innerHTML = ''; registry.delete(handle); },
     };
     return register(handle);
-  }
-
-  // ==========================================================
-  // Widget: Bullet Chart — actual vs target vs benchmark (horizontal)
-  // ranges = qualitative bands, target = goal line, benchmark = comparison line
-  // ==========================================================
-  function bulletChart(el, config) {
-    return _chartBase(el, Object.assign({ height: 140 }, config), {
-      value: 0, target: null, benchmark: null,
-      max: 100, min: 0, unit: '',
-      valueFormatter: null,
-      ranges: [],
-    }, 'bullet-chart', function (data, c) {
-      var fmt = data.valueFormatter || safeNum;
-      // If custom formatter is provided, don't auto-append unit (it's already in the formatted string)
-      var unitSuffix = data.valueFormatter ? '' : (data.unit || '');
-      // Use the global withAlpha helper (handles both hex and rgb)
-      var toAlpha = withAlpha;
-
-      // Background qualitative bands (stacked horizontal bars)
-      var bandSeries = [];
-      if (data.ranges && data.ranges.length) {
-        var prev = data.min;
-        var n = data.ranges.length;
-        data.ranges.forEach(function (r, i) {
-          var w = r.value - prev;
-          if (w <= 0) return;
-          var alpha = 0.08 + (i / Math.max(1, n - 1)) * 0.22;
-          bandSeries.push({
-            name: r.label || ('band' + i), type: 'bar', stack: 'band', silent: true,
-            data: [w], barWidth: '68%',
-            itemStyle: { color: toAlpha(c.accent, alpha), borderRadius: 0 },
-          });
-          prev = r.value;
-        });
-      } else {
-        // No ranges — single soft band across full width
-        bandSeries.push({
-          name: 'range', type: 'bar', stack: 'band', silent: true,
-          data: [data.max - data.min], barWidth: '68%',
-          itemStyle: { color: toAlpha(c.accent, 0.1) },
-        });
-      }
-
-      // Actual value — narrower solid bar, NOT stacked
-      var markLines = [];
-      if (data.target != null) {
-        markLines.push({
-          xAxis: data.target,
-          lineStyle: { color: c.text, width: 2 },
-          label: { show: true, position: 'end',
-                   formatter: '목표 ' + fmt(data.target) + unitSuffix,
-                   color: c.text, fontSize: 10, fontFamily: c.font, fontWeight: 600,
-                   distance: 4, backgroundColor: c.surface, padding: [2, 5],
-                   borderColor: c.border, borderWidth: 1, borderRadius: 3 },
-        });
-      }
-      if (data.benchmark != null) {
-        markLines.push({
-          xAxis: data.benchmark,
-          lineStyle: { color: c.muted, width: 1, type: 'dashed' },
-          label: { show: true, position: 'end',
-                   formatter: '벤치 ' + fmt(data.benchmark) + unitSuffix,
-                   color: c.muted, fontSize: 10, fontFamily: c.font,
-                   distance: 4, backgroundColor: c.surface, padding: [2, 5],
-                   borderColor: c.border, borderWidth: 1, borderRadius: 3 },
-        });
-      }
-      var valueSeries = {
-        name: '실적', type: 'bar',
-        data: [data.value], barWidth: '28%',
-        itemStyle: { color: c.accent, borderRadius: [0, 3, 3, 0] },
-        z: 10,
-        markLine: markLines.length ? {
-          symbol: 'none', silent: true,
-          data: markLines,
-        } : undefined,
-      };
-
-      return {
-        textStyle: { fontFamily: c.font, color: c.text },
-        grid: { top: 36, right: 24, bottom: 26, left: 12 },
-        tooltip: Object.assign({ trigger: 'axis', axisPointer: { type: 'shadow' } }, baseTooltip(c), {
-          formatter: function () {
-            var s = '<b>실적 ' + fmt(data.value) + unitSuffix + '</b>';
-            if (data.target != null) s += '<br/>목표: ' + fmt(data.target) + unitSuffix;
-            if (data.benchmark != null) s += '<br/>벤치: ' + fmt(data.benchmark) + unitSuffix;
-            return s;
-          },
-        }),
-        xAxis: {
-          type: 'value', min: data.min, max: data.max,
-          axisLine: { lineStyle: { color: c.border } },
-          axisTick: { show: false },
-          axisLabel: { color: c.muted, fontSize: 10, formatter: fmt, margin: 8 },
-          splitLine: { show: false },
-        },
-        yAxis: {
-          type: 'category', data: [''],
-          axisLine: { show: false }, axisTick: { show: false }, axisLabel: { show: false },
-        },
-        series: bandSeries.concat([valueSeries]),
-      };
-    });
   }
 
   // ==========================================================
@@ -2914,34 +1842,33 @@
     }
 
     function render() {
-      el.classList.add('mw-card', 'mw-insight');
+      applyCard(el); el.className += ' ' + _insight;
       el.style.setProperty('--mw-insight-bar', statusToVar(data.status));
 
-      var iconHTML = data.icon ? '<span class="mw-insight__icon">' + escapeHTML(data.icon) + '</span>' : '';
-      var metaHTML = data.meta ? '<span class="mw-insight__meta">' + escapeHTML(data.meta) + '</span>' : '';
-      var tagHTML  = data.tag  ? '<span class="mw-insight__tag">'  + escapeHTML(data.tag)  + '</span>' : '';
+      var iconHTML = data.icon ? '<span class="' + _insightIcon + '">' + escapeHTML(data.icon) + '</span>' : '';
+      var metaHTML = data.meta ? '<span class="' + _insightMeta + '">' + escapeHTML(data.meta) + '</span>' : '';
+      var tagHTML  = data.tag  ? '<span class="' + _insightTag + '">'  + escapeHTML(data.tag)  + '</span>' : '';
 
       var bulletsHTML = (data.bullets || []).slice(0, 100).map(function (b) {
         var t = (typeof b === 'string') ? b : (b.text || '');
-        return '<li class="mw-insight__bullet">' + escapeHTML(t) + '</li>';
+        return '<li class="' + _insightBullet + ' before:content-[\'\'] before:absolute before:left-1 before:top-[0.55em] before:w-1 before:h-1 before:rounded-full before:bg-[var(--mw-text-muted)] before:opacity-50">' + escapeHTML(t) + '</li>';
       }).join('');
 
       var highlightHTML = data.highlight
-        ? '<div class="mw-insight__highlight">' +
-            '<span class="mw-insight__highlight-icon">' + escapeHTML(data.highlightIcon || '🎯') + '</span>' +
+        ? '<div class="' + _insightHighlight + '">' +
+            '<span class="' + _insightHlIcon + '">' + escapeHTML(data.highlightIcon || '🎯') + '</span>' +
             '<span>' + escapeHTML(data.highlight) + '</span>' +
           '</div>'
         : '';
 
       el.innerHTML =
-        '<div class="mw-insight__head">' +
-          '<span class="mw-insight__dot"></span>' +
+        '<div class="' + _insightHead + '">' +
           iconHTML +
-          '<span class="mw-insight__title">' + escapeHTML(data.title) + '</span>' +
+          '<span class="' + _insightTitle + '">' + escapeHTML(data.title) + '</span>' +
           metaHTML +
           tagHTML +
         '</div>' +
-        (bulletsHTML ? '<ul class="mw-insight__bullets">' + bulletsHTML + '</ul>' : '') +
+        (bulletsHTML ? '<ul class="' + _insightBullets + '">' + bulletsHTML + '</ul>' : '') +
         highlightHTML;
       _applyCommon(el, data);
     }
@@ -2951,7 +1878,7 @@
       el: el, type: 'insight-card',
       refresh: render,
       update: function (newData) { data = Object.assign(data, newData || {}); render(); },
-      destroy: function () { el.innerHTML = ''; el.classList.remove('mw-insight'); registry.delete(handle); },
+      destroy: function () { el.innerHTML = ''; registry.delete(handle); },
     };
     return register(handle);
   }
@@ -2970,16 +1897,16 @@
     }, config || {});
 
     function render() {
-      el.classList.add('mw-card', 'mw-defcard');
+      applyCard(el);
       var rows = (data.rows || []).map(function (r) {
-        return '<div class="mw-defcard__row">' +
-          '<div class="mw-defcard__key">' + escapeHTML(r.key) + '</div>' +
-          '<div class="mw-defcard__val">' + escapeHTML(r.value) + '</div>' +
+        return '<div class="flex justify-between items-baseline gap-3 py-[var(--mw-space-1-5)] border-b border-dashed border-[var(--mw-border)] last:border-b-0">' +
+          '<div class="text-[length:var(--mw-text-sm)] text-[var(--mw-text-muted)] shrink-0">' + escapeHTML(r.key) + '</div>' +
+          '<div class="text-[length:var(--mw-text-sm)] font-medium text-[var(--mw-text)] text-right">' + escapeHTML(r.value) + '</div>' +
         '</div>';
       }).join('');
       el.innerHTML =
-        (data.title ? '<div class="mw-defcard__title">' + escapeHTML(data.title) + '</div>' : '') +
-        (data.subtitle ? '<div class="mw-defcard__sub">' + escapeHTML(data.subtitle) + '</div>' : '') +
+        (data.title ? '<div class="text-[length:var(--mw-text-base)] font-semibold text-[var(--mw-text)] mb-1">' + escapeHTML(data.title) + '</div>' : '') +
+        (data.subtitle ? '<div class="text-[length:var(--mw-text-sm)] text-[var(--mw-text-muted)] mb-3">' + escapeHTML(data.subtitle) + '</div>' : '') +
         rows;
       _applyCommon(el, data);
     }
@@ -2989,7 +1916,7 @@
       el: el, type: 'def-card',
       refresh: render,
       update: function (newData) { data = Object.assign(data, newData || {}); render(); },
-      destroy: function () { el.innerHTML = ''; el.classList.remove('mw-defcard'); registry.delete(handle); },
+      destroy: function () { el.innerHTML = ''; registry.delete(handle); },
     };
     return register(handle);
   }
@@ -3024,25 +1951,24 @@
         var pct = (Number(s.value) || 0) / total * 100;
         var bg = s.color ? s.color : statusToVar(s.status);
         var label = data.showLabels && pct > 7 ? Math.round(pct) + '%' : '';
-        return '<div class="mw-sharebar__seg" style="width:' + pct.toFixed(3) + '%;background:' + bg + '">' +
+        return '<div class="' + _sharebarSeg + '" style="width:' + pct.toFixed(3) + '%;background:' + bg + '">' +
                escapeHTML(label) + '</div>';
       }).join('');
 
       var legend = data.legend ? (
-        '<div class="mw-sharebar__legend">' +
+        '<div class="' + _sharebarLegend + '">' +
         segs.map(function (s) {
-          var status = s.status || 'gray';
-          return '<span class="mw-sharebar__leg-item">' +
-                 '<span class="mw-sharebar__leg-dot mw-sharebar__leg-dot--' + escapeHTML(status) + '"' +
-                 (s.color ? ' style="background:' + s.color + '"' : '') + '></span>' +
+          var dotColor = s.color ? s.color : statusToVar(s.status || 'gray');
+          return '<span class="' + _sharebarLegItem + '">' +
+                 '<span class="' + _sharebarLegDot + '" style="background:' + dotColor + '"></span>' +
                  escapeHTML(s.label || '') +
-                 (s.sub ? ' <span class="mw-sharebar__leg-sub">' + escapeHTML(s.sub) + '</span>' : '') +
+                 (s.sub ? ' <span class="' + _sharebarLegSub + '">' + escapeHTML(s.sub) + '</span>' : '') +
                  '</span>';
         }).join('') + '</div>'
       ) : '';
 
       el.innerHTML =
-        '<div class="mw-sharebar" style="height:' + Number(data.height) + 'px">' + bars + '</div>' +
+        '<div class="' + _sharebar + '" style="height:' + Number(data.height) + 'px">' + bars + '</div>' +
         legend;
       _applyCommon(el, data);
     }
@@ -3069,10 +1995,12 @@
 
     function render() {
       var s = String(data.status || 'gray').toLowerCase();
+      var dotColorMap = { green: 'var(--mw-success)', yellow: 'var(--mw-warning)', red: 'var(--mw-danger)' };
+      var dotBg = dotColorMap[s] || 'var(--mw-text-muted)';
       el.innerHTML =
-        '<span class="mw-rag mw-rag--' + escapeHTML(s) + '">' +
-          '<span class="mw-rag__dot"></span>' +
-          '<span class="mw-rag__lbl">' + escapeHTML(data.label) + '</span>' +
+        '<span class="' + _rag + '">' +
+          '<span class="' + _ragDot + '" style="background:' + dotBg + '"></span>' +
+          '<span class="' + _ragLbl + '">' + escapeHTML(data.label) + '</span>' +
         '</span>';
       _applyCommon(el, data);
     }
@@ -3093,37 +2021,37 @@
   var api = {
     version: '0.1.25',
     kpiCard: kpiCard,
-    lineChart: lineChart,
-    barChart: barChart,
-    funnelChart: funnelChart,
-    donutChart: donutChart,
+    lineChart: null,
+    barChart: null,
+    funnelChart: null,
+    donutChart: null,
     leaderboard: leaderboard,
     activityTable: activityTable,
-    heatmapChart: heatmapChart,
-    gaugeChart: gaugeChart,
-    radarChart: radarChart,
-    treemapChart: treemapChart,
-    scatterChart: scatterChart,
-    sankeyChart: sankeyChart,
+    heatmapChart: null,
+    gaugeChart: null,
+    radarChart: null,
+    treemapChart: null,
+    scatterChart: null,
+    sankeyChart: null,
     heroTile: heroTile,
-    metricChart: metricChart,
-    ringProgress: ringProgress,
+    metricChart: null,
+    ringProgress: null,
     timeline: timeline,
     statusGrid: statusGrid,
     countdownTile: countdownTile,
     metricStack: metricStack,
     inboxPreview: inboxPreview,
     compareCard: compareCard,
-    calendarHeatmap: calendarHeatmap,
+    calendarHeatmap: null,
     eventCalendar: eventCalendar,
     progressStepper: progressStepper,
-    mapChart: mapChart,
-    waterfallChart: waterfallChart,
-    cohortMatrix: cohortMatrix,
+    mapChart: null,
+    waterfallChart: null,
+    cohortMatrix: null,
     sparklineList: sparklineList,
     goalGrid: goalGrid,
     alertBanner: alertBanner,
-    bulletChart: bulletChart,
+    bulletChart: null,
     pageHeader: pageHeader,
     sectionHead: sectionHead,
     ragChip: ragChip,
@@ -3205,13 +2133,27 @@
     // Mode-specific page builder registry — each mode script registers its builder here.
     _pageBuilders: {},
 
+    // Internal helpers — exposed for maging-charts.js and other split bundles.
+    _internals: {
+      q: q, EC: EC, getColors: getColors, parseHex: parseHex, withAlpha: withAlpha,
+      buildPalette: buildPalette, baseTooltip: baseTooltip, headerHTML: headerHTML,
+      _applyCommon: _applyCommon, escapeHTML: escapeHTML, toStr: toStr,
+      _autoDerive: _autoDerive, _autoValueHTML: _autoValueHTML, _valOrEsc: _valOrEsc,
+      safeNum: safeNum, register: register, _chartBase: _chartBase,
+      fmt: fmt, plainFmt: plainFmt, stripHTML: stripHTML,
+      _arrLast: _arrLast, _arrPrev: _arrPrev, _growthRate: _growthRate, _parseNumVal: _parseNumVal,
+      rotateHue: rotateHue, rgbStr: rgbStr, rgbaStr: rgbaStr,
+      _card: _card, _chartBody: _chartBody, _ringContext: _ringContext, _kpiDelta: _kpiDelta,
+      applyCard: applyCard, registry: registry,
+    },
+
     // ================================================================
     // Maging.page(config) — Declarative page generator (all modes)
     // ================================================================
     page: function (cfg) {
       if (!cfg) return;
 
-      var mode = cfg.mode || 'dashboard';
+      var mode = cfg.mode || (cfg.slides ? 'slide' : 'dashboard');
 
       // Dispatch to mode-specific builder if registered
       if (mode !== 'dashboard' && api._pageBuilders[mode]) {
@@ -3287,18 +2229,18 @@
         var style = document.createElement('style');
         style.id = GRID_FILL_ID;
         style.textContent =
-          '.mw-pgrid > *,.mw-pgrid > .mw-card{height:100% !important;min-width:0;min-height:0 !important;}' +
-          '.mw-pgrid .mw-card{display:flex;flex-direction:column;box-sizing:border-box;height:100% !important;min-height:0 !important;}' +
-          '.mw-pgrid .mw-chart__body{height:auto !important;flex:1 1 auto;min-height:0 !important;}' +
-          '.mw-pgrid .mw-lb__list,.mw-pgrid .mw-timeline,.mw-pgrid .mw-inbox,.mw-pgrid .mw-table__wrap{flex:1 1 auto;min-height:0;overflow-y:auto;}' +
-          '.mw-pgrid .mw-kpi__spark,.mw-pgrid .mw-hero__spark{flex:1 1 auto;min-height:32px;}' +
-          '.mw-pgrid .mw-countdown.mw-card,.mw-pgrid .mw-stat.mw-card,.mw-pgrid .mw-compare.mw-card,.mw-pgrid .mw-mstack.mw-card,.mw-pgrid .mw-kpi.mw-card,.mw-pgrid .mw-hero.mw-card{container-type:size;}' +
-          '.mw-pgrid .mw-countdown__num{font-size:clamp(1.75rem,18cqh,3.25rem);}' +
-          '.mw-pgrid .mw-mstack__main-val{font-size:clamp(1.5rem,16cqh,2.75rem);}' +
-          '.mw-pgrid .mw-compare__val{font-size:clamp(1.15rem,12cqh,2.25rem);}' +
-          '.mw-pgrid .mw-stat__value{font-size:clamp(1.35rem,18cqh,2.5rem);}' +
-          '.mw-pgrid .mw-kpi__value{font-size:clamp(1.5rem,18cqh,2.5rem);}' +
-          '.mw-pgrid .mw-hero__value{font-size:clamp(1.75rem,20cqh,3rem);}';
+          '.mw-pgrid > *{height:100% !important;min-width:0;min-height:0 !important;}' +
+          '.mw-pgrid > *{display:flex;flex-direction:column;box-sizing:border-box;height:100% !important;min-height:0 !important;}' +
+          '.mw-pgrid [data-mw-chart]{height:auto !important;flex:1 1 auto;min-height:0 !important;}' +
+          '.mw-pgrid [data-mw-list]{flex:1 1 auto;min-height:0;overflow-y:auto;}' +
+          '.mw-pgrid [data-mw-spark]{flex:1 1 auto;min-height:32px;}' +
+          '.mw-pgrid [data-mw-cq]{container-type:size;}' +
+          '.mw-pgrid [data-mw-cq=countdown]{font-size:clamp(1.75rem,18cqh,3.25rem);}' +
+          '.mw-pgrid [data-mw-cq=mstack] [data-mw-val]{font-size:clamp(1.5rem,16cqh,2.75rem);}' +
+          '.mw-pgrid [data-mw-cq=compare] [data-mw-val]{font-size:clamp(1.15rem,12cqh,2.25rem);}' +
+          '.mw-pgrid [data-mw-cq=stat] [data-mw-val]{font-size:clamp(1.35rem,18cqh,2.5rem);}' +
+          '.mw-pgrid [data-mw-cq=kpi] [data-mw-val]{font-size:clamp(1.5rem,18cqh,2.5rem);}' +
+          '.mw-pgrid [data-mw-cq=hero] [data-mw-val]{font-size:clamp(1.75rem,20cqh,3rem);}';
         document.head.appendChild(style);
       }
 
@@ -3365,8 +2307,8 @@
 
             // Clear inline minHeight set by _chartBase — grid-auto-rows controls height
             if (height) {
-              var card = el.querySelector('.mw-card') || el;
-              if (card.classList.contains('mw-card')) card.style.minHeight = '';
+              var card = el.querySelector('[data-mw-card]') || el;
+              if (card.dataset.mwCard != null) card.style.minHeight = '';
               if (el.style.minHeight) el.style.minHeight = '';
             }
           });
@@ -3648,7 +2590,7 @@
           { format: 'html', label: htmlIcon + ' HTML', title: '단일 HTML 파일' }
         ]
       };
-      var widgets = document.querySelectorAll('.mw-card');
+      var widgets = document.querySelectorAll('[data-mw-card]');
       if (widgets.length > 0) return {
         format: 'html', label: dlIcon, title: 'HTML 다운로드', multi: true,
         options: [
@@ -3843,7 +2785,7 @@
       fab.style.display = 'none';
 
       function bakeCharts(root) {
-        var charts = root.querySelectorAll('.mw-chart__body');
+        var charts = root.querySelectorAll('[data-mw-chart]');
         var backups = [];
         charts.forEach(function (el) {
           var inst = typeof echarts !== 'undefined' && echarts.getInstanceByDom(el);
@@ -3920,7 +2862,7 @@
         var pdfOrigHash = window.location.hash;
 
         mountSlides(pdfSlides).then(function () {
-          document.body.classList.add('mw-printing');
+          document.body.dataset.mwPrinting = '';
           window.dispatchEvent(new Event('resize'));
 
           var pageW = 1058;
@@ -3932,7 +2874,7 @@
 
           setTimeout(function () {
             window.print();
-            document.body.classList.remove('mw-printing');
+            delete document.body.dataset.mwPrinting;
             pdfSlides.forEach(function (s) { s.style.removeProperty('--print-scale'); });
             finishExport();
             restoreHash(pdfOrigHash);
@@ -3999,7 +2941,7 @@
 
           // Nudge large text slightly wider (headings wrap tighter in PPT)
           slides.forEach(function (s) {
-            s.querySelectorAll('h1, h2, h3, .mw-page-head__title, .mw-slide__label, .mw-header__title, .mw-kpi__label, .mw-kpi__value').forEach(function (el) {
+            s.querySelectorAll('h1, h2, h3, [data-role="title"], .mw-slide__label, [data-role="label"], [data-role="value"]').forEach(function (el) {
               el.style.letterSpacing = '0.03em';
               el.style.paddingRight = (parseFloat(getComputedStyle(el).paddingRight) + 4) + 'px';
             });
@@ -4222,7 +3164,7 @@
   var resizeTimer;
   window.addEventListener('resize', function () {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(refreshAll, 120);
+    resizeTimer = setTimeout(refreshAll, 300);
   });
 
   global.Maging = api;
@@ -4250,7 +3192,7 @@
         var unit = attr(this, 'unit');
         var cfg  = {
           label:     attr(this, 'label'),
-          value:     unit ? val + '<span class="mw-unit"> ' + unit + '</span>' : val,
+          value:     unit ? val + '<span class="text-[0.65em] font-normal text-[var(--mw-text-muted)] ml-[0.1em]"> ' + unit + '</span>' : val,
           valueHTML: !!unit || val.includes('<'),
         };
         var d = attr(this, 'delta');

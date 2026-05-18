@@ -7,7 +7,6 @@ export const metadata: Metadata = {
 };
 
 const config = {
-  mode: 'pitch',
   sidebarTitle: 'AI CS 자동화',
   sidebarDate: 'Proposal · 2026',  slides: [
     {
@@ -150,5 +149,5 @@ const config = {
 };
 
 export default function ProposalPage() {
-  return <MagingPage config={config} fullscreen scripts={['/dist/maging-sidebar.js', '/dist/maging-pitch.js']} />;
+  return <MagingPage config={config} fullscreen scripts={['/dist/maging-sidebar.js', '/dist/maging-weekly.js', '/dist/maging-pitch.js']} />;
 }
