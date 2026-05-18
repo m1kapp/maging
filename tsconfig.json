@@ -39,6 +39,10 @@
     "node_modules",
     "dist",
     "scripts",
-    "_site"
+    "_site",
+    "src/h.ts",
+    "src/slide.tsx",
+    "src/viewer.ts",
+    "src/widgets"
   ]
 }
