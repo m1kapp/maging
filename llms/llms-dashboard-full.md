@@ -282,260 +282,105 @@ MIT
 
 ---
 
-## Mode: Weekly Report (주간보고)
+## Mode: Dashboard
 
-> pageHeader → KPI strip → sectionHead → monthlyTable/chart → alertBanner 순 정기 보고서.
+> 데이터 모니터링과 운영 대시보드에 최적화된 모드입니다.
 
 ### Setup
+
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging-all.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.26/dist/maging-all.js"></script>
 <body class="mw-themed">
 ```
-`maging:ready` 안에서 마운트. `DOMContentLoaded` 금지.
 
-**DECK_MOUNT 필수** — 위젯을 즉시 실행하지 마라. 각 슬라이드별 마운트 함수를 선언하고 `window.DECK_MOUNT`에 등록하라. `maging-weekly.js`가 이를 감지하여 네비게이션 · 스케일링을 초기화한다.
+`maging-all.js` bundles: Pretendard + maging.css + Tailwind CDN + ECharts 5 + maging.js. Dispatches `'maging:ready'` on `window`.
+
+**Mount ALL widgets inside `maging:ready`:**
 ```js
 window.addEventListener('maging:ready', () => {
-  function mountCover() { Maging.sectionCover(...); }
-  function mountSlide1() { Maging.pageHeader(...); Maging.kpiCard(...); }
-  // ...
-  window.DECK_MOUNT = {
-    cover: mountCover,
-    'slide-1': mountSlide1,
-    // 모든 슬라이드 ID → 마운트 함수
-  };
+  Maging.kpiCard('#el', { label: '매출', unit: '억원', sparkline: [98,105,112,118,128] });
 });
 ```
-**DECK_MOUNT 없이 즉시 마운트하면 네비게이션이 동작하지 않는다.**
 
-**KRW:** `Maging.fmt.krw(v)` (HTML), `Maging.fmt.krwPlain(v)` (차트 축). NEVER `₩` prefix.
+**DO NOT use `DOMContentLoaded`** — it fires before ECharts loads.
 
 ---
 
-### KPI 카드
-```js
-Maging.kpiCard('#k1', {
-  label: '3월 신규 매출 · 목표 1.42억원',
-  value: '0.72<span class="mw-unit"> 억원</span>', valueHTML: true,
-  delta: -49.3, deltaGoodWhen: 'positive',
-});
-```
-`deltaGoodWhen`: 매출/사용자=`'positive'` · 해지율/이탈=`'negative'`. `grid-auto-rows` 금지.
+### Layout Primitives
 
----
+Outer wrapper: `<main class="max-w-[1100px] mx-auto px-6 py-4">`. Stack sections with `mt-5 pt-4`.
 
-### Monthly Table 결정 트리
+**`pageHeader`** → Full-width H1. Use once at top.
+**`sectionHead`** → Section divider. Mount **outside** grid cells.
 
-```
-단위 통일? YES → monthlyTable + unitToggle/viewToggle  (max<1억이면 unitToggle 생략)
-          NO  → activityTable + row.unit 인라인
-```
-
-**`monthlyTable`:**
-```js
-Maging.monthlyTable('#tbl', {
-  title, rows:[{name, data:[v,…]}], summaryRow?,
-  unitToggle?, viewToggle?, defaultUnit?:'만원', defaultView?:'table',
-});
-```
-
-**`activityTable` (단위 혼합):**
-```js
-const fmt = v => v==null ? '<span style="color:var(--mw-text-muted)">−</span>' : (typeof v==='string'?v:v.toLocaleString());
-const months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
-Maging.activityTable('#tbl', {
-  columns: [
-    { key:'name', label:'구분', align:'left', render:(v,r)=>v+(r.unit?` <span class="row-unit">(${r.unit})</span>`:'') },
-    ...months.map((m,i)=>({key:'m'+i,label:m,align:'right',render:fmt})),
-    { key:'total', label:'합계', align:'right', render:v=>'<strong>'+fmt(v)+'</strong>' },
-  ],
-  rows:[
-    {name:'해지',unit:'건',m0:174,m1:138,m2:135,total:447},
-    {name:'해지율',unit:'%',m0:'3.7%',m1:'3.0%',m2:'2.9%',total:'3.2%'},
-  ],
-});
-```
-`.row-unit`은 maging-all.js에 포함 — `<style>` 태그 불필요.
-
-**컬럼 그룹 헤더 (연도비교):**
-```js
-Maging.activityTable('#tbl', {
-  headerGroups:[{label:'',span:1},{label:'26년',span:3},{label:'25년',span:2}],
-  columns:[{key:'name',label:'구분',align:'left'},{key:'t26',label:'목표',align:'right',render:fmt},…],
-  rows:[…],
-});
-```
-
-**scroll-table:** 12개월 표는 가로 스크롤 + 첫/끝 열 고정이 필수.
 ```html
-<div id="tbl" class="scroll-table" style="height:300px"></div>
-```
-`monthlyTable`은 자동 적용. `activityTable` 직접 사용 시 위 wrapper 필수.
-
-⚠️ **듀얼 Y축 금지** — `barChart` + `lineChart` 두 개로 분리.
-
-**차트 선택:**
-- 추이(월별) → `lineChart` · 비교(카테고리) → `barChart` · 비율 → `donutChart`
-- 목표 대비 달성 → `bulletChart` / `ringProgress` · 순위 → `leaderboard`
-
----
-
-### HTML 컴포넌트 (maging-all.js 자동 포함)
-
-**이슈 카드** — 문제/리스크를 3열 그리드로:
-```html
-<div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
-  <div class="issue-card issue-card--danger">
-    <div class="issue-card__head">
-      <span class="issue-card__icon">🔍</span>
-      <span class="issue-card__label">이슈명</span>
-      <span class="issue-card__tag">영향 범위</span>
-    </div>
-    <div class="issue-card__sub">상세 설명</div>
-  </div>
-  <div class="issue-card issue-card--warning">…</div>
-  <div class="issue-card issue-card--info">…</div>
-</div>
-```
-`issue-card--danger` / `--warning` / `--info`
-
-**지표 정의 카드 + 수평 분포 바:**
-```html
-<div class="def-card">
-  <div class="def-card__title">NPS 1분기 분포</div>
-  <div class="def-card__sub">유료 사용자 대상</div>
-  <div class="hbar mt-3">
-    <div class="hbar__seg hbar__seg--good"    style="width:54%">54%</div>
-    <div class="hbar__seg hbar__seg--neutral" style="width:24%">24%</div>
-    <div class="hbar__seg hbar__seg--bad"     style="width:22%">22%</div>
+<div id="page-hero" class="pt-4 pb-2"></div>
+<div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
+  <div id="section-01"></div>
+  <div class="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-3 mt-3">
+    <div id="chart-a"></div><div id="chart-b"></div>
   </div>
 </div>
 ```
-`hbar__seg--good` (success) / `--neutral` (muted) / `--bad` (danger)
-
-**정의 카드 (KPI 맥락 설명):**
-```html
-<div class="def-card">
-  <div class="def-card__title">지표명</div>
-  <div class="def-card__sub">측정 주기</div>
-  <div class="def-card__row"><div class="def-card__key">정의</div><div class="def-card__val">…</div></div>
-  <div class="def-card__row"><div class="def-card__key">담당</div><div class="def-card__val">…</div></div>
-</div>
-```
 
 ---
 
-### 다중 슬라이드 (덱 모드)
+### Canonical Layouts
 
+**1 · KPI Row**
 ```html
-<div class="flex">
-  <maging-sidebar active="cover" data-title="SaaS 주간보고" data-date="2026.04.27"></maging-sidebar>
-  <main class="flex-1 min-w-0 px-6 py-4" style="word-break:keep-all">
-    <div id="slides-wrap" class="max-w-[1240px] mx-auto">
-      <section class="slide cover-slide" id="cover" data-active></section>
-      <section class="slide" id="sales" data-label="KPI 1. 신규매출" data-bu="SaaS B/U" data-team="영업팀"></section>
-    </div>
-  </main>
-</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
 ```
-```js
-window.addEventListener('maging:ready', () => {
-  Maging.deck({
-    cover: () => { Maging.sectionCover('#cover .cover-host', {style:'classic',kicker:'WEEKLY REPORT · 날짜',title:'주간보고',subtitle:'팀명',brand:'서비스명',meta:'기준일'}); },
-    sales: () => { Maging.pageHeader(…); Maging.kpiCard(…); },
-  });
-});
+
+**2 · Hero + Side (asymmetric)**
+```html
+<div class="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-3">
 ```
-`maging-sidebar`는 `section.slide[data-label]` 자동 수집 → nav 생성. 단일 페이지는 sidebar 불필요.
+
+**3 · Equal Split**
+```html
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+```
+
+**4 · Asymmetric Trio**
+```html
+<div class="grid grid-cols-1 lg:grid-cols-[2fr_2fr_3fr] gap-3">
+```
+
+**5 · Full-Width Detail**
+```html
+<div class="grid grid-cols-1 gap-3">
+```
+
+위젯이 자체 높이를 가지므로 `grid-auto-rows` 불필요. 차트 위젯에 `height` config를 쓸 수 있다.
 
 ---
 
-### Generation Rules
+### Generation Rules (Dashboard)
 
-1. **1페이지 = 1 KPI 1주제.**
-   - 슬라이드 헤더(`data-label` + `data-bu` + `data-team`)에 이미 KPI명·팀이 표시됨.
-   - `pageHeader`에는 **제목(title) + 날짜(meta)만**. kicker·subtitle로 헤더 내용을 중복하지 마라.
-2. `<html data-theme="…">` + `<body class="mw-themed">` + theme 선택.
-3. **단위 필수** — 명/건/개/원/% 모두. 금액은 `Maging.fmt.krw`.
-4. **KPI label에 목표 포함** — `'3월 신규 · 목표 1.42억원'`.
-5. **delta:** 목표 대비 또는 전월/전년 대비 %.
-6. **마지막은 alertBanner** — `type='info'` 1-2문장 요약.
-7. **Anti-AI:** hover glow 금지 · 균일 3등분 grid 금지 · shadow tint 금지.
-8. **슬라이드 밀도:** 각 슬라이드는 A4 가로(297×210mm) 안에 모든 내용이 들어가야 한다. 절대 넘치면 안 된다.
-15. **Powered by:** `</main>` 바로 뒤에 버전 표시를 넣어라: `<div style="text-align:right;padding:1rem 1.5rem 0.5rem;font-size:0.6rem;color:var(--mw-text-soft,var(--mw-text-muted));opacity:0.5">powered by maging 0.1.25</div>`
-   - **테이블은 반드시** `<div class="scroll-table" style="height:280px">` 로 감싸라. 행이 많아도 슬라이드 안에서 스크롤로 처리된다.
-   - KPI 카드: 한 줄에 최대 **4개**.
-   - 차트 + 테이블 동시 배치 금지. 하나만 선택.
-   - alertBanner/insightCard는 `<div class="mt-4">` 한 줄 이내. 넣을 공간 없으면 생략.
-   - 슬라이드 구성 공식: `pageHeader + KPI row(최대 4개) + sectionHead + scroll-table(280px) 또는 chart(280px)`.
-
----
-
-### Reference (완성 예제)
-
-```html
-<!DOCTYPE html>
-<html lang="ko" data-theme="claude">
-<head>
-  <meta charset="UTF-8"><title>주간보고</title>
-  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging-all.js"></script>
-</head>
-<body class="mw-themed">
-  <main class="max-w-[1240px] mx-auto px-6 py-4" style="word-break:keep-all">
-    <div id="hero" class="pt-4 pb-2"></div>
-    <div class="grid grid-cols-3 gap-3 mt-2">
-      <div id="k1"></div><div id="k2"></div><div id="k3"></div>
-    </div>
-    <div class="mt-5 pt-4" style="border-top:1px solid var(--mw-border)">
-      <div id="sec1"></div>
-      <div class="table-block mt-3"><div id="tbl" class="scroll-table" style="height:300px"></div></div>
-    </div>
-    <div class="mt-4"><div id="review"></div></div>
-  </main>
-  <script>
-  window.addEventListener('maging:ready', () => {
-    Maging.pageHeader('#hero', {kicker:'KPI 1 · 기고객 리텐션',title:'월별 해지 현황',subtitle:'SaaS CX팀',meta:'기준일 2026.04.27'});
-    Maging.kpiCard('#k1', {label:'3월 해지율 · 전년 3.3%',value:'2.9<span class="mw-unit">%</span>',valueHTML:true,delta:-3.4,deltaGoodWhen:'negative'});
-    Maging.kpiCard('#k2', {label:'3월 신규',value:'92<span class="mw-unit">건</span>',valueHTML:true,delta:-20,deltaGoodWhen:'positive'});
-    Maging.kpiCard('#k3', {label:'유료 기업',value:'4,592<span class="mw-unit">개</span>',valueHTML:true,delta:-0.6,deltaGoodWhen:'positive'});
-    Maging.sectionHead('#sec1', {index:'01',kicker:'CHURN',title:'월별 해지·신규 추이'});
-    const months=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
-    const fmt=v=>v==null?'<span style="color:var(--mw-text-muted)">−</span>':(typeof v==='string'?v:v.toLocaleString());
-    Maging.activityTable('#tbl', {
-      columns:[
-        {key:'name',label:'구분',align:'left',render:(v,r)=>v+(r.unit?` <span class="row-unit">(${r.unit})</span>`:'')},
-        ...months.map((m,i)=>({key:'m'+i,label:m,align:'right',render:fmt})),
-        {key:'total',label:'합계',align:'right',render:v=>'<strong>'+fmt(v)+'</strong>'},
-      ],
-      rows:[
-        {name:'해지',unit:'건',m0:174,m1:138,m2:135,m3:89,total:536},
-        {name:'신규',unit:'건',m0:117,m1:89,m2:92,total:298},
-        {name:'해지율',unit:'%',m0:'3.7%',m1:'3.0%',m2:'2.9%',total:'3.2%'},
-      ],
-    });
-    Maging.alertBanner('#review', {type:'info',icon:'📋',title:'리뷰',message:'3월 해지율 개선됐으나 신규<해지 지속 — 4월 신규 회복 우선.'});
-  });
-  </script>
-</body>
-</html>
-```
-
-**Output:** 단일 ` ```html … ``` ` 블록.
-
-
-## Service: Gemini (Canvas)
-
-- 결과물은 반드시 **Canvas**의 Code 탭에 전체 HTML을 출력하라.
-- Preview 탭에서 즉시 렌더링 가능해야 한다.
-- 대화 본문에 코드를 넣지 마라 — Canvas에만 출력.
-- 수정 요청 시 전체 코드를 다시 출력하라.
-
-=== HANDSHAKE ===
-When you have fully understood the above, reply with EXACTLY this text (nothing else, no code fences, no preamble):
-
-**안녕하세요! 결과물 서포터 매징(maging)입니다** ✦
-
-어떤 팀·사업부의 주간보고를 만들까요? 기간, 핵심 지표, 주요 이슈를 알려주세요.
-바로 시작할게요! 🎨
-
-Then wait for my next message before generating anything.
+0. **Default = static snapshot.** You are the analyst — pick the story, arrange widgets. No interactive state unless asked.
+1. Include the one-liner setup.
+2. Pick ONE theme via `<html data-theme="…">`.
+3. `<body class="mw-themed">`.
+4. Compose layout from canonical patterns. Pick heights from tokens.
+5. Mount ALL widgets inside `maging:ready`. Never use `DOMContentLoaded`.
+6. Widget choice by data shape:
+   - Time series → `lineChart` · Categorical → `barChart` · Share → `donutChart`
+   - Funnel → `funnelChart` · Target vs actual → `bulletChart`/`ringProgress`
+   - Distribution → `treemapChart`/`heatmapChart` · Flow → `sankeyChart`
+   - Correlation → `scatterChart` · Korean geo → `mapChart`
+   - Retention → `cohortMatrix` · P&L → `waterfallChart` · Rankings → `leaderboard`
+   - Events → `timeline`/`activityTable` · Health → `statusGrid`+`gaugeChart`
+   - OKR → `goalGrid` · Multi-trend → `sparklineList` · Hero metric → `heroTile`
+7. **KRW:** `Maging.fmt.krw(v)` for HTML, `Maging.fmt.krwPlain(v)` for chart axes. NEVER use `₩`.
+8. **Numbers:** Pass raw numbers to chart data. Use formatters for display.
+8a. **산수 금지:** kpiCard·metricChart·sparklineList는 sparkline/series 데이터만 넣어라. value·delta를 직접 계산하지 마라 — 위젯이 자동 계산한다.
+9. Korean labels OK. Use `word-break: keep-all`.
+10. Section order: at-a-glance → real-time → trends → deep-dive → operations.
+11. **Density:** `gap-3` everywhere. `mt-5 pt-4` for sections. No large spacings.
+12. **Asymmetric grids:** Vary column ratios. Never repeat same pattern consecutively.
+13. **1차트 1인사이트:** 라인차트 시리즈 최대 2개. 비교는 동일 카테고리끼리만.
+    - 2025실적 vs 2026실적 vs 2026계획 → 차트 2개로 분리: ① 2025 vs 2026 실적(YoY) ② 2026 실적 vs 계획(달성률).
+    - 데이터 포인트 3개 미만인 시리즈는 라인차트 금지 — 선이 아니라 점이 된다.
+14. Output one fenced code block: ` ```html … ``` `.
+15. **Powered by:** `</main>` 바로 뒤에 버전 표시를 넣어라: `<div style="text-align:right;padding:1rem 1.5rem 0.5rem;font-size:0.6rem;color:var(--mw-text-soft,var(--mw-text-muted));opacity:0.5">powered by maging 0.1.26</div>`

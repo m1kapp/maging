@@ -22,13 +22,16 @@ export function bootViewer() {
   // ── 2. Maging.deck(MOUNT) — sidebar provided by maging-sidebar.js ────────────────────────────────────────────────────
   function initDeck(MOUNT, root) {
     const scope = root || document;
-    const slides     = [...scope.querySelectorAll('section.slide')];
+    const slideArea  = scope.querySelector('[data-slide-area]');
+    const slides     = slideArea
+      ? [...slideArea.querySelectorAll(':scope > section.slide')]
+      : [...scope.querySelectorAll('section.slide')];
     const SLIDE_IDS  = slides.map(s => s.id);
     const mounted    = {};
 
     // Auto-apply A4 slide wrapper (skip if already wrapped by weeklyPage builder)
     slides.forEach((s, i) => {
-      s.classList.add('mw-slide', 'hidden', 'flex-col', 'rounded-[var(--mw-radius)]', 'bg-[var(--mw-bg)]', 'box-border', 'overflow-hidden', 'shadow-[0_2px_8px_rgba(0,0,0,.08),0_8px_32px_rgba(0,0,0,.06)]');
+      s.classList.add('mw-slide', 'hidden', 'flex-col', 'shrink-0', 'rounded-[var(--mw-radius)]', 'bg-[var(--mw-bg)]', 'box-border', 'overflow-hidden', 'shadow-[0_2px_8px_rgba(0,0,0,.08),0_8px_32px_rgba(0,0,0,.06)]');
       s.style.cssText += ';--slide-w:1240px;width:var(--slide-w);min-width:0;aspect-ratio:297/210;';
       if (s.classList.contains('cover-slide')) return;
       if (s.querySelector('[data-role=body]')) return; // already wrapped by weeklyPage
@@ -65,6 +68,7 @@ export function bootViewer() {
         s.classList.toggle('hidden', !isActive);
         s.classList.toggle('flex', isActive);
       });
+      scaleSlide();
       if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
       if (!mounted[id]) { mounted[id] = true; MOUNT[id]?.(); }
       if (codeViewOpen) openCodeView();
@@ -101,18 +105,35 @@ export function bootViewer() {
       activateById(slides[Math.max(0, Math.min(slides.length - 1, cur + offset))].id);
     }
 
-    function scaleSlide() { if (window._magingScaleSlides) window._magingScaleSlides(slides); }
+    function scaleSlide() {
+      const SLIDE_W = 1240, SLIDE_H = SLIDE_W * (210 / 297);
+      var active = slides.find(function(s) { return s.hasAttribute('data-active'); });
+      if (!active) return;
+      if (document.body.classList.contains('presenter-mode')) {
+        // Always fill viewport width — vertical overflow is clipped
+        var s = innerWidth / SLIDE_W;
+        var mx = -(SLIDE_W * (1 - s)) / 2;
+        var my = -(SLIDE_H * (1 - s)) / 2;
+        active.style.setProperty('--slide-scale', s.toFixed(4));
+        active.style.margin = my.toFixed(1) + 'px ' + mx.toFixed(1) + 'px';
+        return;
+      }
+      var sa = scope.querySelector('[data-slide-area]');
+      if (!sa) return;
+      var fitW = (sa.clientWidth - 16) / SLIDE_W;
+      var fitH = (sa.clientHeight - 16) / SLIDE_H;
+      var s = Math.min(fitW, fitH, 1);
+      if (s < 0.1) s = 1;
+      var mx = -(SLIDE_W * (1 - s)) / 2;
+      var my = -(SLIDE_H * (1 - s)) / 2;
+      active.style.setProperty('--slide-scale', s.toFixed(4));
+      active.style.margin = my.toFixed(1) + 'px ' + mx.toFixed(1) + 'px';
+    }
 
     function toggleFullscreen() {
-      const isOn = document.body.classList.toggle('presenter-mode');
-      localStorage.setItem('weeklyPresenter', isOn ? '1' : '0');
-      // Reset all slide inline styles so layout can settle cleanly
-      slides.forEach(function(s) { s.style.margin = ''; s.style.setProperty('--slide-scale', '1'); });
-      // Sidebar reappears after leaving presenter — layout needs time to settle.
-      // Fire multiple recalcs to catch the final stable size.
-      scaleSlide();
-      setTimeout(scaleSlide, 50);
-      setTimeout(scaleSlide, 200);
+      document.body.classList.toggle('presenter-mode');
+      localStorage.setItem('weeklyPresenter', document.body.classList.contains('presenter-mode') ? '1' : '0');
+      requestAnimationFrame(function() { scaleSlide(); setTimeout(scaleSlide, 300); });
     }
 
     if (localStorage.getItem('weeklyPresenter') === '1') { document.body.classList.add('presenter-mode'); }
@@ -156,13 +177,50 @@ export function bootViewer() {
     window.addEventListener('keydown', (e) => {
       if (e.target.closest && e.target.closest('input, textarea, select, [contenteditable]')) return;
       const k = e.key;
-      if      (k === 'ArrowRight' || k === 'PageDown' || k === 'j' || k === 'J') { e.preventDefault(); activateOffset(1); }
-      else if (k === 'ArrowLeft'  || k === 'PageUp'   || k === 'k' || k === 'K') { e.preventDefault(); activateOffset(-1); }
+      const isPresenter = document.body.classList.contains('presenter-mode');
+
+      // ── Navigate: next slide ──
+      // PPT: →, ↓, Space, Enter, PageDown, N
+      if (k === 'ArrowRight' || k === 'ArrowDown' || k === ' ' || k === 'Enter'
+        || k === 'PageDown' || k === 'n' || k === 'N'
+        || k === 'j' || k === 'J') {
+        e.preventDefault(); activateOffset(1);
+      }
+      // ── Navigate: previous slide ──
+      // PPT: ←, ↑, Backspace, PageUp, P
+      else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'Backspace'
+        || k === 'PageUp' || k === 'p' || k === 'P'
+        || k === 'k' || k === 'K') {
+        e.preventDefault(); activateOffset(-1);
+      }
+      // ── First / Last slide ──
+      // PPT: Home / End
       else if (k === 'Home') { e.preventDefault(); activateById(slides[0].id); }
       else if (k === 'End')  { e.preventDefault(); activateById(slides[slides.length - 1].id); }
+      // ── Go to slide number (1-9) ──
+      else if (!isPresenter && k >= '1' && k <= '9') {
+        var idx = parseInt(k) - 1;
+        if (idx < slides.length) { e.preventDefault(); activateById(slides[idx].id); }
+      }
+      // ── Fullscreen / Presenter toggle ──
+      // PPT: F5 starts, Escape exits. Also support F key.
+      else if (k === 'F5') { e.preventDefault(); if (!isPresenter) toggleFullscreen(); }
       else if (k === 'f' || k === 'F') { e.preventDefault(); toggleFullscreen(); }
+      // ── Black screen (B) / White screen (W) — PPT standard ──
+      else if (isPresenter && (k === 'b' || k === 'B')) {
+        e.preventDefault();
+        var sa = scope.querySelector('[data-slide-area]');
+        if (sa) sa.style.background = sa.style.background === '#000' ? '' : '#000';
+      }
+      else if (isPresenter && (k === 'w' || k === 'W')) {
+        e.preventDefault();
+        var sa = scope.querySelector('[data-slide-area]');
+        if (sa) sa.style.background = sa.style.background === '#fff' ? '' : '#fff';
+      }
+      // ── Code view ──
       else if (k === 'c' || k === 'C') { e.preventDefault(); codeViewOpen ? closeCodeView() : openCodeView(); }
-      else if (k === 'Escape') { e.preventDefault(); if (codeViewOpen) closeCodeView(); else if (document.body.classList.contains('presenter-mode')) toggleFullscreen(); }
+      // ── Escape — exit presenter or close overlay ──
+      else if (k === 'Escape') { e.preventDefault(); if (codeViewOpen) closeCodeView(); else if (isPresenter) toggleFullscreen(); }
     });
 
     document.addEventListener('click', (e) => {
@@ -371,20 +429,20 @@ export function bootViewer() {
     const sDate = cfg.sidebarDate || cfg.date || '';
 
     // Title bar (full width, top)
-    var _btn = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-medium border-none rounded cursor-pointer transition-colors [&_svg]:w-3.5 [&_svg]:h-3.5';
+    var _btn = 'inline-flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-medium border-none rounded-lg cursor-pointer transition-colors [&_svg]:w-4 [&_svg]:h-4';
     var _btnStyle = 'color:#888;background:transparent;';
     var _btnActiveStyle = 'color:#222;background:#f0f0f0;';
-    var _btnAccentStyle = 'color:#fff;background:#222;border-radius:999px;padding:4px 12px;';
+    var _btnAccentStyle = 'color:#fff;background:#222;border-radius:999px;padding:6px 14px;';
     const titlebar = document.createElement('div');
-    titlebar.className = 'flex items-center justify-between px-4 py-2 shrink-0 border-b'; titlebar.setAttribute('data-titlebar', '');
+    titlebar.className = 'flex items-center justify-between px-4 py-3 shrink-0 border-b'; titlebar.setAttribute('data-titlebar', '');
     titlebar.style.cssText = 'background:#fff;border-color:#e5e5e5;';
     titlebar.innerHTML =
-      '<div class="flex items-center gap-2.5 min-w-0">' +
+      '<div class="flex items-center gap-3 min-w-0">' +
         '<span style="font-size:13px;font-weight:600;color:#222;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + sTitle + '</span>' +
         (sDate ? '<span style="font-size:11px;color:#999;white-space:nowrap">' + sDate + '</span>' : '') +
         '<span style="font-size:11px;color:#999;font-variant-numeric:tabular-nums;flex-shrink:0" id="weekly-ind">1 / ' + slides.length + '</span>' +
       '</div>' +
-      '<div class="flex items-center gap-1 shrink-0">' +
+      '<div class="flex items-center gap-2 shrink-0">' +
         '<button class="' + _btn + '" style="' + _btnStyle + '" id="wtb-theme" data-panel="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2"/></svg>테마</button>' +
         '<button class="' + _btn + '" style="' + _btnStyle + '" id="wtb-code" data-panel="code"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 3L1 8l4 5M11 3l4 5-4 5"/></svg>코드</button>' +
         '<button class="' + _btn + '" style="' + _btnStyle + '" id="wtb-export" data-panel="export"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 10v3h10v-3M8 2v8M5 5l3-3 3 3"/></svg>내보내기</button>' +
@@ -638,7 +696,7 @@ export function bootViewer() {
     // Wire title bar — unified panel system (theme + export only; code uses dialog)
     var wtbPresent = container.querySelector('#wtb-present');
     var panelEl = container.querySelector('#wk-panel');
-    var panelBtns = container.querySelectorAll('[data-panel]');
+    var panelBtns = container.querySelectorAll('button[data-panel]');
     var activePanel = null;
 
     function togglePanel(name) {
@@ -698,7 +756,13 @@ export function bootViewer() {
           } catch(e) {}
         }
       }
-      var track = '<div data-carousel-track class="flex gap-2 px-4 overflow-x-auto scroll-smooth">';
+      var track = '<div data-carousel-track class="flex gap-2 px-4 overflow-x-auto scroll-smooth">' +
+        '<div data-carousel-item class="flex flex-col items-center gap-1 cursor-pointer shrink-0 min-w-[48px]" id="theme-shuffle">' +
+          '<div class="w-10 h-7 rounded flex items-center justify-center border-[1.5px] border-dashed border-[var(--mw-border)]">' +
+            '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="var(--mw-text-muted)" stroke-width="1.4"><path d="M2 4h4l3 4-3 4H2M14 4h-4l-1.5 2M9.5 10L11 12h3M14 4l-2 2M14 12l-2-2"/></svg>' +
+          '</div>' +
+          '<span class="text-[9px] text-[var(--mw-text-muted)]">shuffle</span>' +
+        '</div>';
       _themeCache.forEach(function(c) {
         var isActive = c.name === current;
         track += '<div data-carousel-item class="flex flex-col items-center gap-1 cursor-pointer shrink-0 min-w-[48px]' + (isActive ? ' is-active' : '') + '" data-theme-pick="' + c.name + '">' +
@@ -728,6 +792,21 @@ export function bootViewer() {
         if (sw) { sw.style.borderColor = active ? 'var(--mw-accent)' : ''; sw.style.boxShadow = active ? '0 0 0 1px var(--mw-accent)' : ''; }
         if (nm) { nm.style.color = active ? 'var(--mw-accent)' : ''; nm.style.fontWeight = active ? '600' : ''; }
       });
+      if (window.Maging?.refreshAll) window.Maging.refreshAll();
+    });
+
+    // ── Shuffle theme button (inside theme carousel) ──
+    themeTrackEl.addEventListener('click', function(e) {
+      if (!e.target.closest('#theme-shuffle')) return;
+      e.stopPropagation();
+      ensureThemeCarousel();
+      if (!_themeCache || !_themeCache.length) return;
+      var current = document.documentElement.getAttribute('data-theme') || 'flow';
+      var others = _themeCache.filter(function(c) { return c.name !== current; });
+      var pick = others[Math.floor(Math.random() * others.length)];
+      if (!pick) return;
+      document.documentElement.setAttribute('data-theme', pick.name);
+      localStorage.setItem('maging-theme', pick.name);
       if (window.Maging?.refreshAll) window.Maging.refreshAll();
     });
 
@@ -766,12 +845,8 @@ export function bootViewer() {
     });
 
     if (wtbPresent) wtbPresent.addEventListener('click', function() {
-      document.body.classList.toggle('presenter-mode');
-      if (window._magingScaleSlides) {
-        var s = [...container.querySelectorAll('section.slide')];
-        window._magingScaleSlides(s);
-      }
-      // ResizeObserver handles rescale
+      // Delegate to initDeck's toggleFullscreen via keyboard handler
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f' }));
     });
     // ── Thumbnail rebuild (called on init + theme change) ──
     var _initDone = false;
@@ -798,7 +873,7 @@ export function bootViewer() {
         var clone = sec.cloneNode(true);
         clone.removeAttribute('id');
         clone.removeAttribute('data-active');
-        clone.style.cssText = 'display:flex;flex-direction:column;width:1240px;min-width:1240px;margin:0;transform:none;';
+        clone.style.cssText = 'display:flex;flex-direction:column;width:1240px;min-width:1240px;aspect-ratio:297/210;margin:0;transform:none;';
         thumb.innerHTML = '';
         thumb.appendChild(clone);
       });
@@ -849,7 +924,7 @@ export function bootViewer() {
           if (hdr) cont.appendChild(hdr.cloneNode(true));
           cont.appendChild(contBody);
           if (ftr) cont.appendChild(ftr.cloneNode(true));
-          cont.classList.add('mw-slide', 'flex', 'flex-col', 'border', 'border-[var(--mw-border)]', 'rounded-[var(--mw-radius)]', 'bg-[var(--mw-bg)]', 'box-border', 'overflow-hidden');
+          cont.classList.add('mw-slide', 'flex', 'flex-col', 'shrink-0', 'rounded-[var(--mw-radius)]', 'bg-[var(--mw-bg)]', 'box-border', 'overflow-hidden');
           cont.style.cssText += ';--slide-w:1240px;width:var(--slide-w);min-width:var(--slide-w);aspect-ratio:297/210;';
           for (var j = splitIdx; j < widgets.length; j++) contBody.appendChild(widgets[j]);
           sec.after(cont);

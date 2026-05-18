@@ -10,14 +10,14 @@ interface SwotSlideProps {
 
 export function SwotSlide({ headline = '', quadrants = [], callout = '' }: SwotSlideProps) {
   return (
-    <div data-widget="swot" className="flex flex-col flex-1 min-h-0 p-12 px-16 box-border">
-      {headline && <div className="text-[2rem] font-bold text-[var(--mw-text)] mb-7 tracking-[-0.02em]">{headline}</div>}
+    <div data-widget="swot" className="flex flex-col flex-1 min-h-0 p-[4cqw] px-[5cqw] box-border">
+      {headline && <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] mb-[2cqw] tracking-[-0.02em]">{headline}</div>}
       <div className="grid grid-cols-2 rounded-[var(--mw-radius)] overflow-hidden border border-[var(--mw-border)] my-auto flex-1">
         {quadrants.map(q =>
-          <div data-role="quad" className="p-6 flex flex-col border-r border-b border-[var(--mw-border)]">
-            <div data-role="quad-label" className="text-[0.7rem] uppercase tracking-[0.1em] font-bold mb-3">{q.label}</div>
+          <div data-role="quad" className="p-[1.8cqw] flex flex-col border-r border-b border-[var(--mw-border)]">
+            <div data-role="quad-label" className="text-[clamp(8px,0.75cqw,10px)] uppercase tracking-[0.1em] font-bold mb-3">{q.label}</div>
             {(q.items || []).map(it =>
-              <div className="text-[0.82rem] text-[var(--mw-text)] py-1.5 leading-[1.4]">• {it}</div>
+              <div className="text-[clamp(11px,1.1cqw,15px)] text-[var(--mw-text)] py-1.5 leading-[1.4]">• {it}</div>
             )}
           </div>
         )}

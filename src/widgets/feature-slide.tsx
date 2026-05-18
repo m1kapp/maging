@@ -11,14 +11,14 @@ interface FeatureSlideProps {
 
 export function FeatureSlide({ headline = '', items = [], cols = 3, callout = '' }: FeatureSlideProps) {
   return (
-    <div className="flex flex-col flex-1 min-h-0 p-12 px-16 box-border">
-      {headline && <div className="text-[2rem] font-bold text-[var(--mw-text)] mb-9 tracking-[-0.02em] max-w-[85%]">{headline}</div>}
-      <div className="grid gap-5 my-auto" style={'grid-template-columns:repeat(' + cols + ',1fr)'}>
+    <div className="flex flex-col flex-1 min-h-0 p-[4cqw] px-[5cqw] box-border">
+      {headline && <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] mb-[2.5cqw] tracking-[-0.02em]">{headline}</div>}
+      <div className="grid gap-[1.5cqw] my-auto" style={'grid-template-columns:repeat(' + cols + ',1fr)'}>
         {items.map(it =>
-          <div className="p-6 bg-[var(--mw-surface)] border border-[var(--mw-border)] rounded-[var(--mw-radius)]">
-            {it.icon && <div className="text-[1.6rem] mb-3">{it.icon}</div>}
+          <div className="p-[1.8cqw] bg-[var(--mw-surface)] border border-[var(--mw-border)] rounded-[var(--mw-radius)]">
+            {it.icon && <div className="text-[clamp(13px,1.4cqw,18px)] mb-3">{it.icon}</div>}
             <div className="text-base font-bold text-[var(--mw-text)] mb-1.5">{it.title}</div>
-            {it.desc && <div className="text-[0.82rem] text-[var(--mw-text-muted)] leading-relaxed">{it.desc}</div>}
+            {it.desc && <div className="text-[clamp(11px,1.1cqw,15px)] text-[var(--mw-text-muted)] leading-relaxed">{it.desc}</div>}
           </div>
         )}
       </div>

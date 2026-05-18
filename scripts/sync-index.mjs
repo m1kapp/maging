@@ -20,7 +20,7 @@ import { countTokens as openaiCount } from 'gpt-tokenizer/encoding/o200k_base';
 import { countTokens as anthropicCount } from '@anthropic-ai/tokenizer';
 import {
   BASE_SHORT_DASHBOARD, BASE_FULL_DASHBOARD,
-  BASE_SHORT_WEEKLY, BASE_FULL_WEEKLY,
+  BASE_SHORT_SLIDE, BASE_FULL_SLIDE,
   BASE_SHORT_LANDING, BASE_FULL_LANDING,
   SERVICE_RULES, LOGO_URL, HANDSHAKES,
 } from './prompts.mjs';
@@ -54,7 +54,7 @@ function escapeForTemplateLiteral(str) {
 const services = ['flowai', 'claude', 'chatgpt', 'gemini'];
 const bases = {
   dashboard: { short: BASE_SHORT_DASHBOARD, full: BASE_FULL_DASHBOARD },
-  weekly:    { short: BASE_SHORT_WEEKLY,    full: BASE_FULL_WEEKLY },
+  slide:     { short: BASE_SHORT_SLIDE,     full: BASE_FULL_SLIDE },
   landing:   { short: BASE_SHORT_LANDING,   full: BASE_FULL_LANDING },
 };
 
@@ -62,8 +62,7 @@ const bases = {
 const svcRules = { flowai: '', ...SERVICE_RULES };
 
 function compose(mode, variant, service) {
-  const handshakeKey = mode === 'weekly-report' ? 'weekly' : mode;
-  return bases[handshakeKey][variant] + svcRules[service] + HANDSHAKES[handshakeKey];
+  return bases[mode][variant] + svcRules[service] + HANDSHAKES[mode];
 }
 
 function countAll(mode, variant, service) {
@@ -79,7 +78,7 @@ const block = [
 ];
 
 // Base prompts (no service rules, no handshake)
-for (const [mode, key] of [['dashboard', ''], ['weekly', '_WEEKLY'], ['landing', '_LANDING']]) {
+for (const [mode, key] of [['dashboard', ''], ['slide', '_SLIDE'], ['landing', '_LANDING']]) {
   block.push(`  var SHORT_PROMPT${key} = \`${escapeForTemplateLiteral(bases[mode].short)}\`;`);
   block.push(`  var FULL_PROMPT${key} = \`${escapeForTemplateLiteral(bases[mode].full)}\`;`);
 }
@@ -102,7 +101,7 @@ block.push(`  };`);
 block.push(`  var TOKENS_BY_SERVICE = {`);
 for (const svc of services) {
   block.push(`    ${svc}: {`);
-  for (const mode of ['dashboard', 'weekly', 'landing']) {
+  for (const mode of ['dashboard', 'slide', 'landing']) {
     const s = countAll(mode, 'short', svc);
     const f = countAll(mode, 'full', svc);
     block.push(`      ${mode}: { short: { gpt: ${s.gpt}, claude: ${s.claude}, gemini: ${s.gemini} }, full: { gpt: ${f.gpt}, claude: ${f.claude}, gemini: ${f.gemini} } },`);
@@ -113,7 +112,7 @@ block.push(`  };`);
 
 // Backward compat
 block.push(`  var TOKENS = TOKENS_BY_SERVICE.flowai.dashboard;`);
-block.push(`  var TOKENS_WEEKLY = TOKENS_BY_SERVICE.flowai.weekly;`);
+block.push(`  var TOKENS_SLIDE = TOKENS_BY_SERVICE.flowai.slide;`);
 block.push(`  var TOKENS_LANDING = TOKENS_BY_SERVICE.flowai.landing;`);
 
 block.push('  /* SYNC:END */');

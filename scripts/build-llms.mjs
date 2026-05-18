@@ -1,25 +1,26 @@
 /**
- * build-llms.mjs — assemble llms-*.md files from parts.
+ * build-llms.mjs — assemble base llms-*.md files from parts.
  *
  * Source:
  *   llms/core.txt           → shared (themes, core widget APIs, utility, output rules)
  *   llms/dashboard.txt      → dashboard-specific
  *   llms/landing.txt        → landing-specific
  *   llms/weekly-report.txt  → weekly-report-specific
+ *   llms/card-news.txt      → card-news-specific
+ *   llms/pitch-deck.txt     → pitch-deck-specific
  *
- * Output — {mode} × {size} × {service}:
- *   llms-dashboard-full.md                  (flowai, generic)
- *   llms-dashboard-full-for-claude.md
- *   llms-dashboard-short.md
- *   llms-dashboard-short-for-chatgpt.md
- *   …
+ * Output — base full only (service rules / short / handshake are composed at runtime):
+ *   llms-dashboard-full.md
+ *   llms-landing-full.md
+ *   llms-weekly-report-full.md
+ *   llms-card-news-full.md
+ *   llms-pitch-deck-full.md
  *   llms.md  = llms-dashboard-full.md (backward compat)
  */
 
 import { readFileSync, writeFileSync, readdirSync, unlinkSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { SERVICE_RULES, HANDSHAKES } from './prompts.mjs';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const root = join(__dir, '..');
@@ -29,19 +30,16 @@ const VERSION = pkg.version;
 
 // ── Auto-count widgets & themes from actual source code ──
 const magingJS = readFileSync(join(root, 'dist/maging.js'), 'utf-8');
-const magingLanding = readFileSync(join(root, 'dist/maging-landing.js'), 'utf-8');
 const magingNews = readFileSync(join(root, 'dist/maging-news.js'), 'utf-8');
-const magingPitch = readFileSync(join(root, 'dist/maging-pitch.js'), 'utf-8');
-const magingWeekly = readFileSync(join(root, 'dist/maging-weekly.js'), 'utf-8');
+const magingSlide = readFileSync(join(root, 'dist/maging-slide.js'), 'utf-8');
 
 // Theme count: from Maging.themes array
 const themeMatch = magingJS.match(/themes:\s*\[([\s\S]*?)\]/);
 const THEME_COUNT = themeMatch ? themeMatch[1].split(',').filter(s => s.trim().startsWith("'")).length : '?';
 
-// Widget counts: count M.widgetName = function assignments
-const coreWidgets = (magingJS.match(/^\s+\w+:\s+\w+,?\s*$/gm) || []).length; // approximate from api object
+// Widget counts
 const CARDNEWS_WIDGET_COUNT = (magingNews.match(/M\.\w+\s*=\s*\w+/g) || []).filter(m => !m.includes('newsDeck') && !m.includes('_pageBuilders')).length;
-const PITCH_WIDGET_COUNT = (magingPitch.match(/M\.\w+\s*=\s*function/g) || []).length;
+const PITCH_WIDGET_COUNT = (magingSlide.match(/M\.\w+\s*=/g) || []).length;
 
 // Replace all placeholders
 function injectVersion(txt) {
@@ -53,80 +51,40 @@ function injectVersion(txt) {
 }
 
 const core = injectVersion(readFileSync(join(root, 'llms/core.txt'), 'utf-8'));
-const dashboard = injectVersion(readFileSync(join(root, 'llms/dashboard.txt'), 'utf-8'));
-const landing = injectVersion(readFileSync(join(root, 'llms/landing.txt'), 'utf-8'));
-const weeklyReport = injectVersion(readFileSync(join(root, 'llms/weekly-report.txt'), 'utf-8'));
-const cardNews = injectVersion(readFileSync(join(root, 'llms/card-news.txt'), 'utf-8'));
-const pitchDeck = injectVersion(readFileSync(join(root, 'llms/pitch-deck.txt'), 'utf-8'));
 
-const fullBases = {
-  dashboard: core + '\n' + dashboard,
-  landing: core + '\n' + landing,
-  'weekly-report': core + '\n' + weeklyReport,
-  'card-news': core + '\n' + cardNews,
-  'pitch-deck': core + '\n' + pitchDeck,
+const modes = {
+  dashboard: injectVersion(readFileSync(join(root, 'llms/dashboard.txt'), 'utf-8')),
+  landing: injectVersion(readFileSync(join(root, 'llms/landing.txt'), 'utf-8')),
+  slide: injectVersion(readFileSync(join(root, 'llms/slide.txt'), 'utf-8')),
+  'card-news': injectVersion(readFileSync(join(root, 'llms/card-news.txt'), 'utf-8')),
 };
 
-const CDN_BASE = 'https://cdn.jsdelivr.net/npm/@m1kapp/maging';
+const llmsDir = join(root, 'llms');
 
-const shortBases = {
-  dashboard: `You are a maging dashboard generator.\n\nFetch and read: ${CDN_BASE}/llms-dashboard-full.md\nIt has the complete setup, all widget APIs, themes, and generation rules.`,
-  landing: `You are a maging landing page generator.\n\nFetch and read: ${CDN_BASE}/llms-landing-full.md\nIt has the complete setup, all widget APIs, themes, and generation rules.`,
-  'weekly-report': `You are a maging weekly report generator.\n\nFetch and read: ${CDN_BASE}/llms-weekly-report-full.md\nIt has the complete setup, all widget APIs, themes, and generation rules for weekly reports.`,
-  'card-news': `You are a maging card-news generator.\n\nFetch and read: ${CDN_BASE}/llms-card-news-full.md\nIt has the complete setup, all widget APIs, themes, and generation rules for card news.`,
-  'pitch-deck': `You are a maging pitch deck generator.\n\nFetch and read: ${CDN_BASE}/llms-pitch-deck-full.md\nIt has the complete setup, all widget APIs, themes, and generation rules for pitch decks.`,
-};
-
-const modeToHandshake = {
-  dashboard: 'dashboard',
-  landing: 'landing',
-  'weekly-report': 'weekly',
-  'card-news': 'cardnews',
-  'pitch-deck': 'pitchdeck',
-};
-
-const services = ['flowai', 'claude', 'chatgpt', 'gemini'];
-const svcRules = { flowai: '', ...SERVICE_RULES };
-
-/* ── clean old .txt files ── */
-const oldFiles = readdirSync(root).filter(f => f.startsWith('llms') && f.endsWith('.txt'));
-for (const f of oldFiles) {
-  unlinkSync(join(root, f));
-  console.log(`✗ deleted ${f}`);
+/* ── clean old built md files ── */
+const oldMd = readdirSync(llmsDir).filter(f => f.endsWith('.md'));
+for (const f of oldMd) {
+  unlinkSync(join(llmsDir, f));
+  console.log(`✗ deleted llms/${f}`);
 }
 
-/* ── generate all combinations ── */
+/* ── generate base full files only ── */
 const generated = [];
 
-for (const mode of Object.keys(fullBases)) {
-  const hsKey = modeToHandshake[mode];
-
-  for (const svc of services) {
-    const svcSuffix = svc === 'flowai' ? '' : `-for-${svc}`;
-    const rules = svcRules[svc];
-    const hs = HANDSHAKES[hsKey];
-
-    // full
-    const fullContent = fullBases[mode] + '\n' + rules + hs;
-    const fullName = `llms-${mode}-full${svcSuffix}.md`;
-    writeFileSync(join(root, fullName), fullContent);
-    generated.push({ name: fullName, chars: fullContent.length });
-
-    // short
-    const shortContent = shortBases[mode] + '\n' + rules + hs;
-    const shortName = `llms-${mode}-short${svcSuffix}.md`;
-    writeFileSync(join(root, shortName), shortContent);
-    generated.push({ name: shortName, chars: shortContent.length });
-  }
+for (const [mode, modeTxt] of Object.entries(modes)) {
+  const content = core + '\n' + modeTxt;
+  const name = `llms-${mode}-full.md`;
+  writeFileSync(join(llmsDir, name), content);
+  generated.push({ name, chars: content.length });
 }
 
 // backward compat
-const defaultFull = readFileSync(join(root, 'llms-dashboard-full.md'), 'utf-8');
-writeFileSync(join(root, 'llms.md'), defaultFull);
+const defaultFull = readFileSync(join(llmsDir, 'llms-dashboard-full.md'), 'utf-8');
+writeFileSync(join(llmsDir, 'llms.md'), defaultFull);
 
 console.log('');
 for (const { name, chars } of generated) {
-  console.log(`✓ ${name.padEnd(46)} (${chars} chars)`);
+  console.log(`✓ ${name.padEnd(36)} (${chars} chars)`);
 }
-console.log(`✓ ${'llms.md'.padEnd(46)} (= llms-dashboard-full.md)`);
+console.log(`✓ ${'llms.md'.padEnd(36)} (= llms-dashboard-full.md)`);
 console.log(`\n${generated.length + 1} files generated.`);

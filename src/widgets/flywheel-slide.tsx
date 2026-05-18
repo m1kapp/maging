@@ -60,15 +60,15 @@ export function FlywheelSlide({ headline = '', sub = '', steps = [], summary, hu
 
   return (
     <div data-widget="flywheel" className="flex flex-col flex-1 min-h-0 p-[3%] px-[4.5%] box-border">
-      {headline && <div className="text-[clamp(18px,2.5vw,32px)] font-bold text-[var(--mw-text)] mb-[1%] tracking-[-0.02em] text-center">{headline}</div>}
-      {sub && <div className="text-[clamp(11px,1.1vw,15px)] text-[var(--mw-text-muted)] mb-[2%] max-w-[600px] leading-relaxed text-center mx-auto">{sub}</div>}
+      {headline && <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] mb-[1%] tracking-[-0.02em] text-center">{headline}</div>}
+      {sub && <div className="text-[clamp(11px,1.1cqw,15px)] text-[var(--mw-text-muted)] mb-[2%] max-w-[600px] leading-relaxed text-center mx-auto">{sub}</div>}
       <div className="flex-1 flex items-center justify-center min-h-0" dangerouslySetInnerHTML={{ __html: svg }}></div>
       {summary && (
         <div data-role="summary" className="mt-[2%] py-[2%] px-[3%] rounded-[var(--mw-radius)] flex items-center gap-[3%]">
-          <div className="text-[clamp(14px,1.4vw,22px)] opacity-40">↻</div>
+          <div className="text-[clamp(13px,1.4cqw,18px)] opacity-40">↻</div>
           <div>
-            <div className="text-[clamp(11px,1vw,14px)] font-bold">{summary.title}</div>
-            {summary.desc && <div className="text-[clamp(9px,.85vw,12px)] opacity-70 mt-px">{summary.desc}</div>}
+            <div className="text-[clamp(11px,1.1cqw,15px)] font-bold">{summary.title}</div>
+            {summary.desc && <div className="text-[clamp(9px,0.9cqw,12px)] opacity-70 mt-px">{summary.desc}</div>}
           </div>
         </div>
       )}

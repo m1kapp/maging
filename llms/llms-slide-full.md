@@ -282,363 +282,493 @@ MIT
 
 ---
 
-## Mode: Card News (카드뉴스)
+## Mode: Slide (슬라이드)
 
-> 인스타그램/링크드인 캐러셀 카드뉴스. 커버 → 본문(1카드 1메시지) → CTA 구조.
+> 주간보고·피치덱·사업제안·내부발표 등 다목적 슬라이드. `Maging.page({ mode: 'slide' })` 하나로 사이드바·네비게이션·스케일링·자동 페이지네이션 전부 처리.
 
 ### Setup
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging-all.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging-news.js"></script>
-<body class="mw-themed">
+<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.26/dist/maging-all.js"></script>
 ```
 `maging:ready` 안에서 마운트. `DOMContentLoaded` 금지.
 
----
+**`Maging.page()` 사용** — slides 배열에 각 슬라이드의 id, label, widgets를 선언하면 사이드바·네비게이션·스케일링·자동 페이지네이션이 전부 자동 처리된다. HTML 레이아웃을 직접 작성할 필요 없다.
 
-### 카드 크기 & 구조
-
-| 항목 | 값 |
-|------|-----|
-| 크기 | 1080×1350px (4:5 비율) |
-| 총 카드 수 | 5~12장 (권장 7~9장) |
-| 구조 | **커버(1)** + **본문(N)** + **CTA(1)** |
-| 원칙 | **1카드 1메시지** — 한 장에 핵심 포인트 1개만 |
+**KRW:** `Maging.fmt.krw(v)` (HTML), `Maging.fmt.krwPlain(v)` (차트 축). NEVER `₩` prefix.
 
 ---
 
-### 카드 위젯 (11)
+### 대시보드/보고서 위젯
 
-#### `coverCard` — 표지 (첫 장, 후킹)
+#### KPI 카드
 ```js
-Maging.coverCard('#card-cover', {
-  icon: '🚀', tag: 'AI 트렌드',
-  title: 'AI가 바꿀\n마케팅의 미래',
-  subtitle: '마케터가 알아야 할 5가지',
-  brand: '@mybrand',
-  style: 'gradient',
+Maging.kpiCard('#k1', {
+  label: '3월 신규 매출 · 목표 1.42억원',
+  value: '0.72<span class="mw-unit"> 억원</span>', valueHTML: true,
+  delta: -49.3, deltaGoodWhen: 'positive',
 });
 ```
-- `style`: `'gradient'` | `'accent-block'` | `'minimal'` | `'bold-type'` | `'number-hero'` | `'framed'`
-- `bold-type` — 아이콘 없이 거대 타이포만. 2~3단어 임팩트.
-- `number-hero` — 배경에 거대 숫자. `number: 5` 필수. 리스티클용.
-- `framed` — 안쪽 테두리 프레임. 에디토리얼/럭셔리.
-
-#### `bodyCard` — 본문 (핵심 메시지 1개)
-```js
-Maging.bodyCard('#card-01', {
-  num: '01', icon: '🎯',
-  heading: '초개인화 콘텐츠 자동 생성',
-  text: 'AI가 고객 세그먼트별로 맞춤 콘텐츠를 실시간으로 만들어줍니다.',
-  brand: '@mybrand',
-});
-```
-
-#### `dataCard` — 데이터 시각화 (코어 차트 내장)
-```js
-Maging.dataCard('#card-data', {
-  label: 'GLOBAL TREND', title: 'AI 마케팅 도입률 추이',
-  widget: 'barChart',
-  widgetConfig: { items: [{label:'2023',value:31},{label:'2024',value:47},{label:'2025',value:63},{label:'2026',value:78}] },
-  brand: '@mybrand',
-});
-```
-
-#### `numberedCard` — 순위/리스트
-```js
-Maging.numberedCard('#card-top', {
-  heading: 'TOP 3 AI 마케팅 도구',
-  items: [
-    { rank: '1', title: 'ChatGPT', desc: '콘텐츠 초안', icon: '🤖' },
-    { rank: '2', title: 'Midjourney', desc: '비주얼 생성', icon: '🖼️' },
-    { rank: '3', title: 'Jasper', desc: '광고 카피', icon: '📈' },
-  ],
-  brand: '@mybrand',
-});
-```
-
-#### `quoteCard` — 인용문/후킹 문장
-```js
-Maging.quoteCard('#card-quote', {
-  quote: '콘텐츠의 미래는 AI가 만들고 사람이 다듬는 것이다.',
-  name: '김민수', role: 'CMO, TechCorp',
-  brand: '@mybrand',
-});
-```
-- 전문가 인용, 고객 후기, 임팩트 문장에 사용. 중간에 끼워 리듬감 생성.
-
-#### `statCard` — 대형 수치 임팩트
-```js
-Maging.statCard('#card-stat', {
-  label: 'GLOBAL ADOPTION',
-  value: '73<span class="mw-unit">%</span>',
-  context: '글로벌 기업의 73%가 AI 마케팅을 도입했습니다',
-  brand: '@mybrand',
-});
-```
-- 숫자 자체가 메시지일 때 사용. dataCard(차트)와 구분.
-
-#### `comparisonCard` — 좌우 비교 (Do/Don't, Before/After)
-```js
-Maging.comparisonCard('#card-compare', {
-  heading: 'AI 마케팅 Do & Don\'t',
-  leftLabel: 'Don\'t', rightLabel: 'Do',
-  left: ['감에 의존한 타겟팅', '일괄 메시지 발송', '수동 A/B 테스트'],
-  right: ['데이터 기반 세그먼트', '개인화 콘텐츠', '자동 최적화'],
-  brand: '@mybrand',
-});
-```
-
-#### `checklistCard` — 체크리스트 (저장 유도)
-```js
-Maging.checklistCard('#card-check', {
-  heading: 'AI 마케팅 시작 전 체크리스트',
-  items: [
-    { text: '고객 데이터 정리', done: true },
-    { text: '핵심 KPI 설정', done: true },
-    { text: 'AI 도구 선정', done: false },
-    { text: '파일럿 캠페인 설계', done: false },
-  ],
-  brand: '@mybrand',
-});
-```
-- `done: true/false`로 체크 상태. "저장해두세요" 유도에 효과적.
-
-#### `stepCard` — 순서 스텝 (How-to)
-```js
-Maging.stepCard('#card-step', {
-  step: '01',
-  heading: '고객 세그먼트 분석',
-  text: '기존 고객 데이터에서 행동 패턴을 추출하고 클러스터링합니다.',
-  tip: '최소 3개월 이상의 데이터를 사용하세요',
-  brand: '@mybrand',
-});
-```
-- 여러 장에 걸쳐 step 1, 2, 3... 사용. bodyCard보다 프로세스 표현에 적합.
-
-#### `testimonialCard` — 고객 후기
-```js
-Maging.testimonialCard('#card-review', {
-  quote: '도입 3개월 만에 마케팅 비용이 40% 절감됐습니다.',
-  name: '이수진', role: '마케팅 팀장, ABC Corp',
-  stars: 5,
-  brand: '@mybrand',
-});
-```
-- `stars`: 1~5. 별점 표시. 소셜 프루프용.
-
-#### `ctaCard` — 마지막 장 (행동 유도)
-```js
-Maging.ctaCard('#card-cta', {
-  heading: '더 많은 팁이\n궁금하다면?',
-  subtext: '팔로우하고 매주 새로운 인사이트를 받아보세요',
-  ctas: [{ label: '팔로우하기', primary: true }],
-  handles: [
-    { platform: 'Instagram', handle: '@mybrand' },
-    { platform: 'LinkedIn', handle: 'mybrand' },
-  ],
-  brand: '@mybrand',
-});
-```
+`deltaGoodWhen`: 매출/사용자=`'positive'` · 해지율/이탈=`'negative'`. `grid-auto-rows` 금지.
 
 ---
 
-### HTML 구조 & Deck
+#### Monthly Table 결정 트리
 
+```
+단위 통일? YES → monthlyTable + unitToggle/viewToggle  (max<1억이면 unitToggle 생략)
+          NO  → activityTable + row.unit 인라인
+```
+
+**`monthlyTable`:**
+```js
+Maging.monthlyTable('#tbl', {
+  title, rows:[{name, data:[v,…]}], summaryRow?,
+  unitToggle?, viewToggle?, defaultUnit?:'만원', defaultView?:'table',
+});
+```
+
+**`activityTable` (단위 혼합):**
+```js
+const fmt = v => v==null ? '<span style="color:var(--mw-text-muted)">−</span>' : (typeof v==='string'?v:v.toLocaleString());
+const months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+Maging.activityTable('#tbl', {
+  columns: [
+    { key:'name', label:'구분', align:'left', render:(v,r)=>v+(r.unit?` <span class="row-unit">(${r.unit})</span>`:'') },
+    ...months.map((m,i)=>({key:'m'+i,label:m,align:'right',render:fmt})),
+    { key:'total', label:'합계', align:'right', render:v=>'<strong>'+fmt(v)+'</strong>' },
+  ],
+  rows:[
+    {name:'해지',unit:'건',m0:174,m1:138,m2:135,total:447},
+    {name:'해지율',unit:'%',m0:'3.7%',m1:'3.0%',m2:'2.9%',total:'3.2%'},
+  ],
+});
+```
+`.row-unit`은 maging-all.js에 포함 — `<style>` 태그 불필요.
+
+**컬럼 그룹 헤더 (연도비교):**
+```js
+Maging.activityTable('#tbl', {
+  headerGroups:[{label:'',span:1},{label:'26년',span:3},{label:'25년',span:2}],
+  columns:[{key:'name',label:'구분',align:'left'},{key:'t26',label:'목표',align:'right',render:fmt},…],
+  rows:[…],
+});
+```
+
+**scroll-table:** 12개월 표는 가로 스크롤 + 첫/끝 열 고정이 필수.
 ```html
-<div id="cards-wrap">
-  <section class="news-card" id="card-cover" data-active></section>
-  <section class="news-card" id="card-01"></section>
-  <section class="news-card" id="card-02"></section>
-  <section class="news-card" id="card-03"></section>
-  <section class="news-card" id="card-04"></section>
-  <section class="news-card" id="card-data"></section>
-  <section class="news-card" id="card-top3"></section>
-  <section class="news-card" id="card-cta"></section>
+<div id="tbl" class="scroll-table" style="height:300px"></div>
+```
+`monthlyTable`은 자동 적용. `activityTable` 직접 사용 시 위 wrapper 필수.
+
+⚠️ **듀얼 Y축 금지** — `barChart` + `lineChart` 두 개로 분리.
+
+**차트 선택:**
+- 추이(월별) → `lineChart` · 비교(카테고리) → `barChart` · 비율 → `donutChart`
+- 목표 대비 달성 → `bulletChart` / `ringProgress` · 순위 → `leaderboard`
+
+---
+
+#### HTML 컴포넌트 (maging-all.js 자동 포함)
+
+**이슈 카드** — 문제/리스크를 3열 그리드로:
+```html
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+  <div class="issue-card issue-card--danger">
+    <div class="issue-card__head">
+      <span class="issue-card__icon">🔍</span>
+      <span class="issue-card__label">이슈명</span>
+      <span class="issue-card__tag">영향 범위</span>
+    </div>
+    <div class="issue-card__sub">상세 설명</div>
+  </div>
+  <div class="issue-card issue-card--warning">…</div>
+  <div class="issue-card issue-card--info">…</div>
 </div>
-<news-nav></news-nav>
+```
+`issue-card--danger` / `--warning` / `--info`
+
+**지표 정의 카드 + 수평 분포 바:**
+```html
+<div class="def-card">
+  <div class="def-card__title">NPS 1분기 분포</div>
+  <div class="def-card__sub">유료 사용자 대상</div>
+  <div class="hbar mt-3">
+    <div class="hbar__seg hbar__seg--good"    style="width:54%">54%</div>
+    <div class="hbar__seg hbar__seg--neutral" style="width:24%">24%</div>
+    <div class="hbar__seg hbar__seg--bad"     style="width:22%">22%</div>
+  </div>
+</div>
+```
+`hbar__seg--good` (success) / `--neutral` (muted) / `--bad` (danger)
+
+**정의 카드 (KPI 맥락 설명):**
+```html
+<div class="def-card">
+  <div class="def-card__title">지표명</div>
+  <div class="def-card__sub">측정 주기</div>
+  <div class="def-card__row"><div class="def-card__key">정의</div><div class="def-card__val">…</div></div>
+  <div class="def-card__row"><div class="def-card__key">담당</div><div class="def-card__val">…</div></div>
+</div>
 ```
 
-```js
-window.addEventListener('maging:ready', () => {
-  const BRAND = '@mybrand';
+---
 
-  window.NEWS_MOUNT = {
-    'card-cover': () => Maging.coverCard('#card-cover', { ... }),
-    'card-01':    () => Maging.bodyCard('#card-01', { ... }),
-    'card-02':    () => Maging.bodyCard('#card-02', { ... }),
-    'card-data':  () => Maging.dataCard('#card-data', { ... }),
-    'card-top3':  () => Maging.numberedCard('#card-top3', { ... }),
-    'card-cta':   () => Maging.ctaCard('#card-cta', { ... }),
-  };
+### 프레젠테이션 위젯 (20)
+
+#### `pitchCover` — 표지
+```js
+Maging.pitchCover(sel, {
+  company: '회사명',
+  tagline: '한 줄 가치 제안',
+  logo?: '🚀',            // 이모지 또는 텍스트 로고
+  subtitle?: '시리즈 A · 2026',
+  style?: 'bold',         // 'bold' | 'minimal' | 'gradient'
+});
+```
+- `bold` — 대형 타이포 중앙 정렬, 강한 임팩트
+- `minimal` — 좌측 정렬, 여백 활용
+- `gradient` — 배경 그라데이션 + 중앙 배치
+
+#### `problemSlide` — 문제 제시
+```js
+Maging.problemSlide(sel, {
+  headline: '기업의 73%가 대시보드 제작에 2주 이상 소비합니다',
+  points: [
+    { icon: '⏱️', title: '시간 낭비', desc: '반복적인 차트·테이블 코딩에 개발자 리소스 소진' },
+    { icon: '🎨', title: '디자인 불일치', desc: '팀마다 다른 UI, 브랜드 통일성 부재' },
+    { icon: '💸', title: '비용 초과', desc: 'BI 도구 라이선스 연 $50K+ 지출' },
+  ],
+  highlight?: '연간 $2.4B가 보고서 제작에 낭비됩니다',
+});
+```
+- `points`: 2~4개. 아이콘 + 제목 + 설명.
+- `highlight`: 하단 강조 문구 (선택). 숫자 임팩트용.
+
+#### `solutionSlide` — 솔루션
+```js
+Maging.solutionSlide(sel, {
+  headline: '프롬프트 한 줄 → 프로덕션급 대시보드',
+  before?: { label: 'Before', items: ['2주 개발', '디자이너 필요', '유지보수 부담'] },
+  after?: { label: 'After', items: ['30초 생성', '105개 테마', '제로 유지보수'] },
+  features?: [
+    { icon: '⚡', label: 'AI 네이티브' },
+    { icon: '🎨', label: '105 브랜드 테마' },
+    { icon: '📦', label: 'CDN 한 줄' },
+  ],
+});
+```
+- `before/after`: 좌우 비교 레이아웃. 둘 다 있으면 비교 모드.
+- `features`: before/after 없을 때 아이콘 그리드로 표시.
+
+#### `metricHighlight` — 대형 숫자 (트랙션/임팩트)
+```js
+Maging.metricHighlight(sel, {
+  metrics: [
+    { value: '37', unit: '개', label: '위젯 컴포넌트' },
+    { value: '105', unit: '개', label: '브랜드 테마' },
+    { value: '30', unit: '초', label: '생성 시간' },
+    { value: '0', unit: '줄', label: '빌드 설정' },
+  ],
+});
+```
+- `metrics`: 2~4개. 대형 숫자 + 단위 + 설명.
+
+#### `marketSlide` — 시장 규모
+```js
+Maging.marketSlide(sel, {
+  headline?: '글로벌 BI & 리포팅 시장',
+  tam: { value: '$30B', label: 'TAM · 전체 BI 시장' },
+  sam: { value: '$8B', label: 'SAM · 엔터프라이즈 리포팅' },
+  som: { value: '$500M', label: 'SOM · AI 리포트 생성' },
+  insight?: '연 23% CAGR 성장',
+  sources?: ['Gartner 2025', 'IDC Report'],
+});
+```
+- 동심원 또는 계단식 시각화로 TAM > SAM > SOM 표현.
+
+#### `competitorMatrix` — 경쟁 포지셔닝
+```js
+Maging.competitorMatrix(sel, {
+  headline?: '포지셔닝',
+  axisX: { label: '통합도', low: '단일 기능', high: '올인원' },
+  axisY: { label: '개발 속도', low: '수주 개발', high: '즉시 생성' },
+  players: [
+    { name: 'maging', x: 75, y: 95, highlight: true },
+    { name: 'Tableau', x: 90, y: 20 },
+    { name: 'Chart.js', x: 30, y: 50 },
+  ],
+});
+```
+- 2×2 매트릭스. `highlight: true`인 자사 위치 강조. `x`, `y`: 0~100.
+
+#### `bizModelSlide` — 비즈니스 모델
+```js
+Maging.bizModelSlide(sel, {
+  headline?: '수익 모델',
+  tiers: [
+    { name: 'Free', price: '$0', period: '/mo', features: ['CDN 접근', '커뮤니티 지원', '5개 테마'], cta: 'Get Started' },
+    { name: 'Team', price: '$49', period: '/mo', features: ['전체 테마', '팀 라이선스', '우선 지원'], popular: true },
+    { name: 'Enterprise', price: 'Custom', features: ['SSO/SAML', 'SLA 99.9%', '전담 매니저'] },
+  ],
+  note?: 'Land & Expand: 개발자 → 팀 → 기업 계약',
+});
+```
+- `popular: true` — 강조 표시.
+
+#### `timelineSlide` — 로드맵/마일스톤
+```js
+Maging.timelineSlide(sel, {
+  headline?: '로드맵',
+  milestones: [
+    { date: '2025 Q4', title: 'MVP 출시', desc: '대시보드 + 주간보고', done: true },
+    { date: '2026 Q1', title: '카드뉴스 모드', desc: '인스타/링크드인', done: true },
+    { date: '2026 Q2', title: '슬라이드 모드', desc: '프레젠테이션', active: true },
+    { date: '2026 Q3', title: '엔터프라이즈', desc: 'SSO, 감사 로그' },
+  ],
+});
+```
+- `done: true` — 완료. `active: true` — 현재 진행 중. 가로 타임라인.
+
+#### `teamSlide` — 팀 소개
+```js
+Maging.teamSlide(sel, {
+  headline?: '팀',
+  members: [
+    { name: '유민호', role: 'CEO / Product', exp: '전 카카오 PM, 10년 B2B SaaS' },
+    { name: '김개발', role: 'CTO', exp: '전 토스 프론트엔드 리드' },
+  ],
+  advisors?: [{ name: '이투자', role: '전 소프트뱅크 벤처스 파트너' }],
 });
 ```
 
-키보드: ←/→ 이동, F 전체화면, Esc 종료. 터치 스와이프 지원.
+#### `chainFlow` — 프로세스 / 가치 체인
+```js
+Maging.chainFlow(sel, {
+  headline?: '가치 체인 — 3단 전달 구조',
+  steps: [
+    { label?: 'PLATFORM', title: 'AI로 만든다', desc?: '콘텐츠 생성', accent?: true },
+    { label?: '무장', title: '직원이 강해진다', desc?: '역량 증폭' },
+    { label?: '결과', title: '고객이 찾아온다', desc?: '매출 성장' },
+  ],
+  footer?: '이 흐름이 반복되면 조직이 강해진다',
+});
+```
+- `accent: true`인 스텝이 강조 색상. 가치 체인, 프로세스 플로우, 유저 저니 등.
 
----
+#### `compareSlide` — 좌우 대비
+```js
+Maging.compareSlide(sel, {
+  headline?: '왜 이 전략이 강력한가',
+  left: { label: '기존 접근', rows: [{ key: '프레이밍', value: '업무 효율화' }] },
+  right: { label: '새로운 접근', rows: [{ key: '프레이밍', value: '매출 성장' }] },
+  note?: '핵심 한 줄 요약',
+});
+```
 
-### 테마 선택 가이드
+#### `askSlide` — 투자 요청 / CTA
+```js
+Maging.askSlide(sel, {
+  headline: 'Series A · ₩30억',
+  useOfFunds: [
+    { label: '엔지니어링', pct: 50 },
+    { label: '세일즈/마케팅', pct: 30 },
+    { label: '운영', pct: 20 },
+  ],
+  milestones?: ['12개월 내 ARR ₩10억 달성', '엔터프라이즈 고객 20사 확보'],
+  contact?: { email: 'hello@company.com', website: 'company.com' },
+});
+```
 
-| 주제 | 추천 테마 |
-|------|-----------|
-| 비즈니스/B2B | `linkedin`, `linear`, `stripe` |
-| AI/테크 | `openai`, `claude`, `github` |
-| 크리에이티브 | `instagram`, `figma`, `spotify` |
-| 뉴스/미디어 | `bloomberg`, `medium`, `reddit` |
-| 교육 | `duolingo`, `notion` |
-| 럭셔리/프리미엄 | `apple`, `vercel`, `netflix` |
+#### `quoteSlide` — 인용/추천
+```js
+Maging.quoteSlide(sel, {
+  quote: '인용 텍스트',
+  author?: '이름', role?: '직책',
+  style?: 'minimal',  // 'minimal' | 'boxed'
+});
+```
 
----
+#### `referenceTable` — 참조 데이터 테이블
+```js
+Maging.referenceTable(sel, {
+  headline?: '제목',
+  columns: ['항목', '값', '비고'],
+  rows: [{ cells: ['A', 'B', 'C'], highlight?: true }],
+});
+```
 
-### PNG 내보내기 (Playwright)
+#### `storySlide` — 3단 스토리 (과거→현재→미래)
+```js
+Maging.storySlide(sel, {
+  headline?: '우리의 여정',
+  cells: [
+    { tag: '과거', title: '문제 인식', points: ['항목1', '항목2'] },
+    { tag: '현재', title: '솔루션', points: ['항목1'] },
+    { tag: '미래', title: '비전', points: ['항목1'] },
+  ],
+  flow?: [{ label: '단계1' }, { label: '단계2' }],
+});
+```
 
-maging은 HTML 렌더링만 담당. 이미지 캡처는 Playwright CLI로 수행:
+#### `swotSlide` — SWOT 분석
+```js
+Maging.swotSlide(sel, {
+  headline?: 'SWOT 분석',
+  quadrants: [
+    { label: 'Strengths', items: ['항목1', '항목2'] },
+    { label: 'Weaknesses', items: ['항목1'] },
+    { label: 'Opportunities', items: ['항목1'] },
+    { label: 'Threats', items: ['항목1'] },
+  ],
+});
+```
 
-```bash
-# 개별 카드 캡처
-npx playwright screenshot --viewport-size=1080,1350 \
-  "file:///path/to/card-news.html#card-cover" output/card-cover.png
+#### `roadmapSlide` — 간트형 로드맵
+```js
+Maging.roadmapSlide(sel, {
+  headline?: '로드맵',
+  periods: ['Q1', 'Q2', 'Q3', 'Q4'],
+  tracks: [
+    { label: '제품', items: [{ name: '기능A', start: 0, end: 1, bar: 'accent' }] },
+    { label: '마케팅', items: [{ name: '캠페인', start: 1, end: 2, bar: 'muted' }] },
+  ],
+});
+```
 
-# 전체 카드 일괄 캡처 (스크립트)
-for id in card-cover card-01 card-02 card-03 card-04 card-data card-top3 card-cta; do
-  npx playwright screenshot --viewport-size=1080,1350 \
-    "file:///path/to/card-news.html#${id}" "output/${id}.png"
-done
+#### `featureSlide` — 기능 카드 그리드
+```js
+Maging.featureSlide(sel, {
+  headline?: '핵심 기능',
+  features: [
+    { icon: '⚡', title: '빠른 생성', desc: '30초 만에 완성' },
+    { icon: '🎨', title: '테마', desc: '105개 브랜드 테마' },
+  ],
+});
 ```
 
 ---
 
-### 생성 규칙
+### 다중 슬라이드 (Maging.page API)
 
-1. **1카드 1메시지**: 정보를 분할하라. 한 장에 2개 이상의 핵심 포인트 금지.
-2. **타이포그래피 위계**: 제목은 크고 굵게, 부연은 작고 muted. 텍스트 양 최소화.
-3. **brand 일관성**: 모든 카드에 동일한 `brand` 값 전달.
-4. **커버 후킹**: 첫 장 제목은 호기심 유발 — 질문형, 숫자, 반전 활용.
-5. **CTA 명확**: 마지막 장에 구체적 행동 유도 (팔로우, 링크, DM).
-6. **dataCard 활용**: 통계/수치 데이터가 있으면 반드시 dataCard로 시각화.
-7. **카드 수**: 5장 미만 금지, 12장 초과 금지. 권장 7~9장.
-8. **넘버링**: 시리즈형 본문은 bodyCard의 `num` 또는 stepCard 사용.
-9. **아이콘**: bodyCard에 관련 이모지 icon 1개씩 배치.
-10. **테마**: 주제에 맞는 테마 선택. 위 가이드 참조.
-11. **리듬감**: 같은 카드 타입을 3장 이상 연속 금지. bodyCard 사이에 quoteCard, statCard, comparisonCard를 끼워 시각적 변화를 만들어라.
-12. **커버 스타일 선택**: 리스티클("5가지")→`number-hero`, 임팩트 한 줄→`bold-type`, 럭셔리→`framed`, 범용→`gradient`.
-13. **비교 콘텐츠**: Do/Don't, Before/After, Myth/Fact → comparisonCard 사용.
-14. **저장 유도**: 체크리스트, 팁 모음 → checklistCard. 인스타 저장률↑.
-15. **사회적 증거**: 고객 후기, 전문가 인용 → testimonialCard 또는 quoteCard.
-15. **Powered by:** `</main>` 바로 뒤에 버전 표시를 넣어라: `<div style="text-align:right;padding:1rem 1.5rem 0.5rem;font-size:0.6rem;color:var(--mw-text-soft,var(--mw-text-muted));opacity:0.5">powered by maging 0.1.25</div>`
+**`Maging.page()` 한 방으로 전체 슬라이드 생성:**
+```js
+window.addEventListener('maging:ready', function () {
+  Maging.page({
+    mode: 'slide',
+    sidebarTitle: '제목',
+    sidebarDate: '2026.04.27',
+    slides: [
+      {
+        id: 'cover', cover: true,
+        widgets: [{ type: 'sectionCover', style: 'classic', kicker: 'REPORT · 2026', title: '제목', subtitle: '부제', brand: 'brand', meta: '기준일 2026.04.27' }],
+      },
+      {
+        id: 'slide-1', label: '섹션 제목', bu: '사업부', team: '팀명',
+        widgets: [
+          { type: 'pageHeader', title: '페이지 제목', meta: '기준일' },
+          { type: 'kpiCard', label: '지표명', value: '100', delta: 10, deltaGoodWhen: 'positive' },
+          { type: 'sectionHead', title: '상세' },
+          { type: 'monthlyTable', title: '월별 현황', rows: [/*...*/] },
+          { type: 'alertBanner', bannerType: 'info', icon: '—', title: '요약', message: '내용' },
+        ],
+      },
+      // 프레젠테이션 위젯도 동일하게 사용
+      {
+        id: 'problem', label: 'Problem',
+        widgets: [{ type: 'problemSlide', headline: '문제', points: [{icon: '⏱️', title: '제목', desc: '설명'}] }],
+      },
+    ],
+  });
+});
+```
+- 사이드바 · 네비게이션 · 스케일링 · 페이지네이션 자동.
+- **넘치는 슬라이드는 자동 분할됨** — 내용이 A4 1장을 초과하면 다음 장표로 위젯이 이동한다.
+- 대시보드 위젯(kpiCard, monthlyTable, chart 등)과 프레젠테이션 위젯(pitchCover, problemSlide 등) 자유 조합 가능.
 
 ---
 
-### Reference — 완성 예시
+### Generation Rules
+
+1. **1슬라이드 = 1주제.** 보고서는 1 KPI, 피치는 1주장 + 증거.
+   - 슬라이드 헤더(`label` + `bu` + `team`)에 이미 KPI명·팀이 표시됨.
+   - `pageHeader`에는 **제목(title) + 날짜(meta)만**. 헤더 내용을 중복하지 마라.
+   - **`sectionHead`는 KPI와 상세 데이터 사이의 중간 제목.** `pageHeader(대제목) → KPI → sectionHead(중간제목) → table/chart` 3단 위계.
+2. `<html data-theme="…">` — theme 선택.
+3. **단위 필수** — 명/건/개/원/% 모두. 금액은 `Maging.fmt.krw`.
+4. **KPI label에 목표 포함** — `'3월 신규 · 목표 1.42억원'`.
+5. **delta:** 목표 대비 또는 전월/전년 대비 %.
+6. **마지막은 alertBanner** — `type='info'` 1-2문장 요약.
+7. **Anti-AI:** hover glow 금지 · 균일 3등분 grid 금지 · shadow tint 금지.
+8. **슬라이드 밀도:**
+   - KPI 카드: 한 줄에 최대 **4개**.
+   - 1장 최대 구성: `pageHeader + KPI 3~4개 + sectionHead + 테이블/차트 1개 + alertBanner` (총 위젯 7~8개).
+   - **insightCard는 1장에 최대 2개.** 3개 이상이면 반드시 다음 슬라이드로 분리.
+   - 차트 + 테이블 동시 배치 금지. 하나만 선택.
+   - **내용이 많으면 같은 label로 슬라이드를 분리하라.** 사이드바에서 같은 KPI 아래 dot으로 표시된다.
+9. **커버 슬라이드:** `style: 'classic'` 사용. kicker에 리포트 유형+날짜, title에 보고서 이름.
+
+---
+
+### Reference (주간보고 예제)
 
 ```html
 <!DOCTYPE html>
-<html lang="ko" data-theme="claude">
+<html lang="ko" data-theme="flow">
 <head>
-  <meta charset="UTF-8" />
-  <title>AI 마케팅 트렌드 카드뉴스</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging.css">
-  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging-all.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.25/dist/maging-news.js"></script>
+  <meta charset="UTF-8"><title>주간보고</title>
+  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.26/dist/maging-all.js"></script>
 </head>
-<body class="mw-themed" style="display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem;">
-  <div id="cards-wrap" style="max-width:540px;width:100%;">
-    <section class="news-card" id="card-cover" data-active></section>
-    <section class="news-card" id="card-01"></section>
-    <section class="news-card" id="card-02"></section>
-    <section class="news-card" id="card-03"></section>
-    <section class="news-card" id="card-04"></section>
-    <section class="news-card" id="card-data"></section>
-    <section class="news-card" id="card-top3"></section>
-    <section class="news-card" id="card-cta"></section>
-  </div>
-  <news-nav></news-nav>
-  <script>
-  window.addEventListener('maging:ready', () => {
-    const BRAND = '@mybrand';
-    window.NEWS_MOUNT = {
-      'card-cover': () => Maging.coverCard('#card-cover', {
-        icon: '🚀', tag: 'AI 트렌드',
-        title: 'AI가 바꿀\n마케팅의 미래',
-        subtitle: '마케터가 알아야 할 5가지',
-        brand: BRAND, style: 'gradient',
-      }),
-      'card-01': () => Maging.bodyCard('#card-01', {
-        num: '01', icon: '🎯',
-        heading: '초개인화 콘텐츠 자동 생성',
-        text: 'AI가 고객 세그먼트별로 맞춤 콘텐츠를 실시간으로 만들어줍니다.',
-        brand: BRAND,
-      }),
-      'card-02': () => Maging.bodyCard('#card-02', {
-        num: '02', icon: '📊',
-        heading: '예측 분석으로 선제 대응',
-        text: '고객 이탈 예측, 구매 확률 스코어링까지 데이터 기반 의사결정이 자동화됩니다.',
-        brand: BRAND,
-      }),
-      'card-03': () => Maging.bodyCard('#card-03', {
-        num: '03', icon: '💬',
-        heading: 'AI 챗봇이 영업을 대신한다',
-        text: '24시간 고객 응대, 리드 퀄리파잉, 미팅 예약까지 자동화.',
-        brand: BRAND,
-      }),
-      'card-04': () => Maging.bodyCard('#card-04', {
-        num: '04', icon: '🎨',
-        heading: '크리에이티브 제작 비용 90% 절감',
-        text: '배너, 카드뉴스, 썸네일까지 AI 초안 → 사람 감수. 시간 단위 제작.',
-        brand: BRAND,
-      }),
-      'card-data': () => Maging.dataCard('#card-data', {
-        label: 'GLOBAL TREND', title: 'AI 마케팅 도입률 추이',
-        widget: 'barChart',
-        widgetConfig: {
-          categories: ['2022','2023','2024','2025','2026(E)'],
-          series: [{ name: '도입률', data: [18,31,47,63,78] }],
-          yFormatter: v => v + '%',
-        },
-        brand: BRAND,
-      }),
-      'card-top3': () => Maging.numberedCard('#card-top3', {
-        heading: 'AI 마케팅 필수 도구 TOP 3',
-        items: [
-          { rank: '1', title: 'ChatGPT / Claude', desc: '콘텐츠 초안, 카피라이팅', icon: '🤖' },
-          { rank: '2', title: 'Midjourney / DALL-E', desc: '비주얼 생성', icon: '🖼️' },
-          { rank: '3', title: 'HubSpot AI', desc: '리드 스코어링, 이메일 최적화', icon: '📈' },
+<body>
+<script>
+window.addEventListener('maging:ready', function () {
+  Maging.page({
+    mode: 'slide',
+    sidebarTitle: 'SaaS 주간보고',
+    sidebarDate: '2026.04.27 · 4월 4주차',
+    slides: [
+      {
+        id: 'cover', cover: true,
+        widgets: [{
+          type: 'sectionCover', style: 'classic',
+          kicker: 'WEEKLY REPORT · 2026년 4월 4주차',
+          title: 'SaaS 주간보고',
+          subtitle: 'SaaS B/U · Enterprise B/U',
+          brand: 'flow.team',
+          meta: '기준일 2026.04.27(월)',
+        }],
+      },
+      {
+        id: 'retention', label: 'KPI 1. 기고객 리텐션', bu: 'SaaS B/U', team: 'CX팀',
+        widgets: [
+          { type: 'pageHeader', title: '월별 해지 현황', meta: '기준일 2026.04.27(월)' },
+          { type: 'kpiCard', label: '3월 해지율 · 전년 3.3%', value: '2.9<span class="mw-unit">%</span>', valueHTML: true, delta: -3.4, deltaGoodWhen: 'negative' },
+          { type: 'kpiCard', label: '3월 신규', value: '92<span class="mw-unit">건</span>', valueHTML: true, delta: -20, deltaGoodWhen: 'positive' },
+          { type: 'kpiCard', label: '유료 기업', value: '4,592<span class="mw-unit">개</span>', valueHTML: true, delta: -0.6, deltaGoodWhen: 'positive' },
+          { type: 'sectionHead', title: '월별 해지·신규 추이' },
+          {
+            type: 'activityTable',
+            title: '2026년 월별 현황',
+            columns: [
+              { key: 'name', label: '구분', align: 'left' },
+              { key: 'm0', label: '1월', align: 'right' },
+              { key: 'm1', label: '2월', align: 'right' },
+              { key: 'm2', label: '3월', align: 'right' },
+              { key: 'total', label: '합계', align: 'right' },
+            ],
+            rows: [
+              { name: '해지', m0: 174, m1: 138, m2: 135, total: 447 },
+              { name: '신규', m0: 117, m1: 89, m2: 92, total: 298 },
+            ],
+          },
+          { type: 'alertBanner', bannerType: 'info', icon: '—', title: '리뷰', message: '3월 해지율 개선됐으나 신규<해지 지속 — 4월 신규 회복 우선.' },
         ],
-        brand: BRAND,
-      }),
-      'card-cta': () => Maging.ctaCard('#card-cta', {
-        heading: '더 많은 AI 마케팅 팁이\n궁금하다면?',
-        subtext: '팔로우하고 매주 새로운 트렌드를 받아보세요',
-        ctas: [{ label: '팔로우하기', primary: true }],
-        handles: [
-          { platform: 'Instagram', handle: '@mybrand' },
-          { platform: 'LinkedIn', handle: 'mybrand' },
-        ],
-        brand: BRAND,
-      }),
-    };
+      },
+    ],
   });
-  </script>
+});
+</script>
 </body>
 </html>
 ```
 
-
-## Service: Gemini (Canvas)
-
-- 결과물은 반드시 **Canvas**의 Code 탭에 전체 HTML을 출력하라.
-- Preview 탭에서 즉시 렌더링 가능해야 한다.
-- 대화 본문에 코드를 넣지 마라 — Canvas에만 출력.
-- 수정 요청 시 전체 코드를 다시 출력하라.
-
-=== HANDSHAKE ===
-When you have fully understood the above, reply with EXACTLY this text (nothing else, no code fences, no preamble):
-
-**안녕하세요! 결과물 서포터 매징(maging)입니다** ✦
-
-어떤 주제의 카드뉴스를 만들까요? 주제, 타겟 플랫폼(인스타/링크드인), 카드 수를 알려주세요.
-바로 시작할게요! 🎨
-
-Then wait for my next message before generating anything.
+**Output:** 단일 ` ```html … ``` ` 블록. `maging-all.js` 1개만 로드하면 CSS·ECharts·모드 스크립트 전부 자동.

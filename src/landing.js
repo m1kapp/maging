@@ -769,21 +769,55 @@
       }, speed);
     }
 
+    // ── Service rules & handshakes (composed at runtime) ──
+    var SERVICE_RULES = {
+      flowai: '',
+      claude: '\n## Service: Claude (Artifact)\n\n- 결과물은 반드시 **Artifact**로 출력하라. type: `text/html`.\n- Artifact 제목은 결과물 내용을 설명하는 한국어 제목 (예: "SaaS 주간보고 대시보드").\n- Artifact 하나에 전체 HTML을 담아라. 여러 Artifact로 분할 금지.\n- Artifact 외부(대화 본문)에는 코드를 넣지 마라.',
+      chatgpt: '\n## Service: ChatGPT (Canvas)\n\n- 결과물은 반드시 **Canvas**에 전체 HTML 코드를 출력하라.\n- Canvas 하나에 전체 코드를 담아라. 대화 본문에 코드 조각을 넣지 마라.\n- Canvas 출력 후 "Preview" 탭에서 즉시 실행 가능해야 한다.\n- 수정 요청 시 Canvas 내용을 전체 교체하라. 부분 수정 금지.',
+      gemini: '\n## Service: Gemini (Canvas)\n\n- 결과물은 반드시 **Canvas**의 Code 탭에 전체 HTML을 출력하라.\n- Preview 탭에서 즉시 렌더링 가능해야 한다.\n- 대화 본문에 코드를 넣지 마라 — Canvas에만 출력.\n- 수정 요청 시 전체 코드를 다시 출력하라.'
+    };
+
+    var HANDSHAKE_MAP = {
+      dashboard: '\n\n=== WHEN TO GREET vs GENERATE ===\nUser provides data, a file, or a specific request → **skip greeting, generate code immediately.**\nNo specific request yet → reply with:\n\n**안녕하세요! 결과물 서포터 매징(maging)입니다** ✦\n데이터 파일을 첨부하거나, 만들고 싶은 대시보드를 자유롭게 설명해주세요. 🎨',
+      landing: '\n\n=== WHEN TO GREET vs GENERATE ===\nUser provides a product name, service info, or a specific request → **skip greeting, generate code immediately.**\nNo specific request yet → reply with:\n\n**안녕하세요! 결과물 서포터 매징(maging)입니다** ✦\n어떤 서비스의 랜딩페이지를 만들까요? 제품명, 핵심 기능, 타겟 고객을 알려주세요. 🎨',
+      slide: '\n\n=== WHEN TO GREET vs GENERATE ===\nUser provides team info, KPI data, or a specific request → **skip greeting, generate code immediately.**\nNo specific request yet → reply with:\n\n**안녕하세요! 결과물 서포터 매징(maging)입니다** ✦\n어떤 슬라이드를 만들까요? 주제·목적·핵심 내용을 알려주세요. 🎨',
+      'card-news': '\n\n=== WHEN TO GREET vs GENERATE ===\nUser provides a topic, content, or a specific request → **skip greeting, generate code immediately.**\nNo specific request yet → reply with:\n\n**안녕하세요! 결과물 서포터 매징(maging)입니다** ✦\n어떤 주제의 카드뉴스를 만들까요? 주제, 타겟 플랫폼(인스타/링크드인), 카드 수를 알려주세요. 🎨'
+    };
+
+    var SHORT_BASES = {
+      dashboard: 'You are a maging dashboard generator.\n\nFetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging/llms/llms-dashboard-full.md\nIt has the complete setup, all widget APIs, themes, and generation rules.',
+      landing: 'You are a maging landing page generator.\n\nFetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging/llms/llms-landing-full.md\nIt has the complete setup, all widget APIs, themes, and generation rules.',
+      slide: 'You are a maging slide generator.\n\nFetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging/llms/llms-slide-full.md\nIt has the complete setup, all widget APIs, themes, and generation rules for slides.',
+      'card-news': 'You are a maging card-news generator.\n\nFetch and read: https://cdn.jsdelivr.net/npm/@m1kapp/maging/llms/llms-card-news-full.md\nIt has the complete setup, all widget APIs, themes, and generation rules for card news.'
+    };
+
+    function appendTail(base) {
+      return base + (SERVICE_RULES[currentService] || '') + (HANDSHAKE_MAP[currentOutput] || '');
+    }
+
     // ── Fetch prompt ──
+    var baseCache = {};
     function fetchPrompt(cb) {
-      var base = d.promptBaseUrl;
-      var specific = base + 'llms-' + currentOutput + '-' + currentSize + '-for-' + currentService + '.md';
-      var fallback = base + 'llms-' + currentOutput + '-' + currentSize + '.md';
-      fetch(specific).then(function (r) {
-        if (r.ok) return r.text();
-        return fetch(fallback).then(function (r2) { return r2.ok ? r2.text() : ''; });
-      }).then(function (text) {
-        promptText = text || '';
+      if (currentSize === 'short') {
+        promptText = appendTail(SHORT_BASES[currentOutput] || '');
         cb(promptText);
-      }).catch(function () {
-        promptText = '';
-        cb('');
-      });
+        return;
+      }
+      var url = d.promptBaseUrl + 'llms-' + currentOutput + '-full.md';
+      if (baseCache[url]) {
+        promptText = appendTail(baseCache[url]);
+        cb(promptText);
+        return;
+      }
+      fetch(url).then(function (r) { return r.ok ? r.text() : ''; })
+        .then(function (text) {
+          baseCache[url] = text || '';
+          promptText = appendTail(baseCache[url]);
+          cb(promptText);
+        }).catch(function () {
+          promptText = '';
+          cb('');
+        });
     }
 
     // ── Update display ──
@@ -801,7 +835,7 @@
 
     function updateLink() {
       if (!linkEl) return;
-      var name = 'llms-' + currentOutput + '-' + currentSize + '-for-' + currentService + '.md';
+      var name = 'llms-' + currentOutput + '-full.md';
       linkEl.href = d.promptBaseUrl + name;
       linkEl.textContent = name;
     }
@@ -942,7 +976,7 @@
               if (t2) t2.style.display = 'none';
               showEl('preview');
               var fnameEl = $('fname');
-              var FNAMES = { dashboard: 'dashboard.html', weekly: 'weekly-report.html', landing: 'landing.html', cardnews: 'card-news.html' };
+              var FNAMES = { dashboard: 'dashboard.html', slide: 'slide.html', landing: 'landing.html', cardnews: 'card-news.html' };
               if (fnameEl) fnameEl.textContent = FNAMES[currentOutput] || 'output.html';
 
               // Render previews
