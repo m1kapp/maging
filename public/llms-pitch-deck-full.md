@@ -1,1 +1,0 @@
-../llms-pitch-deck-full.md

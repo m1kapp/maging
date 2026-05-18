@@ -1,1 +1,0 @@
-../llms-dashboard-short-for-claude.md

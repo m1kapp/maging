@@ -1,1 +1,0 @@
-../llms-pitch-deck-short-for-chatgpt.md

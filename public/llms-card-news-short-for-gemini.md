@@ -1,1 +1,0 @@
-../llms-card-news-short-for-gemini.md

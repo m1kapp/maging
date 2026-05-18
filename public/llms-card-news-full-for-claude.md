@@ -1,1 +1,0 @@
-../llms-card-news-full-for-claude.md

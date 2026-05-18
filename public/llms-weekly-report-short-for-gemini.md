@@ -1,1 +1,0 @@
-../llms-weekly-report-short-for-gemini.md

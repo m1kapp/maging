@@ -1,1 +1,0 @@
-../llms-landing-short-for-chatgpt.md
