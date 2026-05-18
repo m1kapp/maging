@@ -47,7 +47,7 @@ export function bootViewer() {
         '<div data-role="header" class="flex items-center justify-between px-4 py-2 border-b border-[var(--mw-border)] shrink-0 gap-2"><div>' + headerLeft + '</div>' + headerRight + '</div>' : '';
       const pageNum = '<span data-role="pagenum" class="tabular-nums">' + (i + 1) + ' / ' + slides.length + '</span>';
       const footer = '<div data-role="footer" class="shrink-0 px-4 py-1.5 text-right text-xs text-[var(--mw-text-muted)]">' + pageNum + '</div>';
-      s.innerHTML = header + '<div data-role="body" class="flex-1 flex flex-col overflow-hidden min-h-0 px-4 py-2 pb-3">' + content + '</div>' + footer;
+      s.innerHTML = header + '<div data-role="body" class="flex-1 flex flex-col overflow-hidden min-h-0 px-4 py-2 pb-3 gap-0.5 justify-start [&>*]:!flex-none">' + content + '</div>' + footer;
     });
     const indEl      = document.getElementById('deck-ind');
     const slidesWrap = document.getElementById('slides-wrap');
@@ -538,7 +538,7 @@ export function bootViewer() {
           '<div data-role="header" class="flex items-center justify-between px-4 py-2 border-b border-[var(--mw-border)] shrink-0 gap-2"><div>' + headerLeft + '</div>' + headerRight + '</div>' : '';
         const pageNum = '<span data-role="pagenum" class="tabular-nums">' + (i + 1) + ' / ' + slides.length + '</span>';
         const footer = '<div data-role="footer" class="shrink-0 px-4 py-1.5 text-right text-xs text-[var(--mw-text-muted)]">' + pageNum + '</div>';
-        sec.innerHTML = header + '<div data-role="body" class="flex-1 flex flex-col overflow-hidden min-h-0 px-4 py-2 pb-3"></div>' + footer;
+        sec.innerHTML = header + '<div data-role="body" class="flex-1 flex flex-col overflow-hidden min-h-0 px-4 py-2 pb-3 gap-0.5 justify-start [&>*]:!flex-none"></div>' + footer;
       }
 
       slideArea.appendChild(sec);

@@ -41,6 +41,13 @@
       '.mw-hero-section__kicker {',
       '  font-size: var(--mw-text-xs); color: var(--mw-text-muted); text-transform: uppercase;',
       '  letter-spacing: 0.1em; font-family: var(--mw-font); margin-bottom: 0.75rem;',
+      '  display: inline-flex; align-items: center; gap: 0.5rem;',
+      '}',
+      '.mw-hero-section__version-chip {',
+      '  font-size: 10px; padding: 2px 7px; border-radius: 999px;',
+      '  background: color-mix(in srgb, var(--mw-accent) 15%, transparent);',
+      '  color: var(--mw-accent); font-weight: 600; letter-spacing: 0.02em;',
+      '  text-transform: none; font-family: var(--mw-mono-font);',
       '}',
       '.mw-hero-section__title {',
       '  font-size: clamp(2rem, 5vw, 3.25rem); font-weight: 700;',
@@ -285,7 +292,7 @@
 
     el.innerHTML =
       '<div class="mw-hero-section__inner">' +
-        (d.kicker ? '<div class="mw-hero-section__kicker">' + esc(d.kicker) + '</div>' : '') +
+        (d.kicker ? '<div class="mw-hero-section__kicker">' + esc(d.kicker) + (d.version ? ' <span class="mw-hero-section__version-chip">v' + (window.Maging && window.Maging.version || '__VERSION__') + '</span>' : '') + '</div>' : '') +
         '<h1 class="mw-hero-section__title">' + titleHTML + '</h1>' +
         (d.subtitle ? '<p class="mw-hero-section__subtitle">' + d.subtitle + '</p>' : '') +
         (ctasHTML ? '<div class="mw-hero-section__ctas">' + ctasHTML + '</div>' : '') +

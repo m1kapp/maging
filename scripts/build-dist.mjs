@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { build } from 'esbuild';
-import { readFileSync, cpSync, mkdirSync } from 'fs';
+import { readFileSync, writeFileSync, cpSync, mkdirSync } from 'fs';
 
 const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
 const VERSION = pkg.version;
@@ -9,7 +9,7 @@ const DIRS = ['dist', 'public/dist'];
 // Ensure output dirs exist
 for (const dir of DIRS) mkdirSync(dir, { recursive: true });
 
-// ── 1. Plain JS (copy src → both dirs) ──
+// ── 1. Plain JS (copy src → both dirs, inject __VERSION__) ──
 const plainJS = {
   'src/core.js':     'maging.js',
   'src/all.js':      'maging-all.js',
@@ -20,7 +20,8 @@ const plainJS = {
   'src/grid.js':     'maging-grid.js',
 };
 for (const [src, name] of Object.entries(plainJS)) {
-  for (const dir of DIRS) cpSync(src, dir + '/' + name);
+  const content = readFileSync(src, 'utf8').replace(/__VERSION__/g, VERSION);
+  for (const dir of DIRS) writeFileSync(dir + '/' + name, content);
 }
 
 // ── 2. TSX bundle ──

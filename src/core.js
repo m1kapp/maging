@@ -2020,7 +2020,7 @@
   // Public API
   // ==========================================================
   var api = {
-    version: '0.1.25',
+    version: '__VERSION__',
     kpiCard: kpiCard,
     lineChart: null,
     barChart: null,
@@ -2542,6 +2542,7 @@
         '<button type="button" class="mw-theme-fab__export" aria-label="내보내기"></button>' +
         '<div class="mw-theme-fab__export-menu"></div>' +
       '</div>' +
+      '<div class="mw-theme-fab__version">v' + api.version + '</div>' +
       '<div class="mw-theme-fab__panel" role="dialog" aria-label="테마 목록">' +
         '<div class="mw-theme-fab__head">' +
           '<span>Theme · ' + THEME_DATA.length + '</span>' +

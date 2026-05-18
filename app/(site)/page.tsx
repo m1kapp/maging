@@ -7,6 +7,7 @@ const config = {
     {
       type: 'hero',
       kicker: 'maging',
+      version: true,
       title: 'AI 답변을,<br>쓸 수 있는 {{roller}} 로.',
       roller: ['결과물', '대시보드', '슬라이드', '카드뉴스', '랜딩페이지'],
       rollerDuration: 12000,
@@ -30,7 +31,7 @@ const config = {
       ],
       outputs: [
         { id: 'dashboard', label: '대시보드' },
-        { id: 'weekly-report', label: '슬라이드' },
+        { id: 'slide', label: '슬라이드' },
         { id: 'card-news', label: '카드뉴스' },
         { id: 'landing', label: '랜딩페이지' },
       ],
@@ -40,13 +41,13 @@ const config = {
       promptBaseUrl: '/llms/',
       requests: {
         'dashboard': '3월 매출 CSV 기반으로 경영진 리뷰용 대시보드 만들어줘',
-        'weekly-report': 'SaaS팀 4월 4주차 주간보고 만들어줘. 영업·CS·개발·AX 4개 팀',
+        'slide': 'SaaS팀 4월 4주차 주간보고 만들어줘. 영업·CS·개발·AX 4개 팀',
         'landing': 'AI 코드 리뷰 SaaS 랜딩페이지 만들어줘. 히어로+기능+가격+FAQ',
         'card-news': 'AI 마케팅 트렌드 카드뉴스 만들어줘. 10장짜리',
       },
       handshakes: {
         'dashboard': '데이터 파일을 첨부하거나, 만들고 싶은 대시보드를 자유롭게 설명해주세요.',
-        'weekly-report': '주간보고를 만들어 드릴게요. 팀 구조와 KPI를 알려주세요.',
+        'slide': '주간보고를 만들어 드릴게요. 팀 구조와 KPI를 알려주세요.',
         'landing': '랜딩페이지를 만들어 드릴게요. 제품 정보를 알려주세요.',
         'card-news': '카드뉴스를 만들어 드릴게요. 주제와 장수를 알려주세요.',
       },
@@ -56,7 +57,7 @@ const config = {
           { type: 'kpiCard', compact: true, label: 'DAU', value: '48K', delta: 12.4 },
           { type: 'lineChart', categories: ['1월', '2월', '3월', '4월', '5월', '6월'], series: [{ name: '매출', data: [72, 78, 81, 88, 91, 128] }] },
         ],
-        'weekly-report': [
+        'slide': [
           { type: 'kpiCard', compact: true, label: '신규매출', value: '30억', delta: 18.5 },
           { type: 'kpiCard', compact: true, label: '달성률', value: '96%', delta: -3.8 },
         ],
