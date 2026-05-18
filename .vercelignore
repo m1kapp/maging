@@ -2,5 +2,4 @@ node_modules
 .git
 .DS_Store
 *.log
-scripts
 .env*
