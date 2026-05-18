@@ -1,6 +1,10 @@
 node_modules
 .next
 _site
+
+# Build outputs (src/ → dist/ + public/dist/)
+dist/
+public/dist/
 .DS_Store
 *.log
 .env

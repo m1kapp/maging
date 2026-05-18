@@ -183,5 +183,5 @@ const config = {
 };
 
 export default function EcommercePage() {
-  return <MagingPage config={config} fullscreen scripts={['/dist/maging-sidebar.js', '/dist/maging-weekly.js']} />;
+  return <MagingPage config={config} fullscreen scripts={['/dist/maging-sidebar.js', '/dist/maging-slide.js']} />;
 }

@@ -25,10 +25,9 @@ export default function ComponentsGallery() {
       }
 
       Promise.all([
-        loadScript('/dist/maging-weekly.js'),
+        loadScript('/dist/maging-slide.js'),
         loadScript('/dist/maging-landing.js'),
         loadScript('/dist/maging-news.js'),
-        loadScript('/dist/maging-pitch.js'),
       ]).then(function () {
         var Maging = (window as any).Maging;
         if (!Maging) return;
@@ -84,10 +83,10 @@ export default function ComponentsGallery() {
           cohortMatrix:    { mode: 'core', cat: 'Specialized', wide: true, tall: true },
 
           // -- Slide: Report --
-          monthlyTable:         { mode: 'weekly', cat: '보고용 위젯', wide: true, tall: true },
-          sectionCover:         { mode: 'weekly', cat: '보고용 위젯', wide: true, tall: true },
-          defCard:              { mode: 'weekly', cat: '보고용 위젯' },
-          insightCard:          { mode: 'weekly', cat: '보고용 위젯', tall: true },
+          monthlyTable:         { mode: 'slide', cat: '슬라이드 위젯', wide: true, tall: true },
+          sectionCover:         { mode: 'slide', cat: '슬라이드 위젯', wide: true, tall: true },
+          defCard:              { mode: 'slide', cat: '슬라이드 위젯' },
+          insightCard:          { mode: 'slide', cat: '슬라이드 위젯', tall: true },
 
           // -- Landing Page --
           heroSection:     { mode: 'landing', cat: 'Landing Page', wide: true, tall: true },
@@ -115,18 +114,18 @@ export default function ComponentsGallery() {
           ctaCard:         { mode: 'cardnews', cat: 'Card News', tall: true },
 
           // -- Slide: Presentation --
-          pitchCover:        { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
-          problemSlide:      { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
-          solutionSlide:     { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
-          metricHighlight:   { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
-          marketSlide:       { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
-          competitorMatrix:  { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
-          bizModelSlide:     { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
-          timelineSlide:     { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
-          teamSlide:         { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
-          askSlide:          { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
-          chainFlow:         { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
-          compareSlide:      { mode: 'pitchdeck', cat: '발표용 위젯', wide: true, tall: true },
+          pitchCover:        { mode: 'slide', cat: '슬라이드 위젯', wide: true, tall: true },
+          problemSlide:      { mode: 'slide', cat: '슬라이드 위젯', wide: true, tall: true },
+          solutionSlide:     { mode: 'slide', cat: '슬라이드 위젯', wide: true, tall: true },
+          metricHighlight:   { mode: 'slide', cat: '슬라이드 위젯', wide: true, tall: true },
+          marketSlide:       { mode: 'slide', cat: '슬라이드 위젯', wide: true, tall: true },
+          competitorMatrix:  { mode: 'slide', cat: '슬라이드 위젯', wide: true, tall: true },
+          bizModelSlide:     { mode: 'slide', cat: '슬라이드 위젯', wide: true, tall: true },
+          timelineSlide:     { mode: 'slide', cat: '슬라이드 위젯', wide: true, tall: true },
+          teamSlide:         { mode: 'slide', cat: '슬라이드 위젯', wide: true, tall: true },
+          askSlide:          { mode: 'slide', cat: '슬라이드 위젯', wide: true, tall: true },
+          chainFlow:         { mode: 'slide', cat: '슬라이드 위젯', wide: true, tall: true },
+          compareSlide:      { mode: 'slide', cat: '슬라이드 위젯', wide: true, tall: true },
         };
 
         /* -- Pitch deck frame helpers -- */
@@ -456,13 +455,12 @@ export default function ComponentsGallery() {
         /* ============================================================
          * Render
          * ============================================================ */
-        var currentMode = modeParam;
-        // Legacy mode redirects
-        if (currentMode === 'weekly' || currentMode === 'pitchdeck') currentMode = 'slide';
+        var validModes = ['core', 'slide', 'cardnews', 'landing'];
+        var currentMode = validModes.indexOf(modeParam) >= 0 ? modeParam : 'core';
 
         var MODES = [
           { key: 'core',    label: '\uB300\uC2DC\uBCF4\uB4DC',  desc: '\uB300\uC2DC\uBCF4\uB4DC\u00B7\uC6B4\uC601 \uBAA8\uB2C8\uD130\uB9C1\uC5D0 \uACF5\uD1B5\uC73C\uB85C \uC4F0\uC774\uB294 \uAE30\uBCF8 \uC704\uC82F\uC785\uB2C8\uB2E4. Metrics, Charts, Lists \uB4F1 \uBAA8\uB4E0 \uBAA8\uB4DC\uC758 \uAE30\uBC18.' },
-          { key: 'slide',   label: '\uC2AC\uB77C\uC774\uB4DC', desc: '\uBCF4\uACE0\u00B7\uBC1C\uD45C\u00B7\uC81C\uC548\uC6A9 \uC2AC\uB77C\uC774\uB4DC \uC704\uC82F\uC785\uB2C8\uB2E4. \uBCF4\uACE0\uC6A9(Cover\u00B7Table\u00B7Insight) + \uBC1C\uD45C\uC6A9(Problem\u00B7Market\u00B7Ask) \uCD1D 14\uC885.' },
+          { key: 'slide',   label: '\uC2AC\uB77C\uC774\uB4DC', desc: '\uBCF4\uACE0\u00B7\uBC1C\uD45C\u00B7\uC81C\uC548\uC6A9 \uC2AC\uB77C\uC774\uB4DC \uC704\uC82F\uC785\uB2C8\uB2E4. Cover \u00B7 Table \u00B7 Problem \u00B7 Market \u00B7 Ask \uB4F1 16\uC885.' },
           { key: 'cardnews', label: '\uCE74\uB4DC\uB274\uC2A4', desc: '\uC778\uC2A4\uD0C0\uADF8\uB7A8\u00B7\uB9C1\uD06C\uB4DC\uC778 \uCE90\uB7EC\uC140 \uCE74\uB4DC\uB274\uC2A4 \uC804\uC6A9 \uC704\uC82F 11\uC885. Cover(6\uC2A4\uD0C0\uC77C), Body, Data, Quote, Stat, Comparison, Checklist, Step, Testimonial, CTA.' },
           { key: 'landing', label: '\uB79C\uB529\uD398\uC774\uC9C0', desc: '\uB9C8\uCF00\uD305 \uB79C\uB529\uD398\uC774\uC9C0 \uC804\uC6A9 \uC704\uC82F\uC785\uB2C8\uB2E4. Hero, Pricing, Testimonial \uB4F1 \uC804\uD658 \uCD5C\uC801\uD654 \uCEF4\uD3EC\uB10C\uD2B8.' },
         ];
@@ -488,7 +486,7 @@ export default function ComponentsGallery() {
           Object.keys(WIDGETS).forEach(function(key) {
             var w = WIDGETS[key];
             if (currentMode === 'slide') {
-              if (w.mode === 'weekly' || w.mode === 'pitchdeck') result[key] = w;
+              if (w.mode === 'slide') result[key] = w;
             } else {
               if (w.mode === currentMode) result[key] = w;
             }
@@ -554,11 +552,9 @@ export default function ComponentsGallery() {
         // Category display order
         var CAT_ORDER_BY_MODE: Record<string, string[]> = {
           core:    ['Metrics', 'Charts', 'Lists', 'Calendar & Progress', 'Layout', 'Specialized'],
-          slide:   ['\uBCF4\uACE0\uC6A9 \uC704\uC82F', '\uBC1C\uD45C\uC6A9 \uC704\uC82F'],
-          weekly:  ['\uBCF4\uACE0\uC6A9 \uC704\uC82F'],
+          slide:   ['\uC2AC\uB77C\uC774\uB4DC \uC704\uC82F'],
           landing: ['Landing Page'],
           cardnews: ['Card News'],
-          pitchdeck: ['\uBC1C\uD45C\uC6A9 \uC704\uC82F'],
         };
 
         var catOrder = CAT_ORDER_BY_MODE[currentMode] || CAT_ORDER_BY_MODE.core;
@@ -571,9 +567,8 @@ export default function ComponentsGallery() {
 
           var badgeClass = 'cg-section__badge--core';
           if (cat === 'Landing Page') badgeClass = 'cg-section__badge--landing';
-          if (cat === '\uBCF4\uACE0\uC6A9 \uC704\uC82F') badgeClass = 'cg-section__badge--pitchdeck';
+          if (cat === '\uC2AC\uB77C\uC774\uB4DC \uC704\uC82F') badgeClass = 'cg-section__badge--slide';
           if (cat === 'Card News') badgeClass = 'cg-section__badge--cardnews';
-          if (cat === '\uBC1C\uD45C\uC6A9 \uC704\uC82F') badgeClass = 'cg-section__badge--pitchdeck';
 
           html += '<div class="cg-section">';
           html += '<div class="cg-section__head">';
@@ -712,7 +707,7 @@ export default function ComponentsGallery() {
         .cg-section__badge--dashboard { background: color-mix(in srgb, var(--mw-success) 12%, transparent); color: var(--mw-success); }
         .cg-section__badge--landing { background: color-mix(in srgb, var(--mw-warning) 12%, transparent); color: var(--mw-warning); }
         .cg-section__badge--cardnews { background: color-mix(in srgb, #e91e63 12%, transparent); color: #e91e63; }
-        .cg-section__badge--pitchdeck { background: color-mix(in srgb, #7c3aed 12%, transparent); color: #7c3aed; }
+        .cg-section__badge--slide { background: color-mix(in srgb, #7c3aed 12%, transparent); color: #7c3aed; }
 
         .sc-item {
           display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem;

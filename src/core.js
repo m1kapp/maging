@@ -1707,7 +1707,8 @@
     }, config || {});
 
     function render() {
-      el.classList.add('mw-slide');
+      el.classList.add('mw-slide', 'flex', 'flex-col', 'border', 'border-[var(--mw-border)]', 'rounded-[var(--mw-radius)]', 'bg-[var(--mw-bg)]', 'box-border', 'overflow-hidden');
+      el.style.cssText += ';--slide-w:1240px;width:var(--slide-w);min-width:var(--slide-w);aspect-ratio:297/210;';
 
       // header
       var headerLeft = '';
@@ -2337,8 +2338,7 @@
       var MODE_SCRIPTS = {
         dashboard: [],
         landing:   ['maging-landing.js'],
-        pitch:     ['maging-sidebar.js', 'maging-pitch.js'],
-        weekly:    ['maging-sidebar.js', 'maging-weekly.js'],
+        slide:     ['maging-sidebar.js', 'maging-slide.js'],
         news:      ['maging-news.js'],
       };
 
@@ -2581,7 +2581,8 @@
           { format: 'html', label: htmlIcon + ' HTML', title: '단일 HTML 파일' }
         ]
       };
-      var pages = document.querySelectorAll('.slide, .mw-a4-page, .a4-page');
+      var slideScope = document.querySelector('.wk-slides') || document;
+      var pages = slideScope.querySelectorAll('.slide, .mw-a4-page, .a4-page');
       if (pages.length > 1) return {
         format: 'pptx', label: dlIcon, title: '내보내기 (' + pages.length + '슬라이드)', multi: true,
         options: [
@@ -2667,7 +2668,11 @@
     function getExportTarget() {
       var slides = document.querySelectorAll('.news-card, .cn-slide, [data-slide]');
       if (slides.length > 1) return { type: 'cardnews', elements: slides };
-      var pages = document.querySelectorAll('.slide, .mw-a4-page, .a4-page');
+      // Only main slides — exclude sidebar thumbnail clones
+      var slideArea = document.querySelector('.wk-slides');
+      var pages = slideArea
+        ? slideArea.querySelectorAll('.slide')
+        : document.querySelectorAll('.slide, .mw-a4-page, .a4-page');
       if (pages.length > 1) return { type: 'weekly', elements: pages };
       var main = document.querySelector('main') || document.querySelector('.mw-themed') || document.body;
       return { type: 'dashboard', elements: [main] };
@@ -2884,11 +2889,23 @@
         var slides = Array.from(target.elements);
         var originalHash = window.location.hash;
 
+        // Backup slide state for full restore after export
+        var slideBackups = slides.map(function (s) {
+          return {
+            el: s,
+            hadActive: s.hasAttribute('data-active'),
+            scale: s.style.getPropertyValue('--slide-scale'),
+            transform: s.style.transform,
+            margin: s.style.margin,
+          };
+        });
+
         mountSlides(slides).then(function () {
           slides.forEach(function (s) {
             s.setAttribute('data-active', '');
             s.style.setProperty('--slide-scale', '1');
             s.style.transform = 'none';
+            s.style.margin = '0';
           });
 
           return new Promise(function (r) { setTimeout(r, 500); });
@@ -2903,24 +2920,22 @@
           // Swap fonts to PowerPoint defaults BEFORE measuring
           var PPTX_BODY = "'Apple SD Gothic Neo', 'Malgun Gothic', Calibri, sans-serif";
           var PPTX_MONO = "Consolas, 'Courier New', monospace";
-          var fontBackups = [];
+          var styleBackups = [];
 
           slides.forEach(function (s) {
             var els = s.querySelectorAll('*');
             for (var i = 0; i < els.length; i++) {
               var el = els[i];
               var cs = getComputedStyle(el);
-              // Backup & resolve colors — try to preserve gradients for dom-to-pptx
+              // Backup ALL inline styles for full restore
+              var origCssText = el.style.cssText;
+              // Resolve colors for dom-to-pptx
               el.style.color = cs.color;
               var bgImg = cs.backgroundImage;
               if (bgImg && bgImg.indexOf('linear-gradient') === 0) {
-                // Resolved gradient (CSS vars & color-mix already computed to rgb())
-                // Clear shorthand first, then set image only
-                var origBg = el.style.background;
                 el.style.cssText += ';background:none !important;';
                 el.style.backgroundImage = bgImg;
               } else if (bgImg && bgImg !== 'none') {
-                // Non-linear gradient or complex background — solid fallback
                 var fc = bgImg.match(/rgb[a]?\([^)]+\)/);
                 el.style.background = 'none';
                 el.style.backgroundColor = fc ? fc[0] : cs.backgroundColor;
@@ -2928,14 +2943,13 @@
                 el.style.backgroundColor = cs.backgroundColor;
               }
               el.style.borderColor = cs.borderColor;
-              // Backup & swap fonts
-              var origFont = cs.fontFamily;
-              fontBackups.push({ el: el, font: el.style.fontFamily });
-              if (origFont.indexOf('monospace') > -1 || origFont.indexOf('JetBrains') > -1 || origFont.indexOf('Consolas') > -1) {
+              // Swap fonts
+              if (cs.fontFamily.indexOf('monospace') > -1 || cs.fontFamily.indexOf('JetBrains') > -1 || cs.fontFamily.indexOf('Consolas') > -1) {
                 el.style.fontFamily = PPTX_MONO;
               } else {
                 el.style.fontFamily = PPTX_BODY;
               }
+              styleBackups.push({ el: el, cssText: origCssText });
             }
           });
 
@@ -2955,10 +2969,19 @@
               height: slideH,
               autoEmbedFonts: false,
             });
-          }).then(function (result) {
-            // Restore original fonts
-            fontBackups.forEach(function (b) { b.el.style.fontFamily = b.font; });
-            return result;
+          }).then(function () {
+            // ── Full restore ──
+            // 1. Restore all inline styles (color, bg, font, letterSpacing, padding)
+            styleBackups.forEach(function (b) { b.el.style.cssText = b.cssText; });
+            // 2. Restore slide state (active, scale, transform, margin)
+            slideBackups.forEach(function (b) {
+              if (!b.hadActive) b.el.removeAttribute('data-active');
+              b.el.style.setProperty('--slide-scale', b.scale || '');
+              b.el.style.transform = b.transform || '';
+              b.el.style.margin = b.margin || '';
+            });
+            // 3. Re-scale slides to fit viewer
+            if (window._magingScaleSlides) window._magingScaleSlides(slides);
           });
         }).then(function () {
           finishExport();
@@ -3151,6 +3174,9 @@
 
     renderList();
     syncButton();
+
+    // Expose export function for external callers (e.g. weekly titlebar)
+    api._doExport = doExport;
   }
 
   // Auto-mount on DOM ready

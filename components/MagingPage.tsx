@@ -22,7 +22,7 @@ export function MagingPage({ config, scripts = [], fullscreen = false }: MagingP
   const ref = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
 
-  // Load additional mode scripts (e.g. maging-landing.js, maging-pitch.js)
+  // Load additional mode scripts (e.g. maging-slide.js, maging-landing.js)
   useEffect(() => {
     const mode = (config as any).mode || 'dashboard';
 
@@ -81,23 +81,16 @@ export function MagingPage({ config, scripts = [], fullscreen = false }: MagingP
     // Clear previous content
     ref.current.innerHTML = '';
 
-    // Call mode builder directly if available, otherwise core page()
-    const mode = (config as any).mode || 'dashboard';
+    // Determine mode — slides auto-detect, explicit mode, or dashboard
+    const mode = (config as any).mode || ((config as any).slides ? 'slide' : 'dashboard');
     const builder = mode !== 'dashboard' ? window.Maging._pageBuilders?.[mode] : null;
     const page = builder ? builder(config) : window.Maging.page(config);
     if (page?.el) {
       if (fullscreen) {
-        // Slides/news — page already mounted to body by builder, leave it there.
-        // Just refresh after a tick for ECharts.
-        setTimeout(() => {
-          if (window.Maging?.refreshAll) window.Maging.refreshAll();
-        }, 100);
+        // Slides/news — page already mounted to body by builder
       } else {
         // Dashboard/landing — relocate from body into our ref
         page.mount(ref.current);
-        setTimeout(() => {
-          if (window.Maging?.refreshAll) window.Maging.refreshAll();
-        }, 100);
       }
     }
 

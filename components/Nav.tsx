@@ -75,15 +75,14 @@ export function Nav() {
                 <Link href="/components?mode=core&cat=Lists" className="mw-site-nav__menu-item">Lists &amp; Status (5종)</Link>
               </div>
               <div className="mw-site-nav__mega-col">
-                <div className="mw-site-nav__mega-head">
+                <Link href="/components?mode=slide" className="mw-site-nav__mega-head">
                   <span className="mw-site-nav__mega-icon">▤</span>
                   <span>
                     <span className="mw-site-nav__menu-label">슬라이드</span>
                     <span className="mw-site-nav__menu-desc">보고 · 발표 · 제안</span>
                   </span>
-                </div>
-                <Link href="/components?mode=weekly" className="mw-site-nav__menu-item">보고용 — Cover · Table · Insight</Link>
-                <Link href="/components?mode=pitchdeck" className="mw-site-nav__menu-item">발표용 — Problem · Market · Ask</Link>
+                </Link>
+                <Link href="/components?mode=slide" className="mw-site-nav__menu-item">Cover · Table · Problem · Market · Ask</Link>
               </div>
               <div className="mw-site-nav__mega-col">
                 <Link href="/components?mode=cardnews" className="mw-site-nav__mega-head">

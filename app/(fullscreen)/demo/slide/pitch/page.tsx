@@ -172,5 +172,5 @@ const config = {
 };
 
 export default function PitchDeckPage() {
-  return <MagingPage config={config} fullscreen scripts={['/dist/maging-sidebar.js', '/dist/maging-weekly.js', '/dist/maging-pitch.js']} />;
+  return <MagingPage config={config} fullscreen scripts={['/dist/maging-sidebar.js', '/dist/maging-slide.js']} />;
 }

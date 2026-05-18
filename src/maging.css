@@ -3994,20 +3994,11 @@
    ========================================================== */
 /* ==========================================================
    Slide — A4 가로 페이지 컨테이너
+   Base styles now applied via Tailwind inline (mw-slide class
+   kept as selector hook only for overrides in viewer/sidebar).
    ========================================================== */
 .mw-slide {
-  --slide-w: 1240px;
-  aspect-ratio: 297 / 210;
-  width: var(--slide-w);
-  min-width: var(--slide-w);
-  display: flex;
-  flex-direction: column;
-  border: 1px solid var(--mw-border);
-  border-radius: var(--mw-radius);
-  background: var(--mw-bg);
-  box-sizing: border-box;
-  overflow: hidden;
-  transform-origin: top left;
+  transform-origin: center center;
   transform: scale(var(--slide-scale, 1));
 }
 .mw-slide__header {

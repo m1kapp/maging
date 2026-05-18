@@ -14,6 +14,8 @@
  *    ③ Tailwind Play CDN       — layout utilities (JIT, ~28KB gz overhead)
  *    ④ ECharts 5               — chart engine (required by maging.js)
  *    ⑤ maging.js               — 31 widgets + theme runtime
+ *    ⑥ maging-charts.js        — chart widgets
+ *    ⑦ maging-landing.js       — landing page builder + widgets
  *
  *  Load order is enforced via Promise chain.
  *  CSS loads in parallel; JS runs after ECharts is ready.
@@ -45,12 +47,18 @@
   var SKIP_ECHARTS    = ds.noEcharts    != null;
   var SKIP_PRETENDARD = ds.noPretendard != null;  // not used (Pretendard is in maging.css @import); flag reserved
 
+  // Propagate cache-bust query string from our own src (e.g. ?v=123) to sub-scripts
+  var BUST = (self && self.src && self.src.indexOf('?') !== -1) ? self.src.slice(self.src.indexOf('?')) : '';
+
   function appendLink(href) {
-    var el = document.createElement('link');
-    el.rel = 'stylesheet';
-    el.href = href;
-    (document.head || document.documentElement).appendChild(el);
-    return el;
+    return new Promise(function (resolve) {
+      var el = document.createElement('link');
+      el.rel = 'stylesheet';
+      el.href = href;
+      el.onload = function () { resolve(el); };
+      el.onerror = function () { resolve(el); }; // non-fatal — resolve anyway
+      (document.head || document.documentElement).appendChild(el);
+    });
   }
 
   function loadScript(src, opts) {
@@ -82,35 +90,39 @@
     }
   };
 
-  // ① + ② CSS — parallel, non-blocking
-  appendLink(BASE + 'maging.css');
+  // ① CSS — starts loading in parallel with JS
+  var cssP = appendLink(BASE + 'maging.css' + BUST);
 
-  // ③ Tailwind Play (optional)
+  // ② Tailwind Play (optional)
   if (!SKIP_TAILWIND) {
-    // Suppress Tailwind CDN's "should not be used in production" warning —
-    // it surfaces in Claude Artifacts and confuses end-users.
-    var _origWarn = console.warn;
-    console.warn = function () {
-      if (arguments[0] && typeof arguments[0] === 'string' && arguments[0].indexOf('cdn.tailwindcss.com') !== -1) return;
-      return _origWarn.apply(console, arguments);
-    };
-    loadScript('https://cdn.tailwindcss.com').catch(function (e) {
-      _origWarn.call(console, '[maging-all] Tailwind Play failed (non-fatal):', e.message);
-    });
+    // Fetch Tailwind CDN as text, strip the production warning at source,
+    // then execute as inline script. This is the only reliable way to
+    // suppress the warning — console.warn patching doesn't work because
+    // Tailwind captures a closure reference to the native console object.
+    fetch('https://cdn.tailwindcss.com')
+      .then(function (r) { return r.text(); })
+      .then(function (src) {
+        var el = document.createElement('script');
+        el.textContent = src.replace(/\.warn\("[^"]*cdn\.tailwindcss\.com[^"]*"\)/g, 'void 0');
+        (document.head || document.documentElement).appendChild(el);
+      })
+      .catch(function (e) {
+        // Fallback: load normally (warning will appear but Tailwind still works)
+        loadScript('https://cdn.tailwindcss.com').catch(function () {});
+      });
   }
 
-  // ④ ECharts → ⑤ maging.js (ordered)
-  var echartsP = SKIP_ECHARTS
+  // ③ ECharts → ④ maging.js → ⑤ charts → ⑥ landing (ordered)
+  var jsP = (SKIP_ECHARTS
     ? Promise.resolve()
-    : loadScript('https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js');
+    : loadScript('https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js')
+  )
+    .then(function () { return loadScript(BASE + 'maging.js' + BUST); })
+    .then(function () { return loadScript(BASE + 'maging-charts.js' + BUST); })
+    .then(function () { return loadScript(BASE + 'maging-landing.js' + BUST); });
 
-  echartsP
-    .then(function () {
-      return loadScript(BASE + 'maging.js');
-    })
-    .then(function () {
-      return loadScript(BASE + 'maging-charts.js');
-    })
+  // ⑦ maging:ready — fires only after BOTH CSS and JS are ready
+  Promise.all([cssP, jsP])
     .then(function () {
       _readyDetail = { version: VERSION, base: BASE };
       emit('ready', _readyDetail);

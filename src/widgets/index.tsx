@@ -1,0 +1,22 @@
+// Re-export all pitch/presentation widgets
+export { PitchCover } from './pitch-cover';
+export { ProblemSlide } from './problem-slide';
+export { SolutionSlide } from './solution-slide';
+export { MetricHighlight } from './metric-highlight';
+export { MarketSlide } from './market-slide';
+export { CompetitorMatrix } from './competitor-matrix';
+export { BizModelSlide } from './bizmodel-slide';
+export { TimelineSlide } from './timeline-slide';
+export { TeamSlide } from './team-slide';
+export { AskSlide } from './ask-slide';
+export { ChainFlow } from './chain-flow';
+export { CompareSlide } from './compare-slide';
+export { DeepDiveSlide } from './deepdive-slide';
+export { QuoteSlide } from './quote-slide';
+export { ReferenceTable } from './reference-table';
+export { FlywheelSlide } from './flywheel-slide';
+export { StorySlide } from './story-slide';
+export { SwotSlide } from './swot-slide';
+export { RoadmapSlide } from './roadmap-slide';
+export { FeatureSlide } from './feature-slide';
+export { calloutHTML as Callout } from './callout';

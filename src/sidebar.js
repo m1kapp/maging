@@ -47,7 +47,7 @@
   .wrs__lbl  { flex: 1; }
 
   /* === Thumbnail sidebar === */
-  .wrs--thumbs { width: 220px; min-height: 100%; padding: 14px 8px 24px; background: var(--mw-bg); border-right: 1px solid var(--mw-border); font-family: var(--mw-font); overflow-y: auto; box-sizing: border-box; box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.06); scrollbar-width: thin; display: flex; flex-direction: column; }
+  .wrs--thumbs { width: 220px; min-height: 100%; padding: 14px 8px 24px; background: #fff; border-right: 1px solid #e5e5e5; font-family: var(--mw-font); overflow-y: auto; box-sizing: border-box; box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.06); scrollbar-width: thin; display: flex; flex-direction: column; }
   .wrs--thumbs .wrs__head { padding: 6px 8px 12px; margin-bottom: 4px; }
   .wrs--thumbs .wk-thumb-list { display: flex; flex-direction: column; gap: 10px; padding: 4px 2px 4px 0; overflow-y: auto; flex: 1; min-height: 0; }
   .wrs__thumb { display: flex; align-items: flex-start; gap: 4px; cursor: pointer; flex-shrink: 0; }
@@ -162,8 +162,8 @@
       return;
     }
 
-    // Weekly mode — scale slide to fill .wk-slides
-    var slideArea = document.querySelector('.wk-slides');
+    // Slide viewer mode — scale slide to fill [data-slide-area]
+    var slideArea = document.querySelector('[data-slide-area]');
     if (slideArea) {
       var areaW = slideArea.clientWidth;
       var areaH = slideArea.clientHeight;
