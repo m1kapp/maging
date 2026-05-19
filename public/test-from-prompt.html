@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="innon">
+<head>
+  <meta charset="UTF-8"><title>AI가 닿는 반경</title>
+  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.28/dist/maging-all.js"></script>
+</head>
+<body>
+<script>
+window.addEventListener('maging:ready', function () {
+  Maging.page({
+    mode: 'slide',
+    sidebarTitle: 'AI가 닿는 반경',
+    sidebarDate: 'Workshop · 2026',
+    slides: [
+      {
+        id: 'cover', cover: true,
+        widgets: [{ type: 'sectionCover', style: 'classic', kicker: 'AI WORKSHOP · 2026', title: 'AI가 닿는 반경', subtitle: '가장 가까운 나부터 시작해서, 반경을 넓혀갑니다.', brand: 'flow.team' }],
+      },
+      {
+        id: 'agenda', label: '오늘 일정',
+        widgets: [{ type: 'timelineSlide', headline: '오늘 **80분** 이렇게 진행합니다', milestones: [
+          { date: '10분', title: '설문 리뷰 + 프레임', desc: '공통 고충 확인, 반경 소개', done: true },
+          { date: '5분', title: '① 나', desc: '파일 분석 시연 + 실습', active: true },
+          { date: '5분', title: '② 상급자', desc: '대시보드 시연' },
+          { date: '20분', title: '③ 팀', desc: '챗봇 만들기 실습' },
+          { date: '5분', title: '④⑤ 확장', desc: '공유 + 고객 사례' },
+          { date: '15분', title: '자유 실습', desc: '본인 업무에 적용' },
+          { date: '10분', title: 'QnA', desc: '결과 발표 + 질문' },
+        ] }],
+      },
+      {
+        id: 'pain', label: '설문 결과',
+        widgets: [{ type: 'problemSlide', headline: '여러분이 적어주신 **공통 고충**', points: [
+          { icon: '🔁', title: '같은 질문이 반복된다', desc: '경비처리, SOP, 결재라인 — 같은 답변을 하루에도 여러 번.' },
+          { icon: '📄', title: '공지를 올려도 안 읽힌다', desc: '매뉴얼이 있는데 "어디 있어요?" 전화가 옵니다.' },
+          { icon: '⏱️', title: '같은 작업을 매주 한다', desc: '실적 정리, 논문 요약, 주간보고를 매번 처음부터.' },
+          { icon: '🔍', title: '정보가 흩어져 있다', desc: '규정은 여기, SOP는 저기. 찾기만 해도 30분.' },
+        ], highlight: '**22명 중 19명**이 "자료 찾고 정리하는 데 시간이 가장 많이 든다"고 답했습니다.' }],
+      },
+      {
+        id: 'frame', label: '반경 프레임',
+        widgets: [{ type: 'chainFlow', headline: 'AI가 닿는 **5가지 반경**', steps: [
+          { label: '반경 ①', title: '나', desc: '반복업무를 줄인다', accent: true },
+          { label: '반경 ②', title: '상급자', desc: '보고를 빠르게' },
+          { label: '반경 ③', title: '팀', desc: '안 물어봐도 되게' },
+          { label: '반경 ④', title: '타부서', desc: '알아서 하게' },
+          { label: '반경 ⑤', title: '고객', desc: '매출이 올라오게' },
+        ], footer: '가장 가까운 나부터 시작합니다.' }],
+      },
+      {
+        id: 'r1', label: '① 나',
+        widgets: [{ type: 'compareSlide', headline: '반경 ① — **나를 위한** AI', left: { label: '지금', rows: [
+          { key: '논문 요약', value: '한 편에 30분' },
+          { key: '실적 정리', value: '엑셀 수식 노가다' },
+          { key: '메일', value: '같은 양식 매번 새로' },
+        ] }, right: { label: 'flow AI', rows: [
+          { key: '논문 요약', value: 'PDF 올리고 "요약해줘"' },
+          { key: '실적 정리', value: '엑셀 올리고 "표로 정리"' },
+          { key: '메일', value: '"번역하고 답장 써줘"' },
+        ] } }],
+      },
+      {
+        id: 'r1-do', label: '① 해보기',
+        widgets: [{ type: 'problemSlide', headline: '✋ 지금 **해보세요** — 파일 분석', points: [
+          { icon: '1️⃣', title: '파일 올리기', desc: '준비된 엑셀/PDF를 flow AI에 올리세요.' },
+          { icon: '2️⃣', title: '말하기', desc: '"월별 비교표로 정리하고 이상치 알려줘"' },
+          { icon: '3️⃣', title: '확인하기', desc: '추천 질문 눌러서 더 파고들어 보세요.' },
+        ], highlight: '💡 "코드블록으로 만들어줘" 붙이면 → 엑셀에 바로 복붙 가능' }],
+      },
+      {
+        id: 'r2', label: '② 상급자',
+        widgets: [{ type: 'compareSlide', headline: '반경 ② — **상급자를 위한** AI', left: { label: '지금', rows: [
+          { key: '보고서', value: '수집 3시간 + 정리 2시간' },
+          { key: '대시보드', value: '엑셀 수동 갱신' },
+          { key: '발표', value: '디자인에 반나절' },
+        ] }, right: { label: 'flow AI', rows: [
+          { key: '보고서', value: '데이터 넣으면 자동' },
+          { key: '대시보드', value: '"만들어줘" → 바로' },
+          { key: '발표', value: '프롬프트 하나로 완성' },
+        ] }, note: '🎬 지금 시연합니다: 엑셀 → 대시보드' }],
+      },
+      {
+        id: 'r3', label: '③ 팀',
+        widgets: [{ type: 'problemSlide', headline: '반경 ③ — **팀을 위한** AI', points: [
+          { icon: '💊', title: '품질팀', desc: '"SOP 번호 뭐였지?" → 챗봇이 3초에 답변' },
+          { icon: '💰', title: '회계팀', desc: '"경비 어떻게 해요?" 전화 매일 → 챗봇이 대신' },
+          { icon: '🏭', title: '지원팀', desc: '"주말에도 문의 와요" → 24시간 셀프서비스' },
+        ], highlight: '**22명 중 14명**이 "챗봇 만들고 싶다"고 적었습니다.' }],
+      },
+      {
+        id: 'bot-how', label: '③ 만드는 법',
+        widgets: [{ type: 'chainFlow', headline: '챗봇 **3분**이면 만듭니다', steps: [
+          { label: '1단계', title: '이름 + 역할', desc: '어떤 챗봇인지 알려주세요', accent: true },
+          { label: '2단계', title: '문서 올리기', desc: 'PDF, 한글, 엑셀 뭐든 올리면 학습' },
+          { label: '3단계', title: '질문해보기', desc: '잘 답하는지 확인' },
+        ], footer: '지금 바로 해봅니다.' }],
+      },
+      {
+        id: 'bot-tip', label: '③ 지침 꿀팁',
+        widgets: [{ type: 'compareSlide', headline: '💡 지침이 **답변 품질**을 바꿉니다', left: { label: '지침 없이', rows: [
+          { key: '질문', value: '"경비 마감일?"' },
+          { key: '답변', value: '"25일입니다."' },
+          { key: '평가', value: '맞긴 한데...' },
+        ] }, right: { label: '지침 있으면', rows: [
+          { key: '질문', value: '"경비 마감일?"' },
+          { key: '답변', value: '① 25일 ② 규정 3조 ③ 주말→직전 영업일' },
+          { key: '평가', value: '전화 안 해도 된다!' },
+        ] }, note: '추천: "① 결론 ② 근거 ③ 주의사항 순서로. 모르면 담당자 번호 안내."' }],
+      },
+      {
+        id: 'bot-do', label: '③ 해보기',
+        widgets: [{ type: 'problemSlide', headline: '✋ **챗봇 만들기** 실습 (15분)', points: [
+          { icon: '1️⃣', title: '만들기', desc: 'flow AI → 챗봇 → 새로 만들기' },
+          { icon: '2️⃣', title: '지침 쓰기', desc: '"① 결론 ② 근거 ③ 주의사항 순서로 답변. 모르면 담당자 안내."' },
+          { icon: '3️⃣', title: '문서 올리기', desc: '팀 매뉴얼 올리기. 없으면 샘플 사용.' },
+          { icon: '4️⃣', title: '테스트', desc: '질문 3개 해보고, 부족하면 지침 한 줄 추가.' },
+        ], highlight: '💡 "표로 정리" / "이모지 쓰지 마" / "3문장 이내" → 지침에 추가하면 스타일이 바뀜' }],
+      },
+      {
+        id: 'r4', label: '④ 타부서',
+        widgets: [{ type: 'problemSlide', headline: '반경 ④ — 챗봇을 **공유**하면', points: [
+          { icon: '🔓', title: '회사 전체 공개', desc: '공개 범위 "회사 전체"로 → 전 직원이 사용' },
+          { icon: '📋', title: '업무 자동 생성', desc: '"회의 결과를 프로젝트로" → 할 일+마감일 자동' },
+          { icon: '🔗', title: '대화 공유', desc: 'AI 분석을 공유 버튼으로 팀에 전달' },
+        ], highlight: '💡 챗봇 하나로 **매일 3시간 → 0분**' }],
+      },
+      {
+        id: 'r5', label: '⑤ 고객',
+        widgets: [{ type: 'storySlide', headline: '반경 ⑤ — **고객을 위한** AI', chapters: [
+          { tag: 'Before', title: 'MR 김 대리', desc: '백신 써달라고 말로 설명. 병원장은 기존 거래처를 씀.' },
+          { tag: 'Action', title: '전단지를 만들었다', desc: 'AI로 전단지 제작. 아파트에 직접 배포.' },
+          { tag: 'Result', title: '환자가 왔다', desc: '문의 증가 → 매출 증가 → 병원장이 먼저 연락.' },
+        ], flow: ['AI로 만들고', '직접 전달', '고객이 온다'] }],
+      },
+      {
+        id: 'share', label: '📌 공유',
+        widgets: [{ type: 'problemSlide', headline: '📌 결과물을 **프로젝트에** 올려주세요', points: [
+          { icon: '1️⃣', title: '프로젝트 입장', desc: '"AI 워크샵" 프로젝트에 들어가세요.' },
+          { icon: '2️⃣', title: '게시글 작성', desc: '[팀명] + 챗봇 이름 + 용도를 적어주세요.' },
+          { icon: '3️⃣', title: '캡처 첨부', desc: '챗봇 답변 화면 캡처 or 공유 링크.' },
+          { icon: '4️⃣', title: '댓글 달기', desc: '다른 팀 결과물에 피드백 남기기.' },
+        ], highlight: '💡 이 프로젝트가 **AI 사례 모음집**이 됩니다.' }],
+      },
+      {
+        id: 'free', label: '자유 실습',
+        widgets: [{ type: 'referenceTable', headline: '✋ 자유 실습 — **15분**', columns: ['해보고 싶은 것', '이렇게 말해보세요', '기능'], rows: [
+          { cells: ['문서 요약', '"PDF 핵심 3줄로 정리해줘"', '파일 분석'] },
+          { cells: ['대시보드', '"이 엑셀로 대시보드 만들어줘"', '도구 만들기'] },
+          { cells: ['챗봇 추가', '"온보딩 가이드 챗봇 만들어줘"', '챗봇'] },
+          { cells: ['업무 생성', '"회의 결과 프로젝트로 만들어줘"', '업무 생성'] },
+          { cells: ['이미지', '"서비스 소개 이미지 만들어줘"', '이미지'] },
+          { cells: ['경쟁 분석', '"A사 vs B사 비교표"', '고급 답변'] },
+        ] }],
+      },
+      {
+        id: 'how', label: 'Making of',
+        widgets: [{ type: 'problemSlide', headline: '이 발표자료 **이렇게** 만들었습니다', points: [
+          { icon: '📎', title: '설문 엑셀 첨부', desc: '22명 설문 데이터를 flow AI에 올렸습니다.' },
+          { icon: '💬', title: '프롬프트 1개', desc: '"이 설문으로 워크샵 슬라이드 만들어줘. 나→상급자→팀→타부서→고객 5단계로. 챗봇 실습도 넣어줘."' },
+          { icon: '🎨', title: '바로 완성', desc: '분석 + 구조 + 17장 슬라이드. 디자이너 0명.' },
+        ], highlight: '**뭘 + 어떤 구조로 + 어떤 데이터로** = 한방에 나옵니다.' }],
+      },
+      {
+        id: 'end', label: '마무리',
+        widgets: [{ type: 'askSlide', headline: '오늘부터 **반경을 넓혀**봅시다', useOfFunds: [
+          { label: '오늘 실습', pct: 40 },
+          { label: '2주 적용', pct: 35 },
+          { label: '팀 확산', pct: 25 },
+        ], milestones: [
+          '오늘: 챗봇 1개를 들고 나갑니다',
+          '2주 내: 실무에 써보고 피드백',
+          '1개월: 팀 전체로 확산',
+        ], contact: { email: 'hello@flow.team', website: 'flow.team' } }],
+      },
+    ],
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="innon">
+<head>
+  <meta charset="UTF-8"><title>지침 꿀팁</title>
+  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.27/dist/maging-all.js"></script>
+</head>
+<body>
+<script>
+window.addEventListener('maging:ready', function () {
+  Maging.page({
+    mode: 'slide',
+    sidebarTitle: 'AI 챗봇 가이드',
+    sidebarDate: '2026.05',
+    slides: [
+      {
+        id: 'cover', cover: true,
+        widgets: [{
+          type: 'sectionCover', style: 'classic',
+          kicker: 'AI CHATBOT GUIDE',
+          title: '챗봇 지침의 힘',
+          subtitle: '같은 문서를 학습시켜도, 지침 한 줄이 답변 품질을 완전히 바꿉니다.',
+          brand: 'flow AI',
+        }],
+      },
+      {
+        id: 'tip', label: '지침 꿀팁',
+        widgets: [{
+          type: 'compareSlide',
+          headline: '💡 지침 한 줄이 **답변 품질**을 바꿉니다',
+          left: {
+            label: '지침 없이',
+            rows: [
+              { key: '질문', value: '"경비처리 마감일?"' },
+              { key: '답변', value: '"매월 25일입니다."' },
+              { key: '느낌', value: '맞긴 한데... 이것만?' },
+            ],
+          },
+          right: {
+            label: '지침 있을 때',
+            rows: [
+              { key: '질문', value: '"경비처리 마감일?"' },
+              { key: '답변', value: '① 25일까지 ② 규정 3조 근거 ③ 주말이면 직전 영업일' },
+              { key: '느낌', value: '전화 안 해도 되겠다!' },
+            ],
+          },
+          note: '추천 지침: "답변은 ① 결론 ② 근거 ③ 주의사항 구조로. 모르면 담당자 연락처 안내."',
+        }],
+      },
+    ],
+  });
+});
+</script>
+</body>
+</html>
