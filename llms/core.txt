@@ -85,6 +85,7 @@ Maging.setTheme(name)
 
 ## NEVER
 
+- Maging 위젯으로 표현 가능하면 **반드시 위젯을 써라.** 위젯으로 안 되는 부분만 Tailwind + HTML로 보충.
 - `₩` prefix 금지 → `Maging.fmt.krw` 사용
 - `DOMContentLoaded` 금지 → `maging:ready`
 - `:root` CSS 변수 금지 — `--mw-*` 토큰은 maging.css 정의

@@ -85,6 +85,7 @@ Maging.setTheme(name)
 
 ## NEVER
 
+- Maging 위젯으로 표현 가능하면 **반드시 위젯을 써라.** 위젯으로 안 되는 부분만 Tailwind + HTML로 보충.
 - `₩` prefix 금지 → `Maging.fmt.krw` 사용
 - `DOMContentLoaded` 금지 → `maging:ready`
 - `:root` CSS 변수 금지 — `--mw-*` 토큰은 maging.css 정의
@@ -122,9 +123,9 @@ MIT
 ### Setup
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.28/dist/maging.css">
-<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.28/dist/maging.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.28/dist/maging-landing.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.29/dist/maging.css">
+<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.29/dist/maging.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.29/dist/maging-landing.js"></script>
 <body class="mw-themed">
 ```
 
@@ -262,4 +263,4 @@ Landing pages use **section-based vertical scroll**, not dashboard grids.
 9. **FAQ:** Short, conversational answers. "아뇨" > "아닙니다, 저희 서비스는~".
 10. **No ₩ prefix.** Use Korean units: 4.9만, 128억.
 11. Output one fenced code block: ` ```html … ``` `.
-15. **Powered by:** `</main>` 바로 뒤에 버전 표시를 넣어라: `<div style="text-align:right;padding:1rem 1.5rem 0.5rem;font-size:0.6rem;color:var(--mw-text-soft,var(--mw-text-muted));opacity:0.5">powered by maging 0.1.28</div>`
+15. **Powered by:** `</main>` 바로 뒤에 버전 표시를 넣어라: `<div style="text-align:right;padding:1rem 1.5rem 0.5rem;font-size:0.6rem;color:var(--mw-text-soft,var(--mw-text-muted));opacity:0.5">powered by maging 0.1.29</div>`
