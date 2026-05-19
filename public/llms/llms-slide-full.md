@@ -85,6 +85,7 @@ Maging.setTheme(name)
 
 ## NEVER
 
+- Maging 위젯으로 표현 가능하면 **반드시 위젯을 써라.** 위젯으로 안 되는 부분만 Tailwind + HTML로 보충.
 - `₩` prefix 금지 → `Maging.fmt.krw` 사용
 - `DOMContentLoaded` 금지 → `maging:ready`
 - `:root` CSS 변수 금지 — `--mw-*` 토큰은 maging.css 정의
@@ -117,13 +118,13 @@ MIT
 
 ## Mode: Slide (슬라이드)
 
-> `Maging.page({ mode: 'slide' })` — 사이드바·네비·스케일링·자동 페이지네이션 자동.
+> **`Maging.page()` API를 우선 사용하라.** 모든 슬라이드는 `slides` 배열의 `widgets`로 선언. 위젯으로 표현 가능한 내용을 HTML로 직접 그리지 마라. 위젯으로 안 되는 부분만 Tailwind + HTML로 보충.
 
 ### Setup
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.28/dist/maging-all.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.30/dist/maging-all.js"></script>
 ```
-`maging:ready` 안에서 마운트.
+`maging:ready` 안에서 `Maging.page()` 호출.
 
 ---
 

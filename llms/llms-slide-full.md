@@ -122,7 +122,7 @@ MIT
 
 ### Setup
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.29/dist/maging-all.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.30/dist/maging-all.js"></script>
 ```
 `maging:ready` 안에서 `Maging.page()` 호출.
 
