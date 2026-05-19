@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko" data-theme="flow">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AI가 닿는 반경 - 이노엔 워크샵</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.31/dist/maging-all.js" data-no-tailwind></script>
+  </head>
+  <body class="mw-themed">
+    <script>
+      window.addEventListener('maging:ready', function () {
+        Maging.page({
+          mode: 'slide',
+          sidebarTitle: 'HK inno.N FLOW AI 워크샵',
+          sidebarDate: '2026.5.20(수)',
+          slides: [
+            {
+              id: 'cover',
+              cover: true,
+              widgets: [{
+                type: 'sectionCover',
+                style: 'classic',
+                kicker: 'FLOW AI Hands-on 80분',
+                title: 'AI가 닿는 반경',
+                subtitle: '나 → 상급자 → 팀 → 타부서 → 고객까지 확장하는 실전 세션',
+                brand: 'HK inno.N · FLOW AI',
+              }],
+            },
+            {
+              id: 'pain',
+              label: '공통 고충',
+              widgets: [{
+                type: 'problemSlide',
+                headline: '설문에서 드러난 **공통 고충 4가지**',
+                highlight: '"자료 찾고, 요약하고, 같은 양식을 또 만든다…"',
+                points: [
+                  { icon: '📚', title: '자료 탐색 과부하', desc: '논문·정책·SOP 찾고 최신 버전 확인에 시간 소모' },
+                  { icon: '🧾', title: '반복 문서 작성', desc: '같은 형식 문서를 매일·매주 작성' },
+                  { icon: '✉️', title: '메일·보고서 부담', desc: '유사한 메일/보고를 반복 작성' },
+                  { icon: '☎️', title: '단순 문의 대응', desc: '동일 질문에 반복 대응하는 고충' },
+                ],
+              }],
+            },
+            {
+              id: 'r1',
+              label: '반경① 나',
+              widgets: [{
+                type: 'compareSlide',
+                headline: '반경① **나를 위한** AI',
+                left: { label: 'Before', rows: [
+                  { key: '논문 요약', value: '30분씩 수작업' },
+                  { key: '메일', value: '매번 새로 작성' },
+                ] },
+                right: { label: 'After', rows: [
+                  { key: '논문 요약', value: 'PDF 넣고 "요약해줘"' },
+                  { key: '메일', value: '템플릿 + AI 조정' },
+                ] },
+              }],
+            },
+          ],
+        });
+      });
+    </script>
+  </body>
+</html>
