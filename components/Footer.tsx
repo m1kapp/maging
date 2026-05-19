@@ -22,8 +22,6 @@ export function Footer() {
           <Link href="/components" style={{ color: 'inherit' }}>컴포넌트</Link>
           <Link href="/demo/dashboard/acme" style={{ color: 'inherit' }}>대시보드 데모</Link>
           <Link href="/demo/slide/weekly" style={{ color: 'inherit' }}>주간보고 데모</Link>
-          <Link href="/demo/landing/startup" style={{ color: 'inherit' }}>랜딩페이지 데모</Link>
-          <Link href="/demo/news" style={{ color: 'inherit' }}>카드뉴스 데모</Link>
           <Link href="/stack" style={{ color: 'inherit' }}>스택</Link>
           <a href="https://github.com/m1kapp/maging" target="_blank" rel="noopener" style={{ color: 'inherit' }}>GitHub</a>
         </div>

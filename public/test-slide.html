@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="linear">
+<head>
+  <meta charset="UTF-8"><title>분기 성과 리뷰</title>
+  <script src="http://localhost:8888/dist/maging-all.js" data-base="http://localhost:8888/dist/" data-no-tailwind></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+<script>
+window.addEventListener('maging:ready', function () {
+  Maging.page({
+    mode: 'slide',
+    sidebarTitle: '1Q 성과 리뷰',
+    sidebarDate: '2026.04',
+    slides: [
+      { id: 'cover', cover: true, widgets: [{ type: 'sectionCover', style: 'classic', kicker: 'Q1 REVIEW · 2026', title: '1분기 성과 리뷰', subtitle: 'SaaS B/U · 영업·CS·개발', brand: 'flow.team' }] },
+      { id: 'summary', label: '핵심 지표', widgets: [{ type: 'metricHighlight', metrics: [{ value: '41.2', unit: '억원', label: '1Q 매출' },{ value: '48.9', unit: 'K', label: 'MAU' },{ value: '2.1', unit: '%', label: '해지율' },{ value: '74', unit: '', label: 'NPS' }] }] },
+      { id: 'revenue', label: '매출', bu: 'SaaS B/U', team: '영업팀', widgets: [
+        { type: 'pageHeader', title: '1Q 매출 현황', meta: '기준일 2026.04.01' },
+        { type: 'kpiCard', label: '1Q 매출 · 목표 45억', value: '41.2<span class="mw-unit"> 억원</span>', valueHTML: true, delta: -8.4, deltaGoodWhen: 'positive' },
+        { type: 'kpiCard', label: '3월 매출', value: '15.1<span class="mw-unit"> 억원</span>', valueHTML: true, delta: 12.3, deltaGoodWhen: 'positive' },
+        { type: 'sectionHead', title: '월별 추이' },
+        { type: 'activityTable', columns: [{key:'name',label:'구분',align:'left'},{key:'m1',label:'1월',align:'right'},{key:'m2',label:'2월',align:'right'},{key:'m3',label:'3월',align:'right'}], rows: [{name:'신규',m1:'9.2억',m2:'8.4억',m3:'10.1억'},{name:'기존',m1:'4.1억',m2:'4.3억',m3:'5.0억'}] },
+        { type: 'alertBanner', bannerType: 'info', title: '리뷰', message: '1Q 매출 41.2억. 목표 대비 91.6% 달성.' },
+      ] },
+      { id: 'issue', label: 'Issue', widgets: [{ type: 'problemSlide', headline: '2Q **3가지 과제**', points: [{icon:'📉',title:'기존 고객 이탈',desc:'1Q 해지 47건'},{icon:'⏱️',title:'영업 사이클',desc:'45일→62일'},{icon:'🔧',title:'제품 안정성',desc:'SLA 99.9% 미달'}], highlight: '핵심: **리텐션** 강화' }] },
+      { id: 'next', label: 'Next', widgets: [{ type: 'askSlide', headline: '2Q **액션 플랜**', useOfFunds: [{label:'리텐션',pct:40},{label:'영업',pct:35},{label:'인프라',pct:25}], milestones: ['4월: EBR 30사','5월: 자동화','6월: SLA 99.95%'] }] },
+    ],
+  });
+});
+</script>
+</body>
+</html>

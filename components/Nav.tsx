@@ -84,26 +84,6 @@ export function Nav() {
                 </Link>
                 <Link href="/components?mode=slide" className="mw-site-nav__menu-item">Cover · Table · Problem · Market · Ask</Link>
               </div>
-              <div className="mw-site-nav__mega-col">
-                <Link href="/components?mode=cardnews" className="mw-site-nav__mega-head">
-                  <span className="mw-site-nav__mega-icon">◳</span>
-                  <span>
-                    <span className="mw-site-nav__menu-label">카드뉴스</span>
-                    <span className="mw-site-nav__menu-desc">캐러셀 11종 · 커버 6스타일</span>
-                  </span>
-                </Link>
-                <Link href="/components?mode=cardnews" className="mw-site-nav__menu-item">Cover · Body · Data</Link>
-              </div>
-              <div className="mw-site-nav__mega-col">
-                <Link href="/components?mode=landing" className="mw-site-nav__mega-head">
-                  <span className="mw-site-nav__mega-icon">◐</span>
-                  <span>
-                    <span className="mw-site-nav__menu-label">랜딩페이지</span>
-                    <span className="mw-site-nav__menu-desc">Hero · Pricing · FAQ</span>
-                  </span>
-                </Link>
-                <Link href="/components?mode=landing" className="mw-site-nav__menu-item">Hero · CTA · Pricing</Link>
-              </div>
             </div>
           </div>
 
@@ -142,30 +122,6 @@ export function Nav() {
                 <Link href="/demo/slide/strategy" className="mw-site-nav__menu-item">이노엔 · 내부 전략</Link>
                 <Link href="/demo/slide/weekly" className="mw-site-nav__menu-item">SaaS 주간보고</Link>
                 <Link href="/demo/slide/ecommerce" className="mw-site-nav__menu-item">이커머스 주간보고</Link>
-              </div>
-              <div className="mw-site-nav__mega-col">
-                <div className="mw-site-nav__mega-head">
-                  <span className="mw-site-nav__mega-icon">◳</span>
-                  <span>
-                    <span className="mw-site-nav__menu-label">카드뉴스</span>
-                    <span className="mw-site-nav__menu-desc">인스타 · 링크드인</span>
-                  </span>
-                </div>
-                <Link href="/demo/news" className="mw-site-nav__menu-item">교육/가이드</Link>
-                <Link href="/demo/news/finance" className="mw-site-nav__menu-item">데이터 인사이트</Link>
-                <Link href="/demo/news/cafe" className="mw-site-nav__menu-item">브랜드/서비스 소개</Link>
-              </div>
-              <div className="mw-site-nav__mega-col">
-                <div className="mw-site-nav__mega-head">
-                  <span className="mw-site-nav__mega-icon">◐</span>
-                  <span>
-                    <span className="mw-site-nav__menu-label">랜딩페이지</span>
-                    <span className="mw-site-nav__menu-desc">마케팅 · 전환</span>
-                  </span>
-                </div>
-                <Link href="/demo/landing/startup" className="mw-site-nav__menu-item">SaaS/개발 도구</Link>
-                <Link href="/demo/landing/edtech" className="mw-site-nav__menu-item">교육/서비스</Link>
-                <Link href="/demo/landing/campaign" className="mw-site-nav__menu-item">이벤트/캠페인</Link>
               </div>
             </div>
           </div>
