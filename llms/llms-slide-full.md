@@ -124,8 +124,9 @@ MIT
 ```html
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.31/dist/maging-all.js" data-no-tailwind></script>
+<body class="mw-themed">
 ```
-`<head>`에 Tailwind CDN을 먼저 로드하고, `maging-all.js`에 `data-no-tailwind`를 붙여 중복 로드를 방지. `maging:ready` 안에서 `Maging.page()` 호출.
+`<body class="mw-themed">` 필수. `maging:ready` 안에서 `Maging.page()` 호출. 슬라이드 모드에서는 `<main>` 태그 불필요 — `Maging.page()`가 body에 직접 마운트.
 
 ---
 
