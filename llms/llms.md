@@ -123,11 +123,12 @@ MIT
 ### Setup
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.30/dist/maging-all.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.30/dist/maging-all.js" data-no-tailwind></script>
 <body class="mw-themed">
 ```
 
-`maging-all.js` bundles: Pretendard + maging.css + Tailwind CDN + ECharts 5 + maging.js. Dispatches `'maging:ready'` on `window`.
+`<head>`에 Tailwind CDN 먼저, `maging-all.js`에 `data-no-tailwind` 추가. `maging-all.js` bundles: Pretendard + maging.css + ECharts 5 + maging.js. Dispatches `'maging:ready'` on `window`.
 
 **Mount ALL widgets inside `maging:ready`:**
 ```js
