@@ -61,29 +61,9 @@ export function Nav() {
             >
               컴포넌트 {CARET}
             </button>
-            <div className="mw-site-nav__menu mw-site-nav__menu--mega">
-              <div className="mw-site-nav__mega-col">
-                <Link href="/components?mode=core" className="mw-site-nav__mega-head">
-                  <span className="mw-site-nav__mega-icon">▦</span>
-                  <span>
-                    <span className="mw-site-nav__menu-label">대시보드</span>
-                    <span className="mw-site-nav__menu-desc">KPI · 차트 · 테이블</span>
-                  </span>
-                </Link>
-                <Link href="/components?mode=core&cat=Metrics" className="mw-site-nav__menu-item">Metrics (10종)</Link>
-                <Link href="/components?mode=core&cat=Charts" className="mw-site-nav__menu-item">Charts (13종)</Link>
-                <Link href="/components?mode=core&cat=Lists" className="mw-site-nav__menu-item">Lists &amp; Status (5종)</Link>
-              </div>
-              <div className="mw-site-nav__mega-col">
-                <Link href="/components?mode=slide" className="mw-site-nav__mega-head">
-                  <span className="mw-site-nav__mega-icon">▤</span>
-                  <span>
-                    <span className="mw-site-nav__menu-label">슬라이드</span>
-                    <span className="mw-site-nav__menu-desc">보고 · 발표 · 제안</span>
-                  </span>
-                </Link>
-                <Link href="/components?mode=slide" className="mw-site-nav__menu-item">Cover · Table · Problem · Market · Ask</Link>
-              </div>
+            <div className="mw-site-nav__menu">
+              <Link href="/components?mode=core" className="mw-site-nav__menu-item">▦ 대시보드 위젯</Link>
+              <Link href="/components?mode=slide" className="mw-site-nav__menu-item">▤ 슬라이드 위젯</Link>
             </div>
           </div>
 
@@ -95,34 +75,19 @@ export function Nav() {
             >
               데모 {CARET}
             </button>
-            <div className="mw-site-nav__menu mw-site-nav__menu--mega">
-              <div className="mw-site-nav__mega-col">
-                <div className="mw-site-nav__mega-head">
-                  <span className="mw-site-nav__mega-icon">▦</span>
-                  <span>
-                    <span className="mw-site-nav__menu-label">대시보드</span>
-                    <span className="mw-site-nav__menu-desc">실시간 · 단일 페이지</span>
-                  </span>
-                </div>
-                <Link href="/demo/dashboard/acme" className="mw-site-nav__menu-item">운영 모니터링 · SaaS</Link>
-                <Link href="/demo/dashboard/sales" className="mw-site-nav__menu-item">매출/영업 분석</Link>
-                <Link href="/demo/dashboard/finance" className="mw-site-nav__menu-item">투자 포트폴리오</Link>
-                <Link href="/demo/dashboard/hr" className="mw-site-nav__menu-item">HR 애널리틱스</Link>
-              </div>
-              <div className="mw-site-nav__mega-col">
-                <div className="mw-site-nav__mega-head">
-                  <span className="mw-site-nav__mega-icon">▤</span>
-                  <span>
-                    <span className="mw-site-nav__menu-label">슬라이드</span>
-                    <span className="mw-site-nav__menu-desc">발표 · 보고 · 제안</span>
-                  </span>
-                </div>
-                <Link href="/demo/slide/pitch" className="mw-site-nav__menu-item">투자 유치 · 피칭</Link>
-                <Link href="/demo/slide/proposal" className="mw-site-nav__menu-item">도입 제안</Link>
-                <Link href="/demo/slide/strategy" className="mw-site-nav__menu-item">이노엔 · 내부 전략</Link>
-                <Link href="/demo/slide/weekly" className="mw-site-nav__menu-item">SaaS 주간보고</Link>
-                <Link href="/demo/slide/ecommerce" className="mw-site-nav__menu-item">이커머스 주간보고</Link>
-              </div>
+            <div className="mw-site-nav__menu">
+              <div className="mw-site-nav__menu-label" style={{ padding: '6px 12px', fontSize: '10px', color: 'var(--mw-text-muted)', letterSpacing: '0.08em' }}>대시보드</div>
+              <Link href="/demo/dashboard/acme" className="mw-site-nav__menu-item">운영 모니터링 · SaaS</Link>
+              <Link href="/demo/dashboard/sales" className="mw-site-nav__menu-item">매출/영업 분석</Link>
+              <Link href="/demo/dashboard/finance" className="mw-site-nav__menu-item">투자 포트폴리오</Link>
+              <Link href="/demo/dashboard/hr" className="mw-site-nav__menu-item">HR 애널리틱스</Link>
+              <div className="mw-site-nav__menu-label" style={{ padding: '6px 12px', fontSize: '10px', color: 'var(--mw-text-muted)', letterSpacing: '0.08em', borderTop: '1px solid var(--mw-border)', marginTop: '4px', paddingTop: '10px' }}>슬라이드</div>
+              <Link href="/demo/slide/pitch" className="mw-site-nav__menu-item">투자 유치 · 피칭</Link>
+              <Link href="/demo/slide/proposal" className="mw-site-nav__menu-item">도입 제안</Link>
+              <Link href="/demo/slide/strategy" className="mw-site-nav__menu-item">내부 전략</Link>
+              <Link href="/demo/slide/weekly" className="mw-site-nav__menu-item">SaaS 주간보고</Link>
+              <Link href="/demo/slide/ecommerce" className="mw-site-nav__menu-item">이커머스 주간보고</Link>
+              <Link href="/demo/slide/test-quarterly" className="mw-site-nav__menu-item">1Q 성과 리뷰</Link>
             </div>
           </div>
 
