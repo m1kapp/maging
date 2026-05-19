@@ -164,7 +164,7 @@
   var _secHeadTitle = 'text-[length:var(--mw-text-lg)] font-semibold text-[var(--mw-text)] tracking-[-0.01em] mt-[var(--mw-space-0-5)]';
 
   // ── Alert Banner ──
-  var _alertBanner = 'flex items-start gap-[var(--mw-space-2-5)] p-[var(--mw-space-3)_var(--mw-space-4)] rounded-[var(--mw-radius)] text-[length:var(--mw-text-sm)] leading-[var(--mw-leading-snug)]';
+  var _alertBanner = 'p-[var(--mw-space-3)_var(--mw-space-4)] rounded-[var(--mw-radius)] text-[length:var(--mw-text-sm)] leading-[var(--mw-leading-snug)]';
 
   // ── RAG Chip ──
   var _rag = 'inline-flex items-center gap-[var(--mw-space-1-5)] py-[3px] px-[10px] rounded-full text-[length:var(--mw-text-xs)] font-medium bg-[var(--mw-surface-2)] text-[var(--mw-text)] leading-[var(--mw-leading-snug)] tracking-[0.005em]';
@@ -1577,15 +1577,17 @@
     }, config || {});
     ['title','message'].forEach(function(k) { data[k] = toStr(data[k]); });
 
-    var icons = { info: 'ⓘ', warning: '▲', danger: '⚠', success: '✓' };
+    var _svgCheck = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>';
+    var _svgWarn = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>';
+    var _svgDanger = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>';
+    var icons = { info: _svgCheck, warning: _svgWarn, danger: _svgDanger, success: _svgCheck };
 
     function render() {
       var colorMap = { info: 'var(--mw-accent)', warning: 'var(--mw-warning)', danger: 'var(--mw-danger)', success: 'var(--mw-success)' };
       var col = colorMap[data.type] || colorMap.info;
       el.className += ' ' + _alertBanner;
       el.style.background = 'color-mix(in srgb, ' + col + ' 10%, var(--mw-surface))';
-      el.style.borderLeft = '3px solid ' + col;
-      var icon = data.icon != null ? data.icon : (icons[data.type] || 'ⓘ');
+      var icon = (data.icon === '—' || data.icon === '-' || data.icon === '') ? (icons[data.type] || _svgCheck) : (data.icon != null ? data.icon : (icons[data.type] || _svgCheck));
       var msgRaw = data.message || '';
       var msgHTML = msgRaw ? '<span class="text-[var(--mw-text-muted)]">' + (typeof msgRaw === 'string' && msgRaw.indexOf('<') >= 0 ? msgRaw : escapeHTML(msgRaw)) + '</span>' : '';
       var actionHTML = '';
@@ -1594,11 +1596,14 @@
         actionHTML = '<a class="font-medium whitespace-nowrap ml-auto"' + href + ' style="color:' + col + '" data-alert-action>' + escapeHTML(data.action.label) + ' →</a>';
       }
       var dismissHTML = data.dismissable ? '<button class="ml-2 bg-transparent border-none cursor-pointer text-[var(--mw-text-muted)] text-lg leading-none" data-alert-dismiss aria-label="닫기">×</button>' : '';
+      var iconSpan = icon ? (icon.indexOf('<svg') === 0 ? icon : escapeHTML(icon)) : '';
       el.innerHTML =
-        '<span class="text-[1.1rem] leading-none shrink-0">' + escapeHTML(icon) + '</span>' +
-        '<div class="flex-1 min-w-0 flex flex-col gap-0.5">' +
-          '<span class="font-semibold text-[var(--mw-text)]">' + escapeHTML(data.title) + '</span>' +
-          msgHTML +
+        '<div class="flex items-center gap-2 flex-1 min-w-0">' +
+          (iconSpan ? '<span class="shrink-0" style="color:' + col + '">' + iconSpan + '</span>' : '') +
+          '<div class="flex flex-col gap-0.5">' +
+            '<span class="font-semibold text-[var(--mw-text)]">' + escapeHTML(data.title) + '</span>' +
+            msgHTML +
+          '</div>' +
         '</div>' +
         actionHTML + dismissHTML;
       if (data.dismissable) {

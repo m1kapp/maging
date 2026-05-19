@@ -1,5 +1,6 @@
 import { h } from '../h';
 import { calloutHTML } from './callout';
+import { accentMark } from './utils';
 
 interface Feature { icon?: string; title: string; desc?: string; }
 interface FeatureSlideProps {
@@ -12,7 +13,7 @@ interface FeatureSlideProps {
 export function FeatureSlide({ headline = '', items = [], cols = 3, callout = '' }: FeatureSlideProps) {
   return (
     <div className="flex flex-col flex-1 min-h-0 p-[4cqw] px-[5cqw] box-border">
-      {headline && <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] mb-[2.5cqw] tracking-[-0.02em]">{headline}</div>}
+      {headline && <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] mb-[2.5cqw] tracking-[-0.02em]" dangerouslySetInnerHTML={{ __html: accentMark(headline) }}></div>}
       <div className="grid gap-[1.5cqw] my-auto" style={'grid-template-columns:repeat(' + cols + ',1fr)'}>
         {items.map(it =>
           <div className="p-[1.8cqw] bg-[var(--mw-surface)] border border-[var(--mw-border)] rounded-[var(--mw-radius)]">

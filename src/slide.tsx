@@ -87,8 +87,8 @@ function injectCSS() {
   .cover-slide>.mw-cover--classic .mw-cover__brand{letter-spacing:.02em;text-align:right;font-weight:400}
   .cover-slide>.mw-cover--classic .mw-cover__kicker{letter-spacing:.14em}
   .cover-slide>.mw-cover--classic .mw-cover__body{display:flex;flex-direction:column;gap:1cqw;padding:0}
-  .cover-slide>.mw-cover--classic .mw-cover__title{font-size:clamp(36px,7cqw,92px);letter-spacing:-.045em;line-height:1.02;font-weight:800}
-  .cover-slide>.mw-cover--classic .mw-cover__subtitle{font-size:clamp(16px,2.4cqw,28px);color:var(--mw-text-muted);max-width:55%;line-height:1.55;opacity:.65}
+  .cover-slide>.mw-cover--classic .mw-cover__title{font-size:clamp(32px,5.5cqw,72px);letter-spacing:-.045em;line-height:1.1;font-weight:800;word-break:keep-all}
+  .cover-slide>.mw-cover--classic .mw-cover__subtitle{font-size:clamp(13px,1.6cqw,20px);color:var(--mw-text-muted);max-width:75%;line-height:1.6;opacity:.65}
   .cover-slide>.mw-cover--classic .mw-cover__footer{display:flex;justify-content:space-between;align-items:flex-end;border-top:none;padding-top:0;margin-top:0}
   .cover-slide>.mw-cover--classic .mw-cover__rule{display:none}
 

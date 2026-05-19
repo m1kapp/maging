@@ -1,5 +1,6 @@
 import { h } from '../h';
 import { calloutHTML } from './callout';
+import { accentMark } from './utils';
 
 interface FwStep { title: string; desc?: string; icon?: string; }
 interface Summary { title: string; desc?: string; }
@@ -53,14 +54,14 @@ export function FlywheelSlide({ headline = '', sub = '', steps = [], summary, hu
     let anchor = 'middle';
     if (angle > 30 && angle < 150) anchor = 'start';
     if (angle > 210 && angle < 330) anchor = 'end';
-    svg += '<text x="' + f(lx) + '" y="' + f(ly - 7) + '" text-anchor="' + anchor + '" font-size="12" font-weight="700" fill="var(--mw-text)">' + (i + 1) + '. ' + steps[i].title + '</text>';
-    if (steps[i].desc) svg += '<text x="' + f(lx) + '" y="' + f(ly + 8) + '" text-anchor="' + anchor + '" font-size="9" fill="var(--mw-text-muted)">' + steps[i].desc + '</text>';
+    svg += '<text x="' + f(lx) + '" y="' + f(ly - 10) + '" text-anchor="' + anchor + '" font-size="18" font-weight="700" fill="var(--mw-text)">' + (i + 1) + '. ' + steps[i].title + '</text>';
+    if (steps[i].desc) svg += '<text x="' + f(lx) + '" y="' + f(ly + 10) + '" text-anchor="' + anchor + '" font-size="12" fill="var(--mw-text-muted)">' + steps[i].desc + '</text>';
   }
   svg += '</svg>';
 
   return (
     <div data-widget="flywheel" className="flex flex-col flex-1 min-h-0 p-[3%] px-[4.5%] box-border">
-      {headline && <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] mb-[1%] tracking-[-0.02em] text-center">{headline}</div>}
+      {headline && <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] mb-[1%] tracking-[-0.02em] text-center" dangerouslySetInnerHTML={{ __html: accentMark(headline) }}></div>}
       {sub && <div className="text-[clamp(11px,1.1cqw,15px)] text-[var(--mw-text-muted)] mb-[2%] max-w-[600px] leading-relaxed text-center mx-auto">{sub}</div>}
       <div className="flex-1 flex items-center justify-center min-h-0" dangerouslySetInnerHTML={{ __html: svg }}></div>
       {summary && (

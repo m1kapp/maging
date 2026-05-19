@@ -47,7 +47,7 @@ export function bootViewer() {
         '<div data-role="header" class="flex items-center justify-between px-4 py-2 border-b border-[var(--mw-border)] shrink-0 gap-2"><div>' + headerLeft + '</div>' + headerRight + '</div>' : '';
       const pageNum = '<span data-role="pagenum" class="tabular-nums">' + (i + 1) + ' / ' + slides.length + '</span>';
       const footer = '<div data-role="footer" class="shrink-0 px-4 py-1.5 text-right text-xs text-[var(--mw-text-muted)]">' + pageNum + '</div>';
-      s.innerHTML = header + '<div data-role="body" class="flex-1 flex flex-col overflow-hidden min-h-0 px-4 py-2 pb-3 gap-0.5 justify-start [&>*]:!flex-none">' + content + '</div>' + footer;
+      s.innerHTML = header + '<div data-role="body" class="flex-1 flex flex-col overflow-hidden min-h-0 px-4 py-2 pb-3 gap-0.5 [&>*:not(:only-child)]:!flex-none">' + content + '</div>' + footer;
     });
     const indEl      = document.getElementById('deck-ind');
     const slidesWrap = document.getElementById('slides-wrap');
@@ -538,7 +538,7 @@ export function bootViewer() {
           '<div data-role="header" class="flex items-center justify-between px-4 py-2 border-b border-[var(--mw-border)] shrink-0 gap-2"><div>' + headerLeft + '</div>' + headerRight + '</div>' : '';
         const pageNum = '<span data-role="pagenum" class="tabular-nums">' + (i + 1) + ' / ' + slides.length + '</span>';
         const footer = '<div data-role="footer" class="shrink-0 px-4 py-1.5 text-right text-xs text-[var(--mw-text-muted)]">' + pageNum + '</div>';
-        sec.innerHTML = header + '<div data-role="body" class="flex-1 flex flex-col overflow-hidden min-h-0 px-4 py-2 pb-3 gap-0.5 justify-start [&>*]:!flex-none"></div>' + footer;
+        sec.innerHTML = header + '<div data-role="body" class="flex-1 flex flex-col overflow-hidden min-h-0 px-4 py-2 pb-3 gap-0.5 [&>*:not(:only-child)]:!flex-none"></div>' + footer;
       }
 
       slideArea.appendChild(sec);
@@ -589,19 +589,31 @@ export function bootViewer() {
 
     // Post-process: accent color on last word of cover title
     function applyCoverAccent() {
-      // Target main slide area only (not sidebar thumbnail clones)
+      // Target ALL cover slides in main slide area (not sidebar thumbnail clones)
       var scope = container.querySelector('[data-slide-area]') || container;
-      var ct = scope.querySelector('.cover-slide .mw-cover__title');
-      if (!ct || ct.querySelector('[data-accent]')) return; // already applied
-      var words = ct.textContent.split(' ');
-      if (words.length > 1) {
-        var last = words.pop();
-        ct.innerHTML = words.join(' ') + ' <span data-accent style="color:var(--mw-accent)">' + last + '</span>';
-      } else {
-        ct.innerHTML = '<span data-accent style="color:var(--mw-accent)">' + words[0] + '</span>';
-      }
+      scope.querySelectorAll('.cover-slide .mw-cover__title').forEach(function(ct) {
+        if (ct.querySelector('[data-accent]')) return; // already applied
+        var words = ct.textContent.split(' ');
+        if (words.length > 1) {
+          var last = words.pop();
+          ct.innerHTML = words.join(' ') + ' <span data-accent style="color:var(--mw-accent)">' + last + '</span>';
+        } else {
+          ct.innerHTML = '<span data-accent style="color:var(--mw-accent)">' + words[0] + '</span>';
+        }
+      });
     }
     applyCoverAccent();
+    // Re-apply when cover is lazily mounted (first load on non-cover slide)
+    var _coverObs = new MutationObserver(function() {
+      var scope = container.querySelector('[data-slide-area]') || container;
+      var ct = scope.querySelector('.cover-slide .mw-cover__title');
+      if (ct && !ct.querySelector('[data-accent]')) {
+        applyCoverAccent();
+        rebuildThumbnails();
+      }
+    });
+    var _coverEl = (container.querySelector('[data-slide-area]') || container).querySelector('.cover-slide');
+    if (_coverEl) _coverObs.observe(_coverEl, { childList: true, subtree: true });
     // Re-apply after any Maging refresh (theme change etc.)
     var origRefresh = window.Maging?.refreshAll;
     if (origRefresh) {

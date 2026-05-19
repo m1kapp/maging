@@ -1,7 +1,8 @@
 import { h } from '../h';
 import { calloutHTML } from './callout';
+import { accentMark } from './utils';
 
-interface TableRow { values?: string[]; highlight?: boolean; }
+interface TableRow { values?: string[]; cells?: string[]; highlight?: boolean; }
 interface ReferenceTableProps {
   headline?: string;
   columns?: string[];
@@ -13,7 +14,7 @@ interface ReferenceTableProps {
 export function ReferenceTable({ headline = '', columns = [], rows = [], footnote = '', callout = '' }: ReferenceTableProps) {
   return (
     <div data-widget="reftable" className="flex flex-col flex-1 min-h-0 p-[4cqw] px-[5cqw] box-border">
-      {headline && <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] mb-[2cqw] tracking-[-0.02em]">{headline}</div>}
+      {headline && <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] mb-[2cqw] tracking-[-0.02em]" dangerouslySetInnerHTML={{ __html: accentMark(headline) }}></div>}
       <table className="w-full border-collapse rounded-[var(--mw-radius)] overflow-hidden border border-[var(--mw-border)] my-auto">
         {columns.length > 0 && (
           <thead><tr>
@@ -25,7 +26,7 @@ export function ReferenceTable({ headline = '', columns = [], rows = [], footnot
         <tbody>
           {rows.map(r =>
             <tr {...(r.highlight ? { 'data-highlight': true } : {})}>
-              {(r.values || []).map(v =>
+              {(r.cells || r.values || []).map(v =>
                 <td className="py-2.5 px-3.5 align-top border-b border-[var(--mw-border)] text-[clamp(11px,1.1cqw,15px)] text-[var(--mw-text-muted)]">{v}</td>
               )}
             </tr>

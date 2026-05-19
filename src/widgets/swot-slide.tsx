@@ -1,5 +1,6 @@
 import { h } from '../h';
 import { calloutHTML } from './callout';
+import { accentMark } from './utils';
 
 interface Quadrant { label: string; items?: string[]; }
 interface SwotSlideProps {
@@ -11,7 +12,7 @@ interface SwotSlideProps {
 export function SwotSlide({ headline = '', quadrants = [], callout = '' }: SwotSlideProps) {
   return (
     <div data-widget="swot" className="flex flex-col flex-1 min-h-0 p-[4cqw] px-[5cqw] box-border">
-      {headline && <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] mb-[2cqw] tracking-[-0.02em]">{headline}</div>}
+      {headline && <div className="text-[clamp(24px,3cqw,40px)] font-bold text-[var(--mw-text)] mb-[2cqw] tracking-[-0.02em]" dangerouslySetInnerHTML={{ __html: accentMark(headline) }}></div>}
       <div className="grid grid-cols-2 rounded-[var(--mw-radius)] overflow-hidden border border-[var(--mw-border)] my-auto flex-1">
         {quadrants.map(q =>
           <div data-role="quad" className="p-[1.8cqw] flex flex-col border-r border-b border-[var(--mw-border)]">

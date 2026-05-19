@@ -1,5 +1,6 @@
 import { h } from '../h';
 import { calloutHTML } from './callout';
+import { accentMark } from './utils';
 
 interface RoleEnd { label?: string; name?: string; }
 interface Role { from?: RoleEnd; to?: RoleEnd; message?: string; }
