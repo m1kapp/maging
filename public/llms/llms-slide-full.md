@@ -122,9 +122,10 @@ MIT
 
 ### Setup
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.30/dist/maging-all.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.31/dist/maging-all.js" data-no-tailwind></script>
 ```
-`maging:ready` 안에서 `Maging.page()` 호출.
+`<head>`에 Tailwind CDN을 먼저 로드하고, `maging-all.js`에 `data-no-tailwind`를 붙여 중복 로드를 방지. `maging:ready` 안에서 `Maging.page()` 호출.
 
 ---
 
