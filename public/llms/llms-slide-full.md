@@ -8,8 +8,8 @@
 
 `<html data-theme="NAME">` — 팔레트·폰트·반경·그림자 즉시 교체.
 
-**Light (24)**
-`flow` indigo·기본 | `claude` 주황·고급 | `linear` 블루·미니멀 | `stripe` 보라·핀테크 | `notion` 시안·문서 | `airbnb` 코랄·서비스 | `linkedin` 블루·비즈니스 | `apple` 블루·IT | `hermes` 오렌지·럭셔리 | `tiffany` 민트·럭셔리 | `instagram` 핑크·SNS | `youtube` 빨강·미디어 | `duolingo` 라임·교육 | `morningmate` 퍼플·트렌디 | `medium` 그린·콘텐츠 | `reddit` 오렌지·커뮤니티 | `barbie` 핫핑크·패션 | `deere` 옐로·산업 | `fedex` 오렌지·물류 | `mailchimp` 옐로·마케팅 | `tmobile` 마젠타·통신 | `ups` 골드·물류 | `nasa` 빨강·과학 | `heineken` 레드·F&B
+**Light (25)**
+`flow` indigo·기본 | `morningmate` 퍼플·트렌디 | `innon` 블루·기업 | `claude` 주황·고급 | `linear` 블루·미니멀 | `stripe` 보라·핀테크 | `notion` 시안·문서 | `airbnb` 코랄·서비스 | `linkedin` 블루·비즈니스 | `apple` 블루·IT | `hermes` 오렌지·럭셔리 | `tiffany` 민트·럭셔리 | `instagram` 핑크·SNS | `youtube` 빨강·미디어 | `duolingo` 라임·교육 | `medium` 그린·콘텐츠 | `reddit` 오렌지·커뮤니티 | `barbie` 핫핑크·패션 | `deere` 옐로·산업 | `fedex` 오렌지·물류 | `mailchimp` 옐로·마케팅 | `tmobile` 마젠타·통신 | `ups` 골드·물류 | `nasa` 빨강·과학 | `heineken` 레드·F&B
 
 **Dark (13)**
 `vercel` 블랙·미니멀 | `github` 블루·개발 | `bloomberg` 앰버·금융 | `openai` 청록·AI | `spotify` 그린·음악 | `netflix` 빨강·미디어 | `discord` 퍼플·게임 | `x` 블루·소셜 | `slack` 골드·협업 | `twitch` 퍼플·라이브 | `figma` 오렌지·디자인 | `amazon` 오렌지·커머스 | `adobe` 빨강·크리에이티브
@@ -122,11 +122,25 @@ MIT
 
 ### Setup
 ```html
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.31/dist/maging-all.js" data-no-tailwind></script>
+<!DOCTYPE html>
+<html lang="ko" data-theme="flow">
+<head>
+  <meta charset="UTF-8"><title>제목</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.31/dist/maging-all.js" data-no-tailwind></script>
+</head>
 <body class="mw-themed">
+<script>
+window.addEventListener('maging:ready', function () {
+  Maging.page({ mode: 'slide', ... });
+});
+</script>
+</body>
+</html>
 ```
-`<body class="mw-themed">` 필수. `maging:ready` 안에서 `Maging.page()` 호출. 슬라이드 모드에서는 `<main>` 태그 불필요 — `Maging.page()`가 body에 직접 마운트.
+- `<html data-theme="NAME">` — 테마 설정. `<body class="mw-themed">` 필수.
+- `<body>` 안에 `<main>`이나 `<div>` 넣지 마라 — `Maging.page()`가 body에 직접 마운트.
+- `Maging.setTheme()` 쓰지 마라 — `data-theme` 속성으로만 테마 지정.
 
 ---
 
