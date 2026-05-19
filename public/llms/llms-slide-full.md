@@ -138,9 +138,16 @@ window.addEventListener('maging:ready', function () {
 </body>
 </html>
 ```
-- `<html data-theme="NAME">` — 테마 설정. `<body class="mw-themed">` 필수.
-- `<body>` 안에 `<main>`이나 `<div>` 넣지 마라 — `Maging.page()`가 body에 직접 마운트.
-- `Maging.setTheme()` 쓰지 마라 — `data-theme` 속성으로만 테마 지정.
+**필수:**
+- `<html data-theme="NAME">` — 테마 설정.
+- `<body class="mw-themed">` — 이 클래스만. `bg-slate-900` 등 커스텀 클래스 금지.
+- `<body>` 안에는 `<script>` 1개만. `<div>`, `<main>`, `<div id="app">` 등 넣지 마라.
+- `Maging.page()`가 body에 직접 마운트한다.
+
+**금지:**
+- `Maging.setTheme()` — `data-theme` 속성으로만.
+- `document.createElement`, `innerHTML` — `Maging.page()` API로만.
+- `<body>` 안에 `<script>` 외 HTML 요소 — 자동 생성됨.
 
 ---
 
@@ -161,6 +168,7 @@ window.addEventListener('maging:ready', function () {
 ### 프레젠테이션 위젯
 
 headline에 `**bold**` 마크업 → accent 색상 자동 변환.
+**프레젠테이션 슬라이드는 위젯 1개만.** problemSlide, compareSlide, chainFlow 등은 한 장에 1개. pageHeader/sectionHead/alertBanner를 추가하지 마라 — 위젯 자체가 제목·본문을 포함한다.
 
 **`sectionCover`** `{ style:'classic', kicker, title, subtitle?, brand?, meta? }` — 커버 슬라이드.
 **`pitchCover`** `{ company, tagline?, logo?, subtitle?, style?:'bold'|'minimal'|'gradient' }`
