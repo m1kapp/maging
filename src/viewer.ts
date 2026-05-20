@@ -69,7 +69,7 @@ export function bootViewer() {
         s.classList.toggle('flex', isActive);
       });
       scaleSlide();
-      if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
+      try { if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id); } catch(e) {}
       if (!mounted[id]) { mounted[id] = true; MOUNT[id]?.(); }
       if (codeViewOpen) openCodeView();
       scope.querySelectorAll('.wrs__link[data-nav]').forEach(a => {
@@ -893,7 +893,7 @@ export function bootViewer() {
       container.querySelectorAll('.wrs__thumb[data-nav]').forEach(function(t) {
         t.onclick = function() {
           var id = t.dataset.nav;
-          if (id) { location.hash = '#' + id; window.dispatchEvent(new HashChangeEvent('hashchange')); }
+          if (id) { try { location.hash = '#' + id; } catch(e) {} window.dispatchEvent(new HashChangeEvent('hashchange')); }
         };
       });
     }

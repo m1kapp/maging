@@ -2692,7 +2692,7 @@
           if (i >= elements.length) { resolve(); return; }
           var s = elements[i++];
           if (s.id) {
-            window.location.hash = '#' + s.id;
+            try { window.location.hash = '#' + s.id; } catch(e) {}
             window.dispatchEvent(new HashChangeEvent('hashchange'));
           }
           setTimeout(step, delay || 200);
@@ -2718,7 +2718,7 @@
 
     function restoreHash(hash) {
       if (hash) {
-        window.location.hash = hash;
+        try { window.location.hash = hash; } catch(e) {}
         window.dispatchEvent(new HashChangeEvent('hashchange'));
       }
     }
