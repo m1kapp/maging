@@ -119,7 +119,8 @@
   )
     .then(function () { return loadScript(BASE + 'maging.js' + BUST); })
     .then(function () { return loadScript(BASE + 'maging-charts.js' + BUST); })
-    .then(function () { return loadScript(BASE + 'maging-landing.js' + BUST); });
+    .then(function () { return loadScript(BASE + 'maging-landing.js' + BUST); })
+    .then(function () { return loadScript(BASE + 'maging-slide.js' + BUST); });
 
   // ⑦ maging:ready — fires only after BOTH CSS and JS are ready
   Promise.all([cssP, jsP])

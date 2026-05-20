@@ -128,7 +128,6 @@ MIT
   <meta charset="UTF-8"><title>제목</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.32/dist/maging-all.js" data-no-tailwind></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/@m1kapp/maging@0.1.32/dist/maging-slide.js"></script>
 </head>
 <body class="mw-themed">
 <script>
